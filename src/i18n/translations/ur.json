@@ -50,7 +50,27 @@
     "locationNotice": {
       "showingMecca": "مکہ کے اوقات دکھائے جا رہے ہیں۔",
       "enableLocation": "لوکیشن آن کرنے کے لیے ٹیپ کریں"
+    },
+    "dailyVerse": {
+      "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      "defaultTranslation": "پس یقیناً دشواری کے ساتھ آسانی ہے۔",
+      "defaultSource": "سورۃ الشرح · ۹۴:۶"
+    },
+    "continueReadingEmpty": {
+      "title": "اپنا سفر شروع کریں",
+      "subtitle": "قرآن پڑھنا شروع کریں اور آپ کی پیشرفت یہاں ظاہر ہوگی۔",
+      "buttonLabel": "قرآن کھولیں"
     }
+  },
+  "quran": {
+    "title": "قرآن مجید",
+    "subtitle": "قرآن مجید پڑھیں، مطالعہ کریں اور سنیں",
+    "searchPlaceholder": "سورت تلاش کریں...",
+    "continueReadingTag": "تلاوت جاری رکھیں",
+    "verseNumber": "آیت نمبر {{number}}",
+    "versesCount": "{{count}} آیات",
+    "meccan": "مکی",
+    "medinan": "مدنی"
   },
   "errorBoundary": {
     "title": "کچھ غلط ہو گیا",

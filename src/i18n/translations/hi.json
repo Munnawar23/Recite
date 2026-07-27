@@ -50,7 +50,27 @@
     "locationNotice": {
       "showingMecca": "मक्का के औक़ात दिखाए जा रहे हैं।",
       "enableLocation": "लोकेशन चालू करने के लिए टैप करें"
+    },
+    "dailyVerse": {
+      "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      "defaultTranslation": "निसंदेह, कठिनाई के साथ आसानी है।",
+      "defaultSource": "सूरह अश-शरह · 94:6"
+    },
+    "continueReadingEmpty": {
+      "title": "अपनी यात्रा शुरू करें",
+      "subtitle": "क़ुरआन खोलें और आपकी पढ़ने की प्रगति यहाँ दिखाई देगी।",
+      "buttonLabel": "क़ुरआन खोलें"
     }
+  },
+  "quran": {
+    "title": "कुरआन",
+    "subtitle": "पवित्र कुरआन पढ़ें, अध्ययन करें और सुनें",
+    "searchPlaceholder": "सूरह खोजें...",
+    "continueReadingTag": "पढ़ना जारी रखें",
+    "verseNumber": "आयत सं. {{number}}",
+    "versesCount": "{{count}} आयतें",
+    "meccan": "मक्की",
+    "medinan": "मदनी"
   },
   "errorBoundary": {
     "title": "कुछ गलत हो गया",

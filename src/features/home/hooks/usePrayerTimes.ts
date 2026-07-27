@@ -43,7 +43,8 @@ const getActivePrayer = (
 };
 
 export function usePrayerTimes() {
-  const { coords, permissionStatus, requestLocation } = useUserLocation();
+  const { coords, permissionStatus, cityName, requestLocation } =
+    useUserLocation();
 
   const prayerData = useMemo(() => {
     const coordinates = new Coordinates(coords.latitude, coords.longitude);
@@ -93,6 +94,7 @@ export function usePrayerTimes() {
   return {
     prayerData,
     permissionStatus,
+    cityName,
     requestLocation,
   };
 }

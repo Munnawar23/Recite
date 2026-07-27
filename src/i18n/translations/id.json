@@ -50,7 +50,27 @@
     "locationNotice": {
       "showingMecca": "Menampilkan waktu Mekkah.",
       "enableLocation": "Ketuk untuk mengaktifkan lokasi"
+    },
+    "dailyVerse": {
+      "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      "defaultTranslation": "Maka sesungguhnya bersama kesulitan ada kemudahan.",
+      "defaultSource": "Surah Ash-Sharh · 94:6"
+    },
+    "continueReadingEmpty": {
+      "title": "Mulai perjalanan Anda",
+      "subtitle": "Buka Al-Qur'an dan kemajuan membaca Anda akan muncul di sini.",
+      "buttonLabel": "Buka Al-Qur'an"
     }
+  },
+  "quran": {
+    "title": "Al-Qur'an",
+    "subtitle": "Baca, pelajari, dan dengarkan Al-Qur'an",
+    "searchPlaceholder": "Cari Surah...",
+    "continueReadingTag": "LANJUTKAN MEMBACA",
+    "verseNumber": "Ayat No. {{number}}",
+    "versesCount": "{{count}} AYAT",
+    "meccan": "MAKKIYAH",
+    "medinan": "MADANIYAH"
   },
   "errorBoundary": {
     "title": "Ada yang Salah",

@@ -19,7 +19,7 @@ export const spacing = {
 
   // Semantic layout tokens
   screenPadding: scale(16),
-  sectionHeaderTop: verticalScale(22),
+  sectionHeaderTop: verticalScale(16),
   sectionHeaderBottom: verticalScale(10),
   cardMarginTop: verticalScale(6),
   cardMarginBottom: verticalScale(16),

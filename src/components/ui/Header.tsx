@@ -1,8 +1,12 @@
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { scale } from "react-native-size-matters";
+
+import { useAppFonts } from "@/hooks/useAppFonts";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
-import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { ThemeColors } from "@/theme/colors";
+import { ThemeSpacing } from "@/theme/spacing";
 
 interface HeaderProps {
   title: string;
@@ -29,7 +33,6 @@ export default function Header({
     <View style={S.headerRow}>
       <View style={S.topRow}>
         <Text style={S.titleText}>{title}</Text>
-
         {rightIcon && (
           <TouchableOpacity
             style={S.iconButton}
@@ -44,34 +47,37 @@ export default function Header({
           </TouchableOpacity>
         )}
       </View>
-
       {subtitle && <Text style={S.subtitleText}>{subtitle}</Text>}
     </View>
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any) =>
+type AppFonts = ReturnType<typeof useAppFonts>;
+
+const createStyles = (
+  colors: ThemeColors,
+  fontFamily: AppFonts["fontFamily"],
+  fontSize: AppFonts["fontSize"],
+  spacing: ThemeSpacing,
+) =>
   StyleSheet.create({
     headerRow: {
       paddingHorizontal: spacing.screenPadding,
-      paddingTop: verticalScale(12),
-      paddingBottom: verticalScale(3),
+      paddingTop: spacing.vMd,
+      paddingBottom: spacing.vXs,
     },
-
     topRow: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
     },
-
     titleText: {
-      flex: 1,
       fontSize: fontSize.heading,
-      fontFamily: fontFamily.heading,
       color: colors.text,
+      fontFamily: fontFamily.heading,
       letterSpacing: 0.5,
+      flex: 1,
     },
-
     iconButton: {
       width: scale(36),
       height: scale(36),
@@ -79,13 +85,12 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any)
       backgroundColor: colors.primary + "12",
       alignItems: "center",
       justifyContent: "center",
-      marginLeft: scale(8),
+      marginLeft: spacing.sm,
     },
-
     subtitleText: {
-      marginTop: verticalScale(2),
       fontSize: fontSize.body,
-      fontFamily: fontFamily.text,
       color: colors.subtext,
+      fontFamily: fontFamily.text,
+      marginTop: spacing.vXs,
     },
   });

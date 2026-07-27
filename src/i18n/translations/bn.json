@@ -50,7 +50,27 @@
     "locationNotice": {
       "showingMecca": "মক্কার সময়সূচী দেখানো হচ্ছে।",
       "enableLocation": "লোকেশন চালু করতে ট্যাপ করুন"
+    },
+    "dailyVerse": {
+      "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      "defaultTranslation": "কষ্টের সাথেই তো রয়েছে স্বস্তি।",
+      "defaultSource": "সূরা আলাম নাশরাহ · ৯৪:৬"
+    },
+    "continueReadingEmpty": {
+      "title": "আপনার যাত্রা শুরু করুন",
+      "subtitle": "কুরআন খুলুন এবং আপনার পড়ার অগ্রগতি এখানে প্রদর্শিত হবে।",
+      "buttonLabel": "কুরআন খুলুন"
     }
+  },
+  "quran": {
+    "title": "কুরআন",
+    "subtitle": "পবিত্র কুরআন তিলাওয়াত করুন, অধ্যয়ন করুন এবং শুনুন",
+    "searchPlaceholder": "সূরা খুঁজুন...",
+    "continueReadingTag": "পড়া চালিয়ে যান",
+    "verseNumber": "আয়াত নং {{number}}",
+    "versesCount": "{{count}} আয়াত",
+    "meccan": "মক্কী",
+    "medinan": "মাদানী"
   },
   "errorBoundary": {
     "title": "কিছু ভুল হয়েছে",

@@ -50,7 +50,27 @@
     "locationNotice": {
       "showingMecca": "Showing Mecca times.",
       "enableLocation": "Tap to enable location"
+    },
+    "dailyVerse": {
+      "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      "defaultTranslation": "For indeed, with hardship comes ease.",
+      "defaultSource": "Surah Ash-Sharh · 94:6"
+    },
+    "continueReadingEmpty": {
+      "title": "Start your journey",
+      "subtitle": "Open the Quran and your reading progress will appear here.",
+      "buttonLabel": "Open Quran"
     }
+  },
+  "quran": {
+    "title": "Quran",
+    "subtitle": "Read, study, and listen to the Holy Quran",
+    "searchPlaceholder": "Search Surah...",
+    "continueReadingTag": "CONTINUE READING",
+    "verseNumber": "Verse No. {{number}}",
+    "versesCount": "{{count}} VERSES",
+    "meccan": "MECCAN",
+    "medinan": "MEDINAN"
   },
   "errorBoundary": {
     "title": "Something Went Wrong",

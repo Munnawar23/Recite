@@ -7,6 +7,7 @@ export const lightColors = {
   accent: "#B8823D", // Rich warm gold
   border: "#E3D5C1", // Soft border color matching the beige base
   gradient: ["#4E9B6F", "#3A7D56", "#2B5E40"] as [string, string, string],
+  cardGradient: ["#3F7A5C", "#2D5A43"] as [string, string],
   splashText: "#FFFFFF",
   splashSubtext: "rgba(255, 255, 255, 0.85)",
 };
@@ -20,6 +21,7 @@ export const darkColors = {
   accent: "#E8B84B", // Warm yellow accent
   border: "#203A2B", // Matching border
   gradient: ["#1B5E3B", "#14402A", "#0C2A1B"] as [string, string, string],
+  cardGradient: ["#1B5E3B", "#114028"] as [string, string],
   splashText: "#FFFFFF",
   splashSubtext: "rgba(255, 255, 255, 0.85)",
 };

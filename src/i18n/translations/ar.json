@@ -50,7 +50,27 @@
     "locationNotice": {
       "showingMecca": "عُرضت أوقات مكة المكرمة.",
       "enableLocation": "انقر لتمكين الموقع"
+    },
+    "dailyVerse": {
+      "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      "defaultTranslation": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      "defaultSource": "سورة الشرح · ٩٤:٦"
+    },
+    "continueReadingEmpty": {
+      "title": "ابدأ رحلتك",
+      "subtitle": "افتح القرآن وسيظهر تقدمك في القراءة هنا.",
+      "buttonLabel": "افتح القرآن"
     }
+  },
+  "quran": {
+    "title": "القرآن الكريم",
+    "subtitle": "اقرأ وتدبر واستمع إلى القرآن الكريم",
+    "searchPlaceholder": "البحث عن سورة...",
+    "continueReadingTag": "متابعة القراءة",
+    "verseNumber": "الآية رقم {{number}}",
+    "versesCount": "{{count}} آية",
+    "meccan": "مكية",
+    "medinan": "مدنية"
   },
   "errorBoundary": {
     "title": "حدث خطأ ما",

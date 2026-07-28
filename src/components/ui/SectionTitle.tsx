@@ -62,7 +62,7 @@ const createStyles = (
     text: {
       fontSize: scale(14),
       fontFamily: fontFamily.title,
-      color: colors.accent,
+      color: colors.primary,
       letterSpacing: 0.4,
     },
     rightText: {

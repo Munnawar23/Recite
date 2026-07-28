@@ -8,25 +8,10 @@ import { verticalScale } from "react-native-size-matters";
 
 // ── Star data ─────────────────────────────────────────────────────────────
 const STARS = [
-  // top area — denser near moon
-  { top: 0.02, left: 0.06, size: 1.2, opacity: 0.55 },
-  { top: 0.05, left: 0.28, size: 2.2, opacity: 0.65 },
-  { top: 0.03, left: 0.5, size: 1.4, opacity: 0.45 },
-  { top: 0.08, left: 0.38, size: 1.8, opacity: 0.55 },
-  { top: 0.06, left: 0.62, size: 1.2, opacity: 0.4 },
-  { top: 0.04, left: 0.82, size: 2.5, opacity: 0.6 },
-  { top: 0.1, left: 0.18, size: 2, opacity: 0.5 },
-  { top: 0.12, left: 0.72, size: 1.4, opacity: 0.35 },
-  { top: 0.13, left: 0.9, size: 1.8, opacity: 0.5 },
-  // mid spread
-  { top: 0.17, left: 0.05, size: 1.4, opacity: 0.3 },
-  { top: 0.18, left: 0.46, size: 1.2, opacity: 0.28 },
-  { top: 0.2, left: 0.78, size: 2, opacity: 0.35 },
-  { top: 0.23, left: 0.3, size: 1.5, opacity: 0.3 },
-  { top: 0.25, left: 0.88, size: 1.2, opacity: 0.28 },
-  { top: 0.28, left: 0.58, size: 1.8, opacity: 0.25 },
-  { top: 0.3, left: 0.14, size: 2.2, opacity: 0.22 },
-  { top: 0.32, left: 0.7, size: 1.2, opacity: 0.2 },
+  { top: 0.04, left: 0.15, size: 1.4, opacity: 0.35 },
+  { top: 0.08, left: 0.82, size: 2.0, opacity: 0.45 },
+  { top: 0.18, left: 0.28, size: 1.2, opacity: 0.25 },
+  { top: 0.24, left: 0.75, size: 1.5, opacity: 0.25 },
 ];
 
 // ── Simple dot star ───────────────────────────────────────────────────────
@@ -183,12 +168,12 @@ function Background() {
   // We add verticalScale(70) so that all decorative elements start below the Header component
   const top = insets.top + verticalScale(70);
 
-  const starColor = isDark ? "#C8D8CE" : "#3A7D56";
-  const moonColor = isDark ? "#E8B84B" : "#B8823D";
-  const accentGlow = isDark ? "#4DBF8A" : "#3A7D56";
+  const starColor = isDark ? "#8C9BA5" : "#3A7D56";
+  const moonColor = isDark ? "#D4A86A" : "#B8823D";
+  const accentGlow = isDark ? "#D4A86A" : "#3A7D56";
 
   const gradientColors: [string, string, string] = isDark
-    ? ["#0A1C11", "#102218", "#0E2016"]
+    ? ["#121415", "#16191A", "#121415"]
     : ["#E8F2EA", "#F2E9DD", "#EDE4D4"];
 
   return (
@@ -203,19 +188,7 @@ function Background() {
 
       {/* Top accent gradient removed */}
 
-      {/* ── Large glow orb top-right (behind moon) ── */}
-      <View
-        style={{
-          position: "absolute",
-          top: insets.top - height * 0.01,
-          right: -width * 0.15,
-          width: width * 0.55,
-          height: width * 0.55,
-          borderRadius: width * 0.275,
-          backgroundColor: moonColor,
-          opacity: isDark ? 0.04 : 0.06,
-        }}
-      />
+
 
       {/* ── Crescent moon ── */}
       <View
@@ -253,16 +226,7 @@ function Background() {
         </View>
       ))}
 
-      {/* ── Sparkle dots (tiny glowing points) ── */}
-      <View
-        style={{
-          position: "absolute",
-          top: top + height * 0.025,
-          left: width * 0.42,
-        }}
-      >
-        <Sparkle color={moonColor} size={4} opacity={0.6} />
-      </View>
+      {/* ── Sparkle dot ── */}
       <View
         style={{
           position: "absolute",
@@ -270,34 +234,7 @@ function Background() {
           left: width * 0.6,
         }}
       >
-        <Sparkle color={starColor} size={3} opacity={0.5} />
-      </View>
-      <View
-        style={{
-          position: "absolute",
-          top: top + height * 0.13,
-          left: width * 0.88,
-        }}
-      >
-        <Sparkle color={moonColor} size={3} opacity={0.45} />
-      </View>
-      <View
-        style={{
-          position: "absolute",
-          top: top + height * 0.2,
-          left: width * 0.07,
-        }}
-      >
-        <Sparkle color={starColor} size={3} opacity={0.35} />
-      </View>
-      <View
-        style={{
-          position: "absolute",
-          top: top + height * 0.25,
-          left: width * 0.5,
-        }}
-      >
-        <Sparkle color={moonColor} size={2.5} opacity={0.3} />
+        <Sparkle color={starColor} size={2.5} opacity={0.3} />
       </View>
 
       {/* ── Concentric rings (top-right Islamic geometry) ── */}

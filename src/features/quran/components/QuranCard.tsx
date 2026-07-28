@@ -1,7 +1,6 @@
-import React from "react";
+import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 
 import { useAppFonts } from "@/hooks/useAppFonts";
 import { useAppTheme } from "@/hooks/useAppTheme";
@@ -9,6 +8,7 @@ import { Haptics } from "@/lib/haptics";
 import { ThemeColors } from "@/theme/colors";
 import { ThemeSpacing } from "@/theme/spacing";
 import { Chapter as QuranItem } from "@/types/quran";
+import { scale } from "react-native-size-matters";
 
 interface QuranCardProps {
   item: QuranItem;
@@ -26,7 +26,8 @@ export default function QuranCard({ item, onPress }: QuranCardProps) {
     onPress?.(item);
   };
 
-  const typeTranslationKey = item.type.toLowerCase() === "meccan" ? "quran.meccan" : "quran.medinan";
+  const typeTranslationKey =
+    item.type.toLowerCase() === "meccan" ? "quran.meccan" : "quran.medinan";
 
   return (
     <View style={S.cardWrapper}>
@@ -68,7 +69,11 @@ export default function QuranCard({ item, onPress }: QuranCardProps) {
           <Text style={S.arabicText} numberOfLines={1}>
             {item.name}
           </Text>
-          <Text style={S.translationText} numberOfLines={1} ellipsizeMode="tail">
+          <Text
+            style={S.translationText}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
             {item.englishTranslation}
           </Text>
         </View>
@@ -95,7 +100,7 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      paddingVertical: spacing.vSm,
+      paddingVertical: spacing.vXs,
       paddingHorizontal: spacing.md,
       borderRadius: spacing.md,
       backgroundColor: colors.card,
@@ -117,9 +122,9 @@ const createStyles = (
       marginRight: spacing.xs,
     },
     numberBadge: {
-      width: spacing.xxxl,
-      height: spacing.xxxl,
-      borderRadius: spacing.xxxl / 2,
+      width: scale(30),
+      height: scale(30),
+      borderRadius: scale(15),
       backgroundColor: colors.primary + "12",
       alignItems: "center",
       justifyContent: "center",
@@ -139,8 +144,10 @@ const createStyles = (
     },
     englishName: {
       color: colors.text,
-      fontFamily: fontFamily.heading,
+      fontFamily: fontFamily.title,
+      fontWeight: "600",
       fontSize: fontSize.bodyLg,
+      opacity: 0.85,
     },
     metaRow: {
       flexDirection: "row",

@@ -11,6 +11,11 @@
     "save": "Simpan",
     "cancel": "Batal",
     "tryAgain": "Coba Lagi",
+    "retry": "Coba Lagi",
+    "errorTitle": "Ada yang Salah",
+    "errorMessage": "Gagal memuat data. Ketuk untuk mencoba lagi.",
+    "noConnectionTitle": "Kesalahan Koneksi",
+    "noConnectionSubtitle": "Tidak dapat memuat data. Periksa koneksi internet Anda.",
     "quran": "Al-Qur'an",
     "qibla": "Qibla",
     "library": "Perpustakaan"
@@ -70,7 +75,10 @@
     "verseNumber": "Ayat No. {{number}}",
     "versesCount": "{{count}} AYAT",
     "meccan": "MAKKIYAH",
-    "medinan": "MADANIYAH"
+    "medinan": "MADANIYAH",
+    "noResultsTitle": "Surah Tidak Ditemukan",
+    "noResultsSubtitle": "Coba cari dengan kata kunci lain.",
+    "errorMessage": "Gagal memuat daftar Surah. Ketuk untuk mencoba lagi."
   },
   "errorBoundary": {
     "title": "Ada yang Salah",
@@ -101,6 +109,22 @@
       "button": "Simulasi Aplikasi Crash"
     }
   },
+  "library": {
+    "title": "Perpustakaan",
+    "subtitle": "Surah dan unduhan yang Anda simpan",
+    "tabs": {
+      "favorites": "Favorit",
+      "downloads": "Unduhan"
+    },
+    "emptyFavorites": {
+      "title": "Belum Ada Favorit",
+      "subtitle": "Tandai Surah atau ayat favorit Anda untuk mengaksesnya dengan cepat di sini."
+    },
+    "emptyDownloads": {
+      "title": "Tidak Ada Unduhan",
+      "subtitle": "Unduh Surah untuk membaca atau mendengarkannya secara offline."
+    }
+  },
   "languages": {
     "en": "Inggris",
     "ar": "Arab",
@@ -108,5 +132,15 @@
     "hi": "Hindi",
     "id": "Bahasa Indonesia",
     "bn": "Bengali"
+  },
+  "qiblaScreen": {
+    "title": "Kiblat",
+    "subtitleWithCity": "Menampilkan arah dari {{cityName}}",
+    "subtitleDefault": "Temukan arah ke Mekkah",
+    "currentHeading": "Arah Saat Ini",
+    "qiblaTarget": "Target Kiblat: {{deg}}°",
+    "locationRequiredTitle": "Lokasi Diperlukan",
+    "locationRequiredSubtitle": "Kami membutuhkan lokasi Anda untuk menghitung arah Kiblat yang akurat.",
+    "enableLocation": "Aktifkan Lokasi"
   }
 }

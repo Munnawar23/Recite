@@ -8,20 +8,22 @@ export const lightColors = {
   border: "#E3D5C1", // Soft border color matching the beige base
   gradient: ["#4E9B6F", "#3A7D56", "#2B5E40"] as [string, string, string],
   cardGradient: ["#3F7A5C", "#2D5A43"] as [string, string],
+  splashGradient: ["#2B6143", "#1F4831", "#143121"] as [string, string, string],
   splashText: "#FFFFFF",
   splashSubtext: "rgba(255, 255, 255, 0.85)",
 };
 
 export const darkColors = {
-  background: "#102218", // Slightly darker soft green background
-  card: "#182E22", // Matching card color
-  text: "#E8DFD0", // Warm cream text
-  subtext: "#A9B8AE", // Muted sage subtext
-  primary: "#4DBF8A", // Mint green primary
-  accent: "#E8B84B", // Warm yellow accent
-  border: "#203A2B", // Matching border
-  gradient: ["#1B5E3B", "#14402A", "#0C2A1B"] as [string, string, string],
-  cardGradient: ["#1B5E3B", "#114028"] as [string, string],
+  background: "#121415", // Sleek dark charcoal background
+  card: "#192223", // Dark slate green card container
+  text: "#FFFFFF", // Crisp white primary text
+  subtext: "#8C9BA5", // Muted slate subtext
+  primary: "#D4A86A", // Warm gold primary action/icon color
+  accent: "#D4A86A", // Rich warm gold accent
+  border: "#1E2B2C", // Dark subtle border
+  gradient: ["#1F2E2F", "#192425", "#141C1D"] as [string, string, string],
+  cardGradient: ["#1F2E2F", "#162021"] as [string, string],
+  splashGradient: ["#245239", "#193B28", "#10281A"] as [string, string, string],
   splashText: "#FFFFFF",
   splashSubtext: "rgba(255, 255, 255, 0.85)",
 };

@@ -1,14 +1,14 @@
-import React from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { Ionicons } from "@expo/vector-icons";
 
 import { useAppFonts } from "@/hooks/useAppFonts";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { ThemeColors } from "@/theme/colors";
 import { ThemeSpacing } from "@/theme/spacing";
+import { scale, verticalScale } from "react-native-size-matters";
 
 interface ContinueReadingCardProps {
   surahName: string;
@@ -22,8 +22,9 @@ export default function ContinueReadingCard({
   onPress,
 }: ContinueReadingCardProps) {
   const { t } = useTranslation();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const { colors, fontFamily, fontSize, spacing, activeScheme } = useAppTheme();
+  const isDark = activeScheme === "dark";
+  const S = createStyles(colors, fontFamily, fontSize, spacing, isDark);
 
   const handlePress = () => {
     Haptics.medium();
@@ -32,9 +33,13 @@ export default function ContinueReadingCard({
 
   return (
     <View style={S.cardWrapper}>
-      <TouchableOpacity style={S.card} onPress={handlePress} activeOpacity={0.85}>
+      <TouchableOpacity
+        style={S.card}
+        onPress={handlePress}
+        activeOpacity={0.85}
+      >
         <LinearGradient
-          colors={colors.cardGradient}
+          colors={colors.gradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={S.gradient}
@@ -42,7 +47,7 @@ export default function ContinueReadingCard({
           <View style={S.container}>
             <View style={S.leftSection}>
               <View style={S.iconContainer}>
-                <Ionicons name="book" size={spacing.xl} color={colors.splashText} />
+                <Ionicons name="book" size={scale(18)} color="#FFD98E" />
               </View>
               <View style={S.textContainer}>
                 <Text style={S.tagText}>{t("quran.continueReadingTag")}</Text>
@@ -54,8 +59,8 @@ export default function ContinueReadingCard({
             </View>
             <Ionicons
               name="arrow-forward-outline"
-              size={spacing.xl}
-              color={colors.splashText}
+              size={scale(20)}
+              color="rgba(255,255,255,0.85)"
               style={S.arrowIcon}
             />
           </View>
@@ -72,6 +77,7 @@ const createStyles = (
   fontFamily: AppFonts["fontFamily"],
   fontSize: AppFonts["fontSize"],
   spacing: ThemeSpacing,
+  isDark: boolean,
 ) =>
   StyleSheet.create({
     cardWrapper: {
@@ -80,15 +86,13 @@ const createStyles = (
       marginBottom: spacing.cardMarginBottom,
     },
     card: {
-      borderRadius: spacing.lg,
-      borderWidth: 1,
-      borderColor: "transparent",
+      borderRadius: scale(20),
       overflow: "hidden",
-      shadowColor: colors.primary,
-      shadowOffset: { width: 0, height: spacing.vXs },
-      shadowOpacity: 0.3,
-      shadowRadius: spacing.md,
-      elevation: 6,
+      shadowColor: isDark ? "#000" : "#2B5E40",
+      shadowOffset: { width: 0, height: verticalScale(6) },
+      shadowOpacity: isDark ? 0.4 : 0.2,
+      shadowRadius: scale(14),
+      elevation: 8,
     },
     gradient: {
       position: "relative",
@@ -98,47 +102,50 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      paddingVertical: spacing.vMd,
-      paddingHorizontal: spacing.lg,
+      paddingVertical: verticalScale(14),
+      paddingHorizontal: scale(18),
     },
     leftSection: {
       flexDirection: "row",
       alignItems: "center",
-      gap: spacing.md,
+      gap: scale(14),
       flex: 1,
     },
     iconContainer: {
-      width: spacing.xxxl,
-      height: spacing.xxxl,
-      borderRadius: spacing.xxxl / 2,
-      backgroundColor: "rgba(255, 255, 255, 0.15)",
+      width: scale(38),
+      height: scale(38),
+      borderRadius: scale(19),
+      backgroundColor: "rgba(255,255,255,0.12)",
       alignItems: "center",
       justifyContent: "center",
+      borderWidth: 1,
+      borderColor: "rgba(255,255,255,0.08)",
     },
     textContainer: {
       flex: 1,
-      gap: spacing.vXs / 4,
+      gap: verticalScale(2),
     },
     tagText: {
-      fontFamily: fontFamily.text,
+      fontFamily: fontFamily.title,
       fontSize: fontSize.caption,
-      color: colors.splashSubtext,
-      letterSpacing: 1,
+      color: "rgba(255,255,255,0.9)",
+      letterSpacing: 0.8,
+      textTransform: "uppercase",
     },
     titleText: {
-      fontFamily: fontFamily.heading,
+      fontFamily: fontFamily.title,
+      fontWeight: "600",
       fontSize: fontSize.title,
-      color: colors.splashText,
-      marginTop: spacing.vXs / 4,
+      color: "#fff",
+      letterSpacing: 0.3,
     },
     verseText: {
       fontFamily: fontFamily.text,
       fontSize: fontSize.body,
-      color: colors.splashSubtext,
+      color: "rgba(255,255,255,0.65)",
+      letterSpacing: 0.5,
     },
     arrowIcon: {
-      marginLeft: spacing.sm,
+      marginLeft: scale(10),
     },
   });
-
-

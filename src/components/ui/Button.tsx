@@ -87,7 +87,7 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any)
       paddingVertical: spacing.vMd,
       paddingHorizontal: spacing.xl,
       gap: spacing.sm,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.primary,
       opacity: 1,
     },
     disabled: {

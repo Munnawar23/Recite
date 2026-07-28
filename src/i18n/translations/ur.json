@@ -11,6 +11,11 @@
     "save": "محفوظ کریں",
     "cancel": "منسوخ کریں",
     "tryAgain": "دوبارہ کوشش کریں",
+    "retry": "دوبارہ کوشش کریں",
+    "errorTitle": "کچھ غلط ہو گیا",
+    "errorMessage": "ڈیٹا لوڈ کرنے میں ناکامی۔ دوبارہ کوشش کرنے کے لیے ٹیپ کریں۔",
+    "noConnectionTitle": "کنیکشن کا مسئلہ",
+    "noConnectionSubtitle": "ڈیٹا لوڈ نہیں ہو سکا۔ اپنا انٹرنیٹ کنیکشن چیک کریں۔",
     "quran": "قرآن",
     "qibla": "قبلہ",
     "library": "لائبریری"
@@ -70,7 +75,10 @@
     "verseNumber": "آیت نمبر {{number}}",
     "versesCount": "{{count}} آیات",
     "meccan": "مکی",
-    "medinan": "مدنی"
+    "medinan": "مدنی",
+    "noResultsTitle": "کوئی سورت نہیں ملی",
+    "noResultsSubtitle": "کسی دوسرے لفظ سے تلاش کرنے کی کوشش کریں۔",
+    "errorMessage": "سورۃ کی فہرست لوڈ کرنے میں ناکامی۔ دوبارہ کوشش کے لیے ٹیپ کریں۔"
   },
   "errorBoundary": {
     "title": "کچھ غلط ہو گیا",
@@ -101,6 +109,22 @@
       "button": "ایپ کریش کی نقل کریں"
     }
   },
+  "library": {
+    "title": "لائبریری",
+    "subtitle": "آپ کی محفوظ کردہ سورتیں اور ڈاؤن لوڈز",
+    "tabs": {
+      "favorites": "پسندیدہ",
+      "downloads": "ڈاؤن لوڈز"
+    },
+    "emptyFavorites": {
+      "title": "ابھی تک کوئی پسندیدہ نہیں",
+      "subtitle": "یہاں تیزی سے رسائی کے لیے اپنی پسندیدہ سورتوں یا آیات کو نشان زد کریں۔"
+    },
+    "emptyDownloads": {
+      "title": "کوئی ڈاؤن لوڈ نہیں",
+      "subtitle": "سورتیں آف لائن پڑھنے یا سننے کے لیے ڈاؤن لوڈ کریں۔"
+    }
+  },
   "languages": {
     "en": "انگریزی",
     "ar": "عربی",
@@ -108,5 +132,15 @@
     "hi": "ہندی",
     "id": "انڈونیشیائی",
     "bn": "بنگالی"
+  },
+  "qiblaScreen": {
+    "title": "قبلہ",
+    "subtitleWithCity": "{{cityName}} سے سمت دکھائی جا رہی ہے",
+    "subtitleDefault": "مکہ مکرمہ کی سمت معلوم کریں",
+    "currentHeading": "موجودہ سمت",
+    "qiblaTarget": "قبلہ کی سمت: {{deg}}°",
+    "locationRequiredTitle": "مقام کی رسائی درکار ہے",
+    "locationRequiredSubtitle": "قبلہ کی درست سمت معلوم کرنے کے لیے آپ کا مقام درکار ہے۔",
+    "enableLocation": "لوکیشن آن کریں"
   }
 }

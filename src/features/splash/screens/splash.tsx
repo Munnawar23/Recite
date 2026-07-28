@@ -8,6 +8,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 
 import { QURAN_ANIM } from "@/constants/assets";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { lightColors } from "@/theme/colors";
 
 export default function SplashScreen() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function SplashScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={colors.gradient}
+        colors={colors.splashGradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={StyleSheet.absoluteFill}

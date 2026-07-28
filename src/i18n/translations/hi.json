@@ -11,6 +11,11 @@
     "save": "सहेजें",
     "cancel": "रद्द करें",
     "tryAgain": "पुनः प्रयास करें",
+    "retry": "पुनः प्रयास करें",
+    "errorTitle": "कुछ गलत हो गया",
+    "errorMessage": "डेटा लोड करने में विफल। पुनः प्रयास करने के लिए टैप करें।",
+    "noConnectionTitle": "कनेक्शन त्रुटि",
+    "noConnectionSubtitle": "डेटा लोड करने में असमर्थ। अपना इंटरनेट कनेक्शन जांचें।",
     "quran": "कुरआन",
     "qibla": "क़िबला",
     "library": "पुस्तकालय"
@@ -70,7 +75,10 @@
     "verseNumber": "आयत सं. {{number}}",
     "versesCount": "{{count}} आयतें",
     "meccan": "मक्की",
-    "medinan": "मदनी"
+    "medinan": "मदनी",
+    "noResultsTitle": "कोई सूरह नहीं मिली",
+    "noResultsSubtitle": "किसी अन्य शब्द से खोजने का प्रयास करें।",
+    "errorMessage": "सूरह सूची लोड करने में असमर्थ। पुनः प्रयास करें।"
   },
   "errorBoundary": {
     "title": "कुछ गलत हो गया",
@@ -101,6 +109,22 @@
       "button": "ऐप क्रैश अनुकरण करें"
     }
   },
+  "library": {
+    "title": "लाइब्रेरी",
+    "subtitle": "आपके सहेजे गए सूरह और डाउनलोड",
+    "tabs": {
+      "favorites": "पसंदीदा",
+      "downloads": "डाउनलोड"
+    },
+    "emptyFavorites": {
+      "title": "अभी तक कोई पसंदीदा नहीं",
+      "subtitle": "यहां जल्दी पहुंचने के लिए अपने पसंदीदा सूरह या आयतों को चिह्नित करें।"
+    },
+    "emptyDownloads": {
+      "title": "कोई डाउनलोड नहीं",
+      "subtitle": "सूरह को ऑफ़लाइन पढ़ने या सुनने के लिए डाउनलोड करें।"
+    }
+  },
   "languages": {
     "en": "अंग्रेज़ी",
     "ar": "अरबी",
@@ -108,5 +132,15 @@
     "hi": "हिंदी",
     "id": "इंडोनेशियाई",
     "bn": "बंगाली"
+  },
+  "qiblaScreen": {
+    "title": "क़िबला",
+    "subtitleWithCity": "{{cityName}} से दिशा दिखाई जा रही है",
+    "subtitleDefault": "मक्का की दिशा खोजें",
+    "currentHeading": "वर्तमान दिशा",
+    "qiblaTarget": "क़िबला लक्ष्य: {{deg}}°",
+    "locationRequiredTitle": "स्थान की आवश्यकता है",
+    "locationRequiredSubtitle": "क़िबला की सटीक दिशा की गणना करने के लिए हमें आपके स्थान की आवश्यकता है।",
+    "enableLocation": "स्थान सक्षम करें"
   }
 }

@@ -1,7 +1,10 @@
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import i18n from "@/i18n";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+import { QueryClient } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -14,8 +17,22 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 // Keep the splash screen visible while we fetch resources
 void SplashScreen.preventAutoHideAsync();
 
+const asyncStoragePersister = createAsyncStoragePersister({
+  storage: AsyncStorage,
+  key: "RECITE_QUERY_CACHE",
+});
+
 export default function RootLayout() {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            gcTime: 1000 * 60 * 60 * 24 * 7, // Keep un-instantiated query cache in memory/storage for 7 days
+          },
+        },
+      }),
+  );
 
   const [fontsLoaded, fontError] = useFonts({
     "PlusJakartaSans-Bold": require("../../assets/fonts/PlusJakartaSans-Bold.ttf"),
@@ -45,15 +62,17 @@ export default function RootLayout() {
       <I18nextProvider i18n={i18n}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <SafeAreaProvider>
-            <QueryClientProvider client={queryClient}>
+            <PersistQueryClientProvider
+              client={queryClient}
+              persistOptions={{ persister: asyncStoragePersister }}
+            >
               <StatusBar style={activeScheme === "dark" ? "light" : "dark"} />
-
               <Stack
                 screenOptions={{
                   headerShown: false,
                 }}
               />
-            </QueryClientProvider>
+            </PersistQueryClientProvider>
           </SafeAreaProvider>
         </GestureHandlerRootView>
       </I18nextProvider>

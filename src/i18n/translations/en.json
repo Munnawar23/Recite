@@ -11,6 +11,11 @@
     "save": "Save",
     "cancel": "Cancel",
     "tryAgain": "Try Again",
+    "retry": "Retry",
+    "errorTitle": "Something went wrong",
+    "errorMessage": "Failed to load data. Tap to try again.",
+    "noConnectionTitle": "Connection Error",
+    "noConnectionSubtitle": "Could not load data. Check your internet connection.",
     "quran": "Quran",
     "qibla": "Qibla",
     "library": "Library"
@@ -70,7 +75,10 @@
     "verseNumber": "Verse No. {{number}}",
     "versesCount": "{{count}} VERSES",
     "meccan": "MECCAN",
-    "medinan": "MEDINAN"
+    "medinan": "MEDINAN",
+    "noResultsTitle": "No Surahs Found",
+    "noResultsSubtitle": "Try searching with a different keyword.",
+    "errorMessage": "Failed to load Quran chapters. Tap to try again."
   },
   "errorBoundary": {
     "title": "Something Went Wrong",
@@ -101,6 +109,22 @@
       "button": "Simulate App Crash"
     }
   },
+  "library": {
+    "title": "Library",
+    "subtitle": "Your saved surahs and downloads",
+    "tabs": {
+      "favorites": "Favorites",
+      "downloads": "Downloads"
+    },
+    "emptyFavorites": {
+      "title": "No Favorites Yet",
+      "subtitle": "Mark your favorite Surahs or verses to access them quickly here."
+    },
+    "emptyDownloads": {
+      "title": "No Downloads",
+      "subtitle": "Download Surahs to read or listen to them offline."
+    }
+  },
   "languages": {
     "en": "English",
     "ar": "Arabic",
@@ -108,5 +132,15 @@
     "hi": "Hindi",
     "id": "Indonesian",
     "bn": "Bengali"
+  },
+  "qiblaScreen": {
+    "title": "Qibla",
+    "subtitleWithCity": "Showing direction from {{cityName}}",
+    "subtitleDefault": "Find the direction to Mecca",
+    "currentHeading": "Current Heading",
+    "qiblaTarget": "Qibla Target: {{deg}}°",
+    "locationRequiredTitle": "Location Required",
+    "locationRequiredSubtitle": "We need your location to calculate the precise direction to the Qibla.",
+    "enableLocation": "Enable Location"
   }
 }

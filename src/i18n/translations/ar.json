@@ -11,6 +11,11 @@
     "save": "حفظ",
     "cancel": "إلغاء",
     "tryAgain": "إعادة المحاولة",
+    "retry": "إعادة المحاولة",
+    "errorTitle": "حدث خطأ ما",
+    "errorMessage": "فشل في تحميل البيانات. انقر لإعادة المحاولة.",
+    "noConnectionTitle": "خطأ في الاتصال",
+    "noConnectionSubtitle": "تعذر تحميل البيانات. تحقق من اتصالك بالإنترنت.",
     "quran": "القرآن",
     "qibla": "القبلة",
     "library": "المكتبة"
@@ -70,7 +75,10 @@
     "verseNumber": "الآية رقم {{number}}",
     "versesCount": "{{count}} آية",
     "meccan": "مكية",
-    "medinan": "مدنية"
+    "medinan": "مدنية",
+    "noResultsTitle": "لم يتم العثور على أي سورة",
+    "noResultsSubtitle": "جرب البحث باستخدام كلمة رئيسية أخرى.",
+    "errorMessage": "فشل في تحميل سور القرآن. انقر لإعادة المحاولة."
   },
   "errorBoundary": {
     "title": "حدث خطأ ما",
@@ -101,6 +109,22 @@
       "button": "محاكاة تعطل التطبيق"
     }
   },
+  "library": {
+    "title": "المكتبة",
+    "subtitle": "السور المحفوظة والتنزيلات",
+    "tabs": {
+      "favorites": "المفضلة",
+      "downloads": "التنزيلات"
+    },
+    "emptyFavorites": {
+      "title": "لا توجد مفضلة بعد",
+      "subtitle": "قم بتمييز السور أو الآيات المفضلة لديك للوصول إليها بسرعة هنا."
+    },
+    "emptyDownloads": {
+      "title": "لا توجد تنزيلات",
+      "subtitle": "قم بتنزيل السور لقراءتها أو الاستماع إليها دون اتصال بالإنترنت."
+    }
+  },
   "languages": {
     "en": "الإنجليزية",
     "ar": "العربية",
@@ -108,5 +132,15 @@
     "hi": "الهندية",
     "id": "الإندونيسية",
     "bn": "البنغالية"
+  },
+  "qiblaScreen": {
+    "title": "القبلة",
+    "subtitleWithCity": "عرض الاتجاه من {{cityName}}",
+    "subtitleDefault": "حدد اتجاه القبلة نحو مكة المكرمة",
+    "currentHeading": "الاتجاه الحالي",
+    "qiblaTarget": "اتجاه القبلة: {{deg}}°",
+    "locationRequiredTitle": "الموقع مطلوب",
+    "locationRequiredSubtitle": "نحتاج إلى موقعك لحساب اتجاه القبلة بدقة.",
+    "enableLocation": "تفعيل الموقع"
   }
 }

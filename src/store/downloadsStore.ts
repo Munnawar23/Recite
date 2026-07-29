@@ -12,6 +12,7 @@ export interface DownloadedChapter {
   localAudioUri?: string;
   timestamps?: any[];
   fileSize?: string;
+  fileSizeBytes?: number;
   downloadedAt: string;
 }
 
@@ -56,10 +57,10 @@ export const useDownloadsStore = create<DownloadsState>()(
 
           const defaultVerses = versesByTranslation[translationId] || versesByTranslation[20] || [];
 
-          // 2. Download audio file
           let localAudioUri: string | undefined;
           let timestamps: any[] = [];
           let fileSize: string | undefined;
+          let fileSizeBytes: number | undefined;
           try {
             const audioData = await getChapterAudio(chapterId);
             if (audioData?.audio_url) {
@@ -70,6 +71,7 @@ export const useDownloadsStore = create<DownloadsState>()(
               const localPath = `${documentDirectory}surah_${chapterId}.mp3`;
 
               if (audioData.file_size) {
+                fileSizeBytes = audioData.file_size;
                 fileSize = `${(audioData.file_size / (1024 * 1024)).toFixed(1)} MB`;
               }
 
@@ -107,6 +109,7 @@ export const useDownloadsStore = create<DownloadsState>()(
                 localAudioUri,
                 timestamps,
                 fileSize,
+                fileSizeBytes,
                 downloadedAt: new Date().toISOString(),
               },
             },

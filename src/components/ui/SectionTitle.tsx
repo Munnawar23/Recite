@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
-import { scale } from "react-native-size-matters";
+import { scale, verticalScale } from "react-native-size-matters";
 
 import { useAppTheme } from "@/hooks/useAppTheme";
 
@@ -8,11 +8,17 @@ interface Props {
   label: string;
   icon?: keyof typeof Ionicons.glyphMap;
   rightText?: string;
+  tightSpacing?: boolean;
 }
 
-export default function SectionTitle({ label, icon, rightText }: Props) {
+export default function SectionTitle({
+  label,
+  icon,
+  rightText,
+  tightSpacing,
+}: Props) {
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const S = createStyles(colors, fontFamily, fontSize, spacing, tightSpacing);
 
   return (
     <View style={S.row}>
@@ -36,13 +42,14 @@ const createStyles = (
   fontFamily: any,
   fontSize: any,
   spacing: any,
+  tightSpacing?: boolean,
 ) =>
   StyleSheet.create({
     row: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      marginTop: spacing.sectionHeaderTop,
+      marginTop: tightSpacing ? spacing.sectionHeaderTop - verticalScale(4) : spacing.sectionHeaderTop,
       marginBottom: spacing.sectionHeaderBottom,
       paddingHorizontal: spacing.screenPadding,
     },

@@ -55,8 +55,7 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
   };
 
   useEffect(() => {
-    // Only update position via useEffect if we aren't actively dragging it
-    if (tabWidth > 0 && !isDragging.value) {
+    if (tabWidth > 0) {
       translateX.value = withSpring(activeIndex * tabWidth, SPRING_CONFIG);
     }
   }, [activeIndex, tabWidth]);
@@ -203,10 +202,10 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any,
     tabText: {
       fontSize: fontSize.body,
       fontFamily: fontFamily.text,
-      color: isDark ? "rgba(255,255,255,0.6)" : colors.subtext,
+      color: colors.subtext,
     },
     activeTabText: {
       fontFamily: fontFamily.title,
-      color: isDark ? "#FFFFFF" : colors.primary,
+      color: isDark ? colors.primary : colors.primary,
     },
   });

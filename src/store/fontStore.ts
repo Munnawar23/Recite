@@ -7,6 +7,8 @@ export type FontSizeScale = "small" | "default" | "large";
 interface FontState {
   fontSizeScale: FontSizeScale;
   setFontSizeScale: (scale: FontSizeScale) => void;
+  quranFontSizeScale: FontSizeScale;
+  setQuranFontSizeScale: (scale: FontSizeScale) => void;
 }
 
 export const useFontStore = create<FontState>()(
@@ -14,6 +16,8 @@ export const useFontStore = create<FontState>()(
     (set) => ({
       fontSizeScale: "default",
       setFontSizeScale: (scale) => set({ fontSizeScale: scale }),
+      quranFontSizeScale: "default",
+      setQuranFontSizeScale: (scale) => set({ quranFontSizeScale: scale }),
     }),
     {
       name: STORAGE_KEYS.FONT_SCALE,

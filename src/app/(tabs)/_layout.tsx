@@ -1,4 +1,3 @@
-import Background from "@/components/ui/Background";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { Ionicons } from "@expo/vector-icons";
@@ -126,8 +125,6 @@ export default function TabLayout() {
 
   return (
     <View style={styles.container}>
-      <Background />
-
       <Tabs screenOptions={screenOptions}>
         {tabs.map((tab) => (
           <Tabs.Screen

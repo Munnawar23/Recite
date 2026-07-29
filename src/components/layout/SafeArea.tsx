@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { verticalScale } from "react-native-size-matters";
+import Background from "@/components/ui/Background";
 
 interface SafeAreaProps {
   children: ReactNode;
@@ -17,6 +18,7 @@ export function SafeArea({ children }: SafeAreaProps) {
         { paddingTop: insets.top + verticalScale(1) },
       ]}
     >
+      <Background />
       {children}
     </View>
   );

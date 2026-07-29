@@ -85,6 +85,109 @@
     "subtitle": "An unexpected error occurred in the application. You can try restarting or resetting the current view."
   },
   "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your app preferences and theme",
+    "sections": {
+      "displayLanguage": "Display & Languages",
+      "notifications": "Notifications",
+      "storage": "Storage",
+      "helpSupport": "Help & Support",
+      "aboutUs": "About Us"
+    },
+    "display": {
+      "title": "Display Settings",
+      "subtitle": "Theme, fonts & text sizes",
+      "optionsTitle": "Display Options",
+      "optionsSubtitle": "Theme & font sizes",
+      "appTheme": "App Theme",
+      "appFontSize": "App Font Size",
+      "quranFontSize": "Quran Arabic Font Size",
+      "livePreview": "Live Preview",
+      "sampleTranslation": "In the name of Allah, the Most Gracious, the Most Merciful",
+      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "theme": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      },
+      "fontSize": {
+        "small": "Small",
+        "default": "Default",
+        "large": "Large"
+      }
+    },
+    "languages": {
+      "title": "Languages & Audio",
+      "subtitle": "App language, translation & reciter",
+      "optionsTitle": "Language & Audio Options",
+      "optionsSubtitle": "Language, translation & reciter",
+      "appLanguageSection": "App Language",
+      "appLanguageTitle": "App Interface Language",
+      "appLanguageSubtitle": "Select primary language for menus & interface",
+      "appLanguagePlaceholder": "Select App Language",
+      "quranTranslationSection": "Quran Translation",
+      "quranTranslationTitle": "Default Quran Translation",
+      "quranTranslationSubtitle": "Select translation text displayed for verses",
+      "quranTranslationPlaceholder": "Select Translation",
+      "quranReciterSection": "Quran Reciter",
+      "quranReciterTitle": "Default Quran Reciter",
+      "quranReciterSubtitle": "Select Qari / Reciter voice for audio playback",
+      "quranReciterPlaceholder": "Select Reciter",
+      "translations": {
+        "arabicOnly": "Arabic Only",
+        "english": "English (Saheeh)",
+        "urdu": "Urdu (Maududi)",
+        "hindi": "Hindi (Azizul Haque)",
+        "indonesian": "Indonesian (Ministry)",
+        "bengali": "Bengali (Taisirul)"
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "enableTitle": "Enable Notifications",
+      "enabled": "Notification enabled",
+      "disabled": "Disabled"
+    },
+    "storage": {
+      "title": "Storage",
+      "clearDownloadsTitle": "Clear All Downloads",
+      "clearDownloadsSubtitleEmpty": "0 Surah(s) saved offline (0 MB)",
+      "clearDownloadsSubtitle": "{{count}} Surah(s) saved ({{size}})",
+      "noDownloadsTitle": "No Downloads",
+      "noDownloadsMessage": "You don't have any downloaded Surahs to clear.",
+      "confirmClearDownloadsTitle": "Clear All Downloads?",
+      "confirmClearDownloadsDesc": "Are you sure you want to remove {{count}} downloaded Surah(s) from offline storage?",
+      "toastClearedDownloadsTitle": "Cleared Downloads",
+      "toastClearedDownloadsDesc": "All downloaded Surahs have been cleared.",
+      "clearFavoritesTitle": "Clear All Favorites",
+      "clearFavoritesSubtitle": "{{count}} Surah(s) saved in favorites",
+      "noFavoritesTitle": "No Favorites",
+      "noFavoritesMessage": "You don't have any favorite Surahs to clear.",
+      "confirmClearFavoritesTitle": "Clear All Favorites?",
+      "confirmClearFavoritesDesc": "Are you sure you want to remove {{count}} favorite Surah(s) from your list?",
+      "toastClearedFavoritesTitle": "Cleared Favorites",
+      "toastClearedFavoritesDesc": "All favorite Surahs have been removed."
+    },
+    "helpSupport": {
+      "title": "Help & Support",
+      "contactTitle": "Contact Support",
+      "contactEmail": "munawwarh48@gmail.com"
+    },
+    "about": {
+      "title": "About Us",
+      "subtitle": "Free community Quran app",
+      "appVersionTitle": "App Version",
+      "appVersionSubtitle": "Version {{version}}",
+      "aboutUsTitle": "About Us",
+      "aboutUsContent": "Recite is a non-profit, 100% free community project dedicated to making the Holy Quran accessible to everyone worldwide with zero ads or subscriptions.",
+      "featureFreeTitle": "100% Free & Ad-Free",
+      "featureFreeDesc": "No paywalls, no tracking, and no commercial interruptions.",
+      "featureRecitersTitle": "World-Renowned Reciters",
+      "featureRecitersDesc": "Listen to high-quality audio recitations from top Qaris.",
+      "featureLanguagesTitle": "Multiple Languages",
+      "featureLanguagesDesc": "Side-by-side verse translations across global languages.",
+      "tagline": "Read, Listen & Reflect upon the Quran"
+    },
     "language": {
       "title": "App Language",
       "subtitle": "Choose your preferred language for the application interface."

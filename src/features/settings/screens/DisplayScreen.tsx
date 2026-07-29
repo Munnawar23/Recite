@@ -1,0 +1,153 @@
+import React from "react";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { useTranslation } from "react-i18next";
+import { verticalScale } from "react-native-size-matters";
+
+import SafeArea from "@/components/layout/SafeArea";
+import ScreenHeader from "@/components/ui/ScreenHeader";
+import SectionTitle from "@/components/ui/SectionTitle";
+import TabSwitcher from "@/components/ui/TabSwitcher";
+
+import { useAppTheme } from "@/hooks/useAppTheme";
+import { useFontStore, FontSizeScale } from "@/store/fontStore";
+import { useThemeStore, ThemeMode } from "@/store/themeStore";
+import { Haptics } from "@/lib/haptics";
+
+export default function DisplayScreen() {
+  const { t } = useTranslation();
+  const { themeMode, setThemeMode } = useThemeStore();
+  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+
+  const {
+    fontSizeScale,
+    setFontSizeScale,
+    quranFontSizeScale,
+    setQuranFontSizeScale,
+  } = useFontStore();
+
+  const themeTabs = [
+    { label: t("settings.display.theme.light", "Light"), value: "light" },
+    { label: t("settings.display.theme.dark", "Dark"), value: "dark" },
+    { label: t("settings.display.theme.system", "System"), value: "system" },
+  ];
+
+  const fontSizeTabs = [
+    { label: t("settings.display.fontSize.small", "Small"), value: "small" },
+    { label: t("settings.display.fontSize.default", "Default"), value: "default" },
+    { label: t("settings.display.fontSize.large", "Large"), value: "large" },
+  ];
+
+  let textMultiplier = 1.0;
+  if (fontSizeScale === "small") textMultiplier = 0.85;
+  else if (fontSizeScale === "large") textMultiplier = 1.25;
+
+  let quranMultiplier = 1.0;
+  if (quranFontSizeScale === "small") quranMultiplier = 0.85;
+  else if (quranFontSizeScale === "large") quranMultiplier = 1.25;
+
+  const S = createStyles(colors, fontFamily, fontSize, spacing, textMultiplier, quranMultiplier);
+
+  return (
+    <SafeArea>
+      <ScreenHeader
+        title={t("settings.display.title", "Display Settings")}
+        subtitle={t("settings.display.subtitle", "Theme, fonts & text sizes")}
+      />
+
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={S.scrollContent}>
+        {/* 1. Theme Option */}
+        <SectionTitle label={t("settings.display.appTheme", "App Theme")} icon="color-palette-outline" tightSpacing />
+        <TabSwitcher
+          tabs={themeTabs}
+          activeTab={themeMode}
+          onTabChange={(val: ThemeMode) => {
+            Haptics.medium();
+            setThemeMode(val);
+          }}
+        />
+
+        <View style={{ height: verticalScale(8) }} />
+
+        {/* 2. App Font Size */}
+        <SectionTitle label={t("settings.display.appFontSize", "App Font Size")} icon="text-outline" tightSpacing />
+        <TabSwitcher
+          tabs={fontSizeTabs}
+          activeTab={fontSizeScale}
+          onTabChange={(val: FontSizeScale) => {
+            Haptics.medium();
+            setFontSizeScale(val);
+          }}
+        />
+
+        <View style={{ height: verticalScale(8) }} />
+
+        {/* 3. Quran Font Size */}
+        <SectionTitle label={t("settings.display.quranFontSize", "Quran Arabic Font Size")} icon="book-outline" tightSpacing />
+        <TabSwitcher
+          tabs={fontSizeTabs}
+          activeTab={quranFontSizeScale}
+          onTabChange={(val: FontSizeScale) => {
+            Haptics.medium();
+            setQuranFontSizeScale(val);
+          }}
+        />
+
+        {/* Clean Live Preview Box */}
+        <View style={S.previewCard}>
+          <Text style={S.previewHeader}>{t("settings.display.livePreview", "Live Preview")}</Text>
+          <Text style={S.previewTranslation}>
+            {t("settings.display.sampleTranslation", "In the name of Allah, the Most Gracious, the Most Merciful")}
+          </Text>
+          <Text style={S.previewArabic}>
+            {t("settings.display.sampleArabic", "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ")}
+          </Text>
+        </View>
+
+        <View style={{ height: verticalScale(30) }} />
+      </ScrollView>
+    </SafeArea>
+  );
+}
+
+const createStyles = (
+  colors: any,
+  fontFamily: any,
+  fontSize: any,
+  spacing: any,
+  textMultiplier: number = 1,
+  quranMultiplier: number = 1
+) =>
+  StyleSheet.create({
+    scrollContent: {
+      paddingBottom: spacing.vXxl,
+    },
+    previewCard: {
+      backgroundColor: colors.card,
+      marginHorizontal: spacing.screenPadding,
+      marginTop: spacing.cardMarginBottom,
+      borderRadius: spacing.md,
+      padding: spacing.md,
+      borderWidth: 1,
+      borderColor: colors.border,
+      gap: spacing.itemGap,
+    },
+    previewHeader: {
+      fontFamily: fontFamily.title,
+      fontSize: fontSize.title,
+      color: colors.primary,
+    },
+    previewTranslation: {
+      fontFamily: fontFamily.text,
+      fontSize: fontSize.body * textMultiplier,
+      color: colors.text,
+      lineHeight: fontSize.body * textMultiplier * 1.5,
+    },
+    previewArabic: {
+      fontFamily: fontFamily.quran,
+      fontSize: fontSize.arabic * quranMultiplier,
+      color: colors.primary,
+      textAlign: "right",
+      marginTop: verticalScale(4),
+      lineHeight: fontSize.arabic * quranMultiplier * 1.8,
+    },
+  });

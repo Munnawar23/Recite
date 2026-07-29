@@ -1,8 +1,10 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Modal } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { scale, verticalScale } from "react-native-size-matters";
+import CommonModal from "./CommonModal";
+import { Haptics } from "@/lib/haptics";
 
 interface DeleteConfirmationModalProps {
   visible: boolean;
@@ -10,6 +12,8 @@ interface DeleteConfirmationModalProps {
   description: string;
   onConfirm: () => void;
   onCancel: () => void;
+  confirmText?: string;
+  cancelText?: string;
 }
 
 export default function DeleteConfirmationModal({
@@ -18,94 +22,79 @@ export default function DeleteConfirmationModal({
   description,
   onConfirm,
   onCancel,
+  confirmText = "Clear",
+  cancelText = "Cancel",
 }: DeleteConfirmationModalProps) {
-  const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
-  const isDark = activeScheme === "dark";
-  const S = createStyles(colors, fontFamily, fontSize, isDark);
+  const { colors, fontFamily, fontSize } = useAppTheme();
+  const S = createStyles(colors, fontFamily, fontSize);
 
   if (!visible) return null;
 
+  const handleConfirm = () => {
+    Haptics.medium();
+    onConfirm();
+  };
+
+  const handleCancel = () => {
+    Haptics.medium();
+    onCancel();
+  };
+
   return (
-    <Modal transparent animationType="fade" visible={visible} onRequestClose={onCancel}>
-      <View style={S.overlay}>
-        <View style={S.modalContainer}>
-          <View style={S.iconCircle}>
-            <Ionicons name="trash-outline" size={scale(24)} color="#E53E3E" />
-          </View>
+    <CommonModal visible={visible} title={title} onClose={handleCancel}>
+      <View style={S.container}>
+        <View style={S.iconCircle}>
+          <Ionicons name="trash-outline" size={scale(24)} color="#E53E3E" />
+        </View>
 
-          <Text style={S.title}>{title}</Text>
-          <Text style={S.description}>{description}</Text>
+        <Text style={S.description}>{description}</Text>
 
-          <View style={S.buttonRow}>
-            <TouchableOpacity style={S.cancelBtn} onPress={onCancel} activeOpacity={0.8}>
-              <Text style={S.cancelBtnText}>Cancel</Text>
-            </TouchableOpacity>
+        <View style={S.buttonRow}>
+          <TouchableOpacity style={S.cancelBtn} onPress={handleCancel} activeOpacity={0.8}>
+            <Text style={S.cancelBtnText}>{cancelText}</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity style={S.deleteBtn} onPress={onConfirm} activeOpacity={0.8}>
-              <Text style={S.deleteBtnText}>Delete</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity style={S.deleteBtn} onPress={handleConfirm} activeOpacity={0.8}>
+            <Text style={S.deleteBtnText}>{confirmText}</Text>
+          </TouchableOpacity>
         </View>
       </View>
-    </Modal>
+    </CommonModal>
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, isDark: boolean) =>
+const createStyles = (colors: any, fontFamily: any, fontSize: any) =>
   StyleSheet.create({
-    overlay: {
-      flex: 1,
-      backgroundColor: "rgba(0, 0, 0, 0.55)",
-      justifyContent: "center",
+    container: {
       alignItems: "center",
-      paddingHorizontal: scale(24),
-    },
-    modalContainer: {
-      width: "100%",
-      backgroundColor: colors.card,
-      borderRadius: scale(20),
-      padding: scale(20),
-      alignItems: "center",
-      borderWidth: 1,
-      borderColor: colors.border,
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.25,
-      shadowRadius: 16,
-      elevation: 8,
+      paddingTop: verticalScale(4),
+      gap: verticalScale(12),
     },
     iconCircle: {
-      width: scale(48),
-      height: scale(48),
-      borderRadius: scale(24),
+      width: scale(52),
+      height: scale(52),
+      borderRadius: scale(26),
       backgroundColor: "rgba(229, 62, 62, 0.12)",
       alignItems: "center",
       justifyContent: "center",
-      marginBottom: verticalScale(12),
-    },
-    title: {
-      color: colors.text,
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.cardTitle,
-      marginBottom: verticalScale(6),
-      textAlign: "center",
     },
     description: {
-      color: colors.subtext,
+      color: colors.text,
       fontFamily: fontFamily.text,
-      fontSize: fontSize.body,
+      fontSize: fontSize.bodyLg,
       textAlign: "center",
-      lineHeight: fontSize.body * 1.5,
-      marginBottom: verticalScale(18),
+      lineHeight: fontSize.bodyLg * 1.45,
+      paddingHorizontal: scale(4),
     },
     buttonRow: {
       flexDirection: "row",
       gap: scale(10),
       width: "100%",
+      marginTop: verticalScale(6),
     },
     cancelBtn: {
       flex: 1,
-      paddingVertical: verticalScale(10),
+      paddingVertical: verticalScale(11),
       borderRadius: scale(12),
       backgroundColor: colors.background,
       alignItems: "center",
@@ -115,11 +104,11 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, isDark: boole
     cancelBtnText: {
       color: colors.text,
       fontFamily: fontFamily.title,
-      fontSize: fontSize.body,
+      fontSize: fontSize.bodyLg,
     },
     deleteBtn: {
       flex: 1,
-      paddingVertical: verticalScale(10),
+      paddingVertical: verticalScale(11),
       borderRadius: scale(12),
       backgroundColor: "#E53E3E",
       alignItems: "center",
@@ -127,6 +116,6 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, isDark: boole
     deleteBtnText: {
       color: "#FFFFFF",
       fontFamily: fontFamily.title,
-      fontSize: fontSize.body,
+      fontSize: fontSize.bodyLg,
     },
   });

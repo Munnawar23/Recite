@@ -85,6 +85,109 @@
     "subtitle": "حدث خطأ غير متوقع في التطبيق. يمكنك محاولة إعادة التشغيل أو إعادة تعيين العرض الحالي."
   },
   "settings": {
+    "title": "الإعدادات",
+    "subtitle": "تخصيص تفضيلات التطبيق والمظهر",
+    "sections": {
+      "displayLanguage": "العرض واللغات",
+      "notifications": "الإشعارات",
+      "storage": "التخزين",
+      "helpSupport": "المساعدة والدعم",
+      "aboutUs": "عن التطبيق"
+    },
+    "display": {
+      "title": "إعدادات العرض",
+      "subtitle": "المظهر والخطوط وأحجام النصوص",
+      "optionsTitle": "خيارات العرض",
+      "optionsSubtitle": "المظهر وأحجام الخطوط",
+      "appTheme": "مظهر التطبيق",
+      "appFontSize": "حجم خط التطبيق",
+      "quranFontSize": "حجم الخط العربي للقرآن",
+      "livePreview": "معاينة مباشرة",
+      "sampleTranslation": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "theme": {
+        "light": "فاتح",
+        "dark": "داكن",
+        "system": "النظام"
+      },
+      "fontSize": {
+        "small": "صغير",
+        "default": "افتراضي",
+        "large": "كبير"
+      }
+    },
+    "languages": {
+      "title": "اللغات والصوتيات",
+      "subtitle": "لغة التطبيق، الترجمة والقارئ",
+      "optionsTitle": "خيارات اللغة والصوت",
+      "optionsSubtitle": "اللغة والترجمة والقارئ",
+      "appLanguageSection": "لغة التطبيق",
+      "appLanguageTitle": "لغة واجهة التطبيق",
+      "appLanguageSubtitle": "اختر اللغة الرئيسية للقوائم والواجهة",
+      "appLanguagePlaceholder": "اختر لغة التطبيق",
+      "quranTranslationSection": "ترجمة القرآن",
+      "quranTranslationTitle": "ترجمة القرآن الافتراضية",
+      "quranTranslationSubtitle": "اختر نص الترجمة المعروض للآيات",
+      "quranTranslationPlaceholder": "اختر الترجمة",
+      "quranReciterSection": "قارئ القرآن",
+      "quranReciterTitle": "قارئ القرآن الافتراضي",
+      "quranReciterSubtitle": "اختر صوت القارئ لتشغيل الصوت",
+      "quranReciterPlaceholder": "اختر القارئ",
+      "translations": {
+        "arabicOnly": "النص العربي فقط",
+        "english": "الإنجليزية (صحيح)",
+        "urdu": "الأردية (المودودي)",
+        "hindi": "الهندية (عزيز الحق)",
+        "indonesian": "الإندونيسية (الوزارة)",
+        "bengali": "البنغالية (تيسير)"
+      }
+    },
+    "notifications": {
+      "title": "الإشعارات",
+      "enableTitle": "تفعيل الإشعارات",
+      "enabled": "الإشعارات مفعّلة",
+      "disabled": "معطّلة"
+    },
+    "storage": {
+      "title": "التخزين",
+      "clearDownloadsTitle": "مسح جميع التنزيلات",
+      "clearDownloadsSubtitleEmpty": "٠ سور محفوظة دون اتصال (٠ ميجابايت)",
+      "clearDownloadsSubtitle": "تم حفظ {{count}} سورة ({{size}})",
+      "noDownloadsTitle": "لا توجد تنزيلات",
+      "noDownloadsMessage": "ليس لديك أي سور منزلة لمسحها.",
+      "confirmClearDownloadsTitle": "مسح جميع التنزيلات؟",
+      "confirmClearDownloadsDesc": "هل أنت ألكيد من رغبتك في إزالة {{count}} سورة منزلة من التخزين؟",
+      "toastClearedDownloadsTitle": "تم مسح التنزيلات",
+      "toastClearedDownloadsDesc": "تم مسح جميع السور المنزلة بنجاح.",
+      "clearFavoritesTitle": "مسح جميع المفضلة",
+      "clearFavoritesSubtitle": "تم حفظ {{count}} سورة في المفضلة",
+      "noFavoritesTitle": "لا توجد مفضلة",
+      "noFavoritesMessage": "ليس لديك أي سور مفضلة لمسحها.",
+      "confirmClearFavoritesTitle": "مسح جميع المفضلة؟",
+      "confirmClearFavoritesDesc": "هل أنت ألكيد من رغبتك في إزالة {{count}} سورة مفضلة من قائمتك؟",
+      "toastClearedFavoritesTitle": "تم مسح المفضلة",
+      "toastClearedFavoritesDesc": "تم إزالة جميع السور المفضلة."
+    },
+    "helpSupport": {
+      "title": "المساعدة والدعم",
+      "contactTitle": "التواصل مع الدعم",
+      "contactEmail": "munawwarh48@gmail.com"
+    },
+    "about": {
+      "title": "عن التطبيق",
+      "subtitle": "تطبيق قرآني مجاني للمجتمع",
+      "appVersionTitle": "إصدار التطبيق",
+      "appVersionSubtitle": "الإصدار {{version}}",
+      "aboutUsTitle": "من نحن",
+      "aboutUsContent": "رتّل هو مشروع مجتمعي مجاني ١٠٠٪ وغير ربحي مخصص لجعل القرآن الكريم متاحاً للجميع حول العالم بدون إعلانات أو اشتراكات.",
+      "featureFreeTitle": "مجاني ١٠٠٪ وبدون إعلانات",
+      "featureFreeDesc": "لا توجد رسوم، ولا تتبع، ولا إعلانات تجارية.",
+      "featureRecitersTitle": "نخبة من كبار القراء",
+      "featureRecitersDesc": "استمع إلى تلاوات صوتية عالية الجودة من كبار القراء.",
+      "featureLanguagesTitle": "لغات متعددة",
+      "featureLanguagesDesc": "ترجمات الآيات جنباً إلى جنب بلغات عالمية متعددة.",
+      "tagline": "اقرأ، استمع، وتدبر القرآن الكريم"
+    },
     "language": {
       "title": "لغة التطبيق",
       "subtitle": "اختر لغتك المفضلة لواجهة التطبيق."

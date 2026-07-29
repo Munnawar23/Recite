@@ -85,6 +85,109 @@
     "subtitle": "एप्लिकेशन में एक अप्रत्याशित त्रुटि हुई। आप पुनरारंभ करने या वर्तमान दृश्य को रीसेट करने का प्रयास कर सकते हैं।"
   },
   "settings": {
+    "title": "सेटिंग्स",
+    "subtitle": "अपनी ऐप प्राथमिकताओं और थीम को कस्टमाइज़ करें",
+    "sections": {
+      "displayLanguage": "प्रदर्शन और भाषाएं",
+      "notifications": "सूचनाएं",
+      "storage": "स्टोरेज",
+      "helpSupport": "सहायता और समर्थन",
+      "aboutUs": "हमारे बारे में"
+    },
+    "display": {
+      "title": "प्रदर्शन सेटिंग्स",
+      "subtitle": "थीम, फ़ॉन्ट और टेक्स्ट आकार",
+      "optionsTitle": "प्रदर्शन विकल्प",
+      "optionsSubtitle": "थीम और फ़ॉन्ट आकार",
+      "appTheme": "ऐप थीम",
+      "appFontSize": "ऐप फ़ॉन्ट आकार",
+      "quranFontSize": "क़ुरआनी अरबी फ़ॉन्ट आकार",
+      "livePreview": "लाइव पूर्वावलोकन",
+      "sampleTranslation": "अल्लाह के नाम से जो अत्यंत कृपाशील, दयावान है",
+      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "theme": {
+        "light": "लाइट",
+        "dark": "डार्क",
+        "system": "सिस्टम"
+      },
+      "fontSize": {
+        "small": "छोटा",
+        "default": "डिफ़ॉल्ट",
+        "large": "बड़ा"
+      }
+    },
+    "languages": {
+      "title": "भाषाएं और ऑडियो",
+      "subtitle": "ऐप भाषा, अनुवाद और कारी",
+      "optionsTitle": "भाषा और ऑडियो विकल्प",
+      "optionsSubtitle": "भाषा, अनुवाद और कारी",
+      "appLanguageSection": "ऐप भाषा",
+      "appLanguageTitle": "ऐप इंटरफ़ेस भाषा",
+      "appLanguageSubtitle": "मेनू और इंटरफ़ेस के लिए प्राथमिक भाषा चुनें",
+      "appLanguagePlaceholder": "ऐप भाषा चुनें",
+      "quranTranslationSection": "क़ुरआन अनुवाद",
+      "quranTranslationTitle": "डिफ़ॉल्ट क़ुरआन अनुवाद",
+      "quranTranslationSubtitle": "आयतों के लिए प्रदर्शित अनुवाद पाठ चुनें",
+      "quranTranslationPlaceholder": "अनुवाद चुनें",
+      "quranReciterSection": "क़ुरआन कारी",
+      "quranReciterTitle": "डिफ़ॉल्ट क़ुरआन कारी",
+      "quranReciterSubtitle": "ऑडियो सुनने के लिए क़ारी की आवाज़ चुनें",
+      "quranReciterPlaceholder": "कारी चुनें",
+      "translations": {
+        "arabicOnly": "केवल अरबी",
+        "english": "अंग्रेज़ी (सहीह)",
+        "urdu": "उर्दू (मौदूदी)",
+        "hindi": "हिंदी (अज़ीज़ुल हक)",
+        "indonesian": "इंडोनेशियाई (मंत्रालय)",
+        "bengali": "बंगाली (ताइसीरुल)"
+      }
+    },
+    "notifications": {
+      "title": "सूचनाएं",
+      "enableTitle": "सूचनाएं सक्षम करें",
+      "enabled": "सूचना सक्षम है",
+      "disabled": "अक्षम"
+    },
+    "storage": {
+      "title": "स्टोरेज",
+      "clearDownloadsTitle": "सभी डाउनलोड हटाएं",
+      "clearDownloadsSubtitleEmpty": "0 सूरह ऑफ़लाइन सहेजी गई हैं (0 MB)",
+      "clearDownloadsSubtitle": "{{count}} सूरह सहेजी गई हैं ({{size}})",
+      "noDownloadsTitle": "कोई डाउनलोड नहीं",
+      "noDownloadsMessage": "हटाने के लिए आपके पास कोई डाउनलोड की गई सूरह नहीं है।",
+      "confirmClearDownloadsTitle": "सभी डाउनलोड हटाएं?",
+      "confirmClearDownloadsDesc": "क्या आप निश्चित रूप से ऑफ़लाइन स्टोरेज से {{count}} डाउनलोड की गई सूरह हटाना चाहते हैं?",
+      "toastClearedDownloadsTitle": "डाउनलोड हटा दिए गए",
+      "toastClearedDownloadsDesc": "सभी डाउनलोड की गई सूरह हटा दी गई हैं।",
+      "clearFavoritesTitle": "सभी पसंदीदा हटाएं",
+      "clearFavoritesSubtitle": "{{count}} सूरह पसंदीदा में सहेजी गई हैं",
+      "noFavoritesTitle": "कोई पसंदीदा नहीं",
+      "noFavoritesMessage": "हटाने के लिए आपके पास कोई पसंदीदा सूरह नहीं है।",
+      "confirmClearFavoritesTitle": "सभी पसंदीदा हटाएं?",
+      "confirmClearFavoritesDesc": "क्या आप निश्चित रूप से अपनी सूची से {{count}} पसंदीदा सूरह हटाना चाहते हैं?",
+      "toastClearedFavoritesTitle": "पसंदीदा हटा दिए गए",
+      "toastClearedFavoritesDesc": "सभी पसंदीदा सूरह हटा दी गई हैं।"
+    },
+    "helpSupport": {
+      "title": "सहायता और समर्थन",
+      "contactTitle": "समर्थन से संपर्क करें",
+      "contactEmail": "munawwarh48@gmail.com"
+    },
+    "about": {
+      "title": "हमारे बारे में",
+      "subtitle": "मुफ़्त सामुदायिक क़ुरआन ऐप",
+      "appVersionTitle": "ऐप संस्करण",
+      "appVersionSubtitle": "संस्करण {{version}}",
+      "aboutUsTitle": "हमारे बारे में",
+      "aboutUsContent": "Recite एक गैर-लाभकारी, 100% मुफ़्त सामुदायिक परियोजना है जो बिना किसी विज्ञापन या सदस्यता के दुनिया भर में सभी के लिए पवित्र क़ुरआन सुलभ बनाने के लिए समर्पित है।",
+      "featureFreeTitle": "100% मुफ़्त और विज्ञापन-मुक्त",
+      "featureFreeDesc": "कोई शुल्क नहीं, कोई ट्रैकिंग नहीं, और कोई व्यावसायिक विज्ञापन नहीं।",
+      "featureRecitersTitle": "विश्व प्रसिद्ध कारी",
+      "featureRecitersDesc": "शीर्ष क़ारियों से उच्च गुणवत्ता वाले ऑडियो पाठ सुनें।",
+      "featureLanguagesTitle": "अनेक भाषाएं",
+      "featureLanguagesDesc": "वैश्विक भाषाओं में आयत-दर-आयत अनुवाद।",
+      "tagline": "पवित्र क़ुरआन पढ़ें, सुनें और चिंतन करें"
+    },
     "language": {
       "title": "ऐप भाषा",
       "subtitle": "एप्लिकेशन इंटरफ़ेस के लिए अपनी पसंदीदा भाषा चुनें।"

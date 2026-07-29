@@ -14,6 +14,8 @@ import { I18nextProvider } from "react-i18next";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import Toast from "react-native-toast-message";
+
 // Keep the splash screen visible while we fetch resources
 void SplashScreen.preventAutoHideAsync();
 
@@ -71,7 +73,13 @@ export default function RootLayout() {
                 screenOptions={{
                   headerShown: false,
                 }}
-              />
+              >
+                <Stack.Screen name="(tabs)" />
+                <Stack.Screen name="surah/[id]" />
+                <Stack.Screen name="settings/display" />
+                <Stack.Screen name="settings/languages" />
+              </Stack>
+              <Toast />
             </PersistQueryClientProvider>
           </SafeAreaProvider>
         </GestureHandlerRootView>

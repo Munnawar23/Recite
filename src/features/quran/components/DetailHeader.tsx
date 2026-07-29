@@ -6,7 +6,8 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { scale, verticalScale } from "react-native-size-matters";
 import { Haptics } from "@/lib/haptics";
 import { useRouter } from "expo-router";
-import CommonDropdown from "@/components/ui/CommonDropdown";
+import CommonModal from "@/components/ui/CommonModal";
+import Toast from "react-native-toast-message";
 import { useFavoritesStore } from "@/store/favoritesStore";
 
 interface DetailHeaderProps {
@@ -71,6 +72,13 @@ export default function DetailHeader({
             onPress={() => {
               Haptics.light();
               toggleFavorite(chapterId);
+              Toast.show({
+                type: "success",
+                text1: !isFavorite ? "Added to Favorites" : "Removed from Favorites",
+                text2: !isFavorite
+                  ? `${englishName || `Surah ${chapterId}`} has been saved to your favorites.`
+                  : `${englishName || `Surah ${chapterId}`} removed from your favorites.`,
+              });
             }}
             style={S.actionButton}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -87,7 +95,7 @@ export default function DetailHeader({
 
       {/* Bottom Dropdown Selector Bar (Full Width) */}
       <View style={S.dropdownRow}>
-        <CommonDropdown
+        <CommonModal
           data={translationOptions}
           value={selectedTransId}
           onChange={(item) => onTranslationChange(item.value)}

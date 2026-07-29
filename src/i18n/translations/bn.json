@@ -85,6 +85,109 @@
     "subtitle": "অ্যাপ্লিকেশনটিতে একটি অনাকাঙ্ক্ষিত ত্রুটি ঘটেছে। আপনি আবার শুরু করতে পারেন বা বর্তমান দৃশ্যটি পুনরায় সেট করার চেষ্টা করতে পারেন।"
   },
   "settings": {
+    "title": "সেটিংস",
+    "subtitle": "আপনার অ্যাপের পছন্দ এবং থিম পরিবর্তন করুন",
+    "sections": {
+      "displayLanguage": "প্রদর্শন ও ভাষাসমূহ",
+      "notifications": "নোটিফিকেশনসমূহ",
+      "storage": "স্টোরেজ",
+      "helpSupport": "সাহায্য ও সহায়তা",
+      "aboutUs": "আমাদের সম্পর্কে"
+    },
+    "display": {
+      "title": "প্রদর্শন সেটিংস",
+      "subtitle": "থিম, ফন্ট এবং পাঠ্যের আকার",
+      "optionsTitle": "প্রদর্শন বিকল্পসমূহ",
+      "optionsSubtitle": "থিম এবং ফন্টের আকার",
+      "appTheme": "অ্যাপ থিম",
+      "appFontSize": "অ্যাপের ফন্ট সাইজ",
+      "quranFontSize": "কুরআনি আরবি ফন্ট সাইজ",
+      "livePreview": "লাইভ প্রিভিউ",
+      "sampleTranslation": "পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে শুরু করছি",
+      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "theme": {
+        "light": "হালকা",
+        "dark": "ডার্ক",
+        "system": "সিস্টেম"
+      },
+      "fontSize": {
+        "small": "ছোট",
+        "default": "ডিফল্ট",
+        "large": "বড়"
+      }
+    },
+    "languages": {
+      "title": "ভাষা ও অডিও",
+      "subtitle": "অ্যাপের ভাষা, অনুবাদ ও তিলওয়াতকারী",
+      "optionsTitle": "ভাষা ও অডিও বিকল্পসমূহ",
+      "optionsSubtitle": "ভাষা, অনুবাদ ও তিলওয়াতকারী",
+      "appLanguageSection": "অ্যাপের ভাষা",
+      "appLanguageTitle": "অ্যাপ ইন্টারফেসের ভাষা",
+      "appLanguageSubtitle": "মেনু ও ইন্টারফেসের জন্য মূল ভাষা বেছে নিন",
+      "appLanguagePlaceholder": "অ্যাপের ভাষা নির্বাচন করুন",
+      "quranTranslationSection": "কুরআন অনুবাদ",
+      "quranTranslationTitle": "ডিফল্ট কুরআন অনুবাদ",
+      "quranTranslationSubtitle": "আয়াতের জন্য প্রদর্শিত অনুবাদ পাঠ্য চয়ন করুন",
+      "quranTranslationPlaceholder": "অনুবাদ নির্বাচন করুন",
+      "quranReciterSection": "কুরআন তিলওয়াতকারী",
+      "quranReciterTitle": "ডিফল্ট কুরআন তিলওয়াতকারী",
+      "quranReciterSubtitle": "অডিও শোনার জন্য কারীর কণ্ঠ নির্বাচন করুন",
+      "quranReciterPlaceholder": "তিলওয়াতকারী নির্বাচন করুন",
+      "translations": {
+        "arabicOnly": "শুধু আরবি",
+        "english": "ইংরেজি (সহীহ)",
+        "urdu": "উর্দু (মওদূদী)",
+        "hindi": "হিন্দি (আজিজুল হক)",
+        "indonesian": "ইন্দোনেশীয় (মন্ত্রণালয়)",
+        "bengali": "বাংলা (তাইসীরুল)"
+      }
+    },
+    "notifications": {
+      "title": "নোটিফিকেশনসমূহ",
+      "enableTitle": "নোটিফিকেশন চালু করুন",
+      "enabled": "নোটিফিকেশন চালু আছে",
+      "disabled": "বন্ধ"
+    },
+    "storage": {
+      "title": "স্টোরেজ",
+      "clearDownloadsTitle": "সমস্ত ডাউনলোড মুছে ফেলুন",
+      "clearDownloadsSubtitleEmpty": "0 টি সূরা অফলাইনে সংরক্ষিত (0 MB)",
+      "clearDownloadsSubtitle": "{{count}} টি সূরা সংরক্ষিত ({{size}})",
+      "noDownloadsTitle": "কোনো ডাউনলোড নেই",
+      "noDownloadsMessage": "মুছে ফেলার জন্য আপনার কাছে কোনো ডাউনলোড করা সূরা নেই।",
+      "confirmClearDownloadsTitle": "সমস্ত ডাউনলোড মুছে ফেলবেন?",
+      "confirmClearDownloadsDesc": "আপনি কি নিশ্চিত যে অফলাইন স্টোরেজ থেকে {{count}} টি ডাউনলোড করা সূরা মুছে ফেলতে চান?",
+      "toastClearedDownloadsTitle": "ডাউনলোড মুছে ফেলা হয়েছে",
+      "toastClearedDownloadsDesc": "সমস্ত ডাউনলোড করা সূরা সফলভাবে মুছে ফেলা হয়েছে।",
+      "clearFavoritesTitle": "সমস্ত পছন্দসমূহ মুছে ফেলুন",
+      "clearFavoritesSubtitle": "{{count}} টি সূরা পছন্দের তালিকায় সংরক্ষিত",
+      "noFavoritesTitle": "কোনো পছন্দ নেই",
+      "noFavoritesMessage": "মুছে ফেলার জন্য আপনার কাছে কোনো পছন্দের সূরা নেই।",
+      "confirmClearFavoritesTitle": "সমস্ত পছন্দসমূহ মুছে ফেলবেন?",
+      "confirmClearFavoritesDesc": "আপনি কি নিশ্চিত যে আপনার তালিকা থেকে {{count}} টি পছন্দের সূরা মুছে ফেলতে চান?",
+      "toastClearedFavoritesTitle": "পছন্দসমূহ মুছে ফেলা হয়েছে",
+      "toastClearedFavoritesDesc": "সমস্ত পছন্দের সূরা মুছে ফেলা হয়েছে।"
+    },
+    "helpSupport": {
+      "title": "সাহায্য ও সহায়তা",
+      "contactTitle": "সাপোর্টে যোগাযোগ করুন",
+      "contactEmail": "munawwarh48@gmail.com"
+    },
+    "about": {
+      "title": "আমাদের সম্পর্কে",
+      "subtitle": "ফ্রি কমিউনিটি কুরআন অ্যাপ",
+      "appVersionTitle": "অ্যাপের সংস্করণ",
+      "appVersionSubtitle": "সংস্করণ {{version}}",
+      "aboutUsTitle": "আমাদের সম্পর্কে",
+      "aboutUsContent": "Recite হলো একটি অলাভজনক, ১০০% নিখরচায় কমিউনিটি প্রজেক্ট যা কোনো বিজ্ঞাপন বা সাবস্ক্রিপশন ছাড়াই বিশ্বব্যাপী সবার কাছে পবিত্র কুরআন সহজলভ্য করতে নিবেদিত।",
+      "featureFreeTitle": "১০০% ফ্রি ও বিজ্ঞাপনমুক্ত",
+      "featureFreeDesc": "কোনো হিডেন চার্জ নেই, ট্র্যাকিং নেই এবং বাণিজ্যিক বিজ্ঞাপন নেই।",
+      "featureRecitersTitle": "বিশ্ববিখ্যাত তিলওয়াতকারীগণ",
+      "featureRecitersDesc": "সেরা কারীদের থেকে উচ্চ মানের অডিও তিলাওয়াত শুনুন।",
+      "featureLanguagesTitle": "বিভিন্ন ভাষা",
+      "featureLanguagesDesc": "বিশ্বের বিভিন্ন ভাষায় আয়াতভিত্তিক অনুবাদ।",
+      "tagline": "পবিত্র কুরআন পড়ুন, শুনুন এবং অনুধ্যান করুন"
+    },
     "language": {
       "title": "অ্যাপের ভাষা",
       "subtitle": "অ্যাপ্লিকেশন ইন্টারফেসের জন্য আপনার পছন্দসই ভাষা চয়ন করুন।"

@@ -85,6 +85,109 @@
     "subtitle": "Terjadi kesalahan yang tidak terduga dalam aplikasi. Anda dapat mencoba memulai ulang atau menyetel ulang tampilan saat ini."
   },
   "settings": {
+    "title": "Pengaturan",
+    "subtitle": "Sesuaikan preferensi aplikasi dan tema Anda",
+    "sections": {
+      "displayLanguage": "Tampilan & Bahasa",
+      "notifications": "Notifikasi",
+      "storage": "Penyimpanan",
+      "helpSupport": "Bantuan & Dukungan",
+      "aboutUs": "Tentang Kami"
+    },
+    "display": {
+      "title": "Pengaturan Tampilan",
+      "subtitle": "Tema, font & ukuran teks",
+      "optionsTitle": "Opsi Tampilan",
+      "optionsSubtitle": "Tema & ukuran font",
+      "appTheme": "Tema Aplikasi",
+      "appFontSize": "Ukuran Font Aplikasi",
+      "quranFontSize": "Ukuran Font Arab Al-Qur'an",
+      "livePreview": "Pratinjau Langsung",
+      "sampleTranslation": "Dengan menyebut nama Allah Yang Maha Pengasih lagi Maha Penyayang",
+      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "theme": {
+        "light": "Terang",
+        "dark": "Gelap",
+        "system": "Sistem"
+      },
+      "fontSize": {
+        "small": "Kecil",
+        "default": "Default",
+        "large": "Besar"
+      }
+    },
+    "languages": {
+      "title": "Bahasa & Audio",
+      "subtitle": "Bahasa aplikasi, terjemahan & qari",
+      "optionsTitle": "Opsi Bahasa & Audio",
+      "optionsSubtitle": "Bahasa, terjemahan & qari",
+      "appLanguageSection": "Bahasa Aplikasi",
+      "appLanguageTitle": "Bahasa Antarmuka Aplikasi",
+      "appLanguageSubtitle": "Pilih bahasa utama untuk menu & antarmuka",
+      "appLanguagePlaceholder": "Pilih Bahasa Aplikasi",
+      "quranTranslationSection": "Terjemahan Al-Qur'an",
+      "quranTranslationTitle": "Terjemahan Utama Al-Qur'an",
+      "quranTranslationSubtitle": "Pilih teks terjemahan yang ditampilkan untuk ayat",
+      "quranTranslationPlaceholder": "Pilih Terjemahan",
+      "quranReciterSection": "Qari Al-Qur'an",
+      "quranReciterTitle": "Qari Al-Qur'an Default",
+      "quranReciterSubtitle": "Pilih suara Qari untuk pemutaran audio",
+      "quranReciterPlaceholder": "Pilih Qari",
+      "translations": {
+        "arabicOnly": "Hanya Arab",
+        "english": "Inggris (Saheeh)",
+        "urdu": "Urdu (Maududi)",
+        "hindi": "Hindi (Azizul Haque)",
+        "indonesian": "Indonesia (Kemenag)",
+        "bengali": "Bengali (Taisirul)"
+      }
+    },
+    "notifications": {
+      "title": "Notifikasi",
+      "enableTitle": "Aktifkan Notifikasi",
+      "enabled": "Notifikasi diaktifkan",
+      "disabled": "Dinonaktifkan"
+    },
+    "storage": {
+      "title": "Penyimpanan",
+      "clearDownloadsTitle": "Hapus Semua Unduhan",
+      "clearDownloadsSubtitleEmpty": "0 Surah tersimpan offline (0 MB)",
+      "clearDownloadsSubtitle": "{{count}} Surah tersimpan ({{size}})",
+      "noDownloadsTitle": "Tidak Ada Unduhan",
+      "noDownloadsMessage": "Anda tidak memiliki Surah yang diunduh untuk dihapus.",
+      "confirmClearDownloadsTitle": "Hapus Semua Unduhan?",
+      "confirmClearDownloadsDesc": "Apakah Anda yakin ingin menghapus {{count}} Surah yang diunduh dari penyimpanan offline?",
+      "toastClearedDownloadsTitle": "Unduhan Dihapus",
+      "toastClearedDownloadsDesc": "Semua Surah yang diunduh telah dihapus.",
+      "clearFavoritesTitle": "Hapus Semua Favorit",
+      "clearFavoritesSubtitle": "{{count}} Surah tersimpan di favorit",
+      "noFavoritesTitle": "Tidak Ada Favorit",
+      "noFavoritesMessage": "Anda tidak memiliki Surah favorit untuk dihapus.",
+      "confirmClearFavoritesTitle": "Hapus Semua Favorit?",
+      "confirmClearFavoritesDesc": "Apakah Anda yakin ingin menghapus {{count}} Surah favorit dari daftar Anda?",
+      "toastClearedFavoritesTitle": "Favorit Dihapus",
+      "toastClearedFavoritesDesc": "Semua Surah favorit telah dihapus."
+    },
+    "helpSupport": {
+      "title": "Bantuan & Dukungan",
+      "contactTitle": "Hubungi Dukungan",
+      "contactEmail": "munawwarh48@gmail.com"
+    },
+    "about": {
+      "title": "Tentang Kami",
+      "subtitle": "Aplikasi Al-Qur'an komunitas gratis",
+      "appVersionTitle": "Versi Aplikasi",
+      "appVersionSubtitle": "Versi {{version}}",
+      "aboutUsTitle": "Tentang Kami",
+      "aboutUsContent": "Recite adalah proyek komunitas nirlaba 100% gratis yang didedikasikan untuk menyediakan akses Al-Qur'an bagi semua orang di seluruh dunia tanpa iklan atau berlangganan.",
+      "featureFreeTitle": "100% Gratis & Tanpa Iklan",
+      "featureFreeDesc": "Tanpa biaya, tanpa pelacakan, dan tanpa gangguan iklan.",
+      "featureRecitersTitle": "Qari Ternama Dunia",
+      "featureRecitersDesc": "Dengarkan lantunan audio berkualitas tinggi dari Qari terkemuka.",
+      "featureLanguagesTitle": "Banyak Bahasa",
+      "featureLanguagesDesc": "Terjemahan ayat berdampingan dalam berbagai bahasa dunia.",
+      "tagline": "Baca, Dengarkan & Renungkan Al-Qur'an"
+    },
     "language": {
       "title": "Bahasa Aplikasi",
       "subtitle": "Pilih bahasa pilihan Anda untuk antarmuka aplikasi."

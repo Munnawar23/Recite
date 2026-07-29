@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import { getChapterAudio } from "@/lib/api/quran-data";
 import { useDownloadsStore } from "@/store/downloadsStore";
+import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 
 export interface AudioTimestamp {
   verse_key: string;
@@ -20,7 +21,8 @@ export const RECITER_OPTIONS = [
 ];
 
 export function useQuranAudio(chapterId: number, enabled: boolean = true) {
-  const [reciterId, setReciterId] = useState<number>(7);
+  const { reciterId: globalReciterId } = useQuranSettingsStore();
+  const [reciterId, setReciterId] = useState<number>(globalReciterId || 7);
   const { downloadedChapters } = useDownloadsStore();
   const localChapter = downloadedChapters[chapterId];
   const hasLocalAudio = !!localChapter?.localAudioUri;

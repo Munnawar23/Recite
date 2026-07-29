@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { scale, verticalScale } from "react-native-size-matters";
 import { RECITER_OPTIONS } from "../hooks/useQuranAudio";
-import CommonDropdown from "@/components/ui/CommonDropdown";
+import CommonModal from "@/components/ui/CommonModal";
 import Slider from "@react-native-community/slider";
 import type { AudioPlayer } from "expo-audio";
 
@@ -79,7 +79,7 @@ export default function AudioPlayerControls({
       <View style={S.reciterRow}>
         <Text style={S.reciterLabel}>Reciter:</Text>
         <View style={S.dropdownContainer}>
-          <CommonDropdown
+          <CommonModal
             data={dropdownData}
             value={String(reciterId)}
             onChange={(item) => onReciterChange(Number(item.value))}

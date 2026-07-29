@@ -11,6 +11,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { Haptics } from "@/lib/haptics";
 import type { SurahVerse } from "@/types/quran";
 import { useDownloadsStore } from "@/store/downloadsStore";
+import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 
 // Sub-components
 import DetailHeader from "../components/DetailHeader";
@@ -43,7 +44,8 @@ export default function QuranDetailScreen() {
   const isDark = activeScheme === "dark";
   const chapterId = parseInt(id ?? "1", 10);
 
-  const [selectedTransId, setSelectedTransId] = useState<string>("20");
+  const { translationId: globalTranslationId } = useQuranSettingsStore();
+  const [selectedTransId, setSelectedTransId] = useState<string>(globalTranslationId || "20");
 
   const { downloadedChapters } = useDownloadsStore();
   const localChapter = downloadedChapters[chapterId];

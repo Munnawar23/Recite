@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { LocationData, MECCA_COORDS } from '@/features/home/hooks/useUserLocation';
+import { LocationData, MECCA_COORDS } from '@/hooks/useLocation';
 
 export function useQiblaDirection(userCoords: LocationData['coords']) {
   const qiblaAngle = useMemo(() => {

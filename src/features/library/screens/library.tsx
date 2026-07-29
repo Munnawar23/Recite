@@ -7,6 +7,7 @@ import EmptyState from "@/components/ui/EmptyState";
 import Header from "@/components/ui/Header";
 import NoConnection from "@/components/ui/NoConnection";
 import TabSwitcher from "@/components/ui/TabSwitcher";
+import { DOWNLOAD_ANIM, EMPTY_ANIM } from "@/constants/assets";
 import { useQuranListSearch } from "@/features/quran/hooks/useQuranListSearch";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { ThemeSpacing } from "@/theme/spacing";
@@ -50,7 +51,7 @@ export default function LibraryScreen() {
           ) : activeTab === "favorites" ? (
             <View style={S.emptyStateWrapper}>
               <EmptyState
-                icon="heart-outline"
+                animationSource={DOWNLOAD_ANIM}
                 title={t("library.emptyFavorites.title", "No Favorites Yet")}
                 subtitle={t("library.emptyFavorites.subtitle", "Mark your favorite Surahs or verses to access them quickly here.")}
               />
@@ -58,7 +59,7 @@ export default function LibraryScreen() {
           ) : (
             <View style={S.emptyStateWrapper}>
               <EmptyState
-                icon="download-outline"
+                animationSource={EMPTY_ANIM}
                 title={t("library.emptyDownloads.title", "No Downloads")}
                 subtitle={t("library.emptyDownloads.subtitle", "Download Surahs to read or listen to them offline.")}
               />

@@ -5,6 +5,7 @@ export const STORAGE_KEYS = {
   THEME: "theme-storage",
   FONT_SCALE: "font-scale-storage",
   LANGUAGE: "user-language",
+  NOTIFICATION: "notification-storage",
 } as const;
 
 

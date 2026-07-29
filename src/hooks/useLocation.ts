@@ -10,7 +10,7 @@ export interface LocationData {
   cityName?: string;
 }
 
-export function useUserLocation() {
+export function useLocation() {
   const queryClient = useQueryClient();
 
   const locationQuery = useQuery<LocationData>({

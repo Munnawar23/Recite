@@ -7,7 +7,7 @@ import {
 import { useMemo } from "react";
 
 import { formatPrayerTime } from "@/utils/dateUtils";
-import { useUserLocation } from "./useUserLocation";
+import { useLocation } from "@/hooks/useLocation";
 
 export type Prayer = {
   name: string;
@@ -44,7 +44,7 @@ const getActivePrayer = (
 
 export function usePrayerTimes() {
   const { coords, permissionStatus, cityName, requestLocation } =
-    useUserLocation();
+    useLocation();
 
   const prayerData = useMemo(() => {
     const coordinates = new Coordinates(coords.latitude, coords.longitude);

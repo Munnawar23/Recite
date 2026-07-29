@@ -1,0 +1,55 @@
+import * as Notifications from "expo-notifications";
+import { Alert, Linking, Platform } from "react-native";
+
+export async function requestNotificationPermissions(): Promise<boolean> {
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("recite_reminder_channel_v2", {
+      name: "Daily Reminder",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF236C",
+      sound: "notification",
+      enableVibrate: true,
+      audioAttributes: {
+        usage: Notifications.AndroidAudioUsage.NOTIFICATION_EVENT,
+        contentType: Notifications.AndroidAudioContentType.SONIFICATION,
+      },
+      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
+    });
+  }
+
+  const permRes = await Notifications.getPermissionsAsync();
+
+  if (permRes.status === "granted") {
+    return true;
+  }
+
+  // If system popup can still be shown (e.g. first time)
+  if (permRes.canAskAgain) {
+    const { status } = await Notifications.requestPermissionsAsync({
+      ios: {
+        allowAlert: true,
+        allowBadge: true,
+        allowSound: true,
+      },
+    });
+    return status === "granted";
+  }
+
+  // If permanently denied by user, show Alert dialog guiding to Settings
+  Alert.alert(
+    "Notification Permission Required",
+    "Notifications are currently turned off for Recite in your device settings. Would you like to open Settings to enable daily reminders?",
+    [
+      { text: "Cancel", style: "cancel" },
+      { text: "Open Settings", onPress: () => Linking.openSettings() },
+    ]
+  );
+
+  return false;
+}
+
+export async function checkNotificationPermissions(): Promise<boolean> {
+  const { status } = await Notifications.getPermissionsAsync();
+  return status === "granted";
+}

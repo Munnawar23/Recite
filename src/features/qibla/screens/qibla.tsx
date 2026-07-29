@@ -1,13 +1,13 @@
 import SafeArea from "@/components/layout/SafeArea";
 import EmptyState from "@/components/ui/EmptyState";
 import Header from "@/components/ui/Header";
-import { useUserLocation } from "@/features/home/hooks/useUserLocation";
+import { useLocation } from "@/hooks/useLocation";
 import CompassDial from "@/features/qibla/components/CompassDial";
 import { useCompass } from "@/features/qibla/hooks/useCompass";
 import { useQiblaDirection } from "@/features/qibla/hooks/useQiblaDirection";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useTranslation } from "react-i18next";
-import { Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import Animated, {
   useAnimatedProps,
   type SharedValue,
@@ -42,9 +42,10 @@ function LiveHeadingText({
 
 export default function QiblaScreen() {
   const { t } = useTranslation();
-  const { colors, spacing, fontFamily, fontSize } = useAppTheme();
+  const theme = useAppTheme();
+  const styles = createStyles(theme);
   const { coords, permissionStatus, cityName, requestLocation } =
-    useUserLocation();
+    useLocation();
 
   const qiblaAngle = useQiblaDirection(coords);
   const rotation = useCompass();
@@ -53,7 +54,7 @@ export default function QiblaScreen() {
 
   return (
     <SafeArea>
-      <View style={{ flex: 1 }}>
+      <View style={styles.container}>
         <Header
           title={t("qiblaScreen.title", "Qibla")}
           subtitle={
@@ -63,15 +64,8 @@ export default function QiblaScreen() {
           }
         />
 
-        <View
-          style={{
-            flex: 1,
-            paddingHorizontal: spacing.screenPadding,
-            alignItems: "center",
-            justifyContent: "space-evenly",
-          }}
-        >
-          {permissionStatus === "denied" ? (
+        <View style={styles.content}>
+          {permissionStatus !== "granted" ? (
             <EmptyState
               icon="location-outline"
               title={t("qiblaScreen.locationRequiredTitle", "Location Required")}
@@ -86,27 +80,12 @@ export default function QiblaScreen() {
           ) : (
             <>
               {/* Top Qibla Target Header (Big Font) */}
-              <View style={{ alignItems: "center", marginTop: spacing.xs }}>
-                <Text
-                  style={{
-                    fontFamily: fontFamily.text,
-                    fontSize: fontSize.caption,
-                    color: colors.subtext,
-                    letterSpacing: 1.5,
-                    textTransform: "uppercase",
-                  }}
-                >
+              <View style={styles.targetContainer}>
+                <Text style={styles.targetLabel}>
                   {t("qiblaScreen.title", "Qibla")}
                 </Text>
 
-                <Text
-                  style={{
-                    fontFamily: fontFamily.title,
-                    fontSize: fontSize.splashTitle,
-                    color: colors.primary,
-                    marginTop: spacing.xs,
-                  }}
-                >
+                <Text style={styles.targetValue}>
                   {targetDeg}°
                 </Text>
               </View>
@@ -115,27 +94,14 @@ export default function QiblaScreen() {
               <CompassDial rotation={rotation} qiblaAngle={qiblaAngle} />
 
               {/* Bottom Current Heading */}
-              <View style={{ alignItems: "center", marginBottom: spacing.md }}>
-                <Text
-                  style={{
-                    fontFamily: fontFamily.text,
-                    fontSize: fontSize.body,
-                    color: colors.subtext,
-                  }}
-                >
+              <View style={styles.headingContainer}>
+                <Text style={styles.headingLabel}>
                   {t("qiblaScreen.currentHeading", "Current Heading")}
                 </Text>
 
                 <LiveHeadingText
                   rotation={rotation}
-                  style={{
-                    fontFamily: fontFamily.title,
-                    fontSize: fontSize.splashTitle,
-                    color: colors.text,
-                    marginTop: spacing.xs,
-                    textAlign: "center",
-                    padding: 0,
-                  }}
+                  style={styles.headingValue}
                 />
               </View>
             </>
@@ -145,3 +111,51 @@ export default function QiblaScreen() {
     </SafeArea>
   );
 }
+
+const createStyles = (theme: ReturnType<typeof useAppTheme>) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    content: {
+      flex: 1,
+      paddingHorizontal: theme.spacing.screenPadding,
+      alignItems: "center",
+      justifyContent: "space-evenly",
+    },
+    targetContainer: {
+      alignItems: "center",
+      marginTop: theme.spacing.xs,
+    },
+    targetLabel: {
+      fontFamily: theme.fontFamily.text,
+      fontSize: theme.fontSize.caption,
+      color: theme.colors.subtext,
+      letterSpacing: 1.5,
+      textTransform: "uppercase",
+    },
+    targetValue: {
+      fontFamily: theme.fontFamily.title,
+      fontSize: theme.fontSize.splashTitle,
+      color: theme.colors.primary,
+      marginTop: theme.spacing.xs,
+    },
+    headingContainer: {
+      alignItems: "center",
+      marginBottom: theme.spacing.md,
+    },
+    headingLabel: {
+      fontFamily: theme.fontFamily.text,
+      fontSize: theme.fontSize.body,
+      color: theme.colors.subtext,
+    },
+    headingValue: {
+      fontFamily: theme.fontFamily.title,
+      fontSize: theme.fontSize.splashTitle,
+      color: theme.colors.text,
+      marginTop: theme.spacing.xs,
+      textAlign: "center",
+      padding: 0,
+    },
+  });
+

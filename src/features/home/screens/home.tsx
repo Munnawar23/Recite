@@ -14,7 +14,7 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { ThemeSpacing } from "@/theme/spacing";
 import DailyVerse from "../components/DailyVerse";
 import HijriCard from "../components/HijriCard";
-import { useUserLocation } from "../hooks/useUserLocation";
+import { useLocation } from "@/hooks/useLocation";
 
 const animation = (delay: number) =>
   FadeInDown.duration(500).delay(delay).springify();
@@ -23,7 +23,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { colors, spacing } = useAppTheme();
-  const { cityName } = useUserLocation();
+  const { cityName } = useLocation();
   const queryClient = useQueryClient();
   const [refreshing, setRefreshing] = useState(false);
 

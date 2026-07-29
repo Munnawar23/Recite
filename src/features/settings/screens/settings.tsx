@@ -1,14 +1,16 @@
 import SafeArea from "@/components/layout/SafeArea";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { SUPPORTED_LANGUAGES, SupportedLanguageCode } from "@/i18n";
+import { triggerInstantTestNotification } from "@/lib/notifications";
 import { FontSizeScale } from "@/store/fontStore";
 import { useLanguageStore } from "@/store/languageStore";
+import { useNotificationStore } from "@/store/notificationStore";
 import { ThemeMode } from "@/store/themeStore";
 
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 
 const THEME_OPTIONS: {
@@ -36,6 +38,7 @@ const FONT_SIZE_OPTIONS: {
 export default function SettingsScreen() {
   const { t } = useTranslation();
   const { language, setLanguage } = useLanguageStore();
+  const { isNightlyEnabled, toggleNightlyNotification } = useNotificationStore();
   const {
     themeMode,
     setThemeMode,
@@ -70,10 +73,121 @@ export default function SettingsScreen() {
           {t("common.settings", "Settings")}
         </Text>
 
+        {/* Notifications Card */}
+        <View
+          style={[
+            styles.card,
+            { backgroundColor: colors.card, borderColor: colors.border },
+          ]}
+        >
+          <View style={styles.cardHeader}>
+            <Ionicons
+              name="notifications-outline"
+              size={20}
+              color={colors.accent}
+            />
+            <Text
+              style={[
+                styles.cardTitle,
+                {
+                  color: colors.text,
+                  fontFamily: fontFamily.title,
+                  fontSize: fontSize.title,
+                },
+              ]}
+            >
+              {t("settings.notifications.title", "Daily Notifications")}
+            </Text>
+          </View>
+
+          <Text
+            style={[
+              styles.cardSubtitle,
+              {
+                color: colors.subtext,
+                fontFamily: fontFamily.text,
+                fontSize: fontSize.body,
+              },
+            ]}
+          >
+            {t("settings.notifications.subtitle", "Receive a nightly Quran reading reminder at 10:00 PM.")}
+          </Text>
+
+          {/* 1. Toggle Switch Row */}
+          <View
+            style={[
+              styles.toggleRow,
+              { backgroundColor: colors.background, borderColor: colors.border },
+            ]}
+          >
+            <View style={styles.toggleRowTextContainer}>
+              <Text
+                style={[
+                  styles.toggleLabel,
+                  {
+                    color: colors.text,
+                    fontFamily: fontFamily.title,
+                    fontSize: fontSize.body,
+                  },
+                ]}
+              >
+                {t("settings.notifications.nightlyToggle", "Daily 10 PM Reminder")}
+              </Text>
+              <Text
+                style={[
+                  styles.toggleSublabel,
+                  {
+                    color: colors.subtext,
+                    fontFamily: fontFamily.text,
+                    fontSize: fontSize.caption,
+                  },
+                ]}
+              >
+                {isNightlyEnabled
+                  ? t("settings.notifications.enabledStatus", "Scheduled for 10:00 PM every day")
+                  : t("settings.notifications.disabledStatus", "Disabled")}
+              </Text>
+            </View>
+
+            <Switch
+              value={isNightlyEnabled}
+              onValueChange={(val) => {
+                toggleNightlyNotification(val);
+              }}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              thumbColor={colors.card}
+            />
+          </View>
+
+          {/* 2. Instant Test Notification Button */}
+          <Pressable
+            onPress={() => triggerInstantTestNotification()}
+            style={[
+              styles.testButton,
+              { backgroundColor: colors.accent, marginTop: verticalScale(12) },
+            ]}
+          >
+            <Ionicons name="notifications-sharp" size={16} color={colors.card} />
+            <Text
+              style={[
+                styles.testButtonText,
+                {
+                  color: colors.card,
+                  fontFamily: fontFamily.title,
+                  fontSize: fontSize.body,
+                },
+              ]}
+            >
+              {t("settings.notifications.testButton", "Test Notification Now")}
+            </Text>
+          </Pressable>
+        </View>
+
         {/* Language Selection Card */}
         <View
           style={[
             styles.card,
+            styles.cardSpacing,
             { backgroundColor: colors.card, borderColor: colors.border },
           ]}
         >
@@ -505,5 +619,21 @@ const styles = StyleSheet.create({
   },
   previewText: {
     lineHeight: verticalScale(24),
+  },
+  toggleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: scale(12),
+    borderRadius: scale(12),
+    borderWidth: 1,
+  },
+  toggleRowTextContainer: {
+    flex: 1,
+    paddingRight: scale(12),
+  },
+  toggleLabel: {},
+  toggleSublabel: {
+    marginTop: verticalScale(2),
   },
 });

@@ -1,6 +1,12 @@
-import React from "react";
-import { StyleSheet, Text, View, type StyleProp, type ViewStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import LottieView from "lottie-react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 import { scale } from "react-native-size-matters";
 
 import Button from "@/components/ui/Button";
@@ -11,6 +17,7 @@ import { ThemeSpacing } from "@/theme/spacing";
 
 type BaseProps = {
   icon?: keyof typeof Ionicons.glyphMap;
+  animationSource?: any;
   title: string;
   subtitle: string;
   style?: StyleProp<ViewStyle>;
@@ -32,6 +39,7 @@ type Props = BaseProps &
 
 export default function EmptyState({
   icon = "folder-open-outline",
+  animationSource,
   title,
   subtitle,
   buttonLabel,
@@ -44,9 +52,18 @@ export default function EmptyState({
 
   return (
     <View style={[S.container, style]}>
-      <View style={S.iconCircle}>
-        <Ionicons name={icon} size={scale(34)} color={colors.primary} />
-      </View>
+      {animationSource ? (
+        <LottieView
+          source={animationSource}
+          autoPlay
+          loop
+          style={S.animation}
+        />
+      ) : (
+        <View style={S.iconCircle}>
+          <Ionicons name={icon} size={scale(34)} color={colors.primary} />
+        </View>
+      )}
 
       <Text style={S.title}>{title}</Text>
       <Text style={S.subtitle}>{subtitle}</Text>
@@ -85,6 +102,11 @@ const createStyles = (
       backgroundColor: colors.primary + "18",
       alignItems: "center",
       justifyContent: "center",
+      marginBottom: spacing.vSm,
+    },
+    animation: {
+      width: scale(200),
+      height: scale(200),
       marginBottom: spacing.vSm,
     },
     title: {

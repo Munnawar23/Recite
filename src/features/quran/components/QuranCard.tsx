@@ -1,6 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
 
 import { useAppFonts } from "@/hooks/useAppFonts";
 import { useAppTheme } from "@/hooks/useAppTheme";
@@ -21,9 +22,24 @@ export default function QuranCard({ item, onPress }: QuranCardProps) {
   const isDark = activeScheme === "dark";
   const S = createStyles(colors, fontFamily, fontSize, spacing, isDark);
 
+  const router = useRouter();
+
   const handlePress = () => {
     Haptics.medium();
-    onPress?.(item);
+    if (onPress) {
+      onPress(item);
+    } else {
+      router.push({
+        pathname: "/surah/[id]",
+        params: {
+          id: String(item.id),
+          arabicName: item.name,
+          englishName: item.englishName,
+          versesCount: String(item.versesCount),
+          type: item.type === "meccan" ? "Meccan" : "Medinan",
+        },
+      });
+    }
   };
 
   const typeTranslationKey =

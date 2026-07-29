@@ -76,6 +76,6 @@ export function useDailyVerse() {
     },
 
     staleTime: ONE_DAY,
-    gcTime: ONE_DAY,
+    gcTime: 7 * ONE_DAY,
   });
 }

@@ -6,6 +6,8 @@ export const STORAGE_KEYS = {
   FONT_SCALE: "font-scale-storage",
   LANGUAGE: "user-language",
   NOTIFICATION: "notification-storage",
+  DOWNLOADS: "downloads-storage",
+  FAVORITES: "favorites-storage",
 } as const;
 
 

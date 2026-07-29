@@ -1,0 +1,202 @@
+import React, { useState } from "react";
+import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useDownloadsStore } from "@/store/downloadsStore";
+import { useAppTheme } from "@/hooks/useAppTheme";
+import { scale, verticalScale } from "react-native-size-matters";
+import { Haptics } from "@/lib/haptics";
+import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal";
+
+interface DownloadCardProps {
+  chapterId: number;
+  reciterName: string;
+  selectedTransId: string;
+}
+
+export default function DownloadCard({ chapterId, reciterName, selectedTransId }: DownloadCardProps) {
+  const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
+  const isDark = activeScheme === "dark";
+
+  const { downloadedChapters, downloadingIds, downloadProgress, downloadChapter, deleteChapter } = useDownloadsStore();
+  const isDownloaded = !!downloadedChapters[chapterId];
+  const isDownloading = downloadingIds.includes(chapterId);
+  const progress = downloadProgress[chapterId] ?? 0;
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const S = createStyles(colors, fontFamily, fontSize, isDark);
+
+  const handleDownloadPress = async () => {
+    Haptics.medium();
+    const transId = selectedTransId === "0" ? 20 : parseInt(selectedTransId, 10);
+    try {
+      await downloadChapter(chapterId, transId);
+    } catch (err) {
+      console.warn("Failed to download Surah recitation:", err);
+    }
+  };
+
+  const handleDeletePress = () => {
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteChapter(chapterId);
+    setShowDeleteModal(false);
+  };
+
+  // State configurations
+  let squircleBg = colors.primary + "20";
+  let squircleIconColor = colors.primary;
+  let title = "Download";
+  const progressPercent = Math.round(progress * 100);
+
+  if (isDownloading) {
+    title = `Download • ${progressPercent}%`;
+  } else if (isDownloaded) {
+    squircleBg = colors.primary;
+    squircleIconColor = colors.card;
+    title = "Playing offline from your Audio";
+  }
+
+  return (
+    <View style={S.container}>
+      <View style={S.cardContent}>
+        {/* Left Squircle Icon */}
+        <View style={[S.squircle, { backgroundColor: squircleBg }]}>
+          {isDownloading ? (
+            <ActivityIndicator size="small" color={colors.primary} />
+          ) : (
+            <Ionicons
+              name={isDownloaded ? "checkmark" : "download-outline"}
+              size={scale(20)}
+              color={squircleIconColor}
+            />
+          )}
+        </View>
+
+        {/* Text Area */}
+        <View style={S.textContainer}>
+          <Text numberOfLines={1} style={S.title}>{title}</Text>
+          <Text numberOfLines={1} style={S.subtitle}>{reciterName}</Text>
+        </View>
+
+        {/* Right Actions */}
+        <View style={S.rightAction}>
+          {isDownloaded ? (
+            <TouchableOpacity
+              onPress={handleDeletePress}
+              style={S.deleteBtn}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="trash-outline" size={scale(18)} color={colors.subtext} />
+            </TouchableOpacity>
+          ) : !isDownloading ? (
+            <TouchableOpacity
+              onPress={handleDownloadPress}
+              style={S.downloadBtn}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="download-outline" size={scale(14)} color={colors.card} />
+              <Text style={S.downloadBtnText}>Download</Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </View>
+
+      {/* Thin Bottom Progress Bar */}
+      {(isDownloading || isDownloaded) && (
+        <View style={S.progressBarContainer}>
+          <View
+            style={[
+              S.progressBarFill,
+              { width: `${isDownloaded ? 100 : progressPercent}%` }
+            ]}
+          />
+        </View>
+      )}
+
+      {/* Deletion Confirmation Modal */}
+      <DeleteConfirmationModal
+        visible={showDeleteModal}
+        title="Delete Download?"
+        description="Are you sure you want to remove this Surah recitation from your offline downloads?"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setShowDeleteModal(false)}
+      />
+    </View>
+  );
+}
+
+const createStyles = (colors: any, fontFamily: any, fontSize: any, isDark: boolean) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: colors.card,
+      marginHorizontal: scale(20),
+      marginTop: verticalScale(12),
+      marginBottom: verticalScale(4),
+      borderRadius: scale(16),
+      overflow: "hidden",
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    cardContent: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingHorizontal: scale(16),
+      paddingVertical: verticalScale(12),
+    },
+    squircle: {
+      width: scale(40),
+      height: scale(40),
+      borderRadius: scale(12),
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    textContainer: {
+      flex: 1,
+      marginLeft: scale(12),
+      marginRight: scale(8),
+    },
+    title: {
+      color: colors.text,
+      fontFamily: fontFamily.title,
+      fontSize: fontSize.body,
+    },
+    subtitle: {
+      color: colors.subtext,
+      fontFamily: fontFamily.text,
+      fontSize: fontSize.caption,
+      marginTop: verticalScale(2),
+    },
+    rightAction: {
+      justifyContent: "center",
+    },
+    downloadBtn: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: scale(4),
+      backgroundColor: colors.primary,
+      paddingHorizontal: scale(12),
+      paddingVertical: verticalScale(6),
+      borderRadius: scale(20),
+    },
+    downloadBtnText: {
+      color: colors.card,
+      fontFamily: fontFamily.title,
+      fontSize: fontSize.caption,
+    },
+    deleteBtn: {
+      padding: scale(6),
+    },
+    progressBarContainer: {
+      height: 3,
+      backgroundColor: colors.border,
+      width: "100%",
+    },
+    progressBarFill: {
+      height: "100%",
+      backgroundColor: colors.primary,
+    },
+  });

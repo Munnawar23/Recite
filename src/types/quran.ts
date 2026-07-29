@@ -7,3 +7,11 @@ export interface Chapter {
   versesCount: number;
   type: string;
 }
+
+export interface SurahVerse {
+  id: number;
+  verseKey: string;
+  verseNumber: number;
+  arabic: string;
+  translation: string;
+}

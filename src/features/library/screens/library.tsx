@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { useTranslation } from "react-i18next";
+import { FlashList } from "@shopify/flash-list";
 
 import SafeArea from "@/components/layout/SafeArea";
 import EmptyState from "@/components/ui/EmptyState";
@@ -9,23 +10,47 @@ import NoConnection from "@/components/ui/NoConnection";
 import TabSwitcher from "@/components/ui/TabSwitcher";
 import { DOWNLOAD_ANIM, EMPTY_ANIM } from "@/constants/assets";
 import { useQuranListSearch } from "@/features/quran/hooks/useQuranListSearch";
+import QuranCard from "@/features/quran/components/QuranCard";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { ThemeSpacing } from "@/theme/spacing";
+import { useFavoritesStore } from "@/store/favoritesStore";
+import { useDownloadsStore } from "@/store/downloadsStore";
 
 type TabValue = "favorites" | "downloads";
 
+const FlashListCast = FlashList as any;
+
 export default function LibraryScreen() {
   const { t } = useTranslation();
-  const { spacing } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
   const [activeTab, setActiveTab] = useState<TabValue>("favorites");
-  
-  const { isError, refetch } = useQuranListSearch();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const { chapters, isError, refetch } = useQuranListSearch();
+  const { favoriteIds } = useFavoritesStore();
+  const { downloadedChapters } = useDownloadsStore();
+
   const S = createStyles(spacing);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await refetch();
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   const tabsData = [
     { label: t("library.tabs.favorites", "Favorites"), value: "favorites" },
     { label: t("library.tabs.downloads", "Downloads"), value: "downloads" },
   ];
+
+  const favoriteChapters = chapters.filter((ch) => favoriteIds.includes(ch.id));
+  const downloadedChapterIds = Object.keys(downloadedChapters).map((id) => Number(id));
+  const downloadedChapterList = chapters.filter((ch) => downloadedChapterIds.includes(ch.id));
+
+  const listData = activeTab === "favorites" ? favoriteChapters : downloadedChapterList;
 
   return (
     <SafeArea>
@@ -45,25 +70,72 @@ export default function LibraryScreen() {
 
         <View style={S.contentContainer}>
           {isError ? (
-            <View style={S.emptyStateWrapper}>
+            <ScrollView
+              contentContainerStyle={S.emptyStateWrapper}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  colors={[colors.primary]}
+                  tintColor={colors.primary}
+                />
+              }
+            >
               <NoConnection onRetry={() => refetch()} />
-            </View>
+            </ScrollView>
+          ) : listData.length > 0 ? (
+            <FlashListCast
+              data={listData}
+              keyExtractor={(item: any) => String(item.id)}
+              renderItem={({ item }: { item: any }) => <QuranCard item={item} />}
+              estimatedItemSize={80}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: spacing.vXxl }}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  colors={[colors.primary]}
+                  tintColor={colors.primary}
+                />
+              }
+            />
           ) : activeTab === "favorites" ? (
-            <View style={S.emptyStateWrapper}>
+            <ScrollView
+              contentContainerStyle={S.emptyStateWrapper}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  colors={[colors.primary]}
+                  tintColor={colors.primary}
+                />
+              }
+            >
               <EmptyState
                 animationSource={DOWNLOAD_ANIM}
                 title={t("library.emptyFavorites.title", "No Favorites Yet")}
-                subtitle={t("library.emptyFavorites.subtitle", "Mark your favorite Surahs or verses to access them quickly here.")}
+                subtitle={t("library.emptyFavorites.subtitle", "Mark your favorite Surahs to access them quickly here.")}
               />
-            </View>
+            </ScrollView>
           ) : (
-            <View style={S.emptyStateWrapper}>
+            <ScrollView
+              contentContainerStyle={S.emptyStateWrapper}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  colors={[colors.primary]}
+                  tintColor={colors.primary}
+                />
+              }
+            >
               <EmptyState
                 animationSource={EMPTY_ANIM}
                 title={t("library.emptyDownloads.title", "No Downloads")}
                 subtitle={t("library.emptyDownloads.subtitle", "Download Surahs to read or listen to them offline.")}
               />
-            </View>
+            </ScrollView>
           )}
         </View>
       </View>

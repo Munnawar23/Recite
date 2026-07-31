@@ -10,8 +10,10 @@ import Header from "@/components/layout/Header";
 import SafeArea from "@/components/layout/SafeArea";
 import SectionTitle from "@/components/ui/SectionTitle";
 import PrayerTimes from "@/features/home/components/PrayerTimes";
+import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLocation } from "@/hooks/useLocation";
+import { useReadingProgressStore } from "@/store/readingProgressStore";
 import { ThemeSpacing } from "@/theme/spacing";
 import DailyVerse from "../components/DailyVerse";
 import HijriCard from "../components/HijriCard";
@@ -25,6 +27,7 @@ export default function HomeScreen() {
   const { colors, spacing } = useAppTheme();
   const { cityName } = useLocation();
   const queryClient = useQueryClient();
+  const { lastRead } = useReadingProgressStore();
   const [refreshing, setRefreshing] = useState(false);
 
   const styles = createStyles(spacing);
@@ -102,20 +105,40 @@ export default function HomeScreen() {
             icon="book-outline"
           />
 
-          <EmptyState
-            icon="book-outline"
-            title={t("home.continueReadingEmpty.title", "Start your journey")}
-            subtitle={t(
-              "home.continueReadingEmpty.subtitle",
-              "Open the Quran and your reading progress will appear here.",
-            )}
-            buttonLabel={t(
-              "home.continueReadingEmpty.buttonLabel",
-              "Open Quran",
-            )}
-            buttonIcon="book"
-            onPress={() => router.push("/(tabs)/quran")}
-          />
+          {lastRead ? (
+            <ContinueReadingCard
+              surahName={lastRead.surahName}
+              verseNumber={lastRead.verseNumber}
+              onPress={() =>
+                router.push({
+                  pathname: "/surah/[id]",
+                  params: {
+                    id: String(lastRead.surahNumber),
+                    englishName: lastRead.surahName,
+                    arabicName: lastRead.arabicName,
+                    versesCount: lastRead.versesCount,
+                    type: lastRead.type,
+                    initialVerse: String(lastRead.verseNumber),
+                  },
+                })
+              }
+            />
+          ) : (
+            <EmptyState
+              icon="book-outline"
+              title={t("home.continueReadingEmpty.title", "Start your journey")}
+              subtitle={t(
+                "home.continueReadingEmpty.subtitle",
+                "Open the Quran and your reading progress will appear here.",
+              )}
+              buttonLabel={t(
+                "home.continueReadingEmpty.buttonLabel",
+                "Open Quran",
+              )}
+              buttonIcon="book"
+              onPress={() => router.push("/(tabs)/quran")}
+            />
+          )}
         </Animated.View>
 
         <View style={styles.bottomSpacer} />

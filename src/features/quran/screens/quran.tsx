@@ -1,4 +1,5 @@
 import { FlashList } from "@shopify/flash-list";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -17,11 +18,14 @@ import QuranCard from "@/features/quran/components/QuranCard";
 import SearchBar from "@/features/quran/components/SearchBar";
 import { useQuranListSearch } from "@/features/quran/hooks/useQuranListSearch";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useReadingProgressStore } from "@/store/readingProgressStore";
 import { ThemeSpacing } from "@/theme/spacing";
 
 export default function QuranScreen() {
+  const router = useRouter();
   const { t } = useTranslation();
   const { colors, spacing } = useAppTheme();
+  const { lastRead } = useReadingProgressStore();
   const {
     inputValue,
     setInputValue,
@@ -74,7 +78,25 @@ export default function QuranScreen() {
               onClear={handleClear}
               placeholder={t("quran.searchPlaceholder", "Search Surah...")}
             />
-            <ContinueReadingCard surahName="Al-Fatihah" verseNumber={1} />
+            {lastRead && (
+              <ContinueReadingCard
+                surahName={lastRead.surahName}
+                verseNumber={lastRead.verseNumber}
+                onPress={() =>
+                  router.push({
+                    pathname: "/surah/[id]",
+                    params: {
+                      id: String(lastRead.surahNumber),
+                      englishName: lastRead.surahName,
+                      arabicName: lastRead.arabicName,
+                      versesCount: lastRead.versesCount,
+                      type: lastRead.type,
+                      initialVerse: String(lastRead.verseNumber),
+                    },
+                  })
+                }
+              />
+            )}
             {isLoading && !refreshing && (
               <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color={colors.primary} />

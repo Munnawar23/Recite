@@ -19,6 +19,7 @@
     "offlineBanner": "You are offline. You can still read the Quran and listen to downloaded audio.",
     "offlineAudioPreviewTitle": "Offline Mode",
     "offlineAudioPreviewMessage": "Audio previews require an internet connection. You can still listen to your downloaded surahs.",
+    "offlineReciterChangeMessage": "Changing reciters requires an internet connection. Connect to the internet to switch reciters.",
     "quran": "Quran",
     "qibla": "Qibla",
     "library": "Library",
@@ -82,7 +83,18 @@
     "medinan": "MEDINAN",
     "noResultsTitle": "No Surahs Found",
     "noResultsSubtitle": "Try searching with a different keyword.",
-    "errorMessage": "Failed to load Quran chapters. Tap to try again."
+    "errorMessage": "Failed to load Quran chapters. Tap to try again.",
+    "downloadCard": {
+      "download": "Download",
+      "downloading": "Downloading",
+      "downloadingProgress": "Downloading • {{written}} / {{total}} MB ({{progress}}%)",
+      "paused": "Paused • {{written}} / {{total}} MB ({{progress}}%)",
+      "pause": "Pause",
+      "resume": "Resume",
+      "playingOffline": "Playing offline from your Audio",
+      "deleteTitle": "Delete Download?",
+      "deleteDesc": "Are you sure you want to remove this Surah recitation from your offline downloads?"
+    }
   },
   "errorBoundary": {
     "title": "Something Went Wrong",

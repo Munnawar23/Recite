@@ -68,7 +68,7 @@ const createStyles = (
       paddingHorizontal: spacing.screenPadding,
       paddingTop: 0,
       paddingBottom: spacing.vXs,
-      marginTop: isOffline ? verticalScale(6) : 0,
+      marginTop: isOffline ? verticalScale(4) : 0,
     },
     topRow: {
       flexDirection: "row",

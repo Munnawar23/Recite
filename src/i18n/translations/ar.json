@@ -17,8 +17,9 @@
     "noConnectionTitle": "خطأ في الاتصال",
     "noConnectionSubtitle": "تعذر تحميل البيانات. تحقق من اتصالك بالإنترنت.",
     "offlineBanner": "أنت غير متصل بالإنترنت. يمكنك قراءة القرآن واستماع التلاوات المحملة.",
-    "offlineAudioPreviewTitle": "الوضع غير متصل",
-    "offlineAudioPreviewMessage": "معاينة الصوت تتطلب اتصالاً بالإنترنت. يمكنك استماع السور المحملة لديك.",
+    "offlineAudioPreviewTitle": "وضع عدم الاتصال",
+    "offlineAudioPreviewMessage": "يتطلب المعاينة الصوتية اتصالاً بالإنترنت. لا يزال بإمكانك الاستماع إلى السور التي قمت بتنزيلها.",
+    "offlineReciterChangeMessage": "تغيير القارئ يتطلب اتصالاً بالإنترنت. يرجى الاتصال بالإنترنت لتغيير القارئ.",
     "quran": "القرآن الكريم",
     "qibla": "القبلة",
     "library": "المكتبة",
@@ -82,7 +83,18 @@
     "medinan": "مدنية",
     "noResultsTitle": "لم يتم العثور على أي سورة",
     "noResultsSubtitle": "جرب البحث باستخدام كلمة رئيسية أخرى.",
-    "errorMessage": "فشل في تحميل سور القرآن. انقر لإعادة المحاولة."
+    "errorMessage": "فشل في تحميل سور القرآن. انقر لإعادة المحاولة.",
+    "downloadCard": {
+      "download": "تنزيل",
+      "downloading": "جاري التنزيل",
+      "downloadingProgress": "جاري التنزيل • {{written}} / {{total}} ميجابايت ({{progress}}%)",
+      "paused": "متوقف مؤقتاً • {{written}} / {{total}} ميجابايت ({{progress}}%)",
+      "pause": "إيقاف مؤقت",
+      "resume": "استئناف",
+      "playingOffline": "التشغيل في وضع عدم الاتصال من ملفاتك الصوتية",
+      "deleteTitle": "حذف التنزيل؟",
+      "deleteDesc": "هل أنت تأكد من أنك تريد إزالة تلاوة هذه السورة من التنزيلات أوفلاين؟"
+    }
   },
   "errorBoundary": {
     "title": "حدث خطأ ما",

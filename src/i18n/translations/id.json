@@ -19,6 +19,7 @@
     "offlineBanner": "Anda sedang offline. Anda tetap dapat membaca Al-Qur'an dan mendengarkan audio yang diunduh.",
     "offlineAudioPreviewTitle": "Mode Offline",
     "offlineAudioPreviewMessage": "Pratinjau audio memerlukan koneksi internet. Anda tetap dapat mendengarkan surah yang sudah diunduh.",
+    "offlineReciterChangeMessage": "Mengubah qari memerlukan koneksi internet. Hubungkan ke internet untuk mengganti qari.",
     "quran": "Al-Qur'an",
     "qibla": "Qibla",
     "library": "Perpustakaan",
@@ -82,7 +83,18 @@
     "medinan": "MADANIYAH",
     "noResultsTitle": "Surah Tidak Ditemukan",
     "noResultsSubtitle": "Coba cari dengan kata kunci lain.",
-    "errorMessage": "Gagal memuat daftar Surah. Ketuk untuk mencoba lagi."
+    "errorMessage": "Gagal memuat daftar Surah. Ketuk untuk mencoba lagi.",
+    "downloadCard": {
+      "download": "Unduh",
+      "downloading": "Mengunduh",
+      "downloadingProgress": "Mengunduh • {{written}} / {{total}} MB ({{progress}}%)",
+      "paused": "Jeda • {{written}} / {{total}} MB ({{progress}}%)",
+      "pause": "Jeda",
+      "resume": "Lanjutkan",
+      "playingOffline": "Memutar offline dari Audio Anda",
+      "deleteTitle": "Hapus Unduhan?",
+      "deleteDesc": "Apakah Anda yakin ingin menghapus lantunan Surah ini dari unduhan offline Anda?"
+    }
   },
   "errorBoundary": {
     "title": "Ada yang Salah",

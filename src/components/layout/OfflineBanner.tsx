@@ -3,18 +3,31 @@ import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
-
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scale } from "react-native-size-matters";
+import { useGlobalSearchParams, usePathname } from "expo-router";
+import { useDownloadsStore } from "@/store/downloadsStore";
 
 export function OfflineBanner() {
   const { isOffline } = useNetworkStatus();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  const S = createStyles(colors, fontFamily, fontSize, spacing, insets.top);
+  const pathname = usePathname();
+  const params = useGlobalSearchParams<{ id?: string }>();
+  const { downloadedChapters } = useDownloadsStore();
 
   if (!isOffline) return null;
+
+  // If user is inside surah detail screen and chapter is downloaded, suppress banner
+  if (pathname?.includes("/surah/") && params?.id) {
+    const chapterId = parseInt(params.id, 10);
+    if (downloadedChapters[chapterId]) {
+      return null;
+    }
+  }
+
+  const S = createStyles(colors, fontFamily, fontSize, spacing, insets.top);
 
   return (
     <View style={S.banner}>

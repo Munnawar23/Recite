@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { STORAGE_KEYS, zustandStorage } from "@/lib/storage/appStorage";
 import { getChapterAudio, getVersesByChapter } from "@/lib/api/quran-data";
 import type { SurahVerse } from "@/types/quran";
-import { createDownloadResumable, deleteAsync, documentDirectory } from "expo-file-system/legacy";
+import { createDownloadResumable, deleteAsync, documentDirectory, DownloadResumable } from "expo-file-system/legacy";
 
 export interface DownloadedChapter {
   chapterId: number;
@@ -16,11 +16,19 @@ export interface DownloadedChapter {
   downloadedAt: string;
 }
 
+interface ProgressData {
+  fraction: number;
+  writtenBytes: number;
+  totalBytes: number;
+}
+
 interface DownloadsState {
   downloadedChapters: Record<number, DownloadedChapter>;
   downloadingIds: number[];
-  downloadProgress: Record<number, number>;
+  downloadProgress: Record<number, ProgressData>;
+  activeResumables: Record<number, DownloadResumable>;
   downloadChapter: (chapterId: number, translationId: number) => Promise<void>;
+  cancelDownload: (chapterId: number) => Promise<void>;
   deleteChapter: (chapterId: number) => Promise<void>;
 }
 
@@ -30,17 +38,21 @@ export const useDownloadsStore = create<DownloadsState>()(
       downloadedChapters: {},
       downloadingIds: [],
       downloadProgress: {},
+      activeResumables: {},
       downloadChapter: async (chapterId, translationId) => {
         const { downloadingIds } = get();
         if (downloadingIds.includes(chapterId)) return;
 
         set({
           downloadingIds: [...downloadingIds, chapterId],
-          downloadProgress: { ...get().downloadProgress, [chapterId]: 0 },
+          downloadProgress: {
+            ...get().downloadProgress,
+            [chapterId]: { fraction: 0, writtenBytes: 0, totalBytes: 0 },
+          },
         });
 
         try {
-          // 1. Download supported translations in parallel (English, Urdu, Hindi, Indonesian, Bengali)
+          // 1. Download supported translations in parallel
           const transIds = [20, 97, 122, 33, 161];
           const versesByTranslation: Record<number, SurahVerse[]> = {};
 
@@ -61,6 +73,7 @@ export const useDownloadsStore = create<DownloadsState>()(
           let timestamps: any[] = [];
           let fileSize: string | undefined;
           let fileSizeBytes: number | undefined;
+
           try {
             const audioData = await getChapterAudio(chapterId);
             if (audioData?.audio_url) {
@@ -75,19 +88,31 @@ export const useDownloadsStore = create<DownloadsState>()(
                 fileSize = `${(audioData.file_size / (1024 * 1024)).toFixed(1)} MB`;
               }
 
-              const progressCallback = (downloadProgress: any) => {
-                if (downloadProgress.totalBytesExpectedToWrite > 0) {
-                  const fraction = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
+              let lastUpdateTime = 0;
+              const progressCallback = (dp: any) => {
+                const now = Date.now();
+                // Throttle progress updates to at most once every 300ms, or when completed
+                const total = dp.totalBytesExpectedToWrite > 0 ? dp.totalBytesExpectedToWrite : (fileSizeBytes || 0);
+                const written = dp.totalBytesWritten;
+                const fraction = total > 0 ? written / total : 0;
+                const isComplete = total > 0 && written >= total;
+
+                if (now - lastUpdateTime > 300 || isComplete) {
+                  lastUpdateTime = now;
                   set((state) => ({
                     downloadProgress: {
                       ...state.downloadProgress,
-                      [chapterId]: fraction,
+                      [chapterId]: { fraction, writtenBytes: written, totalBytes: total },
                     },
                   }));
                 }
               };
 
               const downloadResumable = createDownloadResumable(url, localPath, {}, progressCallback);
+              set((state) => ({
+                activeResumables: { ...state.activeResumables, [chapterId]: downloadResumable },
+              }));
+
               const downloadResult = await downloadResumable.downloadAsync();
 
               if (downloadResult) {
@@ -95,8 +120,15 @@ export const useDownloadsStore = create<DownloadsState>()(
               }
               timestamps = audioData.timestamps || [];
             }
-          } catch (audioErr) {
-            console.warn("Failed to download audio for Surah:", audioErr);
+          } catch (audioErr: any) {
+            if (!get().downloadingIds.includes(chapterId)) {
+              return; // Gracefully cancelled
+            }
+            console.warn("Audio download error:", audioErr);
+          }
+
+          if (!get().downloadingIds.includes(chapterId)) {
+            return;
           }
 
           set((state) => ({
@@ -116,18 +148,46 @@ export const useDownloadsStore = create<DownloadsState>()(
           }));
         } catch (error) {
           console.error("Failed to download Surah:", error);
-          throw error;
         } finally {
           set((state) => {
+            const activeCopy = { ...state.activeResumables };
+            delete activeCopy[chapterId];
             const progressCopy = { ...state.downloadProgress };
             delete progressCopy[chapterId];
+
             return {
               downloadingIds: state.downloadingIds.filter((id) => id !== chapterId),
+              activeResumables: activeCopy,
               downloadProgress: progressCopy,
             };
           });
         }
       },
+
+      cancelDownload: async (chapterId) => {
+        const resumable = get().activeResumables[chapterId];
+        set((state) => {
+          const activeCopy = { ...state.activeResumables };
+          delete activeCopy[chapterId];
+          const progressCopy = { ...state.downloadProgress };
+          delete progressCopy[chapterId];
+
+          return {
+            downloadingIds: state.downloadingIds.filter((id) => id !== chapterId),
+            activeResumables: activeCopy,
+            downloadProgress: progressCopy,
+          };
+        });
+
+        if (resumable) {
+          try {
+            await resumable.pauseAsync();
+          } catch (e) {
+            console.warn("Cancel error:", e);
+          }
+        }
+      },
+
       deleteChapter: async (chapterId) => {
         const { downloadedChapters } = get();
         const record = downloadedChapters[chapterId];

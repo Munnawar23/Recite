@@ -40,7 +40,7 @@ export default function RootLayout() {
     "PlusJakartaSans-Bold": require("../../assets/fonts/PlusJakartaSans-Bold.ttf"),
     "Nunito-SemiBold": require("../../assets/fonts/Nunito-SemiBold.ttf"),
     "Nunito-Medium": require("../../assets/fonts/Nunito-Medium.ttf"),
-    "Amiri-Regular": require("../../assets/fonts/Amiri-Regular.ttf"),
+    "Amiri-Bold": require("../../assets/fonts/Amiri-Bold.ttf"),
   });
 
   const { activeScheme } = useAppTheme();

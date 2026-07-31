@@ -18,8 +18,14 @@ interface CommonModalProps {
   placeholder?: string;
 
   // Direct modal mode props
+  visible?: boolean;
+  onClose?: () => void;
+  title?: string;
+  icon?: keyof typeof Ionicons.glyphMap;
+  iconColor?: string;
   confirmButtonText?: string;
   onConfirm?: () => void;
+  children?: React.ReactNode;
 }
 
 export default function CommonModal({

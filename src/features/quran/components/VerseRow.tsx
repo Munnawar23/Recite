@@ -1,9 +1,8 @@
-import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { scale, verticalScale } from "react-native-size-matters";
-import type { SurahVerse } from "@/types/quran";
 import { useFontStore } from "@/store/fontStore";
+import type { SurahVerse } from "@/types/quran";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { scale, verticalScale } from "react-native-size-matters";
 
 interface VerseRowProps {
   item: SurahVerse;
@@ -13,7 +12,13 @@ interface VerseRowProps {
   onPress?: () => void;
 }
 
-export default function VerseRow({ item, selectedTransId, isActive, onLayout, onPress }: VerseRowProps) {
+export default function VerseRow({
+  item,
+  selectedTransId,
+  isActive,
+  onLayout,
+  onPress,
+}: VerseRowProps) {
   const { colors, fontFamily, fontSize } = useAppTheme();
   const { fontSizeScale, quranFontSizeScale } = useFontStore();
 
@@ -25,7 +30,13 @@ export default function VerseRow({ item, selectedTransId, isActive, onLayout, on
   if (quranFontSizeScale === "small") quranMultiplier = 0.85;
   else if (quranFontSizeScale === "large") quranMultiplier = 1.25;
 
-  const S = createStyles(colors, fontFamily, fontSize, textMultiplier, quranMultiplier);
+  const S = createStyles(
+    colors,
+    fontFamily,
+    fontSize,
+    textMultiplier,
+    quranMultiplier,
+  );
 
   return (
     <TouchableOpacity
@@ -52,9 +63,7 @@ export default function VerseRow({ item, selectedTransId, isActive, onLayout, on
 
       {/* Translation below arabic */}
       {selectedTransId !== "0" && item.translation ? (
-        <Text style={S.translationText}>
-          {item.translation}
-        </Text>
+        <Text style={S.translationText}>{item.translation}</Text>
       ) : null}
 
       {/* Thin separator */}
@@ -63,18 +72,26 @@ export default function VerseRow({ item, selectedTransId, isActive, onLayout, on
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, textMultiplier: number, quranMultiplier: number) =>
+const createStyles = (
+  colors: any,
+  fontFamily: any,
+  fontSize: any,
+  textMultiplier: number,
+  quranMultiplier: number,
+) =>
   StyleSheet.create({
     verseRow: {
       paddingTop: verticalScale(10),
       paddingBottom: verticalScale(12),
-      paddingHorizontal: scale(12),
+      paddingHorizontal: 0,
       marginVertical: verticalScale(4),
+      width: "100%",
     },
     arabicWrapper: {
       paddingVertical: verticalScale(8),
-      paddingHorizontal: scale(14),
+      paddingHorizontal: 0,
       borderRadius: scale(12),
+      width: "100%",
     },
     activeArabicWrapper: {
       backgroundColor: colors.primary + "18",
@@ -83,15 +100,17 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, textMultiplie
     },
     verseSeparator: {
       height: 1,
-      backgroundColor: colors.border + "40",
+      backgroundColor: colors.primary + "50",
       marginTop: verticalScale(14),
     },
     arabicText: {
-      color: colors.text,
+      color: colors.primary,
       fontFamily: fontFamily.quran,
-      fontSize: fontSize.arabic * quranMultiplier,
-      lineHeight: fontSize.arabic * quranMultiplier * 2.1,
+      fontSize: (fontSize.arabic + 3) * quranMultiplier,
+      lineHeight: (fontSize.arabic + 3) * quranMultiplier * 2.2,
+      letterSpacing: 2.5,
       textAlign: "center",
+      width: "100%",
     },
     verseHeader: {
       flexDirection: "row",
@@ -107,10 +126,11 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, textMultiplie
     translationText: {
       color: colors.text,
       fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg * textMultiplier,
-      lineHeight: fontSize.bodyLg * textMultiplier * 1.7,
+      fontSize: fontSize.title * textMultiplier,
+      lineHeight: fontSize.title * textMultiplier * 1.7,
       marginTop: verticalScale(10),
       textAlign: "center",
-      paddingHorizontal: scale(10),
+      paddingHorizontal: 0,
+      width: "100%",
     },
   });

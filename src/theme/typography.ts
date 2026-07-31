@@ -4,7 +4,7 @@ export const fontFamily = {
   heading: "PlusJakartaSans-Bold",
   title: "Nunito-SemiBold",
   text: "Nunito-Medium",
-  quran: "Amiri-Regular",
+  quran: "Amiri-Bold",
 };
 
 // ─── Semantic Font Sizes (pre-scaled) ────────────────────────────────────

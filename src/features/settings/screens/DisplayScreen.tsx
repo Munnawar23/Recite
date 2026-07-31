@@ -7,15 +7,13 @@ import SafeArea from "@/components/layout/SafeArea";
 import ScreenHeader from "@/components/ui/ScreenHeader";
 import SectionTitle from "@/components/ui/SectionTitle";
 import TabSwitcher from "@/components/ui/TabSwitcher";
+import { ThemePhonePicker } from "@/components/ui/ThemePhonePicker";
 
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useFontStore, FontSizeScale } from "@/store/fontStore";
-import { useThemeStore, ThemeMode } from "@/store/themeStore";
-import { Haptics } from "@/lib/haptics";
 
 export default function DisplayScreen() {
   const { t } = useTranslation();
-  const { themeMode, setThemeMode } = useThemeStore();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
 
   const {
@@ -24,12 +22,6 @@ export default function DisplayScreen() {
     quranFontSizeScale,
     setQuranFontSizeScale,
   } = useFontStore();
-
-  const themeTabs = [
-    { label: t("settings.display.theme.light", "Light"), value: "light" },
-    { label: t("settings.display.theme.dark", "Dark"), value: "dark" },
-    { label: t("settings.display.theme.system", "System"), value: "system" },
-  ];
 
   const fontSizeTabs = [
     { label: t("settings.display.fontSize.small", "Small"), value: "small" },
@@ -57,16 +49,11 @@ export default function DisplayScreen() {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={S.scrollContent}>
         {/* 1. Theme Option */}
         <SectionTitle label={t("settings.display.appTheme", "App Theme")} icon="color-palette-outline" tightSpacing />
-        <TabSwitcher
-          tabs={themeTabs}
-          activeTab={themeMode}
-          onTabChange={(val: ThemeMode) => {
-            Haptics.medium();
-            setThemeMode(val);
-          }}
-        />
 
-        <View style={{ height: verticalScale(8) }} />
+        {/* Phone Theme Cards */}
+        <ThemePhonePicker />
+
+        <View style={{ height: verticalScale(14) }} />
 
         {/* 2. App Font Size */}
         <SectionTitle label={t("settings.display.appFontSize", "App Font Size")} icon="text-outline" tightSpacing />
@@ -74,7 +61,6 @@ export default function DisplayScreen() {
           tabs={fontSizeTabs}
           activeTab={fontSizeScale}
           onTabChange={(val: FontSizeScale) => {
-            Haptics.medium();
             setFontSizeScale(val);
           }}
         />
@@ -87,7 +73,6 @@ export default function DisplayScreen() {
           tabs={fontSizeTabs}
           activeTab={quranFontSizeScale}
           onTabChange={(val: FontSizeScale) => {
-            Haptics.medium();
             setQuranFontSizeScale(val);
           }}
         />

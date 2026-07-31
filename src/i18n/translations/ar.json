@@ -18,7 +18,8 @@
     "noConnectionSubtitle": "تعذر تحميل البيانات. تحقق من اتصالك بالإنترنت.",
     "quran": "القرآن",
     "qibla": "القبلة",
-    "library": "المكتبة"
+    "library": "المكتبة",
+    "back": "رجوع"
   },
   "splash": {
     "title": "رتّل",
@@ -145,8 +146,12 @@
     "notifications": {
       "title": "الإشعارات",
       "enableTitle": "تفعيل الإشعارات",
-      "enabled": "الإشعارات مفعّلة",
-      "disabled": "معطّلة"
+      "enabled": "الإشعارات مفعلة",
+      "disabled": "معطلة",
+      "toastEnabledTitle": "تم تفعيل الإشعارات",
+      "toastEnabledDesc": "تم تفعيل التذكيرات اليومية.",
+      "toastDisabledTitle": "تم تعطيل الإشعارات",
+      "toastDisabledDesc": "تم تعطيل التذكيرات اليومية."
     },
     "storage": {
       "title": "التخزين",
@@ -156,7 +161,7 @@
       "noDownloadsTitle": "لا توجد تنزيلات",
       "noDownloadsMessage": "ليس لديك أي سور منزلة لمسحها.",
       "confirmClearDownloadsTitle": "مسح جميع التنزيلات؟",
-      "confirmClearDownloadsDesc": "هل أنت ألكيد من رغبتك في إزالة {{count}} سورة منزلة من التخزين؟",
+      "confirmClearDownloadsDesc": "هل أنت ألكيد من رغبتك في إزالة {{count}} سورة منزلة ({{size}}) من التخزين؟",
       "toastClearedDownloadsTitle": "تم مسح التنزيلات",
       "toastClearedDownloadsDesc": "تم مسح جميع السور المنزلة بنجاح.",
       "clearFavoritesTitle": "مسح جميع المفضلة",
@@ -245,5 +250,42 @@
     "locationRequiredTitle": "الموقع مطلوب",
     "locationRequiredSubtitle": "نحتاج إلى موقعك لحساب اتجاه القبلة بدقة.",
     "enableLocation": "تفعيل الموقع"
+  },
+  "onboarding": {
+    "stepOf": "{{current}} من {{total}}",
+    "next": "التالي",
+    "skip": "تخطي",
+    "getStarted": "ابدأ الآن",
+    "language": {
+      "title": "اختر لغتك",
+      "subtitle": "اختر لغتك المفضلة لقوائم التطبيق وواجهته.",
+      "sectionLabel": "لغة التطبيق"
+    },
+    "preferences": {
+      "title": "تفضيلات القرآن",
+      "subtitle": "اختر ترجمة القرآن الافتراضية وصوت القارئ للصوت.",
+      "translationLabel": "ترجمة القرآن",
+      "reciterLabel": "القارئ"
+    },
+    "notifications": {
+      "title": "ابقَ على تواصل",
+      "subtitle": "فعّل التذكيرات اليومية لتلتزم برحلتك مع القرآن الكريم.",
+      "benefit1": "تذكيرات التلاوة اليومية",
+      "benefit2": "تنبيهات أوقات الصلاة",
+      "benefit3": "نصائح قرآنية مخصصة",
+      "enableButton": "تفعيل الإشعارات",
+      "enabledStatus": "الإشعارات مفعّلة",
+      "skipHint": "يمكنك تفعيل هذا لاحقاً في الإعدادات"
+    },
+    "location": {
+      "title": "أوقات صلاة دقيقة",
+      "subtitle": "اسمح بالوصول إلى الموقع لأوقات صلاة دقيقة واتجاه القبلة.",
+      "benefit1": "أوقات الصلاة الدقيقة لمدينتك",
+      "benefit2": "اتجاه القبلة بدقة",
+      "benefit3": "أحداث التقويم الإسلامي المحلية",
+      "enableButton": "تفعيل الموقع",
+      "enabledStatus": "الموقع مفعّل",
+      "skipHint": "سيتم استخدام أوقات مكة المكرمة إذا تخطيت"
+    }
   }
 }

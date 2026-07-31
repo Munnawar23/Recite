@@ -18,7 +18,8 @@
     "noConnectionSubtitle": "ڈیٹا لوڈ نہیں ہو سکا۔ اپنا انٹرنیٹ کنیکشن چیک کریں۔",
     "quran": "قرآن",
     "qibla": "قبلہ",
-    "library": "لائبریری"
+    "library": "لائبریری",
+    "back": "واپس"
   },
   "splash": {
     "title": "ری سائٹ",
@@ -146,7 +147,11 @@
       "title": "نوٹیفکیشنز",
       "enableTitle": "نوٹیفکیشنز فعال کریں",
       "enabled": "نوٹیفکیشن فعال ہے",
-      "disabled": "غیر فعال"
+      "disabled": "غیر فعال",
+      "toastEnabledTitle": "نوٹیفکیشنز فعال ہیں",
+      "toastEnabledDesc": "روزانہ کی یاددہانی فعال کر دی گئی ہے۔",
+      "toastDisabledTitle": "نوٹیفکیشنز غیر فعال ہیں",
+      "toastDisabledDesc": "روزانہ کی یاددہانی غیر فعال کر دی گئی ہے۔"
     },
     "storage": {
       "title": "اسٹوریج",
@@ -156,7 +161,7 @@
       "noDownloadsTitle": "کوئی ڈاؤن لوڈز نہیں",
       "noDownloadsMessage": "پاک کرنے کے لیے کوئی ڈاؤن لوڈ شدہ سورتیں نہیں ہیں۔",
       "confirmClearDownloadsTitle": "تمام ڈاؤن لوڈز صاف کریں؟",
-      "confirmClearDownloadsDesc": "کیا آپ واقعی آف لائن اسٹوریج سے {{count}} ڈاؤن لوڈ شدہ سورتیں ہٹانا چاہتے ہیں؟",
+      "confirmClearDownloadsDesc": "کیا آپ واقعی آف لائن اسٹوریج سے {{count}} ڈاؤن لوڈ شدہ سورتیں ({{size}}) ہٹانا چاہتے ہیں؟",
       "toastClearedDownloadsTitle": "ڈاؤن لوڈز صاف کر دیے گئے",
       "toastClearedDownloadsDesc": "تمام ڈاؤن لوڈ شدہ سورتیں صاف کر دی گئی ہیں۔",
       "clearFavoritesTitle": "تمام پسندیدہ صاف کریں",
@@ -245,5 +250,42 @@
     "locationRequiredTitle": "مقام کی رسائی درکار ہے",
     "locationRequiredSubtitle": "قبلہ کی درست سمت معلوم کرنے کے لیے آپ کا مقام درکار ہے۔",
     "enableLocation": "لوکیشن آن کریں"
+  },
+  "onboarding": {
+    "stepOf": "{{current}} از {{total}}",
+    "next": "اگلا",
+    "skip": "چھوڑیں",
+    "getStarted": "شروع کریں",
+    "language": {
+      "title": "اپنی زبان منتخب کریں",
+      "subtitle": "ایپ کے مینو اور انٹرفیس کے لیے اپنی پسندیدہ زبان منتخب کریں۔",
+      "sectionLabel": "ایپ کی زبان"
+    },
+    "preferences": {
+      "title": "قرآن کی ترجیحات",
+      "subtitle": "آڈیو کے لیے ڈیفالٹ قرآن ترجمہ اور قاری کی آواز منتخب کریں۔",
+      "translationLabel": "قرآن کا ترجمہ",
+      "reciterLabel": "قاری"
+    },
+    "notifications": {
+      "title": "جڑے رہیں",
+      "subtitle": "روزانہ یاددہانی فعال کریں تاکہ آپ قرآن کے سفر میں ثابت قدم رہیں۔",
+      "benefit1": "روزانہ تلاوت کی یاددہانی",
+      "benefit2": "نماز کے اوقات کی اطلاع",
+      "benefit3": "ذاتی قرآنی مشورے",
+      "enableButton": "نوٹیفیکیشن فعال کریں",
+      "enabledStatus": "نوٹیفیکیشن فعال ہے",
+      "skipHint": "آپ اسے بعد میں ترتیبات میں فعال کر سکتے ہیں"
+    },
+    "location": {
+      "title": "درست نماز کے اوقات",
+      "subtitle": "درست نماز کے اوقات اور قبلہ کی سمت کے لیے مقام کی رسائی دیں۔",
+      "benefit1": "آپ کے شہر کے درست نماز کے اوقات",
+      "benefit2": "قبلہ کمپاس کی درست سمت",
+      "benefit3": "مقامی اسلامی کیلنڈر کے واقعات",
+      "enableButton": "لوکیشن فعال کریں",
+      "enabledStatus": "لوکیشن فعال ہے",
+      "skipHint": "اگر چھوڑا گیا تو مکہ کے اوقات استعمال ہوں گے"
+    }
   }
 }

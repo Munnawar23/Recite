@@ -9,6 +9,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { QURAN_ANIM } from "@/constants/assets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { lightColors } from "@/theme/colors";
+import { useOnboardingStore } from "@/store/onboardingStore";
 
 export default function SplashScreen() {
   const router = useRouter();
@@ -18,9 +19,15 @@ export default function SplashScreen() {
 
   const styles = createStyles(colors, fontFamily, fontSizes, spacing);
 
+  const { hasCompletedOnboarding } = useOnboardingStore();
+
   const handleRedirect = useCallback(() => {
-    router.replace("/(tabs)/home" as Href);
-  }, [router]);
+    if (hasCompletedOnboarding) {
+      router.replace("/(tabs)/home" as Href);
+    } else {
+      router.replace("/onboarding" as Href);
+    }
+  }, [router, hasCompletedOnboarding]);
 
   return (
     <View style={styles.container}>

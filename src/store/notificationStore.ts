@@ -30,7 +30,6 @@ export const useNotificationStore = create<NotificationStoreState>()(
             return false;
           }
 
-          // Cancel any existing notification before rescheduling
           if (get().notificationId) {
             await cancelDailyNightlyNotification(get().notificationId);
           }
@@ -58,3 +57,4 @@ export const useNotificationStore = create<NotificationStoreState>()(
     },
   ),
 );
+

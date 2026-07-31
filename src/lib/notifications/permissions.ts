@@ -8,7 +8,6 @@ export async function requestNotificationPermissions(): Promise<boolean> {
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: "#FF236C",
-      sound: "notification",
       enableVibrate: true,
       audioAttributes: {
         usage: Notifications.AndroidAudioUsage.NOTIFICATION_EVENT,

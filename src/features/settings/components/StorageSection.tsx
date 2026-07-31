@@ -42,8 +42,8 @@ export default function StorageSection() {
       title: t("settings.storage.confirmClearDownloadsTitle", "Clear All Downloads?"),
       description: t(
         "settings.storage.confirmClearDownloadsDesc",
-        "Are you sure you want to remove {{count}} downloaded Surah(s) from offline storage?",
-        { count: chapterIds.length }
+        "Are you sure you want to remove {{count}} downloaded Surah(s) ({{size}}) from offline storage?",
+        { count: chapterIds.length, size: formattedSize }
       ),
       onConfirm: async () => {
         Haptics.medium();

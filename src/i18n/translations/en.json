@@ -18,7 +18,8 @@
     "noConnectionSubtitle": "Could not load data. Check your internet connection.",
     "quran": "Quran",
     "qibla": "Qibla",
-    "library": "Library"
+    "library": "Library",
+    "back": "Back"
   },
   "splash": {
     "title": "Recite",
@@ -146,7 +147,11 @@
       "title": "Notifications",
       "enableTitle": "Enable Notifications",
       "enabled": "Notification enabled",
-      "disabled": "Disabled"
+      "disabled": "Disabled",
+      "toastEnabledTitle": "Notifications Enabled",
+      "toastEnabledDesc": "Daily reminders have been enabled.",
+      "toastDisabledTitle": "Notifications Disabled",
+      "toastDisabledDesc": "Daily reminders have been disabled."
     },
     "storage": {
       "title": "Storage",
@@ -156,7 +161,7 @@
       "noDownloadsTitle": "No Downloads",
       "noDownloadsMessage": "You don't have any downloaded Surahs to clear.",
       "confirmClearDownloadsTitle": "Clear All Downloads?",
-      "confirmClearDownloadsDesc": "Are you sure you want to remove {{count}} downloaded Surah(s) from offline storage?",
+      "confirmClearDownloadsDesc": "Are you sure you want to remove {{count}} downloaded Surah(s) ({{size}}) from offline storage?",
       "toastClearedDownloadsTitle": "Cleared Downloads",
       "toastClearedDownloadsDesc": "All downloaded Surahs have been cleared.",
       "clearFavoritesTitle": "Clear All Favorites",
@@ -245,5 +250,42 @@
     "locationRequiredTitle": "Location Required",
     "locationRequiredSubtitle": "We need your location to calculate the precise direction to the Qibla.",
     "enableLocation": "Enable Location"
+  },
+  "onboarding": {
+    "stepOf": "{{current}} of {{total}}",
+    "next": "Next",
+    "skip": "Skip",
+    "getStarted": "Get Started",
+    "language": {
+      "title": "Choose Your Language",
+      "subtitle": "Select your preferred language for menus and the app interface.",
+      "sectionLabel": "App Language"
+    },
+    "preferences": {
+      "title": "Quran Preferences",
+      "subtitle": "Choose your default Quran translation and the reciter voice for audio.",
+      "translationLabel": "Quran Translation",
+      "reciterLabel": "Quran Reciter"
+    },
+    "notifications": {
+      "title": "Stay Connected",
+      "subtitle": "Enable daily reminders to keep you consistent with your Quran journey.",
+      "benefit1": "Daily recitation reminders",
+      "benefit2": "Prayer time alerts",
+      "benefit3": "Personalized Quran tips",
+      "enableButton": "Enable Notifications",
+      "enabledStatus": "Notifications Enabled",
+      "skipHint": "You can always enable this later in Settings"
+    },
+    "location": {
+      "title": "Precise Prayer Times",
+      "subtitle": "Allow location access for accurate prayer times and Qibla direction.",
+      "benefit1": "Accurate prayer times for your city",
+      "benefit2": "Precise Qibla compass direction",
+      "benefit3": "Local Islamic calendar events",
+      "enableButton": "Enable Location",
+      "enabledStatus": "Location Enabled",
+      "skipHint": "Mecca times will be used if skipped"
+    }
   }
 }

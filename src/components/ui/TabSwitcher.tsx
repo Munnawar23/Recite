@@ -3,13 +3,12 @@ import { StyleSheet, Text, TouchableOpacity, View, type ViewStyle, LayoutChangeE
 import { Haptics } from "@/lib/haptics";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { scale, verticalScale } from "react-native-size-matters";
-import { BlurView } from "expo-blur";
-import Animated, { 
-  useAnimatedStyle, 
-  withSpring, 
-  useSharedValue, 
+import Animated, {
+  useAnimatedStyle,
+  withSpring,
+  useSharedValue,
   runOnJS,
-  type WithSpringConfig
+  type WithSpringConfig,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
@@ -25,6 +24,13 @@ interface TabSwitcherProps {
   containerStyle?: ViewStyle;
 }
 
+const SPRING_CONFIG: WithSpringConfig = {
+  mass: 1,
+  damping: 20,
+  stiffness: 250,
+  overshootClamping: false,
+};
+
 const TabSwitcher: React.FC<TabSwitcherProps> = ({
   tabs = [
     { label: "Read", value: "read" },
@@ -36,27 +42,25 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
 }) => {
   const { colors, fontFamily, fontSize, activeScheme, spacing } = useAppTheme();
   const isDark = activeScheme === "dark";
-  const S = createStyles(colors, fontFamily, fontSize, spacing, isDark);
-  
+
   const [containerWidth, setContainerWidth] = useState(0);
-  const activeIndex = Math.max(tabs.findIndex(t => t.value === activeTab), 0);
-  // Account for padding (scale(4) on left and right = scale(8) total)
+  const activeIndex = Math.max(tabs.findIndex((t) => t.value === activeTab), 0);
   const tabWidth = containerWidth > 0 ? (containerWidth - scale(8)) / tabs.length : 0;
 
   const translateX = useSharedValue(0);
-  const isDragging = useSharedValue(false);
   const scaleAnim = useSharedValue(1);
-
-  const SPRING_CONFIG: WithSpringConfig = {
-    mass: 1,
-    damping: 20, // Lower is bouncier
-    stiffness: 250, // Higher is faster
-    overshootClamping: false,
-  };
+  const isInitialized = React.useRef(false);
 
   useEffect(() => {
     if (tabWidth > 0) {
-      translateX.value = withSpring(activeIndex * tabWidth, SPRING_CONFIG);
+      const targetX = activeIndex * tabWidth;
+      if (!isInitialized.current) {
+        // Direct assignment on first layout calculation to avoid 1-2 sec spring delay on mount
+        translateX.value = targetX;
+        isInitialized.current = true;
+      } else {
+        translateX.value = withSpring(targetX, SPRING_CONFIG);
+      }
     }
   }, [activeIndex, tabWidth]);
 
@@ -65,46 +69,32 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
     onTabChange(val);
   };
 
-  const animatedPillStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateX: translateX.value },
-        { scale: scaleAnim.value }
-      ],
-      width: tabWidth,
-    };
-  });
+  const animatedPillStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translateX.value },
+      { scale: scaleAnim.value },
+    ],
+    width: tabWidth,
+  }));
 
   const pan = Gesture.Pan()
     .onBegin(() => {
-      isDragging.value = true;
-      scaleAnim.value = withSpring(1.05, { mass: 1, damping: 15, stiffness: 300 }); // Quick zoom
+      scaleAnim.value = withSpring(1.05, { mass: 1, damping: 15, stiffness: 300 });
     })
     .onChange((event) => {
       if (tabWidth > 0) {
         const maxTranslate = tabWidth * (tabs.length - 1);
         let newValue = translateX.value + event.changeX;
-        
-        // Clamp the pill so it doesn't drag outside the container
         if (newValue < 0) newValue = 0;
         if (newValue > maxTranslate) newValue = maxTranslate;
-        
         translateX.value = newValue;
       }
     })
     .onFinalize(() => {
-      isDragging.value = false;
-      scaleAnim.value = withSpring(1, SPRING_CONFIG); // Bounce back to normal
-      
+      scaleAnim.value = withSpring(1, SPRING_CONFIG);
       if (tabWidth > 0) {
-        // Calculate the closest tab index based on where the user dropped it
         const closestIndex = Math.round(translateX.value / tabWidth);
-        const targetX = closestIndex * tabWidth;
-        
-        // Snap the pill into place using spring physics
-        translateX.value = withSpring(targetX, SPRING_CONFIG);
-
-        // Trigger the tab change logic safely on the JS thread
+        translateX.value = withSpring(closestIndex * tabWidth, SPRING_CONFIG);
         const newTab = tabs[closestIndex];
         if (newTab && newTab.value !== activeTab) {
           runOnJS(handleTabChange)(newTab.value);
@@ -112,32 +102,44 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
       }
     });
 
+  // All colors computed fresh on every render — no stale closure issue
+  const trackBg = isDark ? "rgba(255,255,255,0.06)" : "#FAF4EC";
+  const pillBg = isDark ? "rgba(255,255,255,0.15)" : "#FFFFFF";
+  const activeTxtColor = colors.primary;
+  const inactiveTxtColor = colors.subtext;
+
   return (
-    <View style={[S.container, containerStyle]}>
-      <View style={S.blurWrapper}>
-        <BlurView 
-          intensity={isDark ? 30 : 60} 
-          tint={isDark ? "dark" : "light"} 
-          style={StyleSheet.absoluteFill} 
-        />
-        
+    <View style={[styles.container, { paddingHorizontal: spacing.screenPadding }, containerStyle]}>
+      <View
+        style={[
+          styles.track,
+          {
+            backgroundColor: trackBg,
+            borderColor: colors.border,
+          },
+        ]}
+      >
         <GestureDetector gesture={pan}>
-          <View 
-            style={S.tabContainer}
+          <View
+            style={styles.tabContainer}
             onLayout={(e: LayoutChangeEvent) => setContainerWidth(e.nativeEvent.layout.width)}
           >
-            {/* Animated Pill Background */}
             {containerWidth > 0 && (
-              <Animated.View style={[S.activePill, animatedPillStyle]} />
+              <Animated.View
+                style={[
+                  styles.activePill,
+                  { backgroundColor: pillBg },
+                  animatedPillStyle,
+                ]}
+              />
             )}
 
-            {/* Tab Buttons */}
             {tabs.map((tab) => {
               const isActive = activeTab === tab.value;
               return (
                 <TouchableOpacity
                   key={tab.value}
-                  style={S.tab}
+                  style={styles.tab}
                   activeOpacity={1}
                   onPress={() => {
                     if (!isActive) {
@@ -146,7 +148,13 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
                     }
                   }}
                 >
-                  <Text style={[S.tabText, isActive && S.activeTabText]}>
+                  <Text
+                    style={{
+                      fontSize: fontSize.body,
+                      fontFamily: isActive ? fontFamily.title : fontFamily.text,
+                      color: isActive ? activeTxtColor : inactiveTxtColor,
+                    }}
+                  >
                     {tab.label}
                   </Text>
                 </TouchableOpacity>
@@ -161,51 +169,34 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
 
 export default TabSwitcher;
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any, isDark: boolean) =>
-  StyleSheet.create({
-    container: {
-      paddingHorizontal: spacing.screenPadding,
-      paddingBottom: verticalScale(2),
-    },
-    blurWrapper: {
-      borderRadius: scale(14),
-      overflow: "hidden",
-      borderWidth: 1,
-      borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.05)",
-      backgroundColor: isDark ? "rgba(0,0,0,0.25)" : "rgba(255,255,255,0.4)",
-    },
-    tabContainer: {
-      flexDirection: "row",
-      padding: scale(4),
-      position: "relative",
-    },
-    activePill: {
-      position: "absolute",
-      top: scale(4),
-      bottom: scale(4),
-      left: scale(4),
-      backgroundColor: isDark ? "rgba(255,255,255,0.15)" : "#FFFFFF",
-      borderRadius: scale(10),
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: isDark ? 0 : 0.08,
-      shadowRadius: scale(4),
-      elevation: isDark ? 0 : 2,
-    },
-    tab: {
-      flex: 1,
-      paddingVertical: verticalScale(10),
-      alignItems: "center",
-      justifyContent: "center",
-      zIndex: 1,
-    },
-    tabText: {
-      fontSize: fontSize.body,
-      fontFamily: fontFamily.text,
-      color: colors.subtext,
-    },
-    activeTabText: {
-      fontFamily: fontFamily.title,
-      color: isDark ? colors.primary : colors.primary,
-    },
-  });
+const styles = StyleSheet.create({
+  container: {
+    paddingBottom: verticalScale(2),
+  },
+  track: {
+    borderRadius: scale(14),
+    overflow: "hidden",
+    borderWidth: 1,
+  },
+  tabContainer: {
+    flexDirection: "row",
+    padding: scale(4),
+    position: "relative",
+  },
+  activePill: {
+    position: "absolute",
+    top: scale(4),
+    bottom: scale(4),
+    left: scale(4),
+    borderRadius: scale(10),
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: verticalScale(10),
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
+  },
+});
+
+

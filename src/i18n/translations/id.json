@@ -18,7 +18,8 @@
     "noConnectionSubtitle": "Tidak dapat memuat data. Periksa koneksi internet Anda.",
     "quran": "Al-Qur'an",
     "qibla": "Qibla",
-    "library": "Perpustakaan"
+    "library": "Perpustakaan",
+    "back": "Kembali"
   },
   "splash": {
     "title": "Recite",
@@ -146,7 +147,11 @@
       "title": "Notifikasi",
       "enableTitle": "Aktifkan Notifikasi",
       "enabled": "Notifikasi diaktifkan",
-      "disabled": "Dinonaktifkan"
+      "disabled": "Dinonaktifkan",
+      "toastEnabledTitle": "Notifikasi Diaktifkan",
+      "toastEnabledDesc": "Pengingat harian telah diaktifkan.",
+      "toastDisabledTitle": "Notifikasi Dinonaktifkan",
+      "toastDisabledDesc": "Pengingat harian telah dinonaktifkan."
     },
     "storage": {
       "title": "Penyimpanan",
@@ -156,7 +161,7 @@
       "noDownloadsTitle": "Tidak Ada Unduhan",
       "noDownloadsMessage": "Anda tidak memiliki Surah yang diunduh untuk dihapus.",
       "confirmClearDownloadsTitle": "Hapus Semua Unduhan?",
-      "confirmClearDownloadsDesc": "Apakah Anda yakin ingin menghapus {{count}} Surah yang diunduh dari penyimpanan offline?",
+      "confirmClearDownloadsDesc": "Apakah Anda yakin ingin menghapus {{count}} Surah yang diunduh ({{size}}) dari penyimpanan offline?",
       "toastClearedDownloadsTitle": "Unduhan Dihapus",
       "toastClearedDownloadsDesc": "Semua Surah yang diunduh telah dihapus.",
       "clearFavoritesTitle": "Hapus Semua Favorit",
@@ -245,5 +250,42 @@
     "locationRequiredTitle": "Lokasi Diperlukan",
     "locationRequiredSubtitle": "Kami membutuhkan lokasi Anda untuk menghitung arah Kiblat yang akurat.",
     "enableLocation": "Aktifkan Lokasi"
+  },
+  "onboarding": {
+    "stepOf": "{{current}} dari {{total}}",
+    "next": "Lanjut",
+    "skip": "Lewati",
+    "getStarted": "Mulai",
+    "language": {
+      "title": "Pilih Bahasa Anda",
+      "subtitle": "Pilih bahasa pilihan Anda untuk menu dan antarmuka aplikasi.",
+      "sectionLabel": "Bahasa Aplikasi"
+    },
+    "preferences": {
+      "title": "Preferensi Al-Qur'an",
+      "subtitle": "Pilih terjemahan Al-Qur'an default dan suara qari untuk audio.",
+      "translationLabel": "Terjemahan Al-Qur'an",
+      "reciterLabel": "Qari"
+    },
+    "notifications": {
+      "title": "Tetap Terhubung",
+      "subtitle": "Aktifkan pengingat harian agar konsisten dalam perjalanan Al-Qur'an Anda.",
+      "benefit1": "Pengingat tilawah harian",
+      "benefit2": "Notifikasi waktu shalat",
+      "benefit3": "Tips Al-Qur'an yang dipersonalisasi",
+      "enableButton": "Aktifkan Notifikasi",
+      "enabledStatus": "Notifikasi Diaktifkan",
+      "skipHint": "Anda dapat mengaktifkan ini nanti di Pengaturan"
+    },
+    "location": {
+      "title": "Waktu Shalat Akurat",
+      "subtitle": "Izinkan akses lokasi untuk waktu shalat dan arah Kiblat yang akurat.",
+      "benefit1": "Waktu shalat akurat untuk kota Anda",
+      "benefit2": "Arah kompas Kiblat yang presisi",
+      "benefit3": "Acara kalender Islam lokal",
+      "enableButton": "Aktifkan Lokasi",
+      "enabledStatus": "Lokasi Diaktifkan",
+      "skipHint": "Waktu Mekkah akan digunakan jika dilewati"
+    }
   }
 }

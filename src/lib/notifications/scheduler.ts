@@ -22,7 +22,6 @@ export async function scheduleDailyNightlyNotification(): Promise<string | null>
       content: {
         title: NIGHTLY_REMINDER_CONTENT.title,
         body: NIGHTLY_REMINDER_CONTENT.body,
-        sound: "notification.mp3",
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DAILY,
@@ -64,7 +63,6 @@ export async function triggerInstantTestNotification(): Promise<void> {
       content: {
         title: NIGHTLY_REMINDER_CONTENT.title,
         body: NIGHTLY_REMINDER_CONTENT.body,
-        sound: "notification.mp3",
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,

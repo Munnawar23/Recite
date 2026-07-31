@@ -16,9 +16,10 @@
     "errorMessage": "डेटा लोड करने में विफल। पुनः प्रयास करने के लिए टैप करें।",
     "noConnectionTitle": "कनेक्शन त्रुटि",
     "noConnectionSubtitle": "डेटा लोड करने में असमर्थ। अपना इंटरनेट कनेक्शन जांचें।",
-    "quran": "कुरआन",
+    "quran": "क़ुरआन",
     "qibla": "क़िबला",
-    "library": "पुस्तकालय"
+    "library": "लाइब्रेरी",
+    "back": "पीछे"
   },
   "splash": {
     "title": "Recite",
@@ -146,7 +147,11 @@
       "title": "सूचनाएं",
       "enableTitle": "सूचनाएं सक्षम करें",
       "enabled": "सूचना सक्षम है",
-      "disabled": "अक्षम"
+      "disabled": "अक्षम",
+      "toastEnabledTitle": "सूचनाएं सक्षम की गईं",
+      "toastEnabledDesc": "दैनिक रिमाइंडर्स सक्षम कर दिए गए हैं।",
+      "toastDisabledTitle": "सूचनाएं अक्षम की गईं",
+      "toastDisabledDesc": "दैनिक रिमाइंडर्स अक्षम कर दिए गए हैं।"
     },
     "storage": {
       "title": "स्टोरेज",
@@ -156,7 +161,7 @@
       "noDownloadsTitle": "कोई डाउनलोड नहीं",
       "noDownloadsMessage": "हटाने के लिए आपके पास कोई डाउनलोड की गई सूरह नहीं है।",
       "confirmClearDownloadsTitle": "सभी डाउनलोड हटाएं?",
-      "confirmClearDownloadsDesc": "क्या आप निश्चित रूप से ऑफ़लाइन स्टोरेज से {{count}} डाउनलोड की गई सूरह हटाना चाहते हैं?",
+      "confirmClearDownloadsDesc": "क्या आप निश्चित रूप से ऑफ़लाइन स्टोरेज से {{count}} डाउनलोड की गई सूरह ({{size}}) हटाना चाहते हैं?",
       "toastClearedDownloadsTitle": "डाउनलोड हटा दिए गए",
       "toastClearedDownloadsDesc": "सभी डाउनलोड की गई सूरह हटा दी गई हैं।",
       "clearFavoritesTitle": "सभी पसंदीदा हटाएं",
@@ -245,5 +250,42 @@
     "locationRequiredTitle": "स्थान की आवश्यकता है",
     "locationRequiredSubtitle": "क़िबला की सटीक दिशा की गणना करने के लिए हमें आपके स्थान की आवश्यकता है।",
     "enableLocation": "स्थान सक्षम करें"
+  },
+  "onboarding": {
+    "stepOf": "{{current}} / {{total}}",
+    "next": "आगे",
+    "skip": "छोड़ें",
+    "getStarted": "शुरू करें",
+    "language": {
+      "title": "अपनी भाषा चुनें",
+      "subtitle": "ऐप के मेनू और इंटरफ़ेस के लिए अपनी पसंदीदा भाषा चुनें।",
+      "sectionLabel": "ऐप भाषा"
+    },
+    "preferences": {
+      "title": "क़ुरआन प्राथमिकताएँ",
+      "subtitle": "डिफ़ॉल्ट क़ुरआन अनुवाद और ऑडियो के लिए क़ारी की आवाज़ चुनें।",
+      "translationLabel": "क़ुरआन अनुवाद",
+      "reciterLabel": "क़ारी"
+    },
+    "notifications": {
+      "title": "जुड़े रहें",
+      "subtitle": "दैनिक अनुस्मारक सक्षम करें ताकि आप अपनी क़ुरआन यात्रा में स्थिर रहें।",
+      "benefit1": "दैनिक तिलावत अनुस्मारक",
+      "benefit2": "नमाज़ समय अलर्ट",
+      "benefit3": "व्यक्तिगत क़ुरआनी सुझाव",
+      "enableButton": "सूचनाएँ सक्षम करें",
+      "enabledStatus": "सूचनाएँ सक्षम हैं",
+      "skipHint": "आप इसे बाद में सेटिंग्स में सक्षम कर सकते हैं"
+    },
+    "location": {
+      "title": "सटीक नमाज़ समय",
+      "subtitle": "सटीक नमाज़ समय और क़िबला दिशा के लिए स्थान एक्सेस की अनुमति दें।",
+      "benefit1": "आपके शहर के सटीक नमाज़ समय",
+      "benefit2": "सटीक क़िबला कम्पास दिशा",
+      "benefit3": "स्थानीय इस्लामी कैलेंडर आयोजन",
+      "enableButton": "स्थान सक्षम करें",
+      "enabledStatus": "स्थान सक्षम है",
+      "skipHint": "छोड़ने पर मक्का समय का उपयोग होगा"
+    }
   }
 }

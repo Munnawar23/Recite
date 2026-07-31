@@ -44,7 +44,7 @@ export default function QiblaScreen() {
   const { t } = useTranslation();
   const theme = useAppTheme();
   const styles = createStyles(theme);
-  const { coords, permissionStatus, cityName, requestLocation } =
+  const { coords, permissionStatus, cityName, requestLocation, isLoading } =
     useLocation();
 
   const qiblaAngle = useQiblaDirection(coords);
@@ -75,6 +75,7 @@ export default function QiblaScreen() {
               )}
               buttonLabel={t("qiblaScreen.enableLocation", "Enable Location")}
               buttonIcon="location"
+              loading={isLoading}
               onPress={() => requestLocation()}
             />
           ) : (

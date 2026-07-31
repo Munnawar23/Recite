@@ -8,6 +8,7 @@ export const STORAGE_KEYS = {
   NOTIFICATION: "notification-storage",
   DOWNLOADS: "downloads-storage",
   FAVORITES: "favorites-storage",
+  ONBOARDING: "onboarding-storage",
 } as const;
 
 

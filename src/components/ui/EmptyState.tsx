@@ -20,6 +20,7 @@ type BaseProps = {
   animationSource?: any;
   title: string;
   subtitle: string;
+  loading?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -42,6 +43,7 @@ export default function EmptyState({
   animationSource,
   title,
   subtitle,
+  loading = false,
   buttonLabel,
   buttonIcon = "arrow-forward",
   onPress,
@@ -72,6 +74,7 @@ export default function EmptyState({
         <Button
           title={buttonLabel}
           icon={buttonIcon}
+          loading={loading}
           onPress={onPress}
           style={S.buttonContainer}
         />

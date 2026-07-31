@@ -23,6 +23,7 @@ export interface ButtonProps {
   disabled?: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<any>;
 }
 
 export function Button({
@@ -35,6 +36,7 @@ export function Button({
   disabled = false,
   loading = false,
   style,
+  textStyle,
 }: ButtonProps) {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
@@ -65,7 +67,7 @@ export function Button({
             <Ionicons name={icon} size={scale(18)} color={colors.card} />
           )}
           {buttonTitle ? (
-            <Text style={styles.text}>
+            <Text style={[styles.text, textStyle]} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.85}>
               {buttonTitle}
             </Text>
           ) : null}
@@ -85,8 +87,8 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any)
       justifyContent: "center",
       borderRadius: scale(12),
       paddingVertical: spacing.vMd,
-      paddingHorizontal: spacing.xl,
-      gap: spacing.sm,
+      paddingHorizontal: spacing.md,
+      gap: spacing.xs,
       backgroundColor: colors.primary,
       opacity: 1,
     },

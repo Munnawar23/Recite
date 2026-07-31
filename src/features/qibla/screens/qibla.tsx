@@ -1,11 +1,11 @@
+import EmptyState from "@/components/layout/EmptyState";
+import Header from "@/components/layout/Header";
 import SafeArea from "@/components/layout/SafeArea";
-import EmptyState from "@/components/ui/EmptyState";
-import Header from "@/components/ui/Header";
-import { useLocation } from "@/hooks/useLocation";
 import CompassDial from "@/features/qibla/components/CompassDial";
 import { useCompass } from "@/features/qibla/hooks/useCompass";
 import { useQiblaDirection } from "@/features/qibla/hooks/useQiblaDirection";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useLocation } from "@/hooks/useLocation";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import Animated, {
@@ -59,7 +59,11 @@ export default function QiblaScreen() {
           title={t("qiblaScreen.title", "Qibla")}
           subtitle={
             cityName
-              ? t("qiblaScreen.subtitleWithCity", "Showing direction from {{cityName}}", { cityName })
+              ? t(
+                  "qiblaScreen.subtitleWithCity",
+                  "Showing direction from {{cityName}}",
+                  { cityName },
+                )
               : t("qiblaScreen.subtitleDefault", "Find the direction to Mecca")
           }
         />
@@ -68,10 +72,13 @@ export default function QiblaScreen() {
           {permissionStatus !== "granted" ? (
             <EmptyState
               icon="location-outline"
-              title={t("qiblaScreen.locationRequiredTitle", "Location Required")}
+              title={t(
+                "qiblaScreen.locationRequiredTitle",
+                "Location Required",
+              )}
               subtitle={t(
                 "qiblaScreen.locationRequiredSubtitle",
-                "We need your location to calculate the precise direction to the Qibla."
+                "We need your location to calculate the precise direction to the Qibla.",
               )}
               buttonLabel={t("qiblaScreen.enableLocation", "Enable Location")}
               buttonIcon="location"
@@ -86,9 +93,7 @@ export default function QiblaScreen() {
                   {t("qiblaScreen.title", "Qibla")}
                 </Text>
 
-                <Text style={styles.targetValue}>
-                  {targetDeg}°
-                </Text>
+                <Text style={styles.targetValue}>{targetDeg}°</Text>
               </View>
 
               {/* Center Compass Dial */}
@@ -159,4 +164,3 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>) =>
       padding: 0,
     },
   });
-

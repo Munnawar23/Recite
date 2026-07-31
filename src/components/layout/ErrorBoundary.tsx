@@ -1,10 +1,10 @@
+import Background from "@/components/layout/Background";
 import SafeArea from "@/components/layout/SafeArea";
-import Background from "@/components/ui/Background";
 import Button from "@/components/ui/Button";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import "@/i18n";
 import { Ionicons } from "@expo/vector-icons";
-import React, { Component, ErrorInfo, ReactNode } from "react";
+import { Component, ErrorInfo, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -45,22 +45,14 @@ class ErrorBoundaryClass extends Component<Props, State> {
       if (this.props.fallback) {
         return this.props.fallback;
       }
-      return (
-        <ErrorFallbackView
-          onReset={this.handleReset}
-        />
-      );
+      return <ErrorFallbackView onReset={this.handleReset} />;
     }
 
     return this.props.children;
   }
 }
 
-function ErrorFallbackView({
-  onReset,
-}: {
-  onReset: () => void;
-}) {
+function ErrorFallbackView({ onReset }: { onReset: () => void }) {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
   const styles = createStyles(colors, fontFamily, fontSize, spacing);
@@ -72,7 +64,11 @@ function ErrorFallbackView({
         <View style={styles.contentContainer}>
           {/* Header Icon */}
           <View style={styles.iconContainer}>
-            <Ionicons name="warning-outline" size={scale(40)} color={colors.accent} />
+            <Ionicons
+              name="warning-outline"
+              size={scale(40)}
+              color={colors.accent}
+            />
           </View>
 
           {/* Title & Message */}
@@ -81,7 +77,10 @@ function ErrorFallbackView({
           </Text>
 
           <Text style={styles.subtitle}>
-            {t("errorBoundary.subtitle", "An unexpected error occurred in the application. You can try restarting or resetting the current view.")}
+            {t(
+              "errorBoundary.subtitle",
+              "An unexpected error occurred in the application. You can try restarting or resetting the current view.",
+            )}
           </Text>
 
           {/* Try Again Button */}
@@ -98,7 +97,12 @@ function ErrorFallbackView({
 
 export const ErrorBoundary = ErrorBoundaryClass;
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any) =>
+const createStyles = (
+  colors: any,
+  fontFamily: any,
+  fontSize: any,
+  spacing: any,
+) =>
   StyleSheet.create({
     outerContainer: {
       flex: 1,
@@ -136,4 +140,3 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any)
       fontSize: fontSize.body,
     },
   });
-

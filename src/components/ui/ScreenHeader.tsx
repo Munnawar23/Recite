@@ -1,10 +1,10 @@
-import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { Haptics } from "@/lib/haptics";
 
 interface ScreenHeaderProps {
@@ -13,10 +13,15 @@ interface ScreenHeaderProps {
   onBackPress?: () => void;
 }
 
-export default function ScreenHeader({ title, subtitle, onBackPress }: ScreenHeaderProps) {
+export default function ScreenHeader({
+  title,
+  subtitle,
+  onBackPress,
+}: ScreenHeaderProps) {
   const router = useRouter();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const { isOffline } = useNetworkStatus();
+  const S = createStyles(colors, fontFamily, fontSize, spacing, isOffline);
 
   const handleBack = () => {
     Haptics.medium();
@@ -54,15 +59,22 @@ export default function ScreenHeader({ title, subtitle, onBackPress }: ScreenHea
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any) =>
+const createStyles = (
+  colors: any,
+  fontFamily: any,
+  fontSize: any,
+  spacing: any,
+  isOffline: boolean,
+) =>
   StyleSheet.create({
     container: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
       paddingHorizontal: spacing.screenPadding,
-      paddingTop: verticalScale(12),
-      paddingBottom: verticalScale(12),
+      paddingTop: verticalScale(6),
+      paddingBottom: verticalScale(8),
+      marginTop: isOffline ? verticalScale(2) : 0,
     },
     backButton: {
       width: scale(36),

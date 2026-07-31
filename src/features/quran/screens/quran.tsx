@@ -1,12 +1,17 @@
+import { FlashList } from "@shopify/flash-list";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, RefreshControl, StyleSheet, View } from "react-native";
-import { FlashList } from "@shopify/flash-list";
+import {
+  ActivityIndicator,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from "react-native";
 
+import EmptyState from "@/components/layout/EmptyState";
+import Header from "@/components/layout/Header";
+import NoConnection from "@/components/layout/NoConnection";
 import SafeArea from "@/components/layout/SafeArea";
-import EmptyState from "@/components/ui/EmptyState";
-import Header from "@/components/ui/Header";
-import NoConnection from "@/components/ui/NoConnection";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import QuranCard from "@/features/quran/components/QuranCard";
 import SearchBar from "@/features/quran/components/SearchBar";
@@ -58,7 +63,10 @@ export default function QuranScreen() {
           <>
             <Header
               title={t("quran.title", "The Noble Quran")}
-              subtitle={t("quran.subtitle", "Read, listen and reflect upon the words of Allah")}
+              subtitle={t(
+                "quran.subtitle",
+                "Read, listen and reflect upon the words of Allah",
+              )}
             />
             <SearchBar
               value={inputValue}
@@ -66,10 +74,7 @@ export default function QuranScreen() {
               onClear={handleClear}
               placeholder={t("quran.searchPlaceholder", "Search Surah...")}
             />
-            <ContinueReadingCard
-              surahName="Al-Fatihah"
-              verseNumber={1}
-            />
+            <ContinueReadingCard surahName="Al-Fatihah" verseNumber={1} />
             {isLoading && !refreshing && (
               <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color={colors.primary} />

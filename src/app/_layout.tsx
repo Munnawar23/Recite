@@ -1,4 +1,5 @@
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
+import { OfflineBanner } from "@/components/layout/OfflineBanner";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import i18n from "@/i18n";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -68,9 +69,11 @@ export default function RootLayout() {
               persistOptions={{ persister: asyncStoragePersister }}
             >
               <StatusBar style={activeScheme === "dark" ? "light" : "dark"} />
+              <OfflineBanner />
               <Stack
                 screenOptions={{
                   headerShown: false,
+                  contentStyle: { flex: 1 },
                 }}
               >
                 <Stack.Screen name="(tabs)" />

@@ -1,20 +1,20 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
 
+import EmptyState from "@/components/layout/EmptyState";
+import Header from "@/components/layout/Header";
 import SafeArea from "@/components/layout/SafeArea";
-import EmptyState from "@/components/ui/EmptyState";
-import Header from "@/components/ui/Header";
 import SectionTitle from "@/components/ui/SectionTitle";
 import PrayerTimes from "@/features/home/components/PrayerTimes";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useLocation } from "@/hooks/useLocation";
 import { ThemeSpacing } from "@/theme/spacing";
 import DailyVerse from "../components/DailyVerse";
 import HijriCard from "../components/HijriCard";
-import { useLocation } from "@/hooks/useLocation";
 
 const animation = (delay: number) =>
   FadeInDown.duration(500).delay(delay).springify();
@@ -104,10 +104,7 @@ export default function HomeScreen() {
 
           <EmptyState
             icon="book-outline"
-            title={t(
-              "home.continueReadingEmpty.title",
-              "Start your journey",
-            )}
+            title={t("home.continueReadingEmpty.title", "Start your journey")}
             subtitle={t(
               "home.continueReadingEmpty.subtitle",
               "Open the Quran and your reading progress will appear here.",

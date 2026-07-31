@@ -1,9 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { scale } from "react-native-size-matters";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { scale, verticalScale } from "react-native-size-matters";
 
 import { useAppFonts } from "@/hooks/useAppFonts";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { Haptics } from "@/lib/haptics";
 import { ThemeColors } from "@/theme/colors";
 import { ThemeSpacing } from "@/theme/spacing";
@@ -22,7 +23,8 @@ export default function Header({
   onRightIconPress,
 }: HeaderProps) {
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const { isOffline } = useNetworkStatus();
+  const S = createStyles(colors, fontFamily, fontSize, spacing, isOffline);
 
   const handlePress = () => {
     Haptics.medium();
@@ -59,12 +61,14 @@ const createStyles = (
   fontFamily: AppFonts["fontFamily"],
   fontSize: AppFonts["fontSize"],
   spacing: ThemeSpacing,
+  isOffline: boolean,
 ) =>
   StyleSheet.create({
     headerRow: {
       paddingHorizontal: spacing.screenPadding,
-      paddingTop: spacing.vMd,
+      paddingTop: 0,
       paddingBottom: spacing.vXs,
+      marginTop: isOffline ? verticalScale(6) : 0,
     },
     topRow: {
       flexDirection: "row",

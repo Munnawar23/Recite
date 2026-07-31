@@ -1,8 +1,9 @@
+import Background from "@/components/layout/Background";
+import { useAppTheme } from "@/hooks/useAppTheme";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { verticalScale } from "react-native-size-matters";
-import Background from "@/components/ui/Background";
 
 interface SafeAreaProps {
   children: ReactNode;
@@ -10,12 +11,13 @@ interface SafeAreaProps {
 
 export function SafeArea({ children }: SafeAreaProps) {
   const insets = useSafeAreaInsets();
+  const { isOffline } = useNetworkStatus();
 
   return (
     <View
       style={[
         styles.container,
-        { paddingTop: insets.top + verticalScale(1) },
+        { paddingTop: isOffline ? 0 : insets.top },
       ]}
     >
       <Background />

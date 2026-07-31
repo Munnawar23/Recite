@@ -1,8 +1,7 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
-import EmptyState from "@/components/ui/EmptyState";
+import EmptyState from "@/components/layout/EmptyState";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { ThemeSpacing } from "@/theme/spacing";
 

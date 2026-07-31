@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
 import Toast from "react-native-toast-message";
 import SectionTitle from "@/components/ui/SectionTitle";
 import SettingsItemCard from "@/components/ui/SettingsItemCard";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal";
+import MessageModal from "@/components/common/MessageModal";
 import { useDownloadsStore } from "@/store/downloadsStore";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import { Haptics } from "@/lib/haptics";
@@ -13,6 +13,16 @@ export default function StorageSection() {
   const { t } = useTranslation();
   const { downloadedChapters, deleteChapter } = useDownloadsStore();
   const { favoriteIds, toggleFavorite } = useFavoritesStore();
+
+  const [messageModalConfig, setMessageModalConfig] = useState<{
+    visible: boolean;
+    title: string;
+    message: string;
+  }>({
+    visible: false,
+    title: "",
+    message: "",
+  });
 
   const [deleteModalConfig, setDeleteModalConfig] = useState<{
     visible: boolean;
@@ -30,10 +40,11 @@ export default function StorageSection() {
     Haptics.medium();
     const chapterIds = Object.keys(downloadedChapters).map(Number);
     if (chapterIds.length === 0) {
-      Alert.alert(
-        t("settings.storage.noDownloadsTitle", "No Downloads"),
-        t("settings.storage.noDownloadsMessage", "You don't have any downloaded Surahs to clear.")
-      );
+      setMessageModalConfig({
+        visible: true,
+        title: t("settings.storage.noDownloadsTitle", "No Downloads"),
+        message: t("settings.storage.noDownloadsMessage", "You don't have any downloaded Surahs to clear."),
+      });
       return;
     }
 
@@ -63,10 +74,11 @@ export default function StorageSection() {
   const handleClearFavorites = () => {
     Haptics.medium();
     if (favoriteIds.length === 0) {
-      Alert.alert(
-        t("settings.storage.noFavoritesTitle", "No Favorites"),
-        t("settings.storage.noFavoritesMessage", "You don't have any favorite Surahs to clear.")
-      );
+      setMessageModalConfig({
+        visible: true,
+        title: t("settings.storage.noFavoritesTitle", "No Favorites"),
+        message: t("settings.storage.noFavoritesMessage", "You don't have any favorite Surahs to clear."),
+      });
       return;
     }
 
@@ -140,6 +152,14 @@ export default function StorageSection() {
         description={deleteModalConfig.description}
         onConfirm={deleteModalConfig.onConfirm}
         onCancel={() => setDeleteModalConfig((prev) => ({ ...prev, visible: false }))}
+      />
+
+      <MessageModal
+        visible={messageModalConfig.visible}
+        title={messageModalConfig.title}
+        message={messageModalConfig.message}
+        onClose={() => setMessageModalConfig((prev) => ({ ...prev, visible: false }))}
+        icon="information-circle-outline"
       />
     </>
   );

@@ -1,14 +1,14 @@
-import { useState, useEffect, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import { getChapterAudio } from "@/lib/api/quran-data";
 import { useDownloadsStore } from "@/store/downloadsStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
+import { useQuery } from "@tanstack/react-query";
+import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
+import { useEffect, useMemo } from "react";
 
 export interface AudioTimestamp {
   verse_key: string;
   timestamp_from: number; // in ms
-  timestamp_to: number;   // in ms
+  timestamp_to: number; // in ms
 }
 
 import { RECITERS_IMAGES } from "@/constants/assets";
@@ -18,6 +18,11 @@ export const RECITER_OPTIONS = [
     label: "Mishary Rashid Alafasy",
     id: 7,
     avatar: RECITERS_IMAGES[7],
+  },
+  {
+    label: "Yasser Al-Dossari",
+    id: 161,
+    avatar: RECITERS_IMAGES[161],
   },
   {
     label: "AbdulBaset AbdulSamad",
@@ -74,7 +79,9 @@ export function useQuranAudio(chapterId: number, enabled: boolean = true) {
   }, [audioData, hasLocalAudio, localChapter]);
 
   // Initialize the expo-audio player
-  const player = useAudioPlayer(enabled && audioUrl ? { uri: audioUrl } : undefined);
+  const player = useAudioPlayer(
+    enabled && audioUrl ? { uri: audioUrl } : undefined,
+  );
   const status = useAudioPlayerStatus(player);
 
   // Replace source when audioUrl changes
@@ -90,7 +97,8 @@ export function useQuranAudio(chapterId: number, enabled: boolean = true) {
     const currentTimeMs = status.currentTime * 1000;
 
     const active = timestamps.find(
-      (ts) => currentTimeMs >= ts.timestamp_from && currentTimeMs <= ts.timestamp_to
+      (ts) =>
+        currentTimeMs >= ts.timestamp_from && currentTimeMs <= ts.timestamp_to,
     );
 
     return active ? active.verse_key : null;

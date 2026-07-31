@@ -17,4 +17,5 @@ export const RECITERS_IMAGES: Record<number, any> = {
   4: require("../../assets/images/reciters/shatri.webp"),
   12: require("../../assets/images/reciters/husary.webp"),
   5: require("../../assets/images/reciters/rifai.webp"),
+  161: require("../../assets/images/reciters/yasser.webp"),
 };

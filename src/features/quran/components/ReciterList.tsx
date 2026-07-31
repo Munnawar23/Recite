@@ -3,9 +3,12 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { getChapterAudio } from "@/lib/api/quran-data";
 import { Haptics } from "@/lib/haptics";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
+import { MessageModal } from "@/components/common/MessageModal";
 import { Ionicons } from "@expo/vector-icons";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Image,
@@ -24,7 +27,10 @@ interface ReciterListProps {
 export function ReciterList({ onSelectReciter, showSelectedCheckmark = false }: ReciterListProps) {
   const { reciterId, setReciterId } = useQuranSettingsStore();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { isOffline } = useNetworkStatus();
+  const { t } = useTranslation();
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
+  const [offlineModalVisible, setOfflineModalVisible] = useState(false);
 
   // Audio Preview State
   const [playingReciterId, setPlayingReciterId] = useState<number | null>(null);
@@ -77,6 +83,11 @@ export function ReciterList({ onSelectReciter, showSelectedCheckmark = false }: 
   const togglePlayAudio = async (targetReciterId: number) => {
     Haptics.medium();
 
+    if (isOffline) {
+      setOfflineModalVisible(true);
+      return;
+    }
+
     if (playingReciterId === targetReciterId) {
       if (status.playing) {
         safePause();
@@ -121,7 +132,18 @@ export function ReciterList({ onSelectReciter, showSelectedCheckmark = false }: 
   const S = createStyles(colors, fontFamily, fontSize, spacing);
 
   return (
-    <View style={S.listContainer}>
+    <>
+      <MessageModal
+        visible={offlineModalVisible}
+        onClose={() => setOfflineModalVisible(false)}
+        title={t("common.offlineAudioPreviewTitle", "Offline Mode")}
+        message={t(
+          "common.offlineAudioPreviewMessage",
+          "Audio previews require an internet connection. You can still listen to your downloaded surahs."
+        )}
+        icon="wifi-outline"
+      />
+      <View style={S.listContainer}>
       {RECITER_OPTIONS.map((reciter) => {
         const isSelected = reciterId === reciter.id;
         const hasError = imageError[reciter.id];
@@ -203,7 +225,8 @@ export function ReciterList({ onSelectReciter, showSelectedCheckmark = false }: 
           </TouchableOpacity>
         );
       })}
-    </View>
+      </View>
+    </>
   );
 }
 

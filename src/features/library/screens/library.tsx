@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
-import { useTranslation } from "react-i18next";
 import { FlashList } from "@shopify/flash-list";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 
+import EmptyState from "@/components/layout/EmptyState";
+import Header from "@/components/layout/Header";
+import NoConnection from "@/components/layout/NoConnection";
 import SafeArea from "@/components/layout/SafeArea";
-import EmptyState from "@/components/ui/EmptyState";
-import Header from "@/components/ui/Header";
-import NoConnection from "@/components/ui/NoConnection";
 import TabSwitcher from "@/components/ui/TabSwitcher";
 import { DOWNLOAD_ANIM, EMPTY_ANIM } from "@/constants/assets";
-import { useQuranListSearch } from "@/features/quran/hooks/useQuranListSearch";
 import QuranCard from "@/features/quran/components/QuranCard";
+import { useQuranListSearch } from "@/features/quran/hooks/useQuranListSearch";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { ThemeSpacing } from "@/theme/spacing";
-import { useFavoritesStore } from "@/store/favoritesStore";
 import { useDownloadsStore } from "@/store/downloadsStore";
+import { useFavoritesStore } from "@/store/favoritesStore";
+import { ThemeSpacing } from "@/theme/spacing";
 
 type TabValue = "favorites" | "downloads";
 
@@ -47,10 +47,15 @@ export default function LibraryScreen() {
   ];
 
   const favoriteChapters = chapters.filter((ch) => favoriteIds.includes(ch.id));
-  const downloadedChapterIds = Object.keys(downloadedChapters).map((id) => Number(id));
-  const downloadedChapterList = chapters.filter((ch) => downloadedChapterIds.includes(ch.id));
+  const downloadedChapterIds = Object.keys(downloadedChapters).map((id) =>
+    Number(id),
+  );
+  const downloadedChapterList = chapters.filter((ch) =>
+    downloadedChapterIds.includes(ch.id),
+  );
 
-  const listData = activeTab === "favorites" ? favoriteChapters : downloadedChapterList;
+  const listData =
+    activeTab === "favorites" ? favoriteChapters : downloadedChapterList;
 
   return (
     <SafeArea>
@@ -87,7 +92,9 @@ export default function LibraryScreen() {
             <FlashListCast
               data={listData}
               keyExtractor={(item: any) => String(item.id)}
-              renderItem={({ item }: { item: any }) => <QuranCard item={item} />}
+              renderItem={({ item }: { item: any }) => (
+                <QuranCard item={item} />
+              )}
               estimatedItemSize={80}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: spacing.vXxl }}
@@ -115,7 +122,10 @@ export default function LibraryScreen() {
               <EmptyState
                 animationSource={DOWNLOAD_ANIM}
                 title={t("library.emptyFavorites.title", "No Favorites Yet")}
-                subtitle={t("library.emptyFavorites.subtitle", "Mark your favorite Surahs to access them quickly here.")}
+                subtitle={t(
+                  "library.emptyFavorites.subtitle",
+                  "Mark your favorite Surahs to access them quickly here.",
+                )}
               />
             </ScrollView>
           ) : (
@@ -133,7 +143,10 @@ export default function LibraryScreen() {
               <EmptyState
                 animationSource={EMPTY_ANIM}
                 title={t("library.emptyDownloads.title", "No Downloads")}
-                subtitle={t("library.emptyDownloads.subtitle", "Download Surahs to read or listen to them offline.")}
+                subtitle={t(
+                  "library.emptyDownloads.subtitle",
+                  "Download Surahs to read or listen to them offline.",
+                )}
               />
             </ScrollView>
           )}

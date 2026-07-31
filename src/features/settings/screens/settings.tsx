@@ -2,8 +2,8 @@ import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { verticalScale } from "react-native-size-matters";
 
+import Header from "@/components/layout/Header";
 import SafeArea from "@/components/layout/SafeArea";
-import Header from "@/components/ui/Header";
 
 import AboutSection from "../components/AboutSection";
 import DisplayLanguageSection from "../components/DisplayLanguageSection";

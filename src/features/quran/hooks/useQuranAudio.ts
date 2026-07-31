@@ -11,18 +11,40 @@ export interface AudioTimestamp {
   timestamp_to: number;   // in ms
 }
 
+import { RECITERS_IMAGES } from "@/constants/assets";
+
 export const RECITER_OPTIONS = [
-  { label: "Mishary Rashid Alafasy", id: 7 },
-  { label: "AbdulBaset AbdulSamad (Murattal)", id: 2 },
-  { label: "AbdulBaset AbdulSamad (Mujawwad)", id: 1 },
-  { label: "Abu Bakr al-Shatri", id: 4 },
-  { label: "Mahmoud Khalil Al-Husary", id: 12 },
-  { label: "Hani ar-Rifai", id: 5 },
+  {
+    label: "Mishary Rashid Alafasy",
+    id: 7,
+    avatar: RECITERS_IMAGES[7],
+  },
+  {
+    label: "AbdulBaset AbdulSamad",
+    id: 2,
+    avatar: RECITERS_IMAGES[2],
+  },
+  {
+    label: "Abu Bakr al-Shatri",
+    id: 4,
+    avatar: RECITERS_IMAGES[4],
+  },
+  {
+    label: "Mahmoud Khalil Al-Husary",
+    id: 12,
+    avatar: RECITERS_IMAGES[12],
+  },
+  {
+    label: "Hani ar-Rifai",
+    id: 5,
+    avatar: RECITERS_IMAGES[5],
+  },
 ];
 
 export function useQuranAudio(chapterId: number, enabled: boolean = true) {
-  const { reciterId: globalReciterId } = useQuranSettingsStore();
-  const [reciterId, setReciterId] = useState<number>(globalReciterId || 7);
+  const { reciterId: globalReciterId, setReciterId: setReciterIdInStore } =
+    useQuranSettingsStore();
+  const reciterId = globalReciterId || 7;
   const { downloadedChapters } = useDownloadsStore();
   const localChapter = downloadedChapters[chapterId];
   const hasLocalAudio = !!localChapter?.localAudioUri;
@@ -85,7 +107,7 @@ export function useQuranAudio(chapterId: number, enabled: boolean = true) {
     activeVerseKey: enabled ? activeVerseKey : null,
     isLoadingAudio: enabled ? isLoadingAudio : false,
     reciterId,
-    setReciterId,
+    setReciterId: (id: number) => setReciterIdInStore(id),
     timestamps: enabled ? timestamps : [],
     audioSize: enabled ? audioSize : null,
   };

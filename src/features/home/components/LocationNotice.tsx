@@ -22,10 +22,9 @@ export default function LocationNotice({
     onPress();
   };
 
-  // Forcefully show notice for testing UI
-  // if (permissionStatus !== "denied") {
-  //   return null;
-  // }
+  if (permissionStatus === "granted") {
+    return null;
+  }
 
   return (
     <View style={S.container}>

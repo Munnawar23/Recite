@@ -262,10 +262,14 @@
       "sectionLabel": "App Language"
     },
     "preferences": {
-      "title": "Quran Preferences",
-      "subtitle": "Choose your default Quran translation and the reciter voice for audio.",
+      "title": "Choose Quran Reciter",
+      "subtitle": "Select your preferred Qari / Reciter voice for Quran audio playback.",
       "translationLabel": "Quran Translation",
       "reciterLabel": "Quran Reciter"
+    },
+    "theme": {
+      "title": "Appearance & Display",
+      "subtitle": "Customize theme mode and font sizes for comfortably reading Quran."
     },
     "notifications": {
       "title": "Stay Connected",

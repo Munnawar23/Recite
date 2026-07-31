@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/Button";
 import SafeArea from "@/components/layout/SafeArea";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 
 interface OnboardingStepWrapperProps {
   step: number; // 1-based
@@ -86,7 +86,7 @@ export function OnboardingStepWrapper({
 
         {/* ── Icon badge ── */}
         <View style={S.iconBadge}>
-          <Ionicons name={icon} size={scale(32)} color={colors.primary} />
+          <Ionicons name={icon} size={scale(28)} color={colors.primary} />
         </View>
 
         {/* ── Title & subtitle ── */}
@@ -137,8 +137,8 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any)
       flexDirection: "row",
       justifyContent: "center",
       gap: scale(6),
-      marginTop: verticalScale(20),
-      marginBottom: verticalScale(4),
+      marginTop: verticalScale(10),
+      marginBottom: verticalScale(2),
     },
     dot: {
       width: scale(28),
@@ -157,17 +157,17 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any)
       fontFamily: fontFamily.text,
       fontSize: fontSize.caption,
       color: colors.subtext,
-      marginBottom: verticalScale(24),
+      marginBottom: verticalScale(14),
     },
     iconBadge: {
-      width: scale(72),
-      height: scale(72),
-      borderRadius: scale(22),
+      width: scale(62),
+      height: scale(62),
+      borderRadius: scale(18),
       backgroundColor: colors.primary + "18",
       alignItems: "center",
       justifyContent: "center",
       alignSelf: "center",
-      marginBottom: verticalScale(16),
+      marginBottom: verticalScale(12),
       borderWidth: 1,
       borderColor: colors.primary + "30",
     },
@@ -176,15 +176,15 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any)
       fontSize: fontSize.cardTitle,
       color: colors.text,
       textAlign: "center",
-      marginBottom: verticalScale(6),
+      marginBottom: verticalScale(4),
     },
     subtitle: {
       fontFamily: fontFamily.text,
       fontSize: fontSize.bodyLg,
       color: colors.subtext,
       textAlign: "center",
-      lineHeight: verticalScale(22),
-      marginBottom: verticalScale(24),
+      lineHeight: verticalScale(20),
+      marginBottom: verticalScale(16),
     },
     content: {
       flex: 1,

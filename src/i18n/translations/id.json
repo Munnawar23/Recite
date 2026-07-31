@@ -262,10 +262,14 @@
       "sectionLabel": "Bahasa Aplikasi"
     },
     "preferences": {
-      "title": "Preferensi Al-Qur'an",
-      "subtitle": "Pilih terjemahan Al-Qur'an default dan suara qari untuk audio.",
+      "title": "Pilih Qari Al-Qur'an",
+      "subtitle": "Pilih suara qari favorit Anda untuk pemutaran audio Al-Qur'an.",
       "translationLabel": "Terjemahan Al-Qur'an",
       "reciterLabel": "Qari"
+    },
+    "theme": {
+      "title": "Tampilan & Tema",
+      "subtitle": "Sesuaikan mode tema dan ukuran font untuk membaca Al-Qur'an dengan nyaman."
     },
     "notifications": {
       "title": "Tetap Terhubung",

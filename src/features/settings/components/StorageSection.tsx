@@ -1,9 +1,8 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
+import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal";
+import MessageModal from "@/components/ui/MessageModal";
 import SectionTitle from "@/components/ui/SectionTitle";
 import SettingsItemCard from "@/components/ui/SettingsItemCard";
-import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal";
-import MessageModal from "@/components/common/MessageModal";
+import { useTranslation } from "react-i18next";
 import { useStorageSection } from "../hooks/useStorageSection";
 
 export default function StorageSection() {

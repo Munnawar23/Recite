@@ -1,10 +1,10 @@
+import { STORAGE_KEYS, zustandStorage } from "@/lib/storage/appStorage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { zustandStorage } from "@/lib/storage/appStorage";
 
-interface LastRead {
+export interface LastRead {
   surahNumber: number;
-  surahName: string;  // English name, e.g. "Al-Fatihah"
+  surahName: string;
   arabicName: string;
   versesCount: string;
   type: string;
@@ -18,6 +18,29 @@ interface ReadingProgressState {
   setScrollOffset: (surahNumber: number, offset: number) => void;
   setVerseNumber: (surahNumber: number, verseNumber: number) => void;
   clearLastRead: () => void;
+}
+
+/**
+ * Migrates persisted reading progress state safely without mutating input arguments.
+ */
+function migrateReadingProgress(
+  persistedState: unknown,
+  fromVersion: number,
+): Partial<ReadingProgressState> {
+  const state = (persistedState as Partial<ReadingProgressState>) || {};
+  let lastRead = state.lastRead ?? null;
+
+  if (fromVersion < 1 && lastRead) {
+    // v0 → v1: Default missing scrollOffset to 0 immutably
+    lastRead = {
+      ...lastRead,
+      scrollOffset: lastRead.scrollOffset ?? 0,
+    };
+  }
+
+  return {
+    lastRead,
+  };
 }
 
 export const useReadingProgressStore = create<ReadingProgressState>()(
@@ -39,25 +62,17 @@ export const useReadingProgressStore = create<ReadingProgressState>()(
       clearLastRead: () => set({ lastRead: null }),
     }),
     {
-      name: "reading-progress-storage",
+      name: STORAGE_KEYS.READING_PROGRESS,
       storage: createJSONStorage(() => zustandStorage),
       version: 1,
-      migrate(persistedState: unknown, fromVersion: number): ReadingProgressState {
-        const state = persistedState as Partial<ReadingProgressState>;
-        if (fromVersion < 1) {
-          // v0 → v1: scrollOffset was not persisted — default it to 0
-          if (state.lastRead && state.lastRead.scrollOffset === undefined) {
-            (state.lastRead as LastRead).scrollOffset = 0;
-          }
-        }
-        return {
-          lastRead: state.lastRead ?? null,
-          setLastRead: () => {},
-          setScrollOffset: () => {},
-          setVerseNumber: () => {},
-          clearLastRead: () => {},
-        };
-      },
+      migrate: (persistedState, fromVersion) =>
+        migrateReadingProgress(
+          persistedState,
+          fromVersion,
+        ) as ReadingProgressState,
+      partialize: (state) => ({
+        lastRead: state.lastRead,
+      }),
     },
   ),
 );

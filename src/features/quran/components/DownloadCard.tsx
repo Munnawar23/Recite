@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Pressable } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { useDownloadsStore, getDownloadKey } from "@/store/downloadsStore";
@@ -8,7 +8,7 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { scale, verticalScale } from "react-native-size-matters";
 import { Haptics } from "@/lib/haptics";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal";
-import Svg, { Circle } from "react-native-svg";
+import AppStoreProgressControl from "./AppStoreProgressControl";
 
 interface DownloadCardProps {
   chapterId: number;
@@ -16,79 +16,35 @@ interface DownloadCardProps {
   selectedTransId: string;
 }
 
-// App Store style circular progress button with cross icon inside
-const AppStoreProgressControl = React.memo(function AppStoreProgressControl({
-  progress,
-  onCancel,
-  primaryColor,
-  trackColor,
-}: {
-  progress: number;
-  onCancel: () => void;
-  primaryColor: string;
-  trackColor: string;
-}) {
-  const size = scale(36);
-  const strokeWidth = 3;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (progress || 0) * circumference;
+type ThemeColors = ReturnType<typeof useAppTheme>["colors"];
+type ThemeFontFamily = ReturnType<typeof useAppTheme>["fontFamily"];
+type ThemeFontSize = ReturnType<typeof useAppTheme>["fontSize"];
 
-  return (
-    <Pressable
-      onPressIn={onCancel}
-      style={{ width: size, height: size, alignItems: "center", justifyContent: "center" }}
-      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-    >
-      <Svg width={size} height={size} style={{ position: "absolute", transform: [{ rotate: "-90deg" }] }}>
-        {/* Background Track Circle */}
-        <Circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke={trackColor}
-          strokeWidth={strokeWidth}
-          fill="none"
-        />
-        {/* Animated Progress Circle */}
-        <Circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke={primaryColor}
-          strokeWidth={strokeWidth}
-          fill="none"
-          strokeDasharray={`${circumference} ${circumference}`}
-          strokeDashoffset={strokeDashoffset}
-          strokeLinecap="round"
-        />
-      </Svg>
-      {/* Center Cross Icon */}
-      <Ionicons name="close" size={scale(16)} color={primaryColor} />
-    </Pressable>
-  );
-});
-
-export default function DownloadCard({ chapterId, reciterName, selectedTransId }: DownloadCardProps) {
+function DownloadCard({ chapterId, reciterName, selectedTransId }: DownloadCardProps) {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
   const reciterId = useQuranSettingsStore((state) => state.reciterId);
   const activeReciterId = reciterId || 7;
 
-  const downloadKey = getDownloadKey(chapterId, activeReciterId);
+  const downloadKey = useMemo(
+    () => getDownloadKey(chapterId, activeReciterId),
+    [chapterId, activeReciterId],
+  );
+
+  // Single Zustand selector for downloads store
   const getDownloadedChapter = useDownloadsStore((state) => state.getDownloadedChapter);
   const downloadedRecord = useMemo(
     () => getDownloadedChapter(chapterId, activeReciterId),
     [getDownloadedChapter, chapterId, activeReciterId],
   );
-  const isDownloaded = !!downloadedRecord;
   const isDownloading = useDownloadsStore((state) => state.downloadingIds.has(downloadKey));
   const progData = useDownloadsStore((state) => state.downloadProgress[downloadKey]);
   const downloadChapter = useDownloadsStore((state) => state.downloadChapter);
   const cancelDownload = useDownloadsStore((state) => state.cancelDownload);
   const deleteChapter = useDownloadsStore((state) => state.deleteChapter);
 
+  const isDownloaded = !!downloadedRecord;
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const S = useMemo(
@@ -116,34 +72,74 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
     cancelDownload(chapterId, activeReciterId);
   }, [chapterId, activeReciterId, cancelDownload]);
 
-  const fraction = progData?.fraction ?? 0;
-  const progressPercent = Math.round(fraction * 100);
-  const writtenMB = progData?.writtenBytes ? (progData.writtenBytes / (1024 * 1024)).toFixed(1) : "0.0";
-  const totalMB = progData?.totalBytes ? (progData.totalBytes / (1024 * 1024)).toFixed(1) : "0.0";
+  // Memoized progress calculations & titles
+  const { fraction, progressPercent, writtenMB, totalMB } = useMemo(() => {
+    const f = progData?.fraction ?? 0;
+    const pPercent = Math.round(f * 100);
+    const wMB = progData?.writtenBytes
+      ? (progData.writtenBytes / (1024 * 1024)).toFixed(1)
+      : "0.0";
+    const tMB = progData?.totalBytes
+      ? (progData.totalBytes / (1024 * 1024)).toFixed(1)
+      : "0.0";
 
-  let squircleBg = colors.primary + "20";
-  let squircleIconColor = colors.primary;
-  let title = t("quran.downloadCard.download", "Download");
+    return {
+      fraction: f,
+      progressPercent: pPercent,
+      writtenMB: wMB,
+      totalMB: tMB,
+    };
+  }, [progData?.fraction, progData?.writtenBytes, progData?.totalBytes]);
 
-  if (isDownloading) {
-    if (progData && progData.totalBytes > 0) {
-      title = `${writtenMB} / ${totalMB} MB (${progressPercent}%)`;
-    } else {
-      title = `${progressPercent}%`;
+  const { title, squircleBg, squircleIconColor } = useMemo(() => {
+    let bg = colors.primary + "20";
+    let iconColor = colors.primary;
+    let titleText = t("quran.downloadCard.download", "Download");
+
+    if (isDownloading) {
+      if (progData && progData.totalBytes > 0) {
+        titleText = `${writtenMB} / ${totalMB} MB (${progressPercent}%)`;
+      } else {
+        titleText = `${progressPercent}%`;
+      }
+    } else if (isDownloaded) {
+      bg = colors.primary;
+      iconColor = colors.card;
+      titleText = t("quran.downloadCard.playingOffline", "Downloaded for offline");
     }
-  } else if (isDownloaded) {
-    squircleBg = colors.primary;
-    squircleIconColor = colors.card;
-    title = t("quran.downloadCard.playingOffline", "Downloaded for offline");
-  }
 
-  const displayReciterName = downloadedRecord?.reciterName || reciterName;
+    return {
+      title: titleText,
+      squircleBg: bg,
+      squircleIconColor: iconColor,
+    };
+  }, [
+    isDownloading,
+    isDownloaded,
+    progData,
+    writtenMB,
+    totalMB,
+    progressPercent,
+    colors.primary,
+    colors.card,
+    t,
+  ]);
+
+  const displayReciterName = useMemo(
+    () => downloadedRecord?.reciterName || reciterName,
+    [downloadedRecord?.reciterName, reciterName],
+  );
+
+  const squircleStyle = useMemo(
+    () => [S.squircle, { backgroundColor: squircleBg }],
+    [S.squircle, squircleBg],
+  );
 
   return (
     <View style={S.container}>
       <View style={S.cardContent}>
         {/* Left Squircle Icon */}
-        <View style={[S.squircle, { backgroundColor: squircleBg }]}>
+        <View style={squircleStyle}>
           <Ionicons
             name={isDownloaded ? "checkmark" : "download-outline"}
             size={scale(20)}
@@ -153,8 +149,12 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
 
         {/* Text Area */}
         <View style={S.textContainer}>
-          <Text numberOfLines={1} style={S.title}>{title}</Text>
-          <Text numberOfLines={1} style={S.subtitle}>{displayReciterName}</Text>
+          <Text numberOfLines={1} style={S.title}>
+            {title}
+          </Text>
+          <Text numberOfLines={1} style={S.subtitle}>
+            {displayReciterName}
+          </Text>
         </View>
 
         {/* Right Actions */}
@@ -165,6 +165,8 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
               style={S.deleteBtn}
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel={t("quran.downloadCard.deleteTitle", "Delete Download")}
             >
               <Ionicons name="trash-outline" size={scale(18)} color={colors.subtext} />
             </TouchableOpacity>
@@ -180,9 +182,13 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
               onPress={handleDownloadPress}
               style={S.downloadBtn}
               activeOpacity={0.8}
+              accessibilityRole="button"
+              accessibilityLabel={t("quran.downloadCard.download", "Download Surah")}
             >
               <Ionicons name="download-outline" size={scale(14)} color={colors.card} />
-              <Text style={S.downloadBtnText}>{t("quran.downloadCard.download", "Download")}</Text>
+              <Text style={S.downloadBtnText}>
+                {t("quran.downloadCard.download", "Download")}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
@@ -194,7 +200,7 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
         title={t("quran.downloadCard.deleteTitle", "Delete Download?")}
         description={t(
           "quran.downloadCard.deleteDesc",
-          "Are you sure you want to remove this Surah recitation from your offline downloads?"
+          "Are you sure you want to remove this Surah recitation from your offline downloads?",
         )}
         onConfirm={handleConfirmDelete}
         onCancel={() => setShowDeleteModal(false)}
@@ -203,7 +209,14 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, isDark: boolean) =>
+export default React.memo(DownloadCard);
+
+const createStyles = (
+  colors: ThemeColors,
+  fontFamily: ThemeFontFamily,
+  fontSize: ThemeFontSize,
+  isDark: boolean,
+) =>
   StyleSheet.create({
     container: {
       backgroundColor: colors.card,

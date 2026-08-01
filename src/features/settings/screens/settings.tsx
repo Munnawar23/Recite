@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
+import Constants from "expo-constants";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
-import Constants from "expo-constants";
 
 import Header from "@/components/layout/Header";
 import AboutSection from "../components/AboutSection";
@@ -90,6 +90,6 @@ const createStyles = (
       letterSpacing: scale(0.5),
     },
     bottomSpacer: {
-      height: verticalScale(30),
+      height: verticalScale(10),
     },
   });

@@ -66,7 +66,12 @@ export async function downloadTranslations(
   const defaultVerses =
     versesByTranslation[preferredTranslationId] ||
     versesByTranslation[20] ||
+    Object.values(versesByTranslation)[0] ||
     [];
+
+  if (defaultVerses.length === 0) {
+    throw new Error(`Failed to download verses for chapter ${chapterId}. Please check your network connection.`);
+  }
 
   return { defaultVerses, versesByTranslation };
 }
@@ -96,6 +101,8 @@ export async function createAudioDownload({
   let url = audioData.audio_url;
   if (url.startsWith("//")) {
     url = `https:${url}`;
+  } else if (url.startsWith("http://")) {
+    url = url.replace("http://", "https://");
   }
 
   const audioFileName = `surah_${chapterId}_reciter_${reciterId}.mp3`;

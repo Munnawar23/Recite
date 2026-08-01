@@ -4,6 +4,7 @@ import { useFavoritesStore } from "@/store/favoritesStore";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { useRouter } from "expo-router";
+import React, { useMemo, useCallback } from "react";
 import {
   Platform,
   StyleSheet,
@@ -22,7 +23,11 @@ interface DetailHeaderProps {
   type?: string;
 }
 
-export default function DetailHeader({
+type ThemeColors = ReturnType<typeof useAppTheme>["colors"];
+type ThemeFontFamily = ReturnType<typeof useAppTheme>["fontFamily"];
+type ThemeFontSize = ReturnType<typeof useAppTheme>["fontSize"];
+
+function DetailHeader({
   chapterId,
   arabicName,
   englishName,
@@ -32,10 +37,43 @@ export default function DetailHeader({
   const router = useRouter();
   const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
-  const { favoriteIds, toggleFavorite } = useFavoritesStore();
-  const isFavorite = favoriteIds.includes(chapterId);
 
-  const S = createStyles(colors, fontFamily, fontSize, isDark);
+  const isFavorite = useFavoritesStore(
+    useCallback((state) => state.favoriteIds.includes(chapterId), [chapterId]),
+  );
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
+
+  const S = useMemo(
+    () => createStyles(colors, fontFamily, fontSize, isDark),
+    [colors, fontFamily, fontSize, isDark],
+  );
+
+  const handleBack = useCallback(() => {
+    Haptics.medium();
+    router.back();
+  }, [router]);
+
+  const handleToggleFavorite = useCallback(() => {
+    Haptics.light();
+    toggleFavorite(chapterId);
+    Toast.show({
+      type: "success",
+      text1: !isFavorite
+        ? "Added to Favorites"
+        : "Removed from Favorites",
+      text2: !isFavorite
+        ? `${englishName || `Surah ${chapterId}`} has been saved to your favorites.`
+        : `${englishName || `Surah ${chapterId}`} removed from your favorites.`,
+    });
+  }, [toggleFavorite, chapterId, isFavorite, englishName]);
+
+  const androidBgStyle = useMemo(
+    () => [
+      StyleSheet.absoluteFill,
+      { backgroundColor: colors.background + "EE" },
+    ],
+    [colors.background],
+  );
 
   return (
     <View style={S.headerContainer}>
@@ -46,24 +84,18 @@ export default function DetailHeader({
           style={StyleSheet.absoluteFill}
         />
       ) : (
-        <View
-          style={[
-            StyleSheet.absoluteFill,
-            { backgroundColor: colors.background + "EE" },
-          ]}
-        />
+        <View style={androidBgStyle} />
       )}
 
       {/* Top Title Bar */}
       <View style={S.topBar}>
         <View style={S.leftActions}>
           <TouchableOpacity
-            onPress={() => {
-              Haptics.medium();
-              router.back();
-            }}
+            onPress={handleBack}
             style={S.actionButton}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            accessibilityRole="button"
+            accessibilityLabel="Go back"
           >
             <Ionicons
               name="chevron-back"
@@ -85,22 +117,12 @@ export default function DetailHeader({
 
         <View style={S.rightActions}>
           <TouchableOpacity
-            onPress={() => {
-              Haptics.light();
-              toggleFavorite(chapterId);
-              Toast.show({
-                type: "success",
-                text1: !isFavorite
-                  ? "Added to Favorites"
-                  : "Removed from Favorites",
-                text2: !isFavorite
-                  ? `${englishName || `Surah ${chapterId}`} has been saved to your favorites.`
-                  : `${englishName || `Surah ${chapterId}`} removed from your favorites.`,
-              });
-            }}
+            onPress={handleToggleFavorite}
             style={S.actionButton}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
           >
             <Ionicons
               name={isFavorite ? "heart" : "heart-outline"}
@@ -114,10 +136,12 @@ export default function DetailHeader({
   );
 }
 
+export default React.memo(DetailHeader);
+
 const createStyles = (
-  colors: any,
-  fontFamily: any,
-  fontSize: any,
+  colors: ThemeColors,
+  fontFamily: ThemeFontFamily,
+  fontSize: ThemeFontSize,
   isDark: boolean,
 ) =>
   StyleSheet.create({

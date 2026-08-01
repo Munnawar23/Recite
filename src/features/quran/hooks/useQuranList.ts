@@ -4,7 +4,7 @@ import { Keyboard } from "react-native";
 import { useQuranData } from "./useQuranData";
 import { Haptics } from "@/lib/haptics";
 
-export function useQuranListSearch(selectedOption?: "read" | "listen") {
+export function useQuranList(selectedOption?: "read" | "listen") {
   const [inputValue, setInputValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

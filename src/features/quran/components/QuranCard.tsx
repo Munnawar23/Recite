@@ -1,3 +1,4 @@
+import React, { useMemo, useCallback } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
@@ -17,15 +18,18 @@ interface QuranCardProps {
   onPress?: (item: QuranItem) => void;
 }
 
-export default function QuranCard({ item, onPress }: QuranCardProps) {
+function QuranCard({ item, onPress }: QuranCardProps) {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize, spacing, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
-  const S = createStyles(colors, fontFamily, fontSize, spacing, isDark);
+  const S = useMemo(
+    () => createStyles(colors, fontFamily, fontSize, spacing, isDark),
+    [colors, fontFamily, fontSize, spacing, isDark],
+  );
 
   const router = useRouter();
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     Haptics.medium();
     if (onPress) {
       onPress(item);
@@ -41,7 +45,7 @@ export default function QuranCard({ item, onPress }: QuranCardProps) {
         },
       });
     }
-  };
+  }, [onPress, item, router]);
 
   const typeTranslationKey =
     item.type.toLowerCase() === "meccan" ? "quran.meccan" : "quran.medinan";
@@ -113,6 +117,8 @@ export default function QuranCard({ item, onPress }: QuranCardProps) {
     </View>
   );
 }
+
+export default React.memo(QuranCard);
 
 type AppFonts = ReturnType<typeof useAppFonts>;
 

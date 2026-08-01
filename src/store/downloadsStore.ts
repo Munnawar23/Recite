@@ -281,18 +281,41 @@ export const useDownloadsStore = create<DownloadsState>()(
         const record =
           downloadedChapters[downloadKey] || downloadedChapters[chapterId];
 
-        if (record?.localAudioUri) {
-          try {
-            await deleteAsync(record.localAudioUri, { idempotent: true });
-          } catch (err) {
-            console.warn("Failed to delete local audio file:", err);
+        if (record) {
+          const resolvedFileName =
+            record.fileName ||
+            (record.reciterId
+              ? `surah_${record.chapterId}_reciter_${record.reciterId}.mp3`
+              : undefined);
+          const targetUri = resolvedFileName
+            ? `${documentDirectory}${resolvedFileName}`
+            : record.localAudioUri;
+
+          if (targetUri) {
+            try {
+              await deleteAsync(targetUri, { idempotent: true });
+            } catch (err) {
+              console.warn("Failed to delete local audio file:", err);
+            }
           }
         }
 
         set((s) => {
           const updated = { ...s.downloadedChapters };
           delete updated[downloadKey];
-          delete updated[chapterId];
+
+          // Check if any other reciter downloads remain for this chapterId
+          const remainingReciterKey = Object.keys(updated).find(
+            (k) => k.startsWith(`${chapterId}_`) && updated[k],
+          );
+
+          if (remainingReciterKey) {
+            // Update legacy fallback key to point to remaining reciter download
+            updated[chapterId] = updated[remainingReciterKey];
+          } else {
+            delete updated[chapterId];
+          }
+
           return { downloadedChapters: updated };
         });
       },

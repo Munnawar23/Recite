@@ -1,6 +1,6 @@
 import { Haptics } from "@/lib/haptics";
 import { useReadingProgressStore } from "@/store/readingProgressStore";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Animated, {
   runOnJS,
   useAnimatedScrollHandler,
@@ -26,6 +26,11 @@ export function useQuranDetailScroll({
   const isSelectingVerse = useSharedValue(false);
   const isScrollTopVisible = useSharedValue(false);
   const scrollTopOpacity = useSharedValue(0);
+  const isPlayingAudioShared = useSharedValue(isPlayingAudio);
+
+  useEffect(() => {
+    isPlayingAudioShared.value = isPlayingAudio;
+  }, [isPlayingAudio, isPlayingAudioShared]);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   const { setScrollOffset } = useReadingProgressStore();
@@ -57,9 +62,6 @@ export function useQuranDetailScroll({
       const delta = currentY - lastScrollY.value;
       lastScrollY.value = currentY;
 
-      // Persist scroll offset
-      runOnJS(saveScrollOffset)(currentY);
-
       if (currentY <= 300) {
         if (isScrollTopVisible.value) {
           isScrollTopVisible.value = false;
@@ -75,7 +77,7 @@ export function useQuranDetailScroll({
           runOnJS(updateScrollTopVisibility)(false);
         }
         headerScrollTranslateY.value = withTiming(-120, { duration: 250 });
-        if (!isPlayingAudio && !isSelectingVerse.value) {
+        if (!isPlayingAudioShared.value && !isSelectingVerse.value) {
           playerScrollTranslateY.value = withTiming(200, { duration: 250 });
         } else {
           playerScrollTranslateY.value = withTiming(0, { duration: 200 });

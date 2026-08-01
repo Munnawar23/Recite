@@ -1,30 +1,40 @@
-import { FlashList } from "@shopify/flash-list";
+import { FlashList, FlashListRef, ListRenderItemInfo } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  ActivityIndicator,
-  RefreshControl,
-  StyleSheet,
-  View,
-} from "react-native";
+import { RefreshControl, RefreshControlProps, StyleSheet, View } from "react-native";
 
 import EmptyState from "@/components/layout/EmptyState";
 import Header from "@/components/layout/Header";
 import NoConnection from "@/components/layout/NoConnection";
-import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import QuranCard from "@/features/quran/components/QuranCard";
+import { QuranListHeader } from "@/features/quran/components/QuranListHeader";
 import SearchBar from "@/features/quran/components/SearchBar";
-import { useQuranListSearch } from "@/features/quran/hooks/useQuranListSearch";
+import { useQuranList } from "@/features/quran/hooks/useQuranList";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useReadingProgressStore } from "@/store/readingProgressStore";
+import { LastRead, useReadingProgressStore } from "@/store/readingProgressStore";
 import { ThemeSpacing } from "@/theme/spacing";
+import { Chapter } from "@/types/quran";
+
+const formatContinueReadingParams = (lastRead: LastRead) => ({
+  pathname: "/surah/[id]" as const,
+  params: {
+    id: String(lastRead.surahNumber),
+    englishName: lastRead.surahName,
+    arabicName: lastRead.arabicName,
+    versesCount: lastRead.versesCount,
+    type: lastRead.type,
+    initialVerse: String(lastRead.verseNumber),
+  },
+});
 
 export default function QuranScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { colors, spacing } = useAppTheme();
-  const { lastRead } = useReadingProgressStore();
+
+  const lastRead = useReadingProgressStore((state) => state.lastRead);
+
   const {
     inputValue,
     setInputValue,
@@ -33,10 +43,12 @@ export default function QuranScreen() {
     isLoading,
     isError,
     refetch,
-  } = useQuranListSearch();
+  } = useQuranList();
+
   const [refreshing, setRefreshing] = useState(false);
-  const listRef = useRef<any>(null);
-  const styles = createStyles(spacing);
+  const listRef = useRef<FlashListRef<Chapter>>(null);
+
+  const styles = useMemo(() => createStyles(spacing), [spacing]);
 
   // Scroll to top whenever filtered results change
   useEffect(() => {
@@ -45,18 +57,73 @@ export default function QuranScreen() {
     }
   }, [filteredData]);
 
-  const onRefresh = async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
       await refetch();
     } finally {
       setRefreshing(false);
     }
-  };
+  }, [refetch]);
+
+  const handleContinueReading = useCallback(() => {
+    if (!lastRead) return;
+    router.push(formatContinueReadingParams(lastRead));
+  }, [lastRead, router]);
+
+  const keyExtractor = useCallback((item: Chapter) => String(item.id), []);
+
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<Chapter>) => <QuranCard item={item} />,
+    [],
+  );
+
+  const refreshControl = useMemo(
+    (): React.ReactElement<RefreshControlProps> => (
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        colors={[colors.primary]}
+        tintColor={colors.primary}
+      />
+    ),
+    [refreshing, onRefresh, colors.primary],
+  );
+
+  const renderListHeader = useCallback(
+    () => (
+      <QuranListHeader
+        lastRead={lastRead}
+        isLoading={isLoading}
+        refreshing={refreshing}
+        primaryColor={colors.primary}
+        onContinueReading={handleContinueReading}
+        styles={styles}
+      />
+    ),
+    [lastRead, isLoading, refreshing, colors.primary, handleContinueReading, styles],
+  );
+
+  const renderListEmpty = useCallback(() => {
+    if (isLoading) return null;
+    if (isError) {
+      return (
+        <View style={styles.emptyContainer}>
+          <NoConnection onRetry={refetch} />
+        </View>
+      );
+    }
+    return (
+      <EmptyState
+        icon="search-outline"
+        title={t("quran.noResultsTitle")}
+        subtitle={t("quran.noResultsSubtitle")}
+      />
+    );
+  }, [isLoading, isError, refetch, styles, t]);
 
   return (
-    <View style={{ flex: 1 }}>
-      {/* Fixed header — never scrolls away */}
+    <View style={styles.container}>
       <Header
         title={t("quran.title", "The Noble Quran")}
         subtitle={t(
@@ -70,68 +137,18 @@ export default function QuranScreen() {
         onClear={handleClear}
         placeholder={t("quran.searchPlaceholder", "Search Surah...")}
       />
-      <FlashList
+      <FlashList<Chapter>
         ref={listRef}
         data={filteredData}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <QuranCard item={item} />}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         contentContainerStyle={styles.listContent}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={[colors.primary]}
-            tintColor={colors.primary}
-          />
-        }
-        ListHeaderComponent={
-          <>
-            {lastRead ? (
-              <ContinueReadingCard
-                surahName={lastRead.surahName}
-                verseNumber={lastRead.verseNumber}
-                onPress={() =>
-                  router.push({
-                    pathname: "/surah/[id]",
-                    params: {
-                      id: String(lastRead.surahNumber),
-                      englishName: lastRead.surahName,
-                      arabicName: lastRead.arabicName,
-                      versesCount: lastRead.versesCount,
-                      type: lastRead.type,
-                      initialVerse: String(lastRead.verseNumber),
-                    },
-                  })
-                }
-              />
-            ) : (
-              <View style={styles.topSpacer} />
-            )}
-            {isLoading && !refreshing && (
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color={colors.primary} />
-              </View>
-            )}
-          </>
-        }
-        ListEmptyComponent={
-          !isLoading ? (
-            isError ? (
-              <View style={styles.emptyContainer}>
-                <NoConnection onRetry={() => refetch()} />
-              </View>
-            ) : (
-              <EmptyState
-                icon="search-outline"
-                title={t("quran.noResultsTitle")}
-                subtitle={t("quran.noResultsSubtitle")}
-              />
-            )
-          ) : null
-        }
+        refreshControl={refreshControl}
+        ListHeaderComponent={renderListHeader}
+        ListEmptyComponent={renderListEmpty}
         ListFooterComponent={<View style={styles.bottomSpacer} />}
       />
     </View>
@@ -140,6 +157,9 @@ export default function QuranScreen() {
 
 const createStyles = (spacing: ThemeSpacing) =>
   StyleSheet.create({
+    container: {
+      flex: 1,
+    },
     listContent: {
       flexGrow: 1,
       paddingTop: 0,

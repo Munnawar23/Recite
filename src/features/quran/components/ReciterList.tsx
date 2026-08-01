@@ -1,4 +1,4 @@
-import { MessageModal } from "@/components/common/MessageModal";
+import { MessageModal } from "@/components/ui/MessageModal";
 import { RECITER_OPTIONS } from "@/features/quran/hooks/useQuranAudio";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";

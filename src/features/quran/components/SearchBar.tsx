@@ -1,5 +1,6 @@
+import React, { useMemo } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, TextInput, View } from "react-native";
 
 import { useAppFonts } from "@/hooks/useAppFonts";
 import { useAppTheme } from "@/hooks/useAppTheme";
@@ -11,28 +12,44 @@ interface SearchBarInputProps {
   onChangeText: (text: string) => void;
   onClear: () => void;
   placeholder?: string;
+  testID?: string;
 }
 
-export default function SearchBar({
+export const SearchBar = React.memo(function SearchBar({
   value,
   onChangeText,
   onClear,
   placeholder = "Search Surah...",
+  testID = "search-bar",
 }: SearchBarInputProps) {
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const styles = useMemo(
+    () => createStyles(colors, fontFamily, fontSize, spacing),
+    [colors, fontFamily, fontSize, spacing],
+  );
+
+  const hitSlop = useMemo(
+    () => ({
+      top: spacing.sm,
+      bottom: spacing.sm,
+      left: spacing.sm,
+      right: spacing.sm,
+    }),
+    [spacing.sm],
+  );
 
   return (
-    <View style={S.searchContainer}>
-      <View style={S.searchBar}>
+    <View style={styles.searchContainer}>
+      <View style={styles.searchBar}>
         <Ionicons
           name="search"
           size={spacing.xl}
           color={colors.subtext}
-          style={S.searchIcon}
+          style={styles.searchIcon}
         />
         <TextInput
-          style={S.searchInput}
+          testID={`${testID}-input`}
+          style={styles.searchInput}
           placeholder={placeholder}
           placeholderTextColor={colors.subtext}
           value={value}
@@ -40,29 +57,32 @@ export default function SearchBar({
           autoCorrect={false}
           autoCapitalize="none"
           returnKeyType="search"
+          clearButtonMode="while-editing"
+          accessibilityRole="search"
+          accessibilityLabel={placeholder}
         />
         {value.length > 0 && (
-          <TouchableOpacity
+          <Pressable
+            testID={`${testID}-clear-button`}
             onPress={onClear}
-            style={S.clearButton}
-            hitSlop={{
-              top: spacing.sm,
-              bottom: spacing.sm,
-              left: spacing.sm,
-              right: spacing.sm,
-            }}
+            style={styles.clearButton}
+            hitSlop={hitSlop}
+            accessibilityRole="button"
+            accessibilityLabel="Clear search"
           >
             <Ionicons
               name="close-circle"
               size={spacing.lg}
               color={colors.subtext}
             />
-          </TouchableOpacity>
+          </Pressable>
         )}
       </View>
     </View>
   );
-}
+});
+
+export default SearchBar;
 
 type AppFonts = ReturnType<typeof useAppFonts>;
 

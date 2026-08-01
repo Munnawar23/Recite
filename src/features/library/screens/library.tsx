@@ -17,7 +17,7 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { ThemeSpacing } from "@/theme/spacing";
 import { Chapter } from "@/types/quran";
 import { LibraryEmptyState } from "../components/LibraryEmptyState";
-import { TabValue, useLibrary } from "../hooks/useLibrary";
+import { TabValue, useLibraryData } from "../hooks/useLibraryData";
 
 export default function LibraryScreen() {
   const { t } = useTranslation();
@@ -25,7 +25,7 @@ export default function LibraryScreen() {
   const [activeTab, setActiveTab] = useState<TabValue>("favorites");
   const [refreshing, setRefreshing] = useState(false);
 
-  const { listData, isError, refetch } = useLibrary(activeTab);
+  const { listData, isError, refetch } = useLibraryData(activeTab);
 
   const styles = useMemo(() => createStyles(spacing), [spacing]);
 

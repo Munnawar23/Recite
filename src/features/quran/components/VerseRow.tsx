@@ -1,3 +1,4 @@
+import React, { useMemo } from "react";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useFontStore } from "@/store/fontStore";
 import type { SurahVerse } from "@/types/quran";
@@ -12,7 +13,7 @@ interface VerseRowProps {
   onPress?: () => void;
 }
 
-export default function VerseRow({
+function VerseRow({
   item,
   selectedTransId,
   isActive,
@@ -20,22 +21,31 @@ export default function VerseRow({
   onPress,
 }: VerseRowProps) {
   const { colors, fontFamily, fontSize } = useAppTheme();
-  const { fontSizeScale, quranFontSizeScale } = useFontStore();
+  const fontSizeScale = useFontStore((state) => state.fontSizeScale);
+  const quranFontSizeScale = useFontStore((state) => state.quranFontSizeScale);
 
-  let textMultiplier = 1.0;
-  if (fontSizeScale === "small") textMultiplier = 0.85;
-  else if (fontSizeScale === "large") textMultiplier = 1.25;
+  const textMultiplier = useMemo(() => {
+    if (fontSizeScale === "small") return 0.85;
+    if (fontSizeScale === "large") return 1.25;
+    return 1.0;
+  }, [fontSizeScale]);
 
-  let quranMultiplier = 1.0;
-  if (quranFontSizeScale === "small") quranMultiplier = 0.85;
-  else if (quranFontSizeScale === "large") quranMultiplier = 1.25;
+  const quranMultiplier = useMemo(() => {
+    if (quranFontSizeScale === "small") return 0.85;
+    if (quranFontSizeScale === "large") return 1.25;
+    return 1.0;
+  }, [quranFontSizeScale]);
 
-  const S = createStyles(
-    colors,
-    fontFamily,
-    fontSize,
-    textMultiplier,
-    quranMultiplier,
+  const S = useMemo(
+    () =>
+      createStyles(
+        colors,
+        fontFamily,
+        fontSize,
+        textMultiplier,
+        quranMultiplier,
+      ),
+    [colors, fontFamily, fontSize, textMultiplier, quranMultiplier],
   );
 
   return (
@@ -71,6 +81,8 @@ export default function VerseRow({
     </TouchableOpacity>
   );
 }
+
+export default React.memo(VerseRow);
 
 const createStyles = (
   colors: any,

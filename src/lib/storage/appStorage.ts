@@ -9,6 +9,7 @@ export const STORAGE_KEYS = {
   DOWNLOADS: "downloads-storage",
   FAVORITES: "favorites-storage",
   ONBOARDING: "onboarding-storage",
+  READING_PROGRESS: "reading-progress-storage",
 } as const;
 
 export const appStorage = {

@@ -51,8 +51,9 @@ export default function QuranDetailScreen() {
   const { translationId, setTranslationId } = useQuranSettingsStore();
   const selectedTransId = translationId || "20";
 
-  const { downloadedChapters } = useDownloadsStore();
-  const localChapter = downloadedChapters[chapterId];
+  const { downloadedChapters, getDownloadedChapter } = useDownloadsStore();
+  const { reciterId: currentReciterId } = useQuranSettingsStore();
+  const localChapter = getDownloadedChapter(chapterId, currentReciterId || 7);
   const isDownloaded = !!localChapter;
 
   const queryTransId =

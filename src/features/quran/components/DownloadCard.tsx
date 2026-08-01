@@ -69,17 +69,21 @@ const AppStoreProgressControl = React.memo(function AppStoreProgressControl({
 });
 
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
+import { getDownloadKey } from "@/store/downloadsStore";
 
 export default function DownloadCard({ chapterId, reciterName, selectedTransId }: DownloadCardProps) {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
   const { reciterId } = useQuranSettingsStore();
+  const activeReciterId = reciterId || 7;
 
-  const downloadedRecord = useDownloadsStore((state) => state.downloadedChapters[chapterId]);
+  const downloadKey = getDownloadKey(chapterId, activeReciterId);
+  const getDownloadedChapter = useDownloadsStore((state) => state.getDownloadedChapter);
+  const downloadedRecord = getDownloadedChapter(chapterId, activeReciterId);
   const isDownloaded = !!downloadedRecord;
-  const isDownloading = useDownloadsStore((state) => state.downloadingIds.includes(chapterId));
-  const progData = useDownloadsStore((state) => state.downloadProgress[chapterId]);
+  const isDownloading = useDownloadsStore((state) => state.downloadingIds.includes(downloadKey));
+  const progData = useDownloadsStore((state) => state.downloadProgress[downloadKey]);
   const downloadChapter = useDownloadsStore((state) => state.downloadChapter);
   const cancelDownload = useDownloadsStore((state) => state.cancelDownload);
   const deleteChapter = useDownloadsStore((state) => state.deleteChapter);
@@ -91,7 +95,6 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
   const handleDownloadPress = () => {
     Haptics.medium();
     const transId = selectedTransId === "0" ? 20 : parseInt(selectedTransId, 10);
-    const activeReciterId = reciterId || 7;
     downloadChapter(chapterId, transId, activeReciterId, reciterName);
   };
 
@@ -100,14 +103,14 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
   };
 
   const handleConfirmDelete = () => {
-    deleteChapter(chapterId);
+    deleteChapter(chapterId, downloadedRecord?.reciterId || activeReciterId);
     setShowDeleteModal(false);
   };
 
   const handleCancelPress = useCallback(() => {
     Haptics.medium();
-    cancelDownload(chapterId);
-  }, [chapterId, cancelDownload]);
+    cancelDownload(chapterId, activeReciterId);
+  }, [chapterId, activeReciterId, cancelDownload]);
 
   // State configurations
   let squircleBg = colors.primary + "20";
@@ -129,8 +132,10 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
   } else if (isDownloaded) {
     squircleBg = colors.primary;
     squircleIconColor = colors.card;
-    title = t("quran.downloadCard.playingOffline", "Playing offline from your Audio");
+    title = t("quran.downloadCard.playingOffline", "Downloaded for offline");
   }
+
+  const displayReciterName = downloadedRecord?.reciterName || reciterName;
 
   return (
     <View style={S.container}>
@@ -147,7 +152,7 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
         {/* Text Area */}
         <View style={S.textContainer}>
           <Text numberOfLines={1} style={S.title}>{title}</Text>
-          <Text numberOfLines={1} style={S.subtitle}>{downloadedRecord?.reciterName || reciterName}</Text>
+          <Text numberOfLines={1} style={S.subtitle}>{displayReciterName}</Text>
         </View>
 
         {/* Right Actions */}

@@ -104,7 +104,14 @@ export default function StorageSection() {
     });
   };
 
-  const chapterList = Object.values(downloadedChapters);
+  // De-duplicate downloaded records by localAudioUri/reciter to avoid double-counting legacy keys
+  const chapterList = Object.values(downloadedChapters).reduce((acc: any[], ch) => {
+    if (!acc.some((item) => (ch.localAudioUri && item.localAudioUri === ch.localAudioUri) || (item.chapterId === ch.chapterId && item.reciterId === ch.reciterId))) {
+      acc.push(ch);
+    }
+    return acc;
+  }, []);
+
   const totalMb = chapterList.reduce((acc, ch) => {
     if (ch.fileSizeBytes) {
       return acc + ch.fileSizeBytes / (1024 * 1024);

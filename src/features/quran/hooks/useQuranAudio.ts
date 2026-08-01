@@ -1,6 +1,7 @@
 import { getChapterAudio } from "@/lib/api/quran-data";
 import { useDownloadsStore } from "@/store/downloadsStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { useQuery } from "@tanstack/react-query";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import { useEffect, useMemo } from "react";
@@ -49,13 +50,22 @@ export const RECITER_OPTIONS = [
 export function useQuranAudio(chapterId: number, enabled: boolean = true) {
   const { reciterId: globalReciterId, setReciterId: setReciterIdInStore } =
     useQuranSettingsStore();
-  const reciterId = globalReciterId || 7;
-  const { downloadedChapters } = useDownloadsStore();
-  const localChapter = downloadedChapters[chapterId];
-  // Verify local downloaded audio matches currently selected reciterId (or defaults)
-  const hasLocalAudio =
-    !!localChapter?.localAudioUri &&
-    (!localChapter.reciterId || localChapter.reciterId === reciterId);
+  const rawReciterId = globalReciterId || 7;
+  const { isOffline } = useNetworkStatus();
+  const { getDownloadedChapter } = useDownloadsStore();
+
+  const localChapter = getDownloadedChapter(chapterId, rawReciterId);
+  const reciterId = localChapter?.reciterId ?? rawReciterId;
+
+  // Auto sync setting if offline and playing a downloaded reciter
+  useEffect(() => {
+    if (isOffline && localChapter?.reciterId && localChapter.reciterId !== rawReciterId) {
+      setReciterIdInStore(localChapter.reciterId);
+    }
+  }, [isOffline, localChapter, rawReciterId, setReciterIdInStore]);
+
+  // Verify local downloaded audio exists for selected chapter
+  const hasLocalAudio = !!localChapter?.localAudioUri;
 
   // Fetch audio file details & timestamps
   const { data: audioData, isLoading: isLoadingAudio } = useQuery({

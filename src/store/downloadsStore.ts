@@ -10,6 +10,7 @@ export interface DownloadedChapter {
   verses: SurahVerse[];
   versesByTranslation?: Record<number, SurahVerse[]>;
   localAudioUri?: string;
+  fileName?: string;
   reciterId?: number;
   reciterName?: string;
   timestamps?: any[];
@@ -24,14 +25,22 @@ interface ProgressData {
   totalBytes: number;
 }
 
+/** Utility key helper for downloaded chapters per reciter */
+export function getDownloadKey(chapterId: number, reciterId: number = 7): string {
+  return `${chapterId}_${reciterId}`;
+}
+
 interface DownloadsState {
-  downloadedChapters: Record<number, DownloadedChapter>;
-  downloadingIds: number[];
-  downloadProgress: Record<number, ProgressData>;
-  activeResumables: Record<number, DownloadResumable>;
+  /** Keyed by getDownloadKey(chapterId, reciterId) AND fallback legacy chapterId key */
+  downloadedChapters: Record<string | number, DownloadedChapter>;
+  downloadingIds: string[]; // key formatted as `${chapterId}_${reciterId}`
+  downloadProgress: Record<string, ProgressData>;
+  activeResumables: Record<string, DownloadResumable>;
   downloadChapter: (chapterId: number, translationId: number, reciterId?: number, reciterName?: string) => Promise<void>;
-  cancelDownload: (chapterId: number) => Promise<void>;
-  deleteChapter: (chapterId: number) => Promise<void>;
+  cancelDownload: (chapterId: number, reciterId?: number) => Promise<void>;
+  deleteChapter: (chapterId: number, reciterId?: number) => Promise<void>;
+  /** Find downloaded record for a chapter (preferring active reciterId, or returning first available if offline) */
+  getDownloadedChapter: (chapterId: number, activeReciterId?: number) => DownloadedChapter | undefined;
 }
 
 export const useDownloadsStore = create<DownloadsState>()(
@@ -41,15 +50,52 @@ export const useDownloadsStore = create<DownloadsState>()(
       downloadingIds: [],
       downloadProgress: {},
       activeResumables: {},
+      getDownloadedChapter: (chapterId: number, activeReciterId?: number) => {
+        const { downloadedChapters } = get();
+        let record: DownloadedChapter | undefined;
+
+        if (activeReciterId) {
+          const specificKey = getDownloadKey(chapterId, activeReciterId);
+          if (downloadedChapters[specificKey]) {
+            record = downloadedChapters[specificKey];
+          }
+        }
+        // Fallback: check if legacy chapterId key exists
+        if (!record && downloadedChapters[chapterId]) {
+          record = downloadedChapters[chapterId];
+        }
+        // Fallback: return first available downloaded reciter for this chapterId
+        if (!record) {
+          const keys = Object.keys(downloadedChapters);
+          const matchKey = keys.find(
+            (k) => k === String(chapterId) || k.startsWith(`${chapterId}_`)
+          );
+          if (matchKey) {
+            record = downloadedChapters[matchKey];
+          }
+        }
+
+        if (!record) return undefined;
+
+        // Dynamically resolve localAudioUri using documentDirectory to handle iOS container path changes
+        const resolvedFileName = record.fileName || (record.reciterId ? `surah_${record.chapterId}_reciter_${record.reciterId}.mp3` : undefined);
+        const resolvedUri = resolvedFileName ? `${documentDirectory}${resolvedFileName}` : record.localAudioUri;
+
+        return {
+          ...record,
+          localAudioUri: resolvedUri,
+        };
+      },
       downloadChapter: async (chapterId, translationId, reciterId = 7, reciterName) => {
+        const downloadKey = getDownloadKey(chapterId, reciterId);
         const { downloadingIds } = get();
-        if (downloadingIds.includes(chapterId)) return;
+        if (downloadingIds.includes(downloadKey)) return;
 
         set({
-          downloadingIds: [...downloadingIds, chapterId],
+          downloadingIds: [...downloadingIds, downloadKey],
           downloadProgress: {
             ...get().downloadProgress,
-            [chapterId]: { fraction: 0, writtenBytes: 0, totalBytes: 0 },
+            [downloadKey]: { fraction: 0, writtenBytes: 0, totalBytes: 0 },
           },
         });
 
@@ -72,6 +118,7 @@ export const useDownloadsStore = create<DownloadsState>()(
           const defaultVerses = versesByTranslation[translationId] || versesByTranslation[20] || [];
 
           let localAudioUri: string | undefined;
+          let fileName: string | undefined;
           let timestamps: any[] = [];
           let fileSize: string | undefined;
           let fileSizeBytes: number | undefined;
@@ -83,7 +130,8 @@ export const useDownloadsStore = create<DownloadsState>()(
               if (url.startsWith("//")) {
                 url = `https:${url}`;
               }
-              const localPath = `${documentDirectory}surah_${chapterId}_reciter_${reciterId}.mp3`;
+              const audioFileName = `surah_${chapterId}_reciter_${reciterId}.mp3`;
+              const localPath = `${documentDirectory}${audioFileName}`;
 
               if (audioData.file_size) {
                 fileSizeBytes = audioData.file_size;
@@ -104,7 +152,7 @@ export const useDownloadsStore = create<DownloadsState>()(
                   set((state) => ({
                     downloadProgress: {
                       ...state.downloadProgress,
-                      [chapterId]: { fraction, writtenBytes: written, totalBytes: total },
+                      [downloadKey]: { fraction, writtenBytes: written, totalBytes: total },
                     },
                   }));
                 }
@@ -112,42 +160,47 @@ export const useDownloadsStore = create<DownloadsState>()(
 
               const downloadResumable = createDownloadResumable(url, localPath, {}, progressCallback);
               set((state) => ({
-                activeResumables: { ...state.activeResumables, [chapterId]: downloadResumable },
+                activeResumables: { ...state.activeResumables, [downloadKey]: downloadResumable },
               }));
 
               const downloadResult = await downloadResumable.downloadAsync();
 
               if (downloadResult) {
                 localAudioUri = downloadResult.uri;
+                fileName = audioFileName;
               }
               timestamps = audioData.timestamps || [];
             }
           } catch (audioErr: any) {
-            if (!get().downloadingIds.includes(chapterId)) {
+            if (!get().downloadingIds.includes(downloadKey)) {
               return; // Gracefully cancelled
             }
             console.warn("Audio download error:", audioErr);
           }
 
-          if (!get().downloadingIds.includes(chapterId)) {
+          if (!get().downloadingIds.includes(downloadKey)) {
             return;
           }
+
+          const record: DownloadedChapter = {
+            chapterId,
+            verses: defaultVerses,
+            versesByTranslation,
+            localAudioUri,
+            fileName,
+            reciterId,
+            reciterName,
+            timestamps,
+            fileSize,
+            fileSizeBytes,
+            downloadedAt: new Date().toISOString(),
+          };
 
           set((state) => ({
             downloadedChapters: {
               ...state.downloadedChapters,
-              [chapterId]: {
-                chapterId,
-                verses: defaultVerses,
-                versesByTranslation,
-                localAudioUri,
-                reciterId,
-                reciterName,
-                timestamps,
-                fileSize,
-                fileSizeBytes,
-                downloadedAt: new Date().toISOString(),
-              },
+              [downloadKey]: record,
+              [chapterId]: record, // Keep legacy key populated for backward compatibility
             },
           }));
         } catch (error) {
@@ -155,12 +208,12 @@ export const useDownloadsStore = create<DownloadsState>()(
         } finally {
           set((state) => {
             const activeCopy = { ...state.activeResumables };
-            delete activeCopy[chapterId];
+            delete activeCopy[downloadKey];
             const progressCopy = { ...state.downloadProgress };
-            delete progressCopy[chapterId];
+            delete progressCopy[downloadKey];
 
             return {
-              downloadingIds: state.downloadingIds.filter((id) => id !== chapterId),
+              downloadingIds: state.downloadingIds.filter((id) => id !== downloadKey),
               activeResumables: activeCopy,
               downloadProgress: progressCopy,
             };
@@ -168,16 +221,17 @@ export const useDownloadsStore = create<DownloadsState>()(
         }
       },
 
-      cancelDownload: async (chapterId) => {
-        const resumable = get().activeResumables[chapterId];
+      cancelDownload: async (chapterId, reciterId = 7) => {
+        const downloadKey = getDownloadKey(chapterId, reciterId);
+        const resumable = get().activeResumables[downloadKey];
         set((state) => {
           const activeCopy = { ...state.activeResumables };
-          delete activeCopy[chapterId];
+          delete activeCopy[downloadKey];
           const progressCopy = { ...state.downloadProgress };
-          delete progressCopy[chapterId];
+          delete progressCopy[downloadKey];
 
           return {
-            downloadingIds: state.downloadingIds.filter((id) => id !== chapterId),
+            downloadingIds: state.downloadingIds.filter((id) => id !== downloadKey),
             activeResumables: activeCopy,
             downloadProgress: progressCopy,
           };
@@ -192,9 +246,10 @@ export const useDownloadsStore = create<DownloadsState>()(
         }
       },
 
-      deleteChapter: async (chapterId) => {
+      deleteChapter: async (chapterId, reciterId = 7) => {
         const { downloadedChapters } = get();
-        const record = downloadedChapters[chapterId];
+        const downloadKey = getDownloadKey(chapterId, reciterId);
+        const record = downloadedChapters[downloadKey] || downloadedChapters[chapterId];
 
         if (record?.localAudioUri) {
           try {
@@ -206,6 +261,7 @@ export const useDownloadsStore = create<DownloadsState>()(
 
         set((state) => {
           const updated = { ...state.downloadedChapters };
+          delete updated[downloadKey];
           delete updated[chapterId];
           return { downloadedChapters: updated };
         });

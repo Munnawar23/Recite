@@ -1,4 +1,5 @@
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { usePathname } from "expo-router";
 import { useNetworkStatus } from "./useNetworkStatus";
 
 export interface SafeAreaInsetsResult {
@@ -21,9 +22,17 @@ export interface SafeAreaInsetsResult {
 export function useAppSafeAreaInsets(): SafeAreaInsetsResult {
   const insets = useSafeAreaInsets();
   const { isOffline } = useNetworkStatus();
+  const pathname = usePathname();
+
+  // If offline banner is suppressed for current route, do not zero out top inset
+  const isBannerSuppressed =
+    !pathname ||
+    pathname === "/" ||
+    pathname === "/index" ||
+    pathname.includes("onboarding");
 
   // If offline banner is showing, top inset is handled by OfflineBanner component
-  const calculatedTop = isOffline ? 0 : insets.top;
+  const calculatedTop = isOffline && !isBannerSuppressed ? 0 : insets.top;
 
   return {
     top: calculatedTop,

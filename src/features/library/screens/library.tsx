@@ -6,7 +6,6 @@ import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import EmptyState from "@/components/layout/EmptyState";
 import Header from "@/components/layout/Header";
 import NoConnection from "@/components/layout/NoConnection";
-import SafeArea from "@/components/layout/SafeArea";
 import TabSwitcher from "@/components/ui/TabSwitcher";
 import { DOWNLOAD_ANIM, EMPTY_ANIM } from "@/constants/assets";
 import QuranCard from "@/features/quran/components/QuranCard";
@@ -58,7 +57,7 @@ export default function LibraryScreen() {
     activeTab === "favorites" ? favoriteChapters : downloadedChapterList;
 
   return (
-    <SafeArea>
+    <View style={{ flex: 1 }}>
       <View style={S.container}>
         <Header
           title={t("library.title", "Library")}
@@ -152,7 +151,7 @@ export default function LibraryScreen() {
           )}
         </View>
       </View>
-    </SafeArea>
+    </View>
   );
 }
 

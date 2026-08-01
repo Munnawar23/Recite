@@ -10,6 +10,8 @@ export interface DownloadedChapter {
   verses: SurahVerse[];
   versesByTranslation?: Record<number, SurahVerse[]>;
   localAudioUri?: string;
+  reciterId?: number;
+  reciterName?: string;
   timestamps?: any[];
   fileSize?: string;
   fileSizeBytes?: number;
@@ -27,7 +29,7 @@ interface DownloadsState {
   downloadingIds: number[];
   downloadProgress: Record<number, ProgressData>;
   activeResumables: Record<number, DownloadResumable>;
-  downloadChapter: (chapterId: number, translationId: number) => Promise<void>;
+  downloadChapter: (chapterId: number, translationId: number, reciterId?: number, reciterName?: string) => Promise<void>;
   cancelDownload: (chapterId: number) => Promise<void>;
   deleteChapter: (chapterId: number) => Promise<void>;
 }
@@ -39,7 +41,7 @@ export const useDownloadsStore = create<DownloadsState>()(
       downloadingIds: [],
       downloadProgress: {},
       activeResumables: {},
-      downloadChapter: async (chapterId, translationId) => {
+      downloadChapter: async (chapterId, translationId, reciterId = 7, reciterName) => {
         const { downloadingIds } = get();
         if (downloadingIds.includes(chapterId)) return;
 
@@ -75,13 +77,13 @@ export const useDownloadsStore = create<DownloadsState>()(
           let fileSizeBytes: number | undefined;
 
           try {
-            const audioData = await getChapterAudio(chapterId);
+            const audioData = await getChapterAudio(chapterId, reciterId);
             if (audioData?.audio_url) {
               let url = audioData.audio_url;
               if (url.startsWith("//")) {
                 url = `https:${url}`;
               }
-              const localPath = `${documentDirectory}surah_${chapterId}.mp3`;
+              const localPath = `${documentDirectory}surah_${chapterId}_reciter_${reciterId}.mp3`;
 
               if (audioData.file_size) {
                 fileSizeBytes = audioData.file_size;
@@ -139,6 +141,8 @@ export const useDownloadsStore = create<DownloadsState>()(
                 verses: defaultVerses,
                 versesByTranslation,
                 localAudioUri,
+                reciterId,
+                reciterName,
                 timestamps,
                 fileSize,
                 fileSizeBytes,

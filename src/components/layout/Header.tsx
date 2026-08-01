@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 
 import { useAppFonts } from "@/hooks/useAppFonts";
+import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { Haptics } from "@/lib/haptics";
@@ -24,7 +25,8 @@ export default function Header({
 }: HeaderProps) {
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
   const { isOffline } = useNetworkStatus();
-  const S = createStyles(colors, fontFamily, fontSize, spacing, isOffline);
+  const { paddingTop } = useAppSafeAreaInsets();
+  const S = createStyles(colors, fontFamily, fontSize, spacing, isOffline, paddingTop);
 
   const handlePress = () => {
     Haptics.medium();
@@ -62,11 +64,12 @@ const createStyles = (
   fontSize: AppFonts["fontSize"],
   spacing: ThemeSpacing,
   isOffline: boolean,
+  paddingTop: number,
 ) =>
   StyleSheet.create({
     headerRow: {
       paddingHorizontal: spacing.screenPadding,
-      paddingTop: 0,
+      paddingTop: paddingTop,
       paddingBottom: spacing.vXs,
       marginTop: isOffline ? verticalScale(4) : 0,
     },

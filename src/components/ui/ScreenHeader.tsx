@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 
+import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { Haptics } from "@/lib/haptics";
@@ -21,7 +22,8 @@ export default function ScreenHeader({
   const router = useRouter();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
   const { isOffline } = useNetworkStatus();
-  const S = createStyles(colors, fontFamily, fontSize, spacing, isOffline);
+  const { paddingTop } = useAppSafeAreaInsets();
+  const S = createStyles(colors, fontFamily, fontSize, spacing, isOffline, paddingTop);
 
   const handleBack = () => {
     Haptics.medium();
@@ -65,6 +67,7 @@ const createStyles = (
   fontSize: any,
   spacing: any,
   isOffline: boolean,
+  paddingTop: number,
 ) =>
   StyleSheet.create({
     container: {
@@ -72,7 +75,7 @@ const createStyles = (
       alignItems: "center",
       justifyContent: "space-between",
       paddingHorizontal: spacing.screenPadding,
-      paddingTop: verticalScale(6),
+      paddingTop: paddingTop + verticalScale(6),
       paddingBottom: verticalScale(8),
       marginTop: isOffline ? verticalScale(2) : 0,
     },

@@ -132,7 +132,7 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       paddingHorizontal: scale(12),
-      paddingTop: verticalScale(2),
+      paddingTop: verticalScale(4),
       paddingBottom: verticalScale(2),
     },
     leftActions: {

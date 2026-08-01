@@ -83,7 +83,7 @@ const createStyles = (
     cardWrapper: {
       paddingHorizontal: spacing.screenPadding,
       marginTop: spacing.cardMarginTop,
-      marginBottom: spacing.cardMarginBottom,
+      marginBottom: spacing.vMd,
     },
     card: {
       borderRadius: scale(20),

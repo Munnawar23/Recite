@@ -1,6 +1,6 @@
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
@@ -12,7 +12,6 @@ import {
 import EmptyState from "@/components/layout/EmptyState";
 import Header from "@/components/layout/Header";
 import NoConnection from "@/components/layout/NoConnection";
-import SafeArea from "@/components/layout/SafeArea";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import QuranCard from "@/features/quran/components/QuranCard";
 import SearchBar from "@/features/quran/components/SearchBar";
@@ -41,7 +40,7 @@ export default function QuranScreen() {
 
   // Scroll to top whenever filtered results change
   useEffect(() => {
-    if (listRef.current) {
+    if (listRef.current && filteredData.length > 0) {
       listRef.current.scrollToOffset({ offset: 0, animated: false });
     }
   }, [filteredData]);
@@ -56,7 +55,7 @@ export default function QuranScreen() {
   };
 
   return (
-    <SafeArea>
+    <View style={{ flex: 1 }}>
       {/* Fixed header — never scrolls away */}
       <Header
         title={t("quran.title", "The Noble Quran")}
@@ -90,7 +89,7 @@ export default function QuranScreen() {
         }
         ListHeaderComponent={
           <>
-            {lastRead && (
+            {lastRead ? (
               <ContinueReadingCard
                 surahName={lastRead.surahName}
                 verseNumber={lastRead.verseNumber}
@@ -108,6 +107,8 @@ export default function QuranScreen() {
                   })
                 }
               />
+            ) : (
+              <View style={styles.topSpacer} />
             )}
             {isLoading && !refreshing && (
               <View style={styles.loadingContainer}>
@@ -133,7 +134,7 @@ export default function QuranScreen() {
         }
         ListFooterComponent={<View style={styles.bottomSpacer} />}
       />
-    </SafeArea>
+    </View>
   );
 }
 
@@ -141,6 +142,7 @@ const createStyles = (spacing: ThemeSpacing) =>
   StyleSheet.create({
     listContent: {
       flexGrow: 1,
+      paddingTop: 0,
       paddingBottom: spacing.vLg,
     },
     emptyContainer: {
@@ -155,5 +157,8 @@ const createStyles = (spacing: ThemeSpacing) =>
     },
     bottomSpacer: {
       height: spacing.vXxl,
+    },
+    topSpacer: {
+      height: spacing.vMd,
     },
   });

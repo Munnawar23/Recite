@@ -1,3 +1,4 @@
+import Background from "@/components/layout/Background";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
 import { useAppTheme } from "@/hooks/useAppTheme";
@@ -21,7 +22,7 @@ void SplashScreen.preventAutoHideAsync();
 
 const asyncStoragePersister = createAsyncStoragePersister({
   storage: AsyncStorage,
-  key: "RECITE_QUERY_CACHE",
+  key: "RECITE_QUERY_CACHE_V2",
 });
 
 export default function RootLayout() {
@@ -30,7 +31,8 @@ export default function RootLayout() {
       new QueryClient({
         defaultOptions: {
           queries: {
-            gcTime: 1000 * 60 * 60 * 24 * 7, // Keep un-instantiated query cache in memory/storage for 7 days
+            staleTime: 1000 * 60 * 30, // 30 mins
+            gcTime: 1000 * 60 * 60 * 24, // 24 hours
           },
         },
       }),
@@ -66,7 +68,21 @@ export default function RootLayout() {
           <SafeAreaProvider>
             <PersistQueryClientProvider
               client={queryClient}
-              persistOptions={{ persister: asyncStoragePersister }}
+              persistOptions={{
+                persister: asyncStoragePersister,
+                maxAge: 1000 * 60 * 60 * 24, // 24 hours max cache age
+                buster: "v2",
+                dehydrateOptions: {
+                  shouldDehydrateQuery: (query) => {
+                    // Do not persist huge chapter verse array payloads into SQLite AsyncStorage
+                    const keyStr = JSON.stringify(query.queryKey);
+                    if (keyStr.includes("chapters") || keyStr.includes("verses")) {
+                      return false;
+                    }
+                    return query.state.status === "success";
+                  },
+                },
+              }}
             >
               <StatusBar style={activeScheme === "dark" ? "light" : "dark"} />
               <OfflineBanner />

@@ -1,22 +1,33 @@
-import * as Notifications from "expo-notifications";
-import { requestNotificationPermissions } from "./permissions";
+import { isExpoGo, requestNotificationPermissions } from "./permissions";
 import { NIGHTLY_REMINDER_CONTENT } from "./types";
 
-// Configure default notification handler for foreground notification display
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-    priority: Notifications.AndroidNotificationPriority.HIGH,
-  }),
-});
+let Notifications: typeof import("expo-notifications") | null = null;
+if (!isExpoGo) {
+  try {
+    Notifications = require("expo-notifications");
+    if (Notifications) {
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldPlaySound: true,
+          shouldSetBadge: false,
+          shouldShowBanner: true,
+          shouldShowList: true,
+          priority: Notifications!.AndroidNotificationPriority.HIGH,
+        }),
+      });
+    }
+  } catch (e) {
+    console.warn("Failed to load expo-notifications:", e);
+  }
+}
 
 /**
  * Schedules a daily recurring notification at 10:00 PM (22:00 local time).
  */
 export async function scheduleDailyNightlyNotification(): Promise<string | null> {
+  if (isExpoGo || !Notifications) {
+    return null;
+  }
   try {
     const identifier = await Notifications.scheduleNotificationAsync({
       content: {
@@ -42,7 +53,7 @@ export async function scheduleDailyNightlyNotification(): Promise<string | null>
  * Cancels a scheduled notification by identifier.
  */
 export async function cancelDailyNightlyNotification(identifier: string | null): Promise<void> {
-  if (!identifier) return;
+  if (!identifier || isExpoGo || !Notifications) return;
 
   try {
     await Notifications.cancelScheduledNotificationAsync(identifier);
@@ -55,6 +66,7 @@ export async function cancelDailyNightlyNotification(identifier: string | null):
  * Instantly triggers a test notification for testing.
  */
 export async function triggerInstantTestNotification(): Promise<void> {
+  if (isExpoGo || !Notifications) return;
   try {
     const granted = await requestNotificationPermissions();
     if (!granted) return;

@@ -3,9 +3,9 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { verticalScale } from "react-native-size-matters";
 
 import Header from "@/components/layout/Header";
-import SafeArea from "@/components/layout/SafeArea";
 
 import AboutSection from "../components/AboutSection";
+import DevSection from "../components/DevSection";
 import DisplayLanguageSection from "../components/DisplayLanguageSection";
 import HelpSupportSection from "../components/HelpSupportSection";
 import NotificationSection from "../components/NotificationSection";
@@ -19,7 +19,7 @@ export default function SettingsScreen() {
   const S = createStyles(spacing);
 
   return (
-    <SafeArea>
+    <View style={{ flex: 1 }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={S.scrollContent}
@@ -39,10 +39,11 @@ export default function SettingsScreen() {
         <StorageSection />
         <HelpSupportSection />
         <AboutSection />
+        <DevSection />
 
         <View style={{ height: verticalScale(40) }} />
       </ScrollView>
-    </SafeArea>
+    </View>
   );
 }
 

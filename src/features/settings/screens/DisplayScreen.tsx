@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ScrollView } from "react-native";
 import { useTranslation } from "react-i18next";
 import { verticalScale } from "react-native-size-matters";
 
-import SafeArea from "@/components/layout/SafeArea";
+import Background from "@/components/layout/Background";
 import ScreenHeader from "@/components/ui/ScreenHeader";
 import SectionTitle from "@/components/ui/SectionTitle";
 import TabSwitcher from "@/components/ui/TabSwitcher";
@@ -40,7 +40,8 @@ export default function DisplayScreen() {
   const S = createStyles(colors, fontFamily, fontSize, spacing, textMultiplier, quranMultiplier);
 
   return (
-    <SafeArea>
+    <View style={{ flex: 1 }}>
+      <Background />
       <ScreenHeader
         title={t("settings.display.title", "Display Settings")}
         subtitle={t("settings.display.subtitle", "Theme, fonts & text sizes")}
@@ -90,7 +91,7 @@ export default function DisplayScreen() {
 
         <View style={{ height: verticalScale(30) }} />
       </ScrollView>
-    </SafeArea>
+    </View>
   );
 }
 

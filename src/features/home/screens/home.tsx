@@ -7,7 +7,6 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 import EmptyState from "@/components/layout/EmptyState";
 import Header from "@/components/layout/Header";
-import SafeArea from "@/components/layout/SafeArea";
 import SectionTitle from "@/components/ui/SectionTitle";
 import PrayerTimes from "@/features/home/components/PrayerTimes";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
@@ -49,7 +48,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeArea>
+    <View style={{ flex: 1 }}>
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
@@ -143,7 +142,7 @@ export default function HomeScreen() {
 
         <View style={styles.bottomSpacer} />
       </ScrollView>
-    </SafeArea>
+    </View>
   );
 }
 

@@ -1,3 +1,5 @@
+import Background from "@/components/layout/Background";
+import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { Ionicons } from "@expo/vector-icons";
@@ -5,20 +7,19 @@ import { Tabs } from "expo-router";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Platform, StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 
 export default function TabLayout() {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize } = useAppTheme();
-  const insets = useSafeAreaInsets();
+  const { bottom: bottomInset } = useAppSafeAreaInsets();
 
   const iconSize = scale(20);
 
   // Use safe area if available, otherwise give a comfortable padding
   const bottomPadding =
-    insets.bottom > 0
-      ? insets.bottom
+    bottomInset > 0
+      ? bottomInset
       : Platform.OS === "ios"
         ? verticalScale(12)
         : verticalScale(10);
@@ -125,6 +126,7 @@ export default function TabLayout() {
 
   return (
     <View style={styles.container}>
+      <Background />
       <Tabs screenOptions={screenOptions}>
         {tabs.map((tab) => (
           <Tabs.Screen

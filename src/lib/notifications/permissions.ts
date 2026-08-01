@@ -1,7 +1,24 @@
-import * as Notifications from "expo-notifications";
+import Constants, { ExecutionEnvironment } from "expo-constants";
 import { Alert, Linking, Platform } from "react-native";
 
+export const isExpoGo = Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
+
+// Lazily load expo-notifications only when NOT in Expo Go to avoid SDK 53 import throw
+let Notifications: typeof import("expo-notifications") | null = null;
+if (!isExpoGo) {
+  try {
+    Notifications = require("expo-notifications");
+  } catch (e) {
+    console.warn("Failed to load expo-notifications:", e);
+  }
+}
+
 export async function requestNotificationPermissions(): Promise<boolean> {
+  if (isExpoGo || !Notifications) {
+    console.warn("Expo Go detected or Notifications unavailable: Notifications permissions skipped.");
+    return false;
+  }
+
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("recite_reminder_channel_v2", {
       name: "Daily Reminder",
@@ -49,6 +66,7 @@ export async function requestNotificationPermissions(): Promise<boolean> {
 }
 
 export async function checkNotificationPermissions(): Promise<boolean> {
+  if (isExpoGo || !Notifications) return false;
   const { status } = await Notifications.getPermissionsAsync();
   return status === "granted";
 }

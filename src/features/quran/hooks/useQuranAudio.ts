@@ -52,7 +52,10 @@ export function useQuranAudio(chapterId: number, enabled: boolean = true) {
   const reciterId = globalReciterId || 7;
   const { downloadedChapters } = useDownloadsStore();
   const localChapter = downloadedChapters[chapterId];
-  const hasLocalAudio = !!localChapter?.localAudioUri;
+  // Verify local downloaded audio matches currently selected reciterId (or defaults)
+  const hasLocalAudio =
+    !!localChapter?.localAudioUri &&
+    (!localChapter.reciterId || localChapter.reciterId === reciterId);
 
   // Fetch audio file details & timestamps
   const { data: audioData, isLoading: isLoadingAudio } = useQuery({

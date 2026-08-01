@@ -1,6 +1,5 @@
 import EmptyState from "@/components/layout/EmptyState";
 import Header from "@/components/layout/Header";
-import SafeArea from "@/components/layout/SafeArea";
 import CompassDial from "@/features/qibla/components/CompassDial";
 import { useCompass } from "@/features/qibla/hooks/useCompass";
 import { useQiblaDirection } from "@/features/qibla/hooks/useQiblaDirection";
@@ -53,7 +52,7 @@ export default function QiblaScreen() {
   const targetDeg = Math.round(qiblaAngle);
 
   return (
-    <SafeArea>
+    <View style={{ flex: 1 }}>
       <View style={styles.container}>
         <Header
           title={t("qiblaScreen.title", "Qibla")}
@@ -114,7 +113,7 @@ export default function QiblaScreen() {
           )}
         </View>
       </View>
-    </SafeArea>
+    </View>
   );
 }
 

@@ -1,5 +1,4 @@
 import Background from "@/components/layout/Background";
-import SafeArea from "@/components/layout/SafeArea";
 import Button from "@/components/ui/Button";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import "@/i18n";
@@ -60,8 +59,7 @@ function ErrorFallbackView({ onReset }: { onReset: () => void }) {
   return (
     <View style={styles.outerContainer}>
       <Background />
-      <SafeArea>
-        <View style={styles.contentContainer}>
+      <View style={styles.contentContainer}>
           {/* Header Icon */}
           <View style={styles.iconContainer}>
             <Ionicons
@@ -90,7 +88,6 @@ function ErrorFallbackView({ onReset }: { onReset: () => void }) {
             onPress={onReset}
           />
         </View>
-      </SafeArea>
     </View>
   );
 }

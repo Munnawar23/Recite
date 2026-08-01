@@ -68,12 +68,16 @@ const AppStoreProgressControl = React.memo(function AppStoreProgressControl({
   );
 });
 
+import { useQuranSettingsStore } from "@/store/quranSettingsStore";
+
 export default function DownloadCard({ chapterId, reciterName, selectedTransId }: DownloadCardProps) {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
+  const { reciterId } = useQuranSettingsStore();
 
-  const isDownloaded = useDownloadsStore((state) => !!state.downloadedChapters[chapterId]);
+  const downloadedRecord = useDownloadsStore((state) => state.downloadedChapters[chapterId]);
+  const isDownloaded = !!downloadedRecord;
   const isDownloading = useDownloadsStore((state) => state.downloadingIds.includes(chapterId));
   const progData = useDownloadsStore((state) => state.downloadProgress[chapterId]);
   const downloadChapter = useDownloadsStore((state) => state.downloadChapter);
@@ -87,7 +91,8 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
   const handleDownloadPress = () => {
     Haptics.medium();
     const transId = selectedTransId === "0" ? 20 : parseInt(selectedTransId, 10);
-    downloadChapter(chapterId, transId);
+    const activeReciterId = reciterId || 7;
+    downloadChapter(chapterId, transId, activeReciterId, reciterName);
   };
 
   const handleDeletePress = () => {
@@ -142,7 +147,7 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
         {/* Text Area */}
         <View style={S.textContainer}>
           <Text numberOfLines={1} style={S.title}>{title}</Text>
-          <Text numberOfLines={1} style={S.subtitle}>{reciterName}</Text>
+          <Text numberOfLines={1} style={S.subtitle}>{downloadedRecord?.reciterName || reciterName}</Text>
         </View>
 
         {/* Right Actions */}

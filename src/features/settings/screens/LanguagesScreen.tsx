@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 
-import SafeArea from "@/components/layout/SafeArea";
+import Background from "@/components/layout/Background";
 import CommonModal from "@/components/ui/CommonModal";
 import ScreenHeader from "@/components/ui/ScreenHeader";
 import SectionTitle from "@/components/ui/SectionTitle";
@@ -65,7 +65,8 @@ export default function LanguagesScreen() {
   const S = createStyles(colors, fontFamily, fontSize, spacing);
 
   return (
-    <SafeArea>
+    <View style={{ flex: 1 }}>
+      <Background />
       <ScreenHeader
         title={t("settings.languages.title", "Languages & Audio")}
         subtitle={t(
@@ -165,7 +166,7 @@ export default function LanguagesScreen() {
 
         <View style={{ height: verticalScale(20) }} />
       </ScrollView>
-    </SafeArea>
+    </View>
   );
 }
 

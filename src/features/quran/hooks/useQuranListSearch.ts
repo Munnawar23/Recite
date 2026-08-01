@@ -15,6 +15,11 @@ export function useQuranListSearch(selectedOption?: "read" | "listen") {
       clearTimeout(debounceTimer.current);
     }
 
+    if (inputValue.trim() === "") {
+      setSearchQuery("");
+      return;
+    }
+
     debounceTimer.current = setTimeout(() => {
       setSearchQuery(inputValue);
     }, 300);

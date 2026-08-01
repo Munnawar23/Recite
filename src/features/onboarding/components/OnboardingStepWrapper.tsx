@@ -1,4 +1,5 @@
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -10,8 +11,7 @@ import {
 } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 import { Button } from "@/components/ui/Button";
-import SafeArea from "@/components/layout/SafeArea";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Background from "@/components/layout/Background";
 
 const TOTAL_STEPS = 5;
 
@@ -48,7 +48,7 @@ export function OnboardingStepWrapper({
 }: OnboardingStepWrapperProps) {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-  const insets = useSafeAreaInsets();
+  const { paddingTop, paddingBottom } = useAppSafeAreaInsets();
 
   const isLastStep = step === TOTAL_STEPS;
   const buttonLabel =
@@ -60,8 +60,9 @@ export function OnboardingStepWrapper({
   const S = createStyles(colors, fontFamily, fontSize, spacing);
 
   return (
-    <SafeArea>
-      <View style={[S.container, { paddingBottom: insets.bottom + verticalScale(16) }]}>
+    <View style={{ flex: 1 }}>
+      <Background />
+      <View style={[S.container, { paddingTop: paddingTop + verticalScale(8), paddingBottom: paddingBottom + verticalScale(16) }]}>
         {/* ── Progress dots ── */}
         <View style={S.progressRow}>
           {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
@@ -122,7 +123,7 @@ export function OnboardingStepWrapper({
           )}
         </View>
       </View>
-    </SafeArea>
+    </View>
   );
 }
 

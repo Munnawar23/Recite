@@ -19,7 +19,7 @@ import DailyVerse from "../components/DailyVerse";
 import HijriCard from "../components/HijriCard";
 
 const animation = (delay: number) =>
-  FadeInDown.duration(500).delay(delay).springify();
+  FadeInDown.duration(350).delay(Math.min(delay * 0.3, 120));
 
 export default function HomeScreen() {
   const router = useRouter();

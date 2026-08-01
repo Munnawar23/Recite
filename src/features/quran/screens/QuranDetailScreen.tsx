@@ -1,7 +1,7 @@
 import { useActiveQuranDetail } from "@/features/quran/hooks/useQuranDetail";
+import { useQuranDetailScroll } from "@/features/quran/hooks/useQuranDetailScroll";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
-import { Haptics } from "@/lib/haptics";
 import { useDownloadsStore } from "@/store/downloadsStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { useReadingProgressStore } from "@/store/readingProgressStore";
@@ -13,43 +13,28 @@ import { useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import Animated, {
-  runOnJS,
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+import Animated, { withTiming } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scale, verticalScale } from "react-native-size-matters";
 
-// Sub-components
-import CommonModal from "@/components/ui/CommonModal";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+// Sub-components & Custom Hooks
 import AudioPlayerControls from "../components/AudioPlayerControls";
-import BismillahBanner from "../components/BismillahBanner";
 import DetailHeader from "../components/DetailHeader";
-import DownloadCard from "../components/DownloadCard";
+import QuranDetailHeaderSection from "../components/QuranDetailHeaderSection";
+import ScrollTopButton from "../components/ScrollTopButton";
 import VerseRow from "../components/VerseRow";
 import { RECITER_OPTIONS, useQuranAudio } from "../hooks/useQuranAudio";
-
-const TRANSLATION_OPTIONS = [
-  { label: "Arabic Only", value: "0" },
-  { label: "English (Saheeh)", value: "20" },
-  { label: "Urdu (Maududi)", value: "97" },
-  { label: "Hindi (Azizul Haque)", value: "122" },
-  { label: "Indonesian (Ministry)", value: "33" },
-  { label: "Bengali (Taisirul)", value: "161" },
-];
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList as any);
 
 export default function QuranDetailScreen() {
-  const { id, arabicName, englishName, versesCount, type } =
+  const { id, arabicName, englishName, versesCount, type, initialVerse } =
     useLocalSearchParams<{
       id: string;
       arabicName: string;
@@ -63,10 +48,8 @@ export default function QuranDetailScreen() {
   const isDark = activeScheme === "dark";
   const chapterId = parseInt(id ?? "1", 10);
 
-  const { translationId: globalTranslationId } = useQuranSettingsStore();
-  const [selectedTransId, setSelectedTransId] = useState<string>(
-    globalTranslationId || "20",
-  );
+  const { translationId, setTranslationId } = useQuranSettingsStore();
+  const selectedTransId = translationId || "20";
 
   const { downloadedChapters } = useDownloadsStore();
   const localChapter = downloadedChapters[chapterId];
@@ -87,6 +70,17 @@ export default function QuranDetailScreen() {
   const isLoading = isDownloaded ? false : isApiLoading;
   const isError = isDownloaded ? false : isApiError;
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await refetch();
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   // Audio Playback integration
   const {
     player,
@@ -94,7 +88,6 @@ export default function QuranDetailScreen() {
     activeVerseKey,
     isLoadingAudio,
     reciterId,
-    setReciterId,
     timestamps = [],
   } = useQuranAudio(chapterId, true);
 
@@ -103,63 +96,22 @@ export default function QuranDetailScreen() {
     ? activeReciter.label
     : "Mishary Rashid Alafasy";
 
-  const listRef = useRef<any>(null);
-
-  // Scroll direction detection for hiding/showing audio player & header
-  const lastScrollY = useSharedValue(0);
-  const playerScrollTranslateY = useSharedValue(0);
-  const headerScrollTranslateY = useSharedValue(0);
-
-  const isPlayingAudio = status?.playing;
-
-  const { setLastRead, setScrollOffset, setVerseNumber, lastRead } =
-    useReadingProgressStore();
-
-  // Debounce helper — save scroll offset at most once per 500 ms
-  const saveOffsetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const saveScrollOffset = useCallback(
-    (offsetY: number) => {
-      if (saveOffsetTimer.current) clearTimeout(saveOffsetTimer.current);
-      saveOffsetTimer.current = setTimeout(() => {
-        setScrollOffset(chapterId, offsetY);
-      }, 500);
-    },
-    [chapterId, setScrollOffset],
-  );
-
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      const currentY = event.contentOffset.y;
-      const delta = currentY - lastScrollY.value;
-      lastScrollY.value = currentY;
-
-      // Persist scroll offset (debounced via JS thread)
-      runOnJS(saveScrollOffset)(currentY);
-
-      if (currentY <= 10) {
-        // Near top — keep both header and player visible
-        playerScrollTranslateY.value = withTiming(0, { duration: 200 });
-        headerScrollTranslateY.value = withTiming(0, { duration: 200 });
-      } else if (delta > 6) {
-        // Scrolling down — hide header sliding up
-        headerScrollTranslateY.value = withTiming(-120, { duration: 250 });
-        // Only hide player if audio is NOT currently playing
-        if (!isPlayingAudio) {
-          playerScrollTranslateY.value = withTiming(200, { duration: 250 });
-        } else {
-          playerScrollTranslateY.value = withTiming(0, { duration: 200 });
-        }
-      } else if (delta < -6) {
-        // Scrolling up — bring both back
-        playerScrollTranslateY.value = withTiming(0, { duration: 250 });
-        headerScrollTranslateY.value = withTiming(0, { duration: 250 });
-      }
-    },
+  // Scroll animations & scroll-to-top hook
+  const {
+    listRef,
+    scrollHandler,
+    playerScrollTranslateY,
+    isSelectingVerse,
+    animatedHeaderStyle,
+    animatedScrollTopStyle,
+    showScrollTop,
+    scrollToTop,
+  } = useQuranDetailScroll({
+    chapterId,
+    isPlayingAudio: status?.playing,
   });
 
-  const animatedHeaderStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: headerScrollTranslateY.value }],
-  }));
+  const { setLastRead, setVerseNumber, lastRead } = useReadingProgressStore();
 
   const { isOffline } = useNetworkStatus();
   const isOfflineBannerShowing = isOffline && !isDownloaded;
@@ -194,14 +146,20 @@ export default function QuranDetailScreen() {
     (verseKey: string) => {
       // Bring audio player back into view when a verse is selected
       playerScrollTranslateY.value = withTiming(0, { duration: 250 });
+      isSelectingVerse.value = true;
+
       const matchedTimestamp = timestamps.find(
         (ts) => ts.verse_key === verseKey,
       );
       if (matchedTimestamp && player) {
         player.seekTo((matchedTimestamp.timestamp_from + 150) / 1000);
       }
+
+      setTimeout(() => {
+        isSelectingVerse.value = false;
+      }, 800);
     },
-    [timestamps, player, playerScrollTranslateY],
+    [timestamps, player, playerScrollTranslateY, isSelectingVerse],
   );
 
   const renderVerse = useCallback(
@@ -218,8 +176,6 @@ export default function QuranDetailScreen() {
     },
     [selectedTransId, activeVerseKey, handleVersePress],
   );
-
-  const { initialVerse } = useLocalSearchParams<{ initialVerse?: string }>();
 
   // Scroll to initial verse when opened from Continue Reading card
   useEffect(() => {
@@ -270,7 +226,6 @@ export default function QuranDetailScreen() {
   }, [activeVerseKey, verses]);
 
   // Restore saved scroll position when re-opening the same surah
-  // (only when there is no initialVerse navigation param)
   useEffect(() => {
     const savedOffset =
       lastRead?.surahNumber === chapterId ? lastRead.scrollOffset : 0;
@@ -286,26 +241,12 @@ export default function QuranDetailScreen() {
   }, [verses.length]);
 
   const renderHeader = () => (
-    <View>
-      <View style={{ marginTop: verticalScale(4) }}>
-        <CommonModal
-          data={TRANSLATION_OPTIONS}
-          value={selectedTransId}
-          onChange={(item) => {
-            Haptics.medium();
-            setSelectedTransId(item.value);
-          }}
-          placeholder="Select Translation"
-        />
-      </View>
-      <DownloadCard
-        chapterId={chapterId}
-        reciterName={reciterName}
-        selectedTransId={selectedTransId}
-      />
-      <BismillahBanner chapterId={chapterId} />
-      <View style={{ height: verticalScale(8) }} />
-    </View>
+    <QuranDetailHeaderSection
+      chapterId={chapterId}
+      selectedTransId={selectedTransId}
+      reciterName={reciterName}
+      onTranslationChange={setTranslationId}
+    />
   );
 
   const renderContent = () => {
@@ -345,11 +286,19 @@ export default function QuranDetailScreen() {
         ListHeaderComponent={renderHeader}
         keyExtractor={(item: SurahVerse) => String(item.id)}
         showsVerticalScrollIndicator={false}
-        estimatedItemSize={220}
         onScroll={scrollHandler}
         scrollEventThrottle={16}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={viewabilityConfig.current}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[colors.primary]}
+            tintColor={colors.primary}
+            progressViewOffset={verticalScale(60)}
+          />
+        }
         contentContainerStyle={{
           paddingHorizontal: scale(20),
           paddingTop: verticalScale(67),
@@ -388,11 +337,16 @@ export default function QuranDetailScreen() {
             player={player}
             status={status}
             isLoadingAudio={isLoadingAudio}
-            reciterId={reciterId}
-            onReciterChange={setReciterId}
             scrollTranslateY={playerScrollTranslateY}
           />
         )}
+
+        <ScrollTopButton
+          showScrollTop={showScrollTop}
+          animatedScrollTopStyle={animatedScrollTopStyle}
+          hasAudioPlayer={!!(player && status)}
+          onPress={scrollToTop}
+        />
       </View>
     </View>
   );

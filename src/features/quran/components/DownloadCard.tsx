@@ -176,18 +176,6 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
         </View>
       </View>
 
-      {/* Thin Bottom Progress Bar */}
-      {(isDownloading || isDownloaded) && (
-        <View style={S.progressBarContainer}>
-          <View
-            style={[
-              S.progressBarFill,
-              { width: `${isDownloaded ? 100 : progressPercent}%` }
-            ]}
-          />
-        </View>
-      )}
-
       {/* Deletion Confirmation Modal */}
       <DeleteConfirmationModal
         visible={showDeleteModal}
@@ -263,14 +251,5 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, isDark: boole
     },
     deleteBtn: {
       padding: scale(6),
-    },
-    progressBarContainer: {
-      height: 3,
-      backgroundColor: colors.border,
-      width: "100%",
-    },
-    progressBarFill: {
-      height: "100%",
-      backgroundColor: colors.primary,
     },
   });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, type ViewStyle, LayoutChangeEvent } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, type ViewStyle, LayoutChangeEvent, Dimensions } from "react-native";
 import { Haptics } from "@/lib/haptics";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -31,6 +31,8 @@ const SPRING_CONFIG: WithSpringConfig = {
   overshootClamping: false,
 };
 
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+
 const TabSwitcher: React.FC<TabSwitcherProps> = ({
   tabs = [
     { label: "Read", value: "read" },
@@ -43,24 +45,26 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
   const { colors, fontFamily, fontSize, activeScheme, spacing } = useAppTheme();
   const isDark = activeScheme === "dark";
 
+  // Pre-calculate estimated widths to prevent 1-2s delay on mount
+  const estimatedContainerWidth = SCREEN_WIDTH - spacing.screenPadding * 2;
+  const estimatedTabWidth = (estimatedContainerWidth - scale(8)) / tabs.length;
+
   const [containerWidth, setContainerWidth] = useState(0);
   const activeIndex = Math.max(tabs.findIndex((t) => t.value === activeTab), 0);
-  const tabWidth = containerWidth > 0 ? (containerWidth - scale(8)) / tabs.length : 0;
+  const tabWidth = containerWidth > 0 ? (containerWidth - scale(8)) / tabs.length : estimatedTabWidth;
 
-  const translateX = useSharedValue(0);
+  const translateX = useSharedValue(activeIndex * estimatedTabWidth);
   const scaleAnim = useSharedValue(1);
   const isInitialized = React.useRef(false);
 
   useEffect(() => {
-    if (tabWidth > 0) {
-      const targetX = activeIndex * tabWidth;
-      if (!isInitialized.current) {
-        // Direct assignment on first layout calculation to avoid 1-2 sec spring delay on mount
-        translateX.value = targetX;
-        isInitialized.current = true;
-      } else {
-        translateX.value = withSpring(targetX, SPRING_CONFIG);
-      }
+    const targetX = activeIndex * tabWidth;
+    if (!isInitialized.current) {
+      // Direct assignment on first layout calculation to avoid spring delay on mount
+      translateX.value = targetX;
+      isInitialized.current = true;
+    } else {
+      translateX.value = withSpring(targetX, SPRING_CONFIG);
     }
   }, [activeIndex, tabWidth]);
 
@@ -124,15 +128,14 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
             style={styles.tabContainer}
             onLayout={(e: LayoutChangeEvent) => setContainerWidth(e.nativeEvent.layout.width)}
           >
-            {containerWidth > 0 && (
-              <Animated.View
-                style={[
-                  styles.activePill,
-                  { backgroundColor: pillBg },
-                  animatedPillStyle,
-                ]}
-              />
-            )}
+            {/* Render active pill immediately to prevent flashing/delay */}
+            <Animated.View
+              style={[
+                styles.activePill,
+                { backgroundColor: pillBg },
+                animatedPillStyle,
+              ]}
+            />
 
             {tabs.map((tab) => {
               const isActive = activeTab === tab.value;

@@ -1,6 +1,6 @@
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
@@ -36,7 +36,15 @@ export default function QuranScreen() {
     refetch,
   } = useQuranListSearch();
   const [refreshing, setRefreshing] = useState(false);
+  const listRef = useRef<any>(null);
   const styles = createStyles(spacing);
+
+  // Scroll to top whenever filtered results change
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollToOffset({ offset: 0, animated: false });
+    }
+  }, [filteredData]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -49,11 +57,28 @@ export default function QuranScreen() {
 
   return (
     <SafeArea>
+      {/* Fixed header — never scrolls away */}
+      <Header
+        title={t("quran.title", "The Noble Quran")}
+        subtitle={t(
+          "quran.subtitle",
+          "Read, listen and reflect upon the words of Allah",
+        )}
+      />
+      <SearchBar
+        value={inputValue}
+        onChangeText={setInputValue}
+        onClear={handleClear}
+        placeholder={t("quran.searchPlaceholder", "Search Surah...")}
+      />
       <FlashList
+        ref={listRef}
         data={filteredData}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <QuranCard item={item} />}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         contentContainerStyle={styles.listContent}
         refreshControl={
           <RefreshControl
@@ -65,19 +90,6 @@ export default function QuranScreen() {
         }
         ListHeaderComponent={
           <>
-            <Header
-              title={t("quran.title", "The Noble Quran")}
-              subtitle={t(
-                "quran.subtitle",
-                "Read, listen and reflect upon the words of Allah",
-              )}
-            />
-            <SearchBar
-              value={inputValue}
-              onChangeText={setInputValue}
-              onClear={handleClear}
-              placeholder={t("quran.searchPlaceholder", "Search Surah...")}
-            />
             {lastRead && (
               <ContinueReadingCard
                 surahName={lastRead.surahName}

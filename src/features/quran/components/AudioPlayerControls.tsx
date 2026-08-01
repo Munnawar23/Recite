@@ -1,25 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator, Image } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, type SharedValue } from "react-native-reanimated";
+import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import Animated, { useAnimatedStyle, type SharedValue } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { scale, verticalScale } from "react-native-size-matters";
 import Slider from "@react-native-community/slider";
 import type { AudioPlayer } from "expo-audio";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { RECITER_OPTIONS } from "../hooks/useQuranAudio";
 import { Haptics } from "@/lib/haptics";
-import CommonModal, { DropdownItem } from "@/components/ui/CommonModal";
-import { MessageModal } from "@/components/common/MessageModal";
-import { useTranslation } from "react-i18next";
 
 interface AudioPlayerControlsProps {
   player: AudioPlayer;
   status: any;
   isLoadingAudio: boolean;
-  reciterId?: number;
-  onReciterChange?: (id: number) => void;
   scrollTranslateY?: SharedValue<number>;
 }
 
@@ -27,24 +20,11 @@ export default function AudioPlayerControls({
   player,
   status,
   isLoadingAudio,
-  reciterId = 7,
-  onReciterChange,
   scrollTranslateY,
 }: AudioPlayerControlsProps) {
   const { colors, fontFamily, fontSize } = useAppTheme();
-  const { isOffline } = useNetworkStatus();
-  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const S = createStyles(colors, fontFamily, fontSize, insets.bottom);
-
-  const [showReciterModal, setShowReciterModal] = useState(false);
-  const [showOfflineModal, setShowOfflineModal] = useState(false);
-  const activeReciter = RECITER_OPTIONS.find((r) => r.id === reciterId);
-
-  const reciterModalData = RECITER_OPTIONS.map((r) => ({
-    label: r.label,
-    value: String(r.id),
-  }));
 
   const formatTime = (seconds: number) => {
     if (isNaN(seconds) || seconds === null || seconds === undefined) return "0:00";
@@ -65,8 +45,8 @@ export default function AudioPlayerControls({
   // Reanimated sliding animation logic
   const animatedStyle = useAnimatedStyle(() => {
     const scrollOffset = scrollTranslateY ? scrollTranslateY.value : 0;
-    // Keep player locked visible on screen if audio is playing or reciter modal is open
-    const effectiveOffset = (status.playing || showReciterModal || showOfflineModal) ? 0 : scrollOffset;
+    // Keep player locked visible on screen if audio is playing
+    const effectiveOffset = status.playing ? 0 : scrollOffset;
     return {
       transform: [{ translateY: effectiveOffset }],
     };
@@ -129,51 +109,10 @@ export default function AudioPlayerControls({
 
       {/* Control Buttons */}
       <View style={S.controlsRow}>
-        {/* Reciter Avatar Button (Left Side) */}
-        <TouchableOpacity
-          onPress={() => {
-            Haptics.medium();
-            if (isOffline) {
-              setShowOfflineModal(true);
-            } else {
-              setShowReciterModal(true);
-            }
-          }}
-          activeOpacity={0.7}
-        >
-          {activeReciter?.avatar ? (
-            <Image source={activeReciter.avatar} style={S.reciterAvatar} />
-          ) : (
-            <View style={S.reciterAvatarFallback}>
-              <Ionicons name="person" size={scale(18)} color={colors.primary} />
-            </View>
-          )}
+        {/* Speed Selector (Far Left) */}
+        <TouchableOpacity onPress={cycleSpeed} style={S.speedButton}>
+          <Text style={S.speedButtonText}>{playbackSpeed === 1 ? "1.0" : playbackSpeed}x</Text>
         </TouchableOpacity>
-
-        {/* Offline MessageModal */}
-        <MessageModal
-          visible={showOfflineModal}
-          onClose={() => setShowOfflineModal(false)}
-          title={t("common.offlineAudioPreviewTitle", "Offline Mode")}
-          message={t(
-            "common.offlineReciterChangeMessage",
-            "Changing reciters requires an internet connection. Connect to the internet to switch reciters."
-          )}
-          icon="wifi-outline"
-        />
-
-        {/* Reciter CommonModal Selection */}
-        <CommonModal
-          data={reciterModalData}
-          value={String(reciterId)}
-          onChange={(item: DropdownItem) => {
-            onReciterChange?.(Number(item.value));
-            setShowReciterModal(false);
-          }}
-          placeholder="Select Reciter"
-          visible={showReciterModal}
-          onClose={() => setShowReciterModal(false)}
-        />
 
         {/* Skip backward 10s */}
         <TouchableOpacity
@@ -183,7 +122,7 @@ export default function AudioPlayerControls({
           <Ionicons name="play-back-outline" size={scale(22)} color={colors.text} />
         </TouchableOpacity>
 
-        {/* Play/Pause Main Button */}
+        {/* Play/Pause Main Button (Exact Center) */}
         <TouchableOpacity
           onPress={handlePlayPause}
           disabled={isLoadingAudio}
@@ -209,10 +148,8 @@ export default function AudioPlayerControls({
           <Ionicons name="play-forward-outline" size={scale(22)} color={colors.text} />
         </TouchableOpacity>
 
-        {/* Speed Selector (Far Right) */}
-        <TouchableOpacity onPress={cycleSpeed} style={S.speedButton}>
-          <Text style={S.speedButtonText}>{playbackSpeed === 1 ? "1.0" : playbackSpeed}x</Text>
-        </TouchableOpacity>
+        {/* Spacer to balance speed button on opposite side */}
+        <View style={S.spacerButton} />
       </View>
     </Animated.View>
   );
@@ -259,24 +196,7 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, bottomInset: 
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      paddingHorizontal: scale(14),
-    },
-    reciterAvatar: {
-      width: scale(36),
-      height: scale(36),
-      borderRadius: scale(18),
-      borderWidth: 1,
-      borderColor: colors.primary + "40",
-    },
-    reciterAvatarFallback: {
-      width: scale(36),
-      height: scale(36),
-      borderRadius: scale(18),
-      backgroundColor: colors.primary + "15",
-      alignItems: "center",
-      justifyContent: "center",
-      borderWidth: 1,
-      borderColor: colors.primary + "40",
+      paddingHorizontal: scale(16),
     },
     skipButton: {
       width: scale(36),
@@ -321,3 +241,4 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, bottomInset: 
       elevation: 3,
     },
   });
+

@@ -1,7 +1,8 @@
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useRouter } from "expo-router";
+import Svg, { Path } from "react-native-svg";
 
 import { useAppFonts } from "@/hooks/useAppFonts";
 import { useAppTheme } from "@/hooks/useAppTheme";
@@ -60,8 +61,23 @@ export default function QuranCard({ item, onPress }: QuranCardProps) {
         />
 
         <View style={S.leftSection}>
-          {/* Number Badge */}
+          {/* 8-Pointed Islamic Star Number Badge */}
           <View style={S.numberBadge}>
+            <Svg
+              width={scale(36)}
+              height={scale(36)}
+              viewBox="0 0 36 36"
+              style={StyleSheet.absoluteFill}
+            >
+              <Path
+                d="M 18 3 L 22.02 8.30 L 28.61 7.39 L 27.70 13.98 L 33 18 L 27.70 22.02 L 28.61 28.61 L 22.02 27.70 L 18 33 L 13.98 27.70 L 7.39 28.61 L 8.30 22.02 L 3 18 L 8.30 13.98 L 7.39 7.39 L 13.98 8.30 Z"
+                fill={colors.primary + "15"}
+                stroke={colors.primary + "90"}
+                strokeWidth="1"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+              />
+            </Svg>
             <Text style={S.numberText}>{item.id}</Text>
           </View>
 
@@ -138,20 +154,18 @@ const createStyles = (
       marginRight: spacing.xs,
     },
     numberBadge: {
-      width: scale(30),
-      height: scale(30),
-      borderRadius: scale(15),
-      backgroundColor: colors.primary + "12",
+      width: scale(36),
+      height: scale(36),
       alignItems: "center",
       justifyContent: "center",
-      borderWidth: 1,
-      borderColor: colors.primary + "22",
       flexShrink: 0,
+      position: "relative",
     },
     numberText: {
       color: colors.primary,
       fontFamily: fontFamily.title,
-      fontSize: fontSize.body,
+      fontSize: fontSize.caption * 1.1,
+      fontWeight: "700",
     },
     infoContainer: {
       flex: 1,

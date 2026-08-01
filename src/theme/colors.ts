@@ -8,6 +8,8 @@ export const lightColors = {
   border: "#E3D5C1", // Soft border color matching the beige base
   gradient: ["#4E9B6F", "#3A7D56", "#2B5E40"] as [string, string, string],
   cardGradient: ["#3F7A5C", "#2D5A43"] as [string, string],
+  hijriCardGradient: ["#059669", "#065F46"] as [string, string],
+  hijriCardAccent: "#FFD98E",
   splashGradient: ["#2B6143", "#1F4831", "#143121"] as [string, string, string],
   splashText: "#FFFFFF",
   splashSubtext: "rgba(255, 255, 255, 0.85)",
@@ -23,6 +25,8 @@ export const darkColors = {
   border: "#1E2B2C", // Dark subtle border
   gradient: ["#1F2E2F", "#192425", "#141C1D"] as [string, string, string],
   cardGradient: ["#1F2E2F", "#162021"] as [string, string],
+  hijriCardGradient: ["#134E4A", "#042F2E"] as [string, string],
+  hijriCardAccent: "#FFD98E",
   splashGradient: ["#245239", "#193B28", "#10281A"] as [string, string, string],
   splashText: "#FFFFFF",
   splashSubtext: "rgba(255, 255, 255, 0.85)",

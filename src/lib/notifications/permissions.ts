@@ -20,14 +20,17 @@ export async function requestNotificationPermissions(): Promise<boolean> {
   }
 
   if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("recite_reminder_channel_v2", {
+    await Notifications.setNotificationChannelAsync("recite_reminder_channel_v3", {
       name: "Daily Reminder",
       importance: Notifications.AndroidImportance.MAX,
+      sound: "notification", // refers to assets/sfx/notification.mp3 (no extension)
       vibrationPattern: [0, 250, 250, 250],
       lightColor: "#FF236C",
       enableVibrate: true,
       audioAttributes: {
-        usage: Notifications.AndroidAudioUsage.NOTIFICATION_EVENT,
+        // ALARM usage tells Android to play at the full alarm/notification volume
+        // ignoring silent/DND modes for this channel
+        usage: Notifications.AndroidAudioUsage.ALARM,
         contentType: Notifications.AndroidAudioContentType.SONIFICATION,
       },
       lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,

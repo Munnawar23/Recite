@@ -2,7 +2,7 @@ export const lightColors = {
   background: "#F2E9DD", // Soft warm beige
   card: "#FAF4EC", // Lighter warm beige for cards
   text: "#2C1F0E", // Soft dark warm brown
-  subtext: "#6B5A47", // Medium warm brown for clear secondary text
+  subtext: "#423525", // Deep solid warm brown for high-contrast secondary text
   primary: "#3F7A5C", // Slightly lighter, elegant green matching warm background
   accent: "#B8823D", // Rich warm gold
   border: "#E3D5C1", // Soft border color matching the beige base
@@ -21,7 +21,7 @@ export const darkColors = {
   background: "#121415", // Sleek dark charcoal background
   card: "#192223", // Dark slate green card container
   text: "#FFFFFF", // Crisp white primary text
-  subtext: "#8C9BA5", // Muted slate subtext
+  subtext: "#C5D3DC", // Crisp high-contrast light slate (solid, easy to read)
   primary: "#D4A86A", // Warm gold primary action/icon color
   accent: "#D4A86A", // Rich warm gold accent
   border: "#1E2B2C", // Dark subtle border

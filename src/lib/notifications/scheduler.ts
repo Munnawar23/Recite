@@ -33,12 +33,13 @@ export async function scheduleDailyNightlyNotification(): Promise<string | null>
       content: {
         title: NIGHTLY_REMINDER_CONTENT.title,
         body: NIGHTLY_REMINDER_CONTENT.body,
+        sound: "notification.mp3", // iOS uses this; Android uses the channel sound
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DAILY,
         hour: 22,
         minute: 0,
-        channelId: "recite_reminder_channel_v2",
+        channelId: "recite_reminder_channel_v3",
       },
     });
 
@@ -75,11 +76,12 @@ export async function triggerInstantTestNotification(): Promise<void> {
       content: {
         title: NIGHTLY_REMINDER_CONTENT.title,
         body: NIGHTLY_REMINDER_CONTENT.body,
+        sound: "notification.mp3", // iOS uses this; Android uses the channel sound
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
         seconds: 1,
-        channelId: "recite_reminder_channel_v2",
+        channelId: "recite_reminder_channel_v3",
       },
     });
   } catch (error) {

@@ -162,6 +162,15 @@ export default function QuranDetailScreen() {
       playerScrollTranslateY.value = withTiming(0, { duration: PLAYER_SHOW_ANIMATION_MS });
       isSelectingVerse.value = true;
 
+      const index = verses.findIndex((v) => v.verseKey === verseKey);
+      if (index !== -1) {
+        listRef.current?.scrollToIndex({
+          index,
+          animated: true,
+          viewPosition: 0.5,
+        });
+      }
+
       const matchedTimestamp = timestamps.find(
         (ts) => ts.verse_key === verseKey,
       );
@@ -174,7 +183,7 @@ export default function QuranDetailScreen() {
       }, RESET_SELECTION_DELAY_MS);
       return () => clearTimeout(timer);
     },
-    [timestamps, player, playerScrollTranslateY, isSelectingVerse],
+    [verses, listRef, timestamps, player, playerScrollTranslateY, isSelectingVerse],
   );
 
   const renderVerse = useCallback(

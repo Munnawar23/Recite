@@ -1,4 +1,3 @@
-import Background from "@/components/layout/Background";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
 import { useAppTheme } from "@/hooks/useAppTheme";
@@ -74,9 +73,11 @@ export default function RootLayout() {
                 buster: "v2",
                 dehydrateOptions: {
                   shouldDehydrateQuery: (query) => {
-                    // Do not persist huge chapter verse array payloads into SQLite AsyncStorage
                     const keyStr = JSON.stringify(query.queryKey);
-                    if (keyStr.includes("chapters") || keyStr.includes("verses")) {
+                    if (
+                      keyStr.includes("chapters") ||
+                      keyStr.includes("verses")
+                    ) {
                       return false;
                     }
                     return query.state.status === "success";

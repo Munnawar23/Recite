@@ -1,6 +1,5 @@
-import React from "react";
-import { StyleSheet, View, Text, ScrollView } from "react-native";
 import { useTranslation } from "react-i18next";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { verticalScale } from "react-native-size-matters";
 
 import Background from "@/components/layout/Background";
@@ -10,7 +9,7 @@ import TabSwitcher from "@/components/ui/TabSwitcher";
 import { ThemePhonePicker } from "@/components/ui/ThemePhonePicker";
 
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useFontStore, FontSizeScale } from "@/store/fontStore";
+import { FontSizeScale, useFontStore } from "@/store/fontStore";
 
 export default function DisplayScreen() {
   const { t } = useTranslation();
@@ -25,7 +24,10 @@ export default function DisplayScreen() {
 
   const fontSizeTabs = [
     { label: t("settings.display.fontSize.small", "Small"), value: "small" },
-    { label: t("settings.display.fontSize.default", "Default"), value: "default" },
+    {
+      label: t("settings.display.fontSize.default", "Default"),
+      value: "default",
+    },
     { label: t("settings.display.fontSize.large", "Large"), value: "large" },
   ];
 
@@ -37,7 +39,14 @@ export default function DisplayScreen() {
   if (quranFontSizeScale === "small") quranMultiplier = 0.85;
   else if (quranFontSizeScale === "large") quranMultiplier = 1.25;
 
-  const S = createStyles(colors, fontFamily, fontSize, spacing, textMultiplier, quranMultiplier);
+  const S = createStyles(
+    colors,
+    fontFamily,
+    fontSize,
+    spacing,
+    textMultiplier,
+    quranMultiplier,
+  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -47,9 +56,16 @@ export default function DisplayScreen() {
         subtitle={t("settings.display.subtitle", "Theme, fonts & text sizes")}
       />
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={S.scrollContent}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={S.scrollContent}
+      >
         {/* 1. Theme Option */}
-        <SectionTitle label={t("settings.display.appTheme", "App Theme")} icon="color-palette-outline" tightSpacing />
+        <SectionTitle
+          label={t("settings.display.appTheme", "App Theme")}
+          icon="color-palette-outline"
+          tightSpacing
+        />
 
         {/* Phone Theme Cards */}
         <ThemePhonePicker />
@@ -57,7 +73,11 @@ export default function DisplayScreen() {
         <View style={{ height: verticalScale(14) }} />
 
         {/* 2. App Font Size */}
-        <SectionTitle label={t("settings.display.appFontSize", "App Font Size")} icon="text-outline" tightSpacing />
+        <SectionTitle
+          label={t("settings.display.appFontSize", "App Font Size")}
+          icon="text-outline"
+          tightSpacing
+        />
         <TabSwitcher
           tabs={fontSizeTabs}
           activeTab={fontSizeScale}
@@ -69,7 +89,11 @@ export default function DisplayScreen() {
         <View style={{ height: verticalScale(8) }} />
 
         {/* 3. Quran Font Size */}
-        <SectionTitle label={t("settings.display.quranFontSize", "Quran Arabic Font Size")} icon="book-outline" tightSpacing />
+        <SectionTitle
+          label={t("settings.display.quranFontSize", "Quran Arabic Font Size")}
+          icon="book-outline"
+          tightSpacing
+        />
         <TabSwitcher
           tabs={fontSizeTabs}
           activeTab={quranFontSizeScale}
@@ -80,12 +104,20 @@ export default function DisplayScreen() {
 
         {/* Clean Live Preview Box */}
         <View style={S.previewCard}>
-          <Text style={S.previewHeader}>{t("settings.display.livePreview", "Live Preview")}</Text>
+          <Text style={S.previewHeader}>
+            {t("settings.display.livePreview", "Live Preview")}
+          </Text>
           <Text style={S.previewTranslation}>
-            {t("settings.display.sampleTranslation", "In the name of Allah, the Most Gracious, the Most Merciful")}
+            {t(
+              "settings.display.sampleTranslation",
+              "In the name of Allah, the Most Gracious, the Most Merciful",
+            )}
           </Text>
           <Text style={S.previewArabic}>
-            {t("settings.display.sampleArabic", "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ")}
+            {t(
+              "settings.display.sampleArabic",
+              "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+            )}
           </Text>
         </View>
 
@@ -101,7 +133,7 @@ const createStyles = (
   fontSize: any,
   spacing: any,
   textMultiplier: number = 1,
-  quranMultiplier: number = 1
+  quranMultiplier: number = 1,
 ) =>
   StyleSheet.create({
     scrollContent: {

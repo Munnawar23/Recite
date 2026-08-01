@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import { useDownloadsStore } from "@/store/downloadsStore";
+import { useDownloadsStore, getDownloadKey } from "@/store/downloadsStore";
+import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { scale, verticalScale } from "react-native-size-matters";
 import { Haptics } from "@/lib/haptics";
@@ -68,21 +69,21 @@ const AppStoreProgressControl = React.memo(function AppStoreProgressControl({
   );
 });
 
-import { useQuranSettingsStore } from "@/store/quranSettingsStore";
-import { getDownloadKey } from "@/store/downloadsStore";
-
 export default function DownloadCard({ chapterId, reciterName, selectedTransId }: DownloadCardProps) {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
-  const { reciterId } = useQuranSettingsStore();
+  const reciterId = useQuranSettingsStore((state) => state.reciterId);
   const activeReciterId = reciterId || 7;
 
   const downloadKey = getDownloadKey(chapterId, activeReciterId);
   const getDownloadedChapter = useDownloadsStore((state) => state.getDownloadedChapter);
-  const downloadedRecord = getDownloadedChapter(chapterId, activeReciterId);
+  const downloadedRecord = useMemo(
+    () => getDownloadedChapter(chapterId, activeReciterId),
+    [getDownloadedChapter, chapterId, activeReciterId],
+  );
   const isDownloaded = !!downloadedRecord;
-  const isDownloading = useDownloadsStore((state) => state.downloadingIds.includes(downloadKey));
+  const isDownloading = useDownloadsStore((state) => state.downloadingIds.has(downloadKey));
   const progData = useDownloadsStore((state) => state.downloadProgress[downloadKey]);
   const downloadChapter = useDownloadsStore((state) => state.downloadChapter);
   const cancelDownload = useDownloadsStore((state) => state.cancelDownload);
@@ -90,37 +91,38 @@ export default function DownloadCard({ chapterId, reciterName, selectedTransId }
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const S = createStyles(colors, fontFamily, fontSize, isDark);
+  const S = useMemo(
+    () => createStyles(colors, fontFamily, fontSize, isDark),
+    [colors, fontFamily, fontSize, isDark],
+  );
 
-  const handleDownloadPress = () => {
+  const handleDownloadPress = useCallback(() => {
     Haptics.medium();
     const transId = selectedTransId === "0" ? 20 : parseInt(selectedTransId, 10);
     downloadChapter(chapterId, transId, activeReciterId, reciterName);
-  };
+  }, [chapterId, selectedTransId, activeReciterId, reciterName, downloadChapter]);
 
-  const handleDeletePress = () => {
+  const handleDeletePress = useCallback(() => {
     setShowDeleteModal(true);
-  };
+  }, []);
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = useCallback(() => {
     deleteChapter(chapterId, downloadedRecord?.reciterId || activeReciterId);
     setShowDeleteModal(false);
-  };
+  }, [deleteChapter, chapterId, downloadedRecord?.reciterId, activeReciterId]);
 
   const handleCancelPress = useCallback(() => {
     Haptics.medium();
     cancelDownload(chapterId, activeReciterId);
   }, [chapterId, activeReciterId, cancelDownload]);
 
-  // State configurations
-  let squircleBg = colors.primary + "20";
-  let squircleIconColor = colors.primary;
-
   const fraction = progData?.fraction ?? 0;
   const progressPercent = Math.round(fraction * 100);
   const writtenMB = progData?.writtenBytes ? (progData.writtenBytes / (1024 * 1024)).toFixed(1) : "0.0";
   const totalMB = progData?.totalBytes ? (progData.totalBytes / (1024 * 1024)).toFixed(1) : "0.0";
 
+  let squircleBg = colors.primary + "20";
+  let squircleIconColor = colors.primary;
   let title = t("quran.downloadCard.download", "Download");
 
   if (isDownloading) {

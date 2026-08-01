@@ -1,18 +1,17 @@
+import { RECITERS_IMAGES } from "@/constants/assets";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { getChapterAudio } from "@/lib/api/quran-data";
 import { useDownloadsStore } from "@/store/downloadsStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
-import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { useQuery } from "@tanstack/react-query";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import { useEffect, useMemo } from "react";
 
 export interface AudioTimestamp {
   verse_key: string;
-  timestamp_from: number; // in ms
+  timestamp_from: number;
   timestamp_to: number; // in ms
 }
-
-import { RECITERS_IMAGES } from "@/constants/assets";
 
 export const RECITER_OPTIONS = [
   {
@@ -59,7 +58,11 @@ export function useQuranAudio(chapterId: number, enabled: boolean = true) {
 
   // Auto sync setting if offline and playing a downloaded reciter
   useEffect(() => {
-    if (isOffline && localChapter?.reciterId && localChapter.reciterId !== rawReciterId) {
+    if (
+      isOffline &&
+      localChapter?.reciterId &&
+      localChapter.reciterId !== rawReciterId
+    ) {
       setReciterIdInStore(localChapter.reciterId);
     }
   }, [isOffline, localChapter, rawReciterId, setReciterIdInStore]);
@@ -128,7 +131,7 @@ export function useQuranAudio(chapterId: number, enabled: boolean = true) {
     activeVerseKey: enabled ? activeVerseKey : null,
     isLoadingAudio: enabled ? isLoadingAudio : false,
     reciterId,
-    setReciterId: (id: number) => setReciterIdInStore(id),
+    setReciterId: setReciterIdInStore,
     timestamps: enabled ? timestamps : [],
     audioSize: enabled ? audioSize : null,
   };

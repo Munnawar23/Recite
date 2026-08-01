@@ -39,7 +39,7 @@ export default function ContinueReadingCard({
         activeOpacity={0.85}
       >
         <LinearGradient
-          colors={colors.gradient}
+          colors={colors.continueReadingCardGradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={S.gradient}

@@ -8,7 +8,7 @@ import ur from './translations/ur.json';
 import hi from './translations/hi.json';
 import indonesia from './translations/id.json';
 import bn from './translations/bn.json';
-import { appStorage } from '@/lib/storage/appStorage';
+import { appStorage, STORAGE_KEYS } from '@/lib/storage/appStorage';
 
 export const resources = {
   en: { translation: en },
@@ -39,7 +39,7 @@ const languageDetector = {
   type: 'languageDetector' as const,
   async: true,
   detect: async (callback: (lng: string) => void) => {
-    const savedLanguage = await appStorage.getLanguage();
+    const savedLanguage = await appStorage.getItem<string>(STORAGE_KEYS.LANGUAGE);
     if (savedLanguage && isSupportedLanguage(savedLanguage)) {
       return callback(savedLanguage);
     }
@@ -51,7 +51,7 @@ const languageDetector = {
   },
   init: () => {},
   cacheUserLanguage: async (lng: SupportedLanguageCode) => {
-    await appStorage.setLanguage(lng);
+    await appStorage.setItem(STORAGE_KEYS.LANGUAGE, lng);
   },
 };
 

@@ -36,6 +36,7 @@ export default function HomeScreen() {
 
     try {
       await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["user-location"] }),
         queryClient.invalidateQueries({ queryKey: ["hijri-date"] }),
         queryClient.invalidateQueries({ queryKey: ["prayer-times"] }),
         queryClient.invalidateQueries({ queryKey: ["daily-verse"] }),

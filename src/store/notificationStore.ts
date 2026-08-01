@@ -1,60 +1,63 @@
-import {
-  cancelDailyNightlyNotification,
-  requestNotificationPermissions,
-  scheduleDailyNightlyNotification,
-} from "@/lib/notifications";
 import { STORAGE_KEYS, zustandStorage } from "@/lib/storage/appStorage";
+import { toggleNotificationService } from "@/services/notificationService";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface NotificationStoreState {
-  isNightlyEnabled: boolean;
+  isNotificationsEnabled: boolean;
   notificationId: string | null;
-  toggleNightlyNotification: (enabled?: boolean) => Promise<boolean>;
+  isLoading: boolean;
+  /**
+   * Toggles or sets daily reminder notifications.
+   * Handles permission checks, scheduling, and canceling existing alerts.
+   * Returns a promise resolving to boolean success.
+   */
+  toggleNotifications: (enabled?: boolean) => Promise<boolean>;
 }
 
 export const useNotificationStore = create<NotificationStoreState>()(
   persist(
     (set, get) => ({
-      isNightlyEnabled: false,
+      isNotificationsEnabled: false,
       notificationId: null,
+      isLoading: false,
 
-      toggleNightlyNotification: async (enabled?: boolean) => {
-        const currentState = get().isNightlyEnabled;
-        const targetEnabled = enabled ?? !currentState;
+      toggleNotifications: async (enabled?: boolean) => {
+        const state = get();
 
-        if (targetEnabled) {
-          const granted = await requestNotificationPermissions();
-          if (!granted) {
-            set({ isNightlyEnabled: false, notificationId: null });
-            return false;
-          }
+        // Prevent duplicate concurrent toggle calls
+        if (state.isLoading) return false;
 
-          if (get().notificationId) {
-            await cancelDailyNightlyNotification(get().notificationId);
-          }
+        set({ isLoading: true });
 
-          const id = await scheduleDailyNightlyNotification();
-          if (id) {
-            set({ isNightlyEnabled: true, notificationId: id });
-            return true;
-          } else {
-            set({ isNightlyEnabled: false, notificationId: null });
-            return false;
-          }
-        } else {
-          if (get().notificationId) {
-            await cancelDailyNightlyNotification(get().notificationId);
-          }
-          set({ isNightlyEnabled: false, notificationId: null });
-          return true;
+        try {
+          const result = await toggleNotificationService(
+            state.isNotificationsEnabled,
+            state.notificationId,
+            enabled,
+          );
+          set({
+            isNotificationsEnabled: result.enabled,
+            notificationId: result.notificationId,
+          });
+
+          return result.success;
+        } catch (error) {
+          console.error("[notificationStore] Unexpected toggle error:", error);
+          set({ isNotificationsEnabled: false, notificationId: null });
+          return false;
+        } finally {
+          set({ isLoading: false });
         }
       },
     }),
     {
       name: STORAGE_KEYS.NOTIFICATION,
       storage: createJSONStorage(() => zustandStorage),
+      partialize: (state) => ({
+        isNotificationsEnabled: state.isNotificationsEnabled,
+        notificationId: state.notificationId,
+      }),
     },
   ),
 );
-

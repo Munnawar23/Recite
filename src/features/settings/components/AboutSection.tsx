@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { scale, verticalScale } from "react-native-size-matters";
-import Constants from "expo-constants";
 import { useTranslation } from "react-i18next";
 import SectionTitle from "@/components/ui/SectionTitle";
 import SettingsItemCard from "@/components/ui/SettingsItemCard";
@@ -18,7 +17,10 @@ function AboutUsContent() {
   return (
     <View style={S.container}>
       <Text style={S.introText}>
-        {t("settings.about.aboutUsContent", "Recite is a non-profit, 100% free community project dedicated to making the Holy Quran accessible to everyone worldwide with zero ads or subscriptions.")}
+        {t(
+          "settings.about.aboutUsContent",
+          "Recite is a non-profit, 100% free community project dedicated to making the Holy Quran accessible to everyone worldwide with zero ads or subscriptions.",
+        )}
       </Text>
 
       <View style={S.featureRow}>
@@ -26,8 +28,15 @@ function AboutUsContent() {
           <Ionicons name="heart" size={scale(18)} color={colors.primary} />
         </View>
         <View style={S.textWrap}>
-          <Text style={S.featureTitle}>{t("settings.about.featureFreeTitle", "100% Free & Ad-Free")}</Text>
-          <Text style={S.featureDesc}>{t("settings.about.featureFreeDesc", "No paywalls, no tracking, and no commercial interruptions.")}</Text>
+          <Text style={S.featureTitle}>
+            {t("settings.about.featureFreeTitle", "100% Free & Ad-Free")}
+          </Text>
+          <Text style={S.featureDesc}>
+            {t(
+              "settings.about.featureFreeDesc",
+              "No paywalls, no tracking, and no commercial interruptions.",
+            )}
+          </Text>
         </View>
       </View>
 
@@ -36,8 +45,15 @@ function AboutUsContent() {
           <Ionicons name="headset" size={scale(18)} color={colors.primary} />
         </View>
         <View style={S.textWrap}>
-          <Text style={S.featureTitle}>{t("settings.about.featureRecitersTitle", "World-Renowned Reciters")}</Text>
-          <Text style={S.featureDesc}>{t("settings.about.featureRecitersDesc", "Listen to high-quality audio recitations from top Qaris.")}</Text>
+          <Text style={S.featureTitle}>
+            {t("settings.about.featureRecitersTitle", "World-Renowned Reciters")}
+          </Text>
+          <Text style={S.featureDesc}>
+            {t(
+              "settings.about.featureRecitersDesc",
+              "Listen to high-quality audio recitations from top Qaris.",
+            )}
+          </Text>
         </View>
       </View>
 
@@ -46,41 +62,100 @@ function AboutUsContent() {
           <Ionicons name="globe" size={scale(18)} color={colors.primary} />
         </View>
         <View style={S.textWrap}>
-          <Text style={S.featureTitle}>{t("settings.about.featureLanguagesTitle", "Multiple Languages")}</Text>
-          <Text style={S.featureDesc}>{t("settings.about.featureLanguagesDesc", "Side-by-side verse translations across global languages.")}</Text>
+          <Text style={S.featureTitle}>
+            {t("settings.about.featureLanguagesTitle", "Multiple Languages")}
+          </Text>
+          <Text style={S.featureDesc}>
+            {t(
+              "settings.about.featureLanguagesDesc",
+              "Side-by-side verse translations across global languages.",
+            )}
+          </Text>
         </View>
       </View>
     </View>
   );
 }
 
-function AboutAppContent() {
+function AboutTheAppContent() {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize } = useAppTheme();
-  const appName = Constants.expoConfig?.name || "Recite";
-  const appVersion = Constants.expoConfig?.version || "1.0.0";
   const S = createStyles(colors, fontFamily, fontSize);
 
   return (
     <View style={S.container}>
-      <View style={S.heroHeader}>
-        <View style={S.heroBadge}>
-          <Ionicons name="book" size={scale(28)} color={colors.primary} />
+      <Text style={S.introText}>
+        {t(
+          "settings.about.aboutAppIntro",
+          "Recite is built with open-source technologies to deliver a fast, modern, and beautiful Quran experience for everyone.",
+        )}
+      </Text>
+
+      <View style={S.featureRow}>
+        <View style={S.iconBadge}>
+          <Ionicons name="gift-outline" size={scale(18)} color={colors.primary} />
         </View>
-        <Text style={S.appName}>{appName}</Text>
-        <Text style={S.appTagline}>{t("settings.about.tagline", "Read, Listen & Reflect upon the Quran")}</Text>
-        <View style={S.versionBadge}>
-          <Text style={S.versionText}>{t("settings.about.appVersionSubtitle", "Version {{version}}", { version: appVersion })}</Text>
+        <View style={S.textWrap}>
+          <Text style={S.featureTitle}>
+            {t("settings.about.appFeatureFreeTitle", "100% Free & No Ads")}
+          </Text>
+          <Text style={S.featureDesc}>
+            {t(
+              "settings.about.appFeatureFreeDesc",
+              "Completely free forever without any ads, popups, or monetization.",
+            )}
+          </Text>
         </View>
       </View>
 
       <View style={S.featureRow}>
         <View style={S.iconBadge}>
-          <Ionicons name="information-circle" size={scale(18)} color={colors.primary} />
+          <Ionicons name="code-slash-outline" size={scale(18)} color={colors.primary} />
         </View>
         <View style={S.textWrap}>
-          <Text style={S.featureTitle}>{t("settings.about.appVersionTitle", "App Version")}</Text>
-          <Text style={S.featureDesc}>{`${appName} v${appVersion}`}</Text>
+          <Text style={S.featureTitle}>
+            {t("settings.about.appFeatureOpenSourceTitle", "Open Source")}
+          </Text>
+          <Text style={S.featureDesc}>
+            {t(
+              "settings.about.appFeatureOpenSourceDesc",
+              "Transparent development with community contributions welcomed.",
+            )}
+          </Text>
+        </View>
+      </View>
+
+      <View style={S.featureRow}>
+        <View style={S.iconBadge}>
+          <Ionicons name="cloud-download-outline" size={scale(18)} color={colors.primary} />
+        </View>
+        <View style={S.textWrap}>
+          <Text style={S.featureTitle}>
+            {t("settings.about.appFeatureApiTitle", "Quran.com API")}
+          </Text>
+          <Text style={S.featureDesc}>
+            {t(
+              "settings.about.appFeatureApiDesc",
+              "Powered by official API endpoints from Quran.com for verified authentic verse text & audio.",
+            )}
+          </Text>
+        </View>
+      </View>
+
+      <View style={S.featureRow}>
+        <View style={S.iconBadge}>
+          <Ionicons name="hardware-chip-outline" size={scale(18)} color={colors.primary} />
+        </View>
+        <View style={S.textWrap}>
+          <Text style={S.featureTitle}>
+            {t("settings.about.appFeatureExpoTitle", "Built with Expo & React Native")}
+          </Text>
+          <Text style={S.featureDesc}>
+            {t(
+              "settings.about.appFeatureExpoDesc",
+              "Engineered using Expo and React Native for optimal cross-platform performance.",
+            )}
+          </Text>
         </View>
       </View>
     </View>
@@ -100,8 +175,6 @@ export default function AboutSection() {
     content: null,
   });
 
-  const appVersion = Constants.expoConfig?.version || "1.0.0";
-
   const handleOpenAboutUs = () => {
     Haptics.medium();
     setInfoModalConfig({
@@ -112,13 +185,13 @@ export default function AboutSection() {
     });
   };
 
-  const handleOpenAboutApp = () => {
+  const handleOpenAboutTheApp = () => {
     Haptics.medium();
     setInfoModalConfig({
       visible: true,
-      title: t("settings.about.appVersionTitle", "App Version"),
+      title: t("settings.about.aboutTheAppTitle", "About the App"),
       icon: "information-circle-outline",
-      content: <AboutAppContent />,
+      content: <AboutTheAppContent />,
     });
   };
 
@@ -133,9 +206,9 @@ export default function AboutSection() {
       />
       <SettingsItemCard
         icon="information-circle-outline"
-        title={t("settings.about.appVersionTitle", "App Version")}
-        subtitle={t("settings.about.appVersionSubtitle", "Version {{version}}", { version: appVersion })}
-        onPress={handleOpenAboutApp}
+        title={t("settings.about.aboutTheAppTitle", "About the App")}
+        subtitle={t("settings.about.aboutTheAppSubtitle", "100% free, no ads, open source & Expo")}
+        onPress={handleOpenAboutTheApp}
       />
 
       <CommonModal
@@ -162,43 +235,6 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any) =>
       color: colors.text,
       lineHeight: fontSize.bodyLg * 1.45,
       marginBottom: verticalScale(6),
-    },
-    heroHeader: {
-      alignItems: "center",
-      marginBottom: verticalScale(8),
-    },
-    heroBadge: {
-      width: scale(56),
-      height: scale(56),
-      borderRadius: scale(16),
-      backgroundColor: colors.primary + "18",
-      alignItems: "center",
-      justifyContent: "center",
-      marginBottom: verticalScale(8),
-    },
-    appName: {
-      fontFamily: fontFamily.heading,
-      fontSize: fontSize.splashTitle,
-      color: colors.primary,
-    },
-    appTagline: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.body,
-      color: colors.subtext,
-      marginTop: verticalScale(4),
-      textAlign: "center",
-    },
-    versionBadge: {
-      backgroundColor: colors.primary + "18",
-      paddingHorizontal: scale(12),
-      paddingVertical: verticalScale(4),
-      borderRadius: scale(20),
-      marginTop: verticalScale(8),
-    },
-    versionText: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.body,
-      color: colors.primary,
     },
     featureRow: {
       flexDirection: "row",

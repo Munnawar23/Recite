@@ -29,11 +29,15 @@ export default function HijriCard() {
         {/* Subtle decorative elements for depth */}
         <View style={S.decoCircleLarge} />
         <View style={S.decoCircleSmall} />
-        
+
         {/* Top Header */}
         <View style={S.topRow}>
           <View style={S.badge}>
-            <Ionicons name="moon" size={scale(12)} color={colors.hijriCardAccent} />
+            <Ionicons
+              name="moon"
+              size={scale(12)}
+              color={colors.hijriCardAccent}
+            />
             <Text style={S.badgeText}>
               {t("home.hijriCard.badge", "ISLAMIC DATE")}
             </Text>
@@ -44,9 +48,9 @@ export default function HijriCard() {
         {/* Main Content */}
         <View style={S.mainContent}>
           <Text style={S.dayNumber}>{hijriDate.day}</Text>
-          
+
           <View style={S.dividerLine} />
-          
+
           <View style={S.dateDetails}>
             <Text style={S.month} numberOfLines={1}>
               {hijriDate.month}
@@ -139,7 +143,7 @@ const createStyles = (
     },
     badgeText: {
       fontSize: moderateScale(10),
-      fontFamily: fontFamily.title || fontFamily["body-bold"],
+      fontFamily: fontFamily.title,
       color: "rgba(255,255,255,0.95)",
       letterSpacing: 1.2,
       textTransform: "uppercase",
@@ -179,7 +183,7 @@ const createStyles = (
     },
     yearText: {
       fontSize: moderateScale(13),
-      fontFamily: fontFamily.title || fontFamily["body-bold"],
+      fontFamily: fontFamily.title,
       color: colors.hijriCardAccent,
     },
     dividerDot: {

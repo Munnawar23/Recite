@@ -3,7 +3,6 @@ import { ThemePhonePicker } from "@/components/ui/ThemePhonePicker";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { FontSizeScale, useFontStore } from "@/store/fontStore";
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -26,7 +25,10 @@ export function ThemeStep({ onNext, onBack }: ThemeStepProps) {
 
   const fontSizeTabs = [
     { label: t("settings.display.fontSize.small", "Small"), value: "small" },
-    { label: t("settings.display.fontSize.default", "Default"), value: "default" },
+    {
+      label: t("settings.display.fontSize.default", "Default"),
+      value: "default",
+    },
     { label: t("settings.display.fontSize.large", "Large"), value: "large" },
   ];
 
@@ -58,7 +60,6 @@ export function ThemeStep({ onNext, onBack }: ThemeStepProps) {
       icon="color-palette-outline"
       onPrimary={onNext}
       onBack={onBack}
-      showSkip={false}
     >
       <ScrollView
         showsVerticalScrollIndicator={false}

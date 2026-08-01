@@ -1,36 +1,25 @@
-import { useAppTheme } from "@/hooks/useAppTheme";
+import Background from "@/components/layout/Background";
+import { Button } from "@/components/ui/Button";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
-import { Button } from "@/components/ui/Button";
-import Background from "@/components/layout/Background";
 
 const TOTAL_STEPS = 5;
 
 interface OnboardingStepWrapperProps {
-  step: number; // 1-based
+  step: number;
   title: string;
   subtitle: string;
   icon: keyof typeof Ionicons.glyphMap;
   children: React.ReactNode;
-  /** Label for the primary action button */
   primaryLabel?: string;
   onPrimary: () => void;
-  /** Optional handler to navigate to previous step */
   onBack?: () => void;
-  /** If true, primary button shows a loading indicator */
   primaryLoading?: boolean;
-  /** If false, hides the skip link */
-  showSkip?: boolean;
-  onSkip?: () => void;
 }
 
 export function OnboardingStepWrapper({
@@ -43,8 +32,6 @@ export function OnboardingStepWrapper({
   onPrimary,
   onBack,
   primaryLoading = false,
-  showSkip = true,
-  onSkip,
 }: OnboardingStepWrapperProps) {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
@@ -57,12 +44,19 @@ export function OnboardingStepWrapper({
       ? t("onboarding.getStarted", "Get Started")
       : t("onboarding.next", "Next"));
 
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const S = createStyles(
+    colors,
+    fontFamily,
+    fontSize,
+    spacing,
+    paddingTop,
+    paddingBottom,
+  );
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={S.root}>
       <Background />
-      <View style={[S.container, { paddingTop: paddingTop + verticalScale(8), paddingBottom: paddingBottom + verticalScale(16) }]}>
+      <View style={S.container}>
         {/* ── Progress dots ── */}
         <View style={S.progressRow}>
           {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
@@ -105,7 +99,14 @@ export function OnboardingStepWrapper({
                 tx="common.back"
                 title="Back"
                 onPress={onBack}
-                style={[S.backBtn, { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }]}
+                style={[
+                  S.backBtn,
+                  {
+                    backgroundColor: colors.card,
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                  },
+                ]}
                 textStyle={{ color: colors.text }}
               />
             )}
@@ -116,23 +117,30 @@ export function OnboardingStepWrapper({
               style={onBack ? S.flexBtn : undefined}
             />
           </View>
-          {showSkip && onSkip && (
-            <TouchableOpacity style={S.skipBtn} onPress={onSkip} activeOpacity={0.7}>
-              <Text style={S.skipText}>{t("onboarding.skip", "Skip")}</Text>
-            </TouchableOpacity>
-          )}
         </View>
       </View>
     </View>
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any) =>
+const createStyles = (
+  colors: any,
+  fontFamily: any,
+  fontSize: any,
+  spacing: any,
+  paddingTop: number,
+  paddingBottom: number,
+) =>
   StyleSheet.create({
+    root: {
+      flex: 1,
+    },
     container: {
       flex: 1,
       backgroundColor: colors.background,
       paddingHorizontal: spacing.screenPadding,
+      paddingTop: paddingTop + verticalScale(4),
+      paddingBottom: paddingBottom + verticalScale(10),
     },
     progressRow: {
       flexDirection: "row",
@@ -204,15 +212,6 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any)
     },
     flexBtn: {
       flex: 1,
-    },
-    skipBtn: {
-      alignItems: "center",
-      paddingVertical: verticalScale(10),
-    },
-    skipText: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.body,
-      color: colors.subtext,
     },
   });
 

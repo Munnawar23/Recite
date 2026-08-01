@@ -1,10 +1,14 @@
-import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ViewStyle, TextStyle } from "react-native";
+import React, { useMemo, useCallback } from "react";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { scale, verticalScale } from "react-native-size-matters";
 
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
+import { ThemeColors } from "@/theme/colors";
+import { ThemeSpacing } from "@/theme/spacing";
+
+type ThemeObject = ReturnType<typeof useAppTheme>;
 
 interface SettingsItemCardProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -24,30 +28,35 @@ export default function SettingsItemCard({
   rightElement,
 }: SettingsItemCardProps) {
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const effectiveIconColor = iconColor || colors.primary;
 
-  const handlePress = () => {
+  const styles = useMemo(
+    () => createStyles(colors, fontFamily, fontSize, spacing, effectiveIconColor),
+    [colors, fontFamily, fontSize, spacing, effectiveIconColor],
+  );
+
+  const handlePress = useCallback(() => {
     Haptics.medium();
     onPress();
-  };
+  }, [onPress]);
 
   return (
     <TouchableOpacity
-      style={S.card}
+      style={styles.card}
       onPress={handlePress}
       activeOpacity={0.7}
     >
-      <View style={S.leftContainer}>
-        <View style={[S.iconContainer, { backgroundColor: (iconColor || colors.primary) + "18" }]}>
-          <Ionicons name={icon} size={scale(20)} color={iconColor || colors.primary} />
+      <View style={styles.leftContainer}>
+        <View style={styles.iconContainer}>
+          <Ionicons name={icon} size={scale(20)} color={effectiveIconColor} />
         </View>
 
-        <View style={S.textContainer}>
-          <Text style={S.title} numberOfLines={1}>
+        <View style={styles.textContainer}>
+          <Text style={styles.title} numberOfLines={1}>
             {title}
           </Text>
           {subtitle ? (
-            <Text style={S.subtitle} numberOfLines={1}>
+            <Text style={styles.subtitle} numberOfLines={1}>
               {subtitle}
             </Text>
           ) : null}
@@ -55,7 +64,7 @@ export default function SettingsItemCard({
       </View>
 
       {rightElement ? (
-        <View style={S.rightContainer}>{rightElement}</View>
+        <View style={styles.rightContainer}>{rightElement}</View>
       ) : (
         <Ionicons name="chevron-forward" size={scale(18)} color={colors.subtext} />
       )}
@@ -64,19 +73,12 @@ export default function SettingsItemCard({
 }
 
 const createStyles = (
-  colors: any,
-  fontFamily: any,
-  fontSize: any,
-  spacing: any
-): {
-  card: ViewStyle;
-  leftContainer: ViewStyle;
-  iconContainer: ViewStyle;
-  textContainer: ViewStyle;
-  title: TextStyle;
-  subtitle: TextStyle;
-  rightContainer: ViewStyle;
-} =>
+  colors: ThemeColors,
+  fontFamily: ThemeObject["fontFamily"],
+  fontSize: ThemeObject["fontSize"],
+  spacing: ThemeSpacing,
+  iconColor: string,
+) =>
   StyleSheet.create({
     card: {
       flexDirection: "row",
@@ -103,6 +105,7 @@ const createStyles = (
       alignItems: "center",
       justifyContent: "center",
       marginRight: scale(12),
+      backgroundColor: iconColor + "18",
     },
     textContainer: {
       flex: 1,

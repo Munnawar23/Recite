@@ -1,7 +1,5 @@
 import { ReciterList } from "@/features/quran/components/ReciterList";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useQuranSettingsStore } from "@/store/quranSettingsStore";
-import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet } from "react-native";
 import { OnboardingStepWrapper } from "./OnboardingStepWrapper";
@@ -13,13 +11,7 @@ interface TranslationStepProps {
 
 export function Translation({ onNext, onBack }: TranslationStepProps) {
   const { t } = useTranslation();
-  const { setTranslationId } = useQuranSettingsStore();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-
-  useEffect(() => {
-    // Ensure default translation is English ("20")
-    setTranslationId("20");
-  }, [setTranslationId]);
 
   const S = createStyles(colors, fontFamily, fontSize, spacing);
 
@@ -34,7 +26,6 @@ export function Translation({ onNext, onBack }: TranslationStepProps) {
       icon="headset-outline"
       onPrimary={onNext}
       onBack={onBack}
-      showSkip={false}
     >
       <ScrollView
         showsVerticalScrollIndicator={false}

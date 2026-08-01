@@ -3,9 +3,8 @@ import { SUPPORTED_LANGUAGES, SupportedLanguageCode } from "@/i18n";
 import { Haptics } from "@/lib/haptics";
 import { useLanguageStore } from "@/store/languageStore";
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 import { OnboardingStepWrapper } from "./OnboardingStepWrapper";
 
@@ -30,7 +29,6 @@ export function AppLanguageStep({ onNext }: AppLanguageStepProps) {
       )}
       icon="globe-outline"
       onPrimary={onNext}
-      showSkip={false}
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -66,10 +64,15 @@ export function AppLanguageStep({ onNext }: AppLanguageStepProps) {
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any) =>
+const createStyles = (
+  colors: any,
+  fontFamily: any,
+  fontSize: any,
+  spacing: any,
+) =>
   StyleSheet.create({
     listContainer: {
-      gap: verticalScale(8),
+      gap: spacing.vSm,
       paddingBottom: verticalScale(12),
     },
     languageItem: {
@@ -98,4 +101,3 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any)
   });
 
 export default AppLanguageStep;
-

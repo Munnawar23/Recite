@@ -1,9 +1,9 @@
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNotificationStore } from "@/store/notificationStore";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 import { OnboardingStepWrapper } from "./OnboardingStepWrapper";
 
@@ -12,25 +12,22 @@ interface NotificationStepProps {
   onBack: () => void;
 }
 
-const BENEFITS = [
-  "onboarding.notifications.benefit1",
-] as const;
+const BENEFITS = ["onboarding.notifications.benefit1"] as const;
 
 export function NotificationStep({ onNext, onBack }: NotificationStepProps) {
   const { t } = useTranslation();
-  const { isNightlyEnabled, toggleNightlyNotification } =
+  const { isNotificationsEnabled, toggleNotifications } =
     useNotificationStore();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
   const [loading, setLoading] = useState(false);
 
   const handleEnable = async () => {
-    if (isNightlyEnabled) {
+    if (isNotificationsEnabled) {
       onNext();
       return;
     }
     setLoading(true);
-    // Enable nightly reminder — this requests notification permission
-    await toggleNightlyNotification(true);
+    await toggleNotifications(true);
     setLoading(false);
     onNext();
   };
@@ -47,19 +44,22 @@ export function NotificationStep({ onNext, onBack }: NotificationStepProps) {
       )}
       icon="notifications-outline"
       primaryLabel={
-        isNightlyEnabled
+        isNotificationsEnabled
           ? t("onboarding.notifications.enabledStatus", "Notifications Enabled")
           : t("onboarding.notifications.enableButton", "Enable Notifications")
       }
       onPrimary={handleEnable}
       onBack={onBack}
       primaryLoading={loading}
-      showSkip={false}
     >
       {/* Benefits list */}
-      <View style={S.benefitsList}>
-        {BENEFITS.map((key) => (
-          <View key={key} style={S.benefitRow}>
+      <FlatList
+        data={BENEFITS}
+        keyExtractor={(item) => item}
+        style={S.benefitsList}
+        scrollEnabled={false}
+        renderItem={({ item: key }) => (
+          <View style={S.benefitRow}>
             <View style={S.checkCircle}>
               <Ionicons
                 name="checkmark"
@@ -69,11 +69,11 @@ export function NotificationStep({ onNext, onBack }: NotificationStepProps) {
             </View>
             <Text style={S.benefitText}>{t(key)}</Text>
           </View>
-        ))}
-      </View>
+        )}
+      />
 
       {/* Success state */}
-      {isNightlyEnabled && (
+      {isNotificationsEnabled && (
         <View style={S.successBadge}>
           <Ionicons
             name="checkmark-circle"
@@ -81,7 +81,10 @@ export function NotificationStep({ onNext, onBack }: NotificationStepProps) {
             color={colors.primary}
           />
           <Text style={S.successText}>
-            {t("onboarding.notifications.enabledStatus", "Notifications Enabled")}
+            {t(
+              "onboarding.notifications.enabledStatus",
+              "Notifications Enabled",
+            )}
           </Text>
         </View>
       )}
@@ -97,9 +100,15 @@ export function NotificationStep({ onNext, onBack }: NotificationStepProps) {
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any) =>
+const createStyles = (
+  colors: any,
+  fontFamily: any,
+  fontSize: any,
+  spacing: any,
+) =>
   StyleSheet.create({
     benefitsList: {
+      flexGrow: 0,
       backgroundColor: colors.card,
       borderRadius: scale(16),
       padding: scale(16),

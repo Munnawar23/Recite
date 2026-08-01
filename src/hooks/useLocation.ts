@@ -21,13 +21,9 @@ export function useLocation() {
 
         if (status === "granted") {
           let coords = MECCA_COORDS;
-          const lastLoc = await Location.getLastKnownPositionAsync({});
-          if (lastLoc?.coords) {
-            coords = {
-              latitude: lastLoc.coords.latitude,
-              longitude: lastLoc.coords.longitude,
-            };
-          } else {
+          
+          try {
+            // Get accurate current GPS position
             const loc = await Location.getCurrentPositionAsync({
               accuracy: Location.Accuracy.Balanced,
             });
@@ -37,6 +33,15 @@ export function useLocation() {
                 longitude: loc.coords.longitude,
               };
             }
+          } catch (e) {
+            // Fallback to last known position if current fix fails (e.g. indoors)
+            const lastLoc = await Location.getLastKnownPositionAsync({});
+            if (lastLoc?.coords) {
+              coords = {
+                latitude: lastLoc.coords.latitude,
+                longitude: lastLoc.coords.longitude,
+              };
+            }
           }
 
           let cityName: string | undefined;
@@ -44,7 +49,7 @@ export function useLocation() {
             const [geocode] = await Location.reverseGeocodeAsync(coords);
             cityName = geocode?.city || geocode?.subregion || geocode?.region || undefined;
           } catch (e) {
-            console.warn("Reverse geocoding error:", e);
+            console.warn("[useLocation] Reverse geocoding error:", e);
           }
 
           return {
@@ -56,12 +61,11 @@ export function useLocation() {
 
         return {
           coords: MECCA_COORDS,
-          permissionStatus:
-            status === "undetermined" ? "undetermined" : "denied",
+          permissionStatus: status === "undetermined" ? "undetermined" : "denied",
           cityName: "Mecca",
         };
       } catch (error) {
-        console.warn("Could not retrieve user location:", error);
+        console.warn("[useLocation] Could not retrieve user location:", error);
         return {
           coords: MECCA_COORDS,
           permissionStatus: "denied",
@@ -69,6 +73,7 @@ export function useLocation() {
         };
       }
     },
+    staleTime: 1000 * 60 * 30, // 30 minutes fresh
     initialData: {
       coords: MECCA_COORDS,
       permissionStatus: "undetermined",
@@ -87,8 +92,7 @@ export function useLocation() {
         await Linking.openSettings();
         return "denied";
       }
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      return status;
+      return currentPerm.status;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-location"] });

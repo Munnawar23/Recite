@@ -11,11 +11,19 @@ import { Haptics } from "@/lib/haptics";
 export default function NotificationSection() {
   const { t } = useTranslation();
   const { colors } = useAppTheme();
-  const { isNightlyEnabled, toggleNightlyNotification } = useNotificationStore();
+
+  const isNotificationsEnabled = useNotificationStore(
+    (state) => state.isNotificationsEnabled,
+  );
+  const isLoading = useNotificationStore((state) => state.isLoading);
+  const toggleNotifications = useNotificationStore(
+    (state) => state.toggleNotifications,
+  );
 
   const handleToggle = async (targetValue: boolean) => {
+    if (isLoading) return;
     Haptics.medium();
-    const success = await toggleNightlyNotification(targetValue);
+    const success = await toggleNotifications(targetValue);
     if (success) {
       Toast.show({
         type: "success",
@@ -31,23 +39,28 @@ export default function NotificationSection() {
 
   return (
     <>
-      <SectionTitle label={t("settings.sections.notifications", "Notifications")} icon="notifications-outline" tightSpacing />
-      
+      <SectionTitle
+        label={t("settings.sections.notifications", "Notifications")}
+        icon="notifications-outline"
+        tightSpacing
+      />
+
       {/* Daily reminder toggle */}
       <SettingsItemCard
         icon="alarm-outline"
         title={t("settings.notifications.enableTitle", "Enable Notifications")}
         subtitle={
-          isNightlyEnabled
+          isNotificationsEnabled
             ? t("settings.notifications.enabled", "Notification enabled")
             : t("settings.notifications.disabled", "Disabled")
         }
         onPress={() => {
-          handleToggle(!isNightlyEnabled);
+          handleToggle(!isNotificationsEnabled);
         }}
         rightElement={
           <Switch
-            value={isNightlyEnabled}
+            value={isNotificationsEnabled}
+            disabled={isLoading}
             onValueChange={(val) => {
               handleToggle(val);
             }}
@@ -60,4 +73,3 @@ export default function NotificationSection() {
     </>
   );
 }
-

@@ -1,16 +1,17 @@
+import { MessageModal } from "@/components/common/MessageModal";
 import { RECITER_OPTIONS } from "@/features/quran/hooks/useQuranAudio";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { getChapterAudio } from "@/lib/api/quran-data";
 import { Haptics } from "@/lib/haptics";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
-import { useNetworkStatus } from "@/hooks/useNetworkStatus";
-import { MessageModal } from "@/components/common/MessageModal";
 import { Ionicons } from "@expo/vector-icons";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
+  FlatList,
   Image,
   StyleSheet,
   Text,
@@ -19,12 +20,19 @@ import {
 } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 
+const PLAY_BTN_HIT_SLOP = { top: 8, bottom: 8, left: 8, right: 8 };
+
 interface ReciterListProps {
   onSelectReciter?: (id: number) => void;
   showSelectedCheckmark?: boolean;
+  scrollEnabled?: boolean;
 }
 
-export function ReciterList({ onSelectReciter, showSelectedCheckmark = false }: ReciterListProps) {
+export function ReciterList({
+  onSelectReciter,
+  showSelectedCheckmark = false,
+  scrollEnabled = false,
+}: ReciterListProps) {
   const { reciterId, setReciterId } = useQuranSettingsStore();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
   const { isOffline } = useNetworkStatus();
@@ -42,7 +50,7 @@ export function ReciterList({ onSelectReciter, showSelectedCheckmark = false }: 
   const player = useAudioPlayer(audioUrl ? { uri: audioUrl } : undefined);
   const status = useAudioPlayerStatus(player);
 
-  // Auto-start playback ONLY when status.isLoaded transitions to true
+  // Auto-start playback when audio finishes loading
   useEffect(() => {
     if (status.isLoaded && playOnLoadRef.current) {
       playOnLoadRef.current = false;
@@ -50,12 +58,12 @@ export function ReciterList({ onSelectReciter, showSelectedCheckmark = false }: 
       try {
         player.play();
       } catch (err) {
-        // ignore released object error on unmount
+        // ignore
       }
     }
   }, [status.isLoaded, player]);
 
-  // Reset playing state if audio finishes
+  // Reset playing state when audio finishes
   useEffect(() => {
     if (status.didJustFinish) {
       setPlayingReciterId(null);
@@ -68,11 +76,11 @@ export function ReciterList({ onSelectReciter, showSelectedCheckmark = false }: 
         player.pause();
       }
     } catch (err) {
-      // ignore released object error on unmount
+      // ignore
     }
   };
 
-  // Clean up audio when component unmounts
+  // Clean up audio on unmount
   useEffect(() => {
     return () => {
       safePause();
@@ -107,7 +115,7 @@ export function ReciterList({ onSelectReciter, showSelectedCheckmark = false }: 
       setIsLoadingAudio(true);
       setPlayingReciterId(targetReciterId);
 
-      const audioFile = await getChapterAudio(1, targetReciterId); // Surah Al-Fatihah
+      const audioFile = await getChapterAudio(1, targetReciterId);
       let url = audioFile?.audio_url;
       if (url?.startsWith("//")) {
         url = `https:${url}`;
@@ -129,6 +137,12 @@ export function ReciterList({ onSelectReciter, showSelectedCheckmark = false }: 
     }
   };
 
+  const handleSelectReciter = (id: number) => {
+    Haptics.medium();
+    setReciterId(id);
+    if (onSelectReciter) onSelectReciter(id);
+  };
+
   const S = createStyles(colors, fontFamily, fontSize, spacing);
 
   return (
@@ -139,93 +153,93 @@ export function ReciterList({ onSelectReciter, showSelectedCheckmark = false }: 
         title={t("common.offlineAudioPreviewTitle", "Offline Mode")}
         message={t(
           "common.offlineAudioPreviewMessage",
-          "Audio previews require an internet connection. You can still listen to your downloaded surahs."
+          "Audio previews require an internet connection. You can still listen to your downloaded surahs.",
         )}
         icon="wifi-outline"
       />
-      <View style={S.listContainer}>
-      {RECITER_OPTIONS.map((reciter) => {
-        const isSelected = reciterId === reciter.id;
-        const hasError = imageError[reciter.id];
-        const isThisPlaying =
-          playingReciterId === reciter.id && status.playing;
-        const isThisLoading =
-          playingReciterId === reciter.id &&
-          (isLoadingAudio || (!status.isLoaded && !status.playing));
+      <FlatList
+        data={RECITER_OPTIONS}
+        keyExtractor={(item) => String(item.id)}
+        contentContainerStyle={S.listContainer}
+        scrollEnabled={scrollEnabled}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item: reciter }) => {
+          const isSelected = reciterId === reciter.id;
+          const hasError = imageError[reciter.id];
+          const isThisPlaying =
+            playingReciterId === reciter.id && status.playing;
+          const isThisLoading =
+            playingReciterId === reciter.id &&
+            (isLoadingAudio || (!status.isLoaded && !status.playing));
 
-        return (
-          <TouchableOpacity
-            key={reciter.id}
-            style={[S.reciterItem, isSelected && S.selectedItem]}
-            onPress={() => {
-              Haptics.medium();
-              setReciterId(reciter.id);
-              if (onSelectReciter) onSelectReciter(reciter.id);
-            }}
-            activeOpacity={0.7}
-          >
-            <View style={S.leftSection}>
-              {reciter.avatar && !hasError ? (
-                <Image
-                  source={
-                    typeof reciter.avatar === "string"
-                      ? { uri: reciter.avatar }
-                      : reciter.avatar
-                  }
-                  style={S.avatar}
-                  onError={() =>
-                    setImageError((prev) => ({ ...prev, [reciter.id]: true }))
-                  }
-                />
-              ) : (
-                <View style={S.avatarFallback}>
-                  <Ionicons
-                    name="person"
-                    size={scale(18)}
-                    color={colors.primary}
+          return (
+            <TouchableOpacity
+              style={[S.reciterItem, isSelected && S.selectedItem]}
+              onPress={() => handleSelectReciter(reciter.id)}
+              activeOpacity={0.7}
+            >
+              <View style={S.leftSection}>
+                {reciter.avatar && !hasError ? (
+                  <Image
+                    source={
+                      typeof reciter.avatar === "string"
+                        ? { uri: reciter.avatar }
+                        : reciter.avatar
+                    }
+                    style={S.avatar}
+                    onError={() =>
+                      setImageError((prev) => ({ ...prev, [reciter.id]: true }))
+                    }
                   />
-                </View>
-              )}
-              <Text style={[S.reciterLabel, isSelected && S.selectedLabel]}>
-                {reciter.label}
-              </Text>
-            </View>
-
-            <View style={S.rightActions}>
-              {showSelectedCheckmark && isSelected && (
-                <Ionicons
-                  name="checkmark-circle"
-                  size={scale(22)}
-                  color={colors.primary}
-                  style={{ marginRight: scale(4) }}
-                />
-              )}
-
-              {/* Audio Preview Play/Pause Button */}
-              <TouchableOpacity
-                style={S.playBtn}
-                onPress={(e) => {
-                  e.stopPropagation();
-                  togglePlayAudio(reciter.id);
-                }}
-                activeOpacity={0.7}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                {isThisLoading ? (
-                  <ActivityIndicator size="small" color={colors.primary} />
                 ) : (
+                  <View style={S.avatarFallback}>
+                    <Ionicons
+                      name="person"
+                      size={scale(18)}
+                      color={colors.primary}
+                    />
+                  </View>
+                )}
+                <Text style={[S.reciterLabel, isSelected && S.selectedLabel]}>
+                  {reciter.label}
+                </Text>
+              </View>
+
+              <View style={S.rightActions}>
+                {showSelectedCheckmark && isSelected && (
                   <Ionicons
-                    name={isThisPlaying ? "pause-circle" : "play-circle"}
-                    size={scale(30)}
+                    name="checkmark-circle"
+                    size={scale(22)}
                     color={colors.primary}
+                    style={S.checkmarkIcon}
                   />
                 )}
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-        );
-      })}
-      </View>
+
+                {/* Audio Preview Play/Pause Button */}
+                <TouchableOpacity
+                  style={S.playBtn}
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    togglePlayAudio(reciter.id);
+                  }}
+                  activeOpacity={0.7}
+                  hitSlop={PLAY_BTN_HIT_SLOP}
+                >
+                  {isThisLoading ? (
+                    <ActivityIndicator size="small" color={colors.primary} />
+                  ) : (
+                    <Ionicons
+                      name={isThisPlaying ? "pause-circle" : "play-circle"}
+                      size={scale(30)}
+                      color={colors.primary}
+                    />
+                  )}
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+          );
+        }}
+      />
     </>
   );
 }
@@ -292,6 +306,9 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       gap: scale(6),
+    },
+    checkmarkIcon: {
+      marginRight: scale(4),
     },
     playBtn: {
       padding: scale(2),

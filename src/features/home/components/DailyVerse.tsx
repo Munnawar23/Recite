@@ -35,7 +35,7 @@ export default function DailyVerse() {
     <View style={S.card}>
       {/* Subtle gold tint overlay */}
       <LinearGradient
-        colors={[`${colors.accent}12`, `${colors.accent}00`]}
+        colors={colors.dailyVerseGradient}
         style={StyleSheet.absoluteFill}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}

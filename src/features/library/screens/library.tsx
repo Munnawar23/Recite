@@ -1,23 +1,23 @@
-import { FlashList } from "@shopify/flash-list";
-import { useState } from "react";
+import { FlashList, ListRenderItemInfo } from "@shopify/flash-list";
+import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import {
+  RefreshControl,
+  RefreshControlProps,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 
-import EmptyState from "@/components/layout/EmptyState";
 import Header from "@/components/layout/Header";
 import NoConnection from "@/components/layout/NoConnection";
 import TabSwitcher from "@/components/ui/TabSwitcher";
-import { DOWNLOAD_ANIM, EMPTY_ANIM } from "@/constants/assets";
 import QuranCard from "@/features/quran/components/QuranCard";
-import { useQuranListSearch } from "@/features/quran/hooks/useQuranListSearch";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useDownloadsStore } from "@/store/downloadsStore";
-import { useFavoritesStore } from "@/store/favoritesStore";
 import { ThemeSpacing } from "@/theme/spacing";
-
-type TabValue = "favorites" | "downloads";
-
-const FlashListCast = FlashList as any;
+import { Chapter } from "@/types/quran";
+import { LibraryEmptyState } from "../components/LibraryEmptyState";
+import { TabValue, useLibrary } from "../hooks/useLibrary";
 
 export default function LibraryScreen() {
   const { t } = useTranslation();
@@ -25,131 +25,89 @@ export default function LibraryScreen() {
   const [activeTab, setActiveTab] = useState<TabValue>("favorites");
   const [refreshing, setRefreshing] = useState(false);
 
-  const { chapters, isError, refetch } = useQuranListSearch();
-  const { favoriteIds } = useFavoritesStore();
-  const { downloadedChapters } = useDownloadsStore();
+  const { listData, isError, refetch } = useLibrary(activeTab);
 
-  const S = createStyles(spacing);
+  const styles = useMemo(() => createStyles(spacing), [spacing]);
 
-  const onRefresh = async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
       await refetch();
     } finally {
       setRefreshing(false);
     }
-  };
+  }, [refetch]);
 
-  const tabsData = [
-    { label: t("library.tabs.favorites", "Favorites"), value: "favorites" },
-    { label: t("library.tabs.downloads", "Downloads"), value: "downloads" },
-  ];
+  const handleTabChange = useCallback((value: string) => {
+    setActiveTab(value as TabValue);
+  }, []);
 
-  const favoriteChapters = chapters.filter((ch) => favoriteIds.includes(ch.id));
-  const downloadedChapterIds = Object.keys(downloadedChapters).map((id) =>
-    Number(id),
+  const tabsData = useMemo(
+    () => [
+      { label: t("library.tabs.favorites", "Favorites"), value: "favorites" },
+      { label: t("library.tabs.downloads", "Downloads"), value: "downloads" },
+    ],
+    [t],
   );
-  const downloadedChapterList = chapters.filter((ch) =>
-    downloadedChapterIds.includes(ch.id),
+
+  const keyExtractor = useCallback((item: Chapter) => String(item.id), []);
+
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<Chapter>) => <QuranCard item={item} />,
+    [],
   );
 
-  const listData =
-    activeTab === "favorites" ? favoriteChapters : downloadedChapterList;
+  const refreshControl = useMemo(
+    (): React.ReactElement<RefreshControlProps> => (
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        colors={[colors.primary]}
+        tintColor={colors.primary}
+      />
+    ),
+    [refreshing, onRefresh, colors.primary],
+  );
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={S.container}>
-        <Header
-          title={t("library.title", "Library")}
-          subtitle={t("library.subtitle", "Your saved surahs and downloads")}
+    <View style={styles.flexContainer}>
+      <Header
+        title={t("library.title", "Library")}
+        subtitle={t("library.subtitle", "Your saved surahs and downloads")}
+      />
+
+      <View style={styles.tabSwitcherContainer}>
+        <TabSwitcher
+          tabs={tabsData}
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
         />
+      </View>
 
-        <View style={S.tabSwitcherContainer}>
-          <TabSwitcher
-            tabs={tabsData}
-            activeTab={activeTab}
-            onTabChange={(value) => setActiveTab(value as TabValue)}
+      <View style={styles.flexContainer}>
+        {isError ? (
+          <ScrollView
+            contentContainerStyle={styles.emptyStateWrapper}
+            refreshControl={refreshControl}
+          >
+            <NoConnection onRetry={refetch} />
+          </ScrollView>
+        ) : listData.length > 0 ? (
+          <FlashList<Chapter>
+            data={listData}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.listContentContainer}
+            refreshControl={refreshControl}
           />
-        </View>
-
-        <View style={S.contentContainer}>
-          {isError ? (
-            <ScrollView
-              contentContainerStyle={S.emptyStateWrapper}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                  colors={[colors.primary]}
-                  tintColor={colors.primary}
-                />
-              }
-            >
-              <NoConnection onRetry={() => refetch()} />
-            </ScrollView>
-          ) : listData.length > 0 ? (
-            <FlashListCast
-              data={listData}
-              keyExtractor={(item: any) => String(item.id)}
-              renderItem={({ item }: { item: any }) => (
-                <QuranCard item={item} />
-              )}
-              estimatedItemSize={80}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: spacing.vXxl }}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                  colors={[colors.primary]}
-                  tintColor={colors.primary}
-                />
-              }
-            />
-          ) : activeTab === "favorites" ? (
-            <ScrollView
-              contentContainerStyle={S.emptyStateWrapper}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                  colors={[colors.primary]}
-                  tintColor={colors.primary}
-                />
-              }
-            >
-              <EmptyState
-                animationSource={DOWNLOAD_ANIM}
-                title={t("library.emptyFavorites.title", "No Favorites Yet")}
-                subtitle={t(
-                  "library.emptyFavorites.subtitle",
-                  "Mark your favorite Surahs to access them quickly here.",
-                )}
-              />
-            </ScrollView>
-          ) : (
-            <ScrollView
-              contentContainerStyle={S.emptyStateWrapper}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                  colors={[colors.primary]}
-                  tintColor={colors.primary}
-                />
-              }
-            >
-              <EmptyState
-                animationSource={EMPTY_ANIM}
-                title={t("library.emptyDownloads.title", "No Downloads")}
-                subtitle={t(
-                  "library.emptyDownloads.subtitle",
-                  "Download Surahs to read or listen to them offline.",
-                )}
-              />
-            </ScrollView>
-          )}
-        </View>
+        ) : (
+          <LibraryEmptyState
+            activeTab={activeTab}
+            refreshControl={refreshControl}
+            spacing={spacing}
+          />
+        )}
       </View>
     </View>
   );
@@ -157,20 +115,19 @@ export default function LibraryScreen() {
 
 const createStyles = (spacing: ThemeSpacing) =>
   StyleSheet.create({
-    container: {
+    flexContainer: {
       flex: 1,
     },
     tabSwitcherContainer: {
       marginTop: spacing.sectionHeaderTop,
       marginBottom: spacing.sectionHeaderBottom,
     },
-    contentContainer: {
-      flex: 1,
+    listContentContainer: {
+      paddingBottom: spacing.vXxl,
     },
     emptyStateWrapper: {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      paddingBottom: spacing.vXxl * 2,
     },
   });

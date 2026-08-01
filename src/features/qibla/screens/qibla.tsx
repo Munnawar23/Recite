@@ -52,7 +52,7 @@ export default function QiblaScreen() {
   const targetDeg = Math.round(qiblaAngle);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.root}>
       <View style={styles.container}>
         <Header
           title={t("qiblaScreen.title", "Qibla")}
@@ -119,6 +119,9 @@ export default function QiblaScreen() {
 
 const createStyles = (theme: ReturnType<typeof useAppTheme>) =>
   StyleSheet.create({
+    root: {
+      flex: 1,
+    },
     container: {
       flex: 1,
     },

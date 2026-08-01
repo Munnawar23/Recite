@@ -1,7 +1,6 @@
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLocation } from "@/hooks/useLocation";
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -29,9 +28,6 @@ export function LocationStep({ onFinish, onBack }: LocationStepProps) {
       onFinish();
       return;
     }
-    // requestLocation triggers the native permission dialog.
-    // The hook's onSuccess already invalidates prayer-times cache.
-    // We navigate forward regardless; the UI will update once permission resolves.
     requestLocation(undefined, { onSettled: () => onFinish() });
   };
 
@@ -54,7 +50,6 @@ export function LocationStep({ onFinish, onBack }: LocationStepProps) {
       onPrimary={handleEnable}
       onBack={onBack}
       primaryLoading={isLoading}
-      showSkip={false}
     >
       {/* Benefits list */}
       <View style={S.benefitsList}>
@@ -97,7 +92,12 @@ export function LocationStep({ onFinish, onBack }: LocationStepProps) {
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any) =>
+const createStyles = (
+  colors: any,
+  fontFamily: any,
+  fontSize: any,
+  spacing: any,
+) =>
   StyleSheet.create({
     benefitsList: {
       backgroundColor: colors.card,

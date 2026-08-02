@@ -1,3 +1,4 @@
+import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { useFavoritesStore } from "@/store/favoritesStore";
@@ -36,6 +37,7 @@ function DetailHeader({
 }: DetailHeaderProps) {
   const router = useRouter();
   const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
+  const { paddingTop } = useAppSafeAreaInsets();
   const isDark = activeScheme === "dark";
 
   const isFavorite = useFavoritesStore(
@@ -44,8 +46,8 @@ function DetailHeader({
   const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
 
   const S = useMemo(
-    () => createStyles(colors, fontFamily, fontSize, isDark),
-    [colors, fontFamily, fontSize, isDark],
+    () => createStyles(colors, fontFamily, fontSize, isDark, paddingTop),
+    [colors, fontFamily, fontSize, isDark, paddingTop],
   );
 
   const handleBack = useCallback(() => {
@@ -143,9 +145,11 @@ const createStyles = (
   fontFamily: ThemeFontFamily,
   fontSize: ThemeFontSize,
   isDark: boolean,
+  paddingTop: number,
 ) =>
   StyleSheet.create({
     headerContainer: {
+      paddingTop: paddingTop,
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
       overflow: "hidden",
@@ -199,6 +203,6 @@ const createStyles = (
     headerSubtitle: {
       color: colors.subtext,
       fontFamily: fontFamily.text,
-      fontSize: fontSize.caption * 0.95,
+      fontSize: fontSize.caption,
     },
   });

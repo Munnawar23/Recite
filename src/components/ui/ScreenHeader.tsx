@@ -96,12 +96,15 @@ const createStyles = (
       fontFamily: fontFamily.title,
       fontSize: fontSize.cardTitle,
       color: colors.text,
+      lineHeight: fontSize.cardTitle * 1.3,
     },
     subtitle: {
-      fontFamily: fontFamily.text,
+      fontFamily: fontFamily.title,
       fontSize: fontSize.body,
-      color: colors.subtext,
+      color: colors.text,
       marginTop: verticalScale(2),
+      lineHeight: fontSize.body * 1.3,
+      opacity: 0.9,
     },
     placeholder: {
       width: scale(36),

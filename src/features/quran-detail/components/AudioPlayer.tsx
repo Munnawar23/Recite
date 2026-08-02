@@ -239,7 +239,7 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, bottomInset: 
     },
     speedButtonText: {
       fontFamily: fontFamily.title,
-      fontSize: fontSize.caption * 0.9,
+      fontSize: fontSize.caption,
       color: "#FFFFFF",
     },
     spacerButton: {

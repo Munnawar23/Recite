@@ -170,7 +170,7 @@ const createStyles = (
     numberText: {
       color: colors.primary,
       fontFamily: fontFamily.title,
-      fontSize: fontSize.caption * 1.1,
+      fontSize: fontSize.caption,
       fontWeight: "700",
     },
     infoContainer: {
@@ -193,7 +193,7 @@ const createStyles = (
     },
     metaText: {
       color: colors.subtext,
-      fontFamily: fontFamily.text,
+      fontFamily: fontFamily.title,
       fontSize: fontSize.caption,
       letterSpacing: 0.3,
     },
@@ -201,7 +201,8 @@ const createStyles = (
       width: spacing.xs,
       height: spacing.xs,
       borderRadius: spacing.xs / 2,
-      backgroundColor: colors.subtext + "66",
+      backgroundColor: colors.subtext,
+      opacity: 0.6,
     },
     rightSection: {
       flex: 0.8,

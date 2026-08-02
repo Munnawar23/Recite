@@ -319,9 +319,29 @@ function DownloadCard({
 
         {/* Text Area */}
         <View style={S.textContainer}>
-          <Text numberOfLines={1} style={S.title}>
-            {titleText}
-          </Text>
+          {isDownloaded ? (
+            <View
+              style={[
+                S.badge,
+                {
+                  backgroundColor: colors.primary + "18",
+                  borderColor: colors.primary + "35",
+                  alignSelf: "flex-start",
+                  paddingHorizontal: scale(8),
+                  paddingVertical: verticalScale(3),
+                  marginBottom: verticalScale(2),
+                },
+              ]}
+            >
+              <Text numberOfLines={1} style={[S.title, { color: colors.primary }]}>
+                {titleText}
+              </Text>
+            </View>
+          ) : (
+            <Text numberOfLines={1} style={S.title}>
+              {titleText}
+            </Text>
+          )}
           <Text numberOfLines={1} style={S.subtitle}>
             {subtitleText}
           </Text>

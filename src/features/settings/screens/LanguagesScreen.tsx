@@ -23,39 +23,7 @@ export const RECITER_DROPDOWN_DATA = RECITER_OPTIONS.map((reciter) => ({
 export default function LanguagesScreen() {
   const { t } = useTranslation();
   const { language, setLanguage } = useLanguageStore();
-  const { translationId, setTranslationId, reciterId, setReciterId } =
-    useQuranSettingsStore();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-
-  const translationOptions = [
-    {
-      label: t("settings.languages.translations.arabicOnly", "Arabic Only"),
-      value: "0",
-    },
-    {
-      label: t("settings.languages.translations.english", "English (Saheeh)"),
-      value: "20",
-    },
-    {
-      label: t("settings.languages.translations.urdu", "Urdu (Maududi)"),
-      value: "97",
-    },
-    {
-      label: t("settings.languages.translations.hindi", "Hindi (Azizul Haque)"),
-      value: "122",
-    },
-    {
-      label: t(
-        "settings.languages.translations.indonesian",
-        "Indonesian (Ministry)",
-      ),
-      value: "33",
-    },
-    {
-      label: t("settings.languages.translations.bengali", "Bengali (Taisirul)"),
-      value: "161",
-    },
-  ];
 
   const languageDropdownData = SUPPORTED_LANGUAGES.map((lang) => ({
     label: t(`languages.${lang.code}`, lang.label),
@@ -79,26 +47,7 @@ export default function LanguagesScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={S.scrollContent}
       >
-        {/* 1. Quran Reciter */}
-        <SectionTitle
-          label={t("settings.languages.quranReciterSection", "Quran Reciter")}
-          icon="musical-notes-outline"
-          tightSpacing
-        />
-        <View style={S.card}>
-          <Text style={S.cardTitle}>
-            {t("settings.languages.quranReciterTitle", "Default Quran Reciter")}
-          </Text>
-          <Text style={S.cardSubtitle}>
-            {t(
-              "settings.languages.quranReciterSubtitle",
-              "Select Qari / Reciter voice for audio playback",
-            )}
-          </Text>
-          <ReciterList />
-        </View>
-
-        {/* 2. App Interface Language */}
+        {/* 1. App Interface Language */}
         <SectionTitle
           label={t("settings.languages.appLanguageSection", "App Language")}
           icon="globe-outline"
@@ -128,40 +77,23 @@ export default function LanguagesScreen() {
           />
         </View>
 
-        {/* 3. Quran Translation */}
+        {/* 2. Quran Reciter */}
         <SectionTitle
-          label={t(
-            "settings.languages.quranTranslationSection",
-            "Quran Translation",
-          )}
-          icon="book-outline"
+          label={t("settings.languages.quranReciterSection", "Quran Reciter")}
+          icon="musical-notes-outline"
           tightSpacing
         />
         <View style={S.card}>
           <Text style={S.cardTitle}>
-            {t(
-              "settings.languages.quranTranslationTitle",
-              "Default Quran Translation",
-            )}
+            {t("settings.languages.quranReciterTitle", "Default Quran Reciter")}
           </Text>
           <Text style={S.cardSubtitle}>
             {t(
-              "settings.languages.quranTranslationSubtitle",
-              "Select translation text displayed for verses",
+              "settings.languages.quranReciterSubtitle",
+              "Select Qari / Reciter voice for audio playback",
             )}
           </Text>
-          <CommonModal
-            data={translationOptions}
-            value={translationId}
-            onChange={(item) => {
-              Haptics.medium();
-              setTranslationId(item.value);
-            }}
-            placeholder={t(
-              "settings.languages.quranTranslationPlaceholder",
-              "Select Translation",
-            )}
-          />
+          <ReciterList />
         </View>
 
         <View style={{ height: verticalScale(20) }} />

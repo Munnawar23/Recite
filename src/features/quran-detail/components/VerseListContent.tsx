@@ -16,15 +16,11 @@ import { scale, verticalScale } from "react-native-size-matters";
 import VerseListHeader from "./VerseListHeader";
 import VerseRow from "./VerseRow";
 
+import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
+
 const AnimatedFlashList = Animated.createAnimatedComponent(
   FlashList as unknown as React.ComponentType<any>,
 );
-
-const LIST_CONTENT_CONTAINER_STYLE = {
-  paddingHorizontal: scale(20),
-  paddingTop: verticalScale(67),
-  paddingBottom: verticalScale(180),
-};
 
 const keyExtractor = (item: SurahVerse) => String(item.id);
 
@@ -77,6 +73,16 @@ function VerseListContent({
   isPlayingLocally,
 }: VerseListContentProps) {
   const { colors, fontFamily, fontSize } = useAppTheme();
+  const { paddingTop } = useAppSafeAreaInsets();
+
+  const contentContainerStyle = useMemo(
+    () => ({
+      paddingHorizontal: scale(20),
+      paddingTop: paddingTop + verticalScale(75),
+      paddingBottom: verticalScale(180),
+    }),
+    [paddingTop],
+  );
 
   const S = useMemo(
     () => createStyles(colors, fontFamily, fontSize),
@@ -120,7 +126,15 @@ function VerseListContent({
         isPlayingLocally={isPlayingLocally}
       />
     ),
-    [chapterId, selectedTransId, reciterName, setTranslationId, audioUrl, audioTotalBytes, isPlayingLocally],
+    [
+      chapterId,
+      selectedTransId,
+      reciterName,
+      setTranslationId,
+      audioUrl,
+      audioTotalBytes,
+      isPlayingLocally,
+    ],
   );
 
   if (isLoading) {
@@ -168,7 +182,7 @@ function VerseListContent({
       onViewableItemsChanged={onViewableItemsChanged}
       viewabilityConfig={viewabilityConfig.current}
       refreshControl={refreshControl}
-      contentContainerStyle={LIST_CONTENT_CONTAINER_STYLE}
+      contentContainerStyle={contentContainerStyle}
     />
   );
 }

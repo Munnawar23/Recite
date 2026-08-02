@@ -133,16 +133,15 @@ const createStyles = (
       textTransform: "uppercase",
     },
     titleText: {
-      fontFamily: fontFamily.title,
-      fontWeight: "600",
-      fontSize: fontSize.title,
+      fontFamily: fontFamily.heading,
+      fontSize: fontSize.bodyLg,
       color: "#fff",
       letterSpacing: 0.3,
     },
     verseText: {
       fontFamily: fontFamily.text,
       fontSize: fontSize.body,
-      color: "rgba(255,255,255,0.65)",
+      color: "rgba(255,255,255,0.88)",
       letterSpacing: 0.5,
     },
     arrowIcon: {

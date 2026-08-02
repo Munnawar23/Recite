@@ -15,8 +15,8 @@ export default function BismillahBanner({ chapterId }: BismillahBannerProps) {
   const { fontSizeScale } = useFontStore();
 
   let multiplier = 1.0;
-  if (fontSizeScale === "small") multiplier = 0.85;
-  else if (fontSizeScale === "large") multiplier = 1.25;
+  if (fontSizeScale === "small") multiplier = 0.90;
+  else if (fontSizeScale === "large") multiplier = 1.12;
 
   const S = createStyles(fontFamily, fontSize, multiplier);
 

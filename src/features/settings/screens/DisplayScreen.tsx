@@ -32,12 +32,12 @@ export default function DisplayScreen() {
   ];
 
   let textMultiplier = 1.0;
-  if (fontSizeScale === "small") textMultiplier = 0.85;
-  else if (fontSizeScale === "large") textMultiplier = 1.25;
+  if (fontSizeScale === "small") textMultiplier = 0.90;
+  else if (fontSizeScale === "large") textMultiplier = 1.12;
 
   let quranMultiplier = 1.0;
-  if (quranFontSizeScale === "small") quranMultiplier = 0.85;
-  else if (quranFontSizeScale === "large") quranMultiplier = 1.25;
+  if (quranFontSizeScale === "small") quranMultiplier = 0.90;
+  else if (quranFontSizeScale === "large") quranMultiplier = 1.12;
 
   const S = createStyles(
     colors,

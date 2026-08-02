@@ -50,8 +50,8 @@ export default function QuranDetailScreen() {
   } = useQuranDetailScreen();
 
   const S = useMemo(
-    () => createStyles(colors.background, topInset, isOffline),
-    [colors.background, topInset, isOffline],
+    () => createStyles(colors.background),
+    [colors.background],
   );
 
   const gradientColors = useMemo(
@@ -122,11 +122,7 @@ export default function QuranDetailScreen() {
   );
 }
 
-const createStyles = (
-  background: string,
-  topInset: number,
-  isOffline: boolean,
-) =>
+const createStyles = (background: string) =>
   StyleSheet.create({
     root: {
       flex: 1,
@@ -134,11 +130,10 @@ const createStyles = (
     },
     mainContainer: {
       flex: 1,
-      paddingTop: isOffline ? verticalScale(4) : topInset,
     },
     animatedHeaderContainer: {
       position: "absolute",
-      top: isOffline ? verticalScale(4) : topInset,
+      top: 0,
       left: 0,
       right: 0,
       zIndex: 20,

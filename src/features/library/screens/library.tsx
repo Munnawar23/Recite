@@ -119,8 +119,8 @@ const createStyles = (spacing: ThemeSpacing) =>
       flex: 1,
     },
     tabSwitcherContainer: {
-      marginTop: spacing.sectionHeaderTop,
-      marginBottom: spacing.sectionHeaderBottom,
+      marginTop: spacing.vXs,
+      marginBottom: spacing.vSm,
     },
     listContentContainer: {
       paddingBottom: spacing.vXxl,

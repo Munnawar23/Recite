@@ -71,7 +71,6 @@ const createStyles = (
       paddingHorizontal: spacing.screenPadding,
       paddingTop: paddingTop,
       paddingBottom: spacing.vXs,
-      marginTop: isOffline ? verticalScale(4) : 0,
     },
     topRow: {
       flexDirection: "row",
@@ -96,8 +95,9 @@ const createStyles = (
     },
     subtitleText: {
       fontSize: fontSize.body,
-      color: colors.subtext,
-      fontFamily: fontFamily.text,
+      color: colors.text,
+      fontFamily: fontFamily.title,
       marginTop: spacing.vXs,
+      opacity: 0.9,
     },
   });

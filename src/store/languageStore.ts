@@ -23,9 +23,11 @@ export const useLanguageStore = create<LanguageState>()(
       name: STORAGE_KEYS.LANGUAGE,
       storage: createJSONStorage(() => zustandStorage),
       onRehydrateStorage: () => (state) => {
-        // Sync i18n instance when store rehydrates from AsyncStorage
+        // Sync i18n instance asynchronously after component mount to avoid unmounted React state update warning
         if (state?.language) {
-          i18n.changeLanguage(state.language);
+          setTimeout(() => {
+            i18n.changeLanguage(state.language);
+          }, 0);
         }
       },
     },

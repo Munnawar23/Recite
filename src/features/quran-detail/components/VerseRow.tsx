@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useFontStore } from "@/store/fontStore";
 import type { SurahVerse } from "@/types/quran";
+import React, { useMemo } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 
@@ -25,14 +25,14 @@ function VerseRow({
   const quranFontSizeScale = useFontStore((state) => state.quranFontSizeScale);
 
   const textMultiplier = useMemo(() => {
-    if (fontSizeScale === "small") return 0.85;
-    if (fontSizeScale === "large") return 1.25;
+    if (fontSizeScale === "small") return 0.9;
+    if (fontSizeScale === "large") return 1.12;
     return 1.0;
   }, [fontSizeScale]);
 
   const quranMultiplier = useMemo(() => {
-    if (quranFontSizeScale === "small") return 0.85;
-    if (quranFontSizeScale === "large") return 1.25;
+    if (quranFontSizeScale === "small") return 0.9;
+    if (quranFontSizeScale === "large") return 1.12;
     return 1.0;
   }, [quranFontSizeScale]);
 
@@ -76,8 +76,12 @@ function VerseRow({
         <Text style={S.translationText}>{item.translation}</Text>
       ) : null}
 
-      {/* Thin separator */}
-      <View style={S.verseSeparator} />
+      {/* Elegant Separator */}
+      <View style={S.separatorContainer}>
+        <View style={S.separatorLine} />
+        <Text style={S.separatorOrnament}>◈</Text>
+        <View style={S.separatorLine} />
+      </View>
     </TouchableOpacity>
   );
 }
@@ -93,10 +97,10 @@ const createStyles = (
 ) =>
   StyleSheet.create({
     verseRow: {
-      paddingTop: verticalScale(10),
-      paddingBottom: verticalScale(12),
+      paddingTop: verticalScale(8),
+      paddingBottom: verticalScale(8),
       paddingHorizontal: 0,
-      marginVertical: verticalScale(4),
+      marginVertical: 0,
       width: "100%",
     },
     arabicWrapper: {
@@ -110,16 +114,30 @@ const createStyles = (
       borderWidth: 1,
       borderColor: colors.primary + "30",
     },
-    verseSeparator: {
-      height: 1,
-      backgroundColor: colors.primary + "50",
-      marginTop: verticalScale(14),
+    separatorContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: scale(10),
+      marginTop: verticalScale(18),
+      marginBottom: verticalScale(8),
+      paddingHorizontal: scale(20),
+    },
+    separatorLine: {
+      flex: 1,
+      height: 1.5,
+      backgroundColor: colors.primary + "60",
+    },
+    separatorOrnament: {
+      color: colors.primary,
+      fontSize: scale(13),
     },
     arabicText: {
-      color: colors.primary,
+      color: colors.quranVerse,
       fontFamily: fontFamily.quran,
-      fontSize: (fontSize.arabic + 3) * quranMultiplier,
-      lineHeight: (fontSize.arabic + 3) * quranMultiplier * 2.2,
+      fontWeight: "600",
+      fontSize: fontSize.arabic * quranMultiplier,
+      lineHeight: fontSize.arabic * quranMultiplier * 2.2,
       letterSpacing: 2.5,
       textAlign: "center",
       width: "100%",
@@ -141,6 +159,7 @@ const createStyles = (
       fontSize: fontSize.title * textMultiplier,
       lineHeight: fontSize.title * textMultiplier * 1.7,
       marginTop: verticalScale(10),
+      marginBottom: verticalScale(4),
       textAlign: "center",
       paddingHorizontal: 0,
       width: "100%",

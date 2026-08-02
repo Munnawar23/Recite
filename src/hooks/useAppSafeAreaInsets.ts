@@ -23,7 +23,8 @@ export function useAppSafeAreaInsets(): SafeAreaInsetsResult {
     !pathname ||
     pathname === "/" ||
     pathname === "/index" ||
-    pathname.includes("onboarding");
+    pathname.includes("onboarding") ||
+    pathname.includes("quran-detail");
 
   const calculatedTop = isOffline && !isBannerSuppressed ? 0 : insets.top;
 

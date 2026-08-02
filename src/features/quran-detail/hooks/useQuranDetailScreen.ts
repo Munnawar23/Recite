@@ -8,7 +8,7 @@ import type { SurahVerse } from "@/types/quran";
 import { useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { withTiming } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { RECITER_OPTIONS, useQuranAudio } from "../hooks/useQuranAudio";
 
 const PLAYBACK_SEEK_OFFSET_SEC = 0.15;
@@ -97,7 +97,7 @@ export function useQuranDetailScreen() {
   const lastRead = useReadingProgressStore((state) => state.lastRead);
 
   const { isOffline } = useNetworkStatus();
-  const insets = useSafeAreaInsets();
+  const safeArea = useAppSafeAreaInsets();
 
   // Record this surah as last read when screen opens
   useEffect(() => {
@@ -222,7 +222,7 @@ export function useQuranDetailScreen() {
     fontFamily,
     isDark,
     isOffline,
-    topInset: insets.top,
+    topInset: safeArea.paddingTop,
     // Data
     verses,
     isLoading,

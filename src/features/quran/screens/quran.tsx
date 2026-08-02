@@ -7,15 +7,16 @@ import { RefreshControl, RefreshControlProps, StyleSheet, View } from "react-nat
 import EmptyState from "@/components/layout/EmptyState";
 import Header from "@/components/layout/Header";
 import NoConnection from "@/components/layout/NoConnection";
+import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import QuranCard from "@/features/quran/components/QuranCard";
-import LottieView from "lottie-react-native";
-import { QuranListHeader } from "@/features/quran/components/QuranListHeader";
 import SearchBar from "@/features/quran/components/SearchBar";
-import { useQuranList } from "@/features/quran/hooks/useQuranList";
+import { useChapterSearch } from "@/features/quran/hooks/useChapterSearch";
+import { useQuranChapters } from "@/features/quran/hooks/useQuranChapters";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { LastRead, useReadingProgressStore } from "@/store/readingProgressStore";
 import { ThemeSpacing } from "@/theme/spacing";
 import { Chapter } from "@/types/quran";
+import LottieView from "lottie-react-native";
 import { scale } from "react-native-size-matters";
 
 const formatContinueReadingParams = (lastRead: LastRead) => ({
@@ -37,15 +38,12 @@ export default function QuranScreen() {
 
   const lastRead = useReadingProgressStore((state) => state.lastRead);
 
-  const {
-    inputValue,
-    setInputValue,
-    handleClear,
-    filteredData,
-    isLoading,
-    isError,
-    refetch,
-  } = useQuranList();
+  // 1. Data-fetching hook
+  const { chapters, isLoading, isError, refetch } = useQuranChapters();
+
+  // 2. Search & debouncing hook
+  const { inputValue, setInputValue, handleClear, filteredData } =
+    useChapterSearch(chapters);
 
   const [refreshing, setRefreshing] = useState(false);
   const listRef = useRef<FlashListRef<Chapter>>(null);
@@ -94,11 +92,17 @@ export default function QuranScreen() {
 
   const renderListHeader = useCallback(
     () => (
-      <QuranListHeader
-        lastRead={lastRead}
-        onContinueReading={handleContinueReading}
-        styles={styles}
-      />
+      <>
+        {lastRead ? (
+          <ContinueReadingCard
+            surahName={lastRead.surahName}
+            verseNumber={lastRead.verseNumber}
+            onPress={handleContinueReading}
+          />
+        ) : (
+          <View style={styles.topSpacer} />
+        )}
+      </>
     ),
     [lastRead, handleContinueReading, styles],
   );

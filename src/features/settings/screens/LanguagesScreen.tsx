@@ -7,7 +7,7 @@ import CommonModal from "@/components/ui/CommonModal";
 import ScreenHeader from "@/components/ui/ScreenHeader";
 import SectionTitle from "@/components/ui/SectionTitle";
 
-import { ReciterList } from "@/features/quran/components/ReciterList";
+import { ReciterList } from "@/components/ui/ReciterList";
 import { RECITER_OPTIONS } from "@/features/quran-detail/hooks/useQuranAudio";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { SUPPORTED_LANGUAGES, SupportedLanguageCode } from "@/i18n";

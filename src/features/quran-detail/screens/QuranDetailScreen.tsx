@@ -28,15 +28,27 @@ import Animated, { withTiming } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scale, verticalScale } from "react-native-size-matters";
 
+import CommonModal from "@/components/ui/CommonModal";
+import { Haptics } from "@/lib/haptics";
 import LottieView from "lottie-react-native";
 
 // Sub-components & Custom Hooks
-import AudioPlayerControls from "../components/AudioPlayerControls";
-import DetailHeader from "../components/DetailHeader";
-import QuranDetailHeaderSection from "../components/QuranDetailHeaderSection";
+import AudioPlayer from "../components/AudioPlayer";
+import BismillahBanner from "../components/BismillahBanner";
+import DownloadCard from "../components/DownloadCard";
+import Header from "../components/Header";
 import ScrollTopButton from "../components/ScrollTopButton";
 import VerseRow from "../components/VerseRow";
 import { RECITER_OPTIONS, useQuranAudio } from "../hooks/useQuranAudio";
+
+const TRANSLATION_OPTIONS = [
+  { label: "Arabic Only", value: "0" },
+  { label: "English (Saheeh)", value: "20" },
+  { label: "Urdu (Maududi)", value: "97" },
+  { label: "Hindi (Azizul Haque)", value: "122" },
+  { label: "Indonesian (Ministry)", value: "33" },
+  { label: "Bengali (Taisirul)", value: "161" },
+];
 
 const AnimatedFlashList = Animated.createAnimatedComponent(
   FlashList as unknown as React.ComponentType<any>,
@@ -281,12 +293,26 @@ export default function QuranDetailScreen() {
 
   const renderHeader = useCallback(
     () => (
-      <QuranDetailHeaderSection
-        chapterId={chapterId}
-        selectedTransId={selectedTransId}
-        reciterName={reciterName}
-        onTranslationChange={setTranslationId}
-      />
+      <View>
+        <View style={{ marginTop: verticalScale(4) }}>
+          <CommonModal
+            data={TRANSLATION_OPTIONS}
+            value={selectedTransId}
+            onChange={(item) => {
+              Haptics.medium();
+              setTranslationId(item.value);
+            }}
+            placeholder="Select Translation"
+          />
+        </View>
+        <DownloadCard
+          chapterId={chapterId}
+          reciterName={reciterName}
+          selectedTransId={selectedTransId}
+        />
+        <BismillahBanner chapterId={chapterId} />
+        <View style={{ height: verticalScale(8) }} />
+      </View>
     ),
     [chapterId, selectedTransId, reciterName, setTranslationId],
   );
@@ -383,7 +409,7 @@ export default function QuranDetailScreen() {
 
       <View style={S.mainContainer}>
         <Animated.View style={[S.animatedHeaderContainer, animatedHeaderStyle]}>
-          <DetailHeader
+          <Header
             chapterId={chapterId}
             arabicName={arabicName}
             englishName={englishName}
@@ -395,7 +421,7 @@ export default function QuranDetailScreen() {
         {renderContent()}
 
         {player && status && (
-          <AudioPlayerControls
+          <AudioPlayer
             player={player}
             status={status}
             isLoadingAudio={isLoadingAudio}

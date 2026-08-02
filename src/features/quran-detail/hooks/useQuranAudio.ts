@@ -1,5 +1,5 @@
 import { RECITERS_IMAGES } from "@/constants/assets";
-import { getChapterAudio } from "@/lib/api/quran-data";
+import { getChapterAudio } from "@/lib/api/chapter-audio";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { useQuery } from "@tanstack/react-query";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";

@@ -26,8 +26,14 @@ export const getRandomVerse = async (
     `/verses/random?language=${lang}&translations=${translationId}&fields=text_uthmani`,
   );
   const verse = data.verse;
-  const translation =
-    verse.translations?.[0]?.text?.replace(/<[^>]+>/g, "") || "";
+  const rawTranslation = verse.translations?.[0]?.text || "";
+  const translation = rawTranslation
+    .replace(/<sup[^>]*>.*?<\/sup>/g, "") // Remove <sup> footnote tags
+    .replace(/<[^>]+>/g, "") // Remove any remaining HTML tags
+    .replace(/\s*sup\s*\d+\s*/gi, "") // Remove leftover "sup 1" text patterns
+    .replace(/(\D)\d+(\s*[,।॥\.\?!\)]|$)/g, "$1$2") // Remove orphan footnote numbers before punctuation/end of sentence
+    .replace(/\s{2,}/g, " ") // Normalize spaces
+    .trim();
 
   return {
     arabic: verse.text_uthmani,

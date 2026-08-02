@@ -1,4 +1,4 @@
-import { ReciterList } from "@/features/quran/components/ReciterList";
+import { ReciterList } from "@/components/ui/ReciterList";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet } from "react-native";

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getVersesByChapter } from "@/lib/api/quran-data";
+import { getVersesByChapter } from "@/lib/api/chapter-verses";
 import type { SurahVerse } from "@/types/quran";
 
 export function useSurahDetail(chapterId: number, translationId: number) {

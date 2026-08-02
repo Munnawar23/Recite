@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import { useQuranList } from "@/features/quran/hooks/useQuranList";
+import { useQuranChapters } from "@/features/quran/hooks/useQuranChapters";
 import { useFavoritesStore } from "@/store/favoritesStore";
 
 export type TabValue = "favorites" | "downloads";
 
 export function useLibraryData(activeTab: TabValue) {
-  const { chapters, isError, refetch } = useQuranList();
+  const { chapters, isError, refetch } = useQuranChapters();
 
   const favoriteIds = useFavoritesStore((state) => state.favoriteIds);
 

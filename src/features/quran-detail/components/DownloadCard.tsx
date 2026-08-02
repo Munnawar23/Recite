@@ -1,8 +1,10 @@
-import React, { useMemo } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import { StyleSheet, View, Text, TouchableOpacity, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import Svg, { Circle } from "react-native-svg";
 import { useTranslation } from "react-i18next";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { Haptics } from "@/lib/haptics";
 import { scale, verticalScale } from "react-native-size-matters";
 
 interface DownloadCardProps {
@@ -15,10 +17,102 @@ type ThemeColors = ReturnType<typeof useAppTheme>["colors"];
 type ThemeFontFamily = ReturnType<typeof useAppTheme>["fontFamily"];
 type ThemeFontSize = ReturnType<typeof useAppTheme>["fontSize"];
 
+/* Circular Progress Indicator for Download State */
+function CircularProgressControl({
+  progress,
+  onCancel,
+  primaryColor,
+  trackColor,
+}: {
+  progress: number;
+  onCancel: () => void;
+  primaryColor: string;
+  trackColor: string;
+}) {
+  const size = scale(32);
+  const strokeWidth = 3;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (progress || 0) * circumference;
+
+  return (
+    <Pressable
+      onPressIn={onCancel}
+      accessibilityRole="button"
+      accessibilityLabel="Cancel Download"
+      style={{ width: size, height: size, alignItems: "center", justifyContent: "center" }}
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+    >
+      <Svg width={size} height={size} style={{ position: "absolute", transform: [{ rotate: "-90deg" }] }}>
+        <Circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke={trackColor}
+          strokeWidth={strokeWidth}
+          fill="none"
+        />
+        <Circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke={primaryColor}
+          strokeWidth={strokeWidth}
+          fill="none"
+          strokeDasharray={`${circumference} ${circumference}`}
+          strokeDashoffset={strokeDashoffset}
+          strokeLinecap="round"
+        />
+      </Svg>
+      <Ionicons name="close" size={scale(14)} color={primaryColor} />
+    </Pressable>
+  );
+}
+
 function DownloadCard({ reciterName = "Mishary Rashid Alafasy" }: DownloadCardProps) {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
+
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloaded, setIsDownloaded] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
+
+  const handleStartDownload = () => {
+    Haptics.medium();
+    setIsDownloading(true);
+    setIsDownloaded(false);
+    setProgress(0);
+
+    const stepMs = 50; // 50ms interval * 100 steps = 5 seconds total
+    timerRef.current = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 1) {
+          if (timerRef.current) clearInterval(timerRef.current);
+          setIsDownloading(false);
+          setIsDownloaded(true);
+          Haptics.success();
+          return 1;
+        }
+        return prev + 0.01;
+      });
+    }, stepMs);
+  };
+
+  const handleCancelDownload = () => {
+    Haptics.medium();
+    if (timerRef.current) clearInterval(timerRef.current);
+    setIsDownloading(false);
+    setProgress(0);
+  };
 
   const S = useMemo(
     () => createStyles(colors, fontFamily, fontSize, isDark),
@@ -31,7 +125,7 @@ function DownloadCard({ reciterName = "Mishary Rashid Alafasy" }: DownloadCardPr
         {/* Left Squircle Icon */}
         <View style={[S.squircle, { backgroundColor: colors.primary + "20" }]}>
           <Ionicons
-            name="download-outline"
+            name={isDownloaded ? "checkmark-circle-outline" : "download-outline"}
             size={scale(20)}
             color={colors.primary}
           />
@@ -40,7 +134,11 @@ function DownloadCard({ reciterName = "Mishary Rashid Alafasy" }: DownloadCardPr
         {/* Text Area */}
         <View style={S.textContainer}>
           <Text numberOfLines={1} style={S.title}>
-            {t("quran.downloadCard.download", "Download")}
+            {isDownloaded
+              ? t("quran.downloadCard.downloaded", "Downloaded")
+              : isDownloading
+              ? `${Math.round(progress * 100)}%`
+              : t("quran.downloadCard.download", "Download")}
           </Text>
           <Text numberOfLines={1} style={S.subtitle}>
             {reciterName}
@@ -49,17 +147,38 @@ function DownloadCard({ reciterName = "Mishary Rashid Alafasy" }: DownloadCardPr
 
         {/* Right Action */}
         <View style={S.rightAction}>
-          <TouchableOpacity
-            style={S.downloadBtn}
-            activeOpacity={0.8}
-            accessibilityRole="button"
-            accessibilityLabel={t("quran.downloadCard.download", "Download Surah")}
-          >
-            <Ionicons name="download-outline" size={scale(14)} color={colors.card} />
-            <Text style={S.downloadBtnText}>
-              {t("quran.downloadCard.download", "Download")}
-            </Text>
-          </TouchableOpacity>
+          {isDownloading ? (
+            <CircularProgressControl
+              progress={progress}
+              onCancel={handleCancelDownload}
+              primaryColor={colors.primary}
+              trackColor={colors.border}
+            />
+          ) : isDownloaded ? (
+            <TouchableOpacity
+              style={[S.downloadBtn, S.downloadedBtn]}
+              activeOpacity={0.8}
+              onPress={handleStartDownload}
+            >
+              <Ionicons name="checkmark" size={scale(14)} color={colors.primary} />
+              <Text style={[S.downloadBtnText, { color: colors.primary }]}>
+                {t("quran.downloadCard.downloaded", "Downloaded")}
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={S.downloadBtn}
+              activeOpacity={0.8}
+              onPress={handleStartDownload}
+              accessibilityRole="button"
+              accessibilityLabel={t("quran.downloadCard.download", "Download Surah")}
+            >
+              <Ionicons name="download-outline" size={scale(14)} color={colors.card} />
+              <Text style={S.downloadBtnText}>
+                {t("quran.downloadCard.download", "Download")}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>
@@ -116,6 +235,7 @@ const createStyles = (
     },
     rightAction: {
       justifyContent: "center",
+      alignItems: "center",
     },
     downloadBtn: {
       flexDirection: "row",
@@ -125,6 +245,11 @@ const createStyles = (
       paddingHorizontal: scale(12),
       paddingVertical: verticalScale(6),
       borderRadius: scale(20),
+    },
+    downloadedBtn: {
+      backgroundColor: colors.primary + "15",
+      borderWidth: 1,
+      borderColor: colors.primary + "30",
     },
     downloadBtnText: {
       color: colors.card,

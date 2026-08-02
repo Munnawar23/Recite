@@ -9,19 +9,19 @@ import type { AudioPlayer } from "expo-audio";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Haptics } from "@/lib/haptics";
 
-interface AudioPlayerControlsProps {
+interface AudioPlayerProps {
   player: AudioPlayer;
   status: any;
   isLoadingAudio: boolean;
   scrollTranslateY?: SharedValue<number>;
 }
 
-export default function AudioPlayerControls({
+export default function AudioPlayerComponent({
   player,
   status,
   isLoadingAudio,
   scrollTranslateY,
-}: AudioPlayerControlsProps) {
+}: AudioPlayerProps) {
   const { colors, fontFamily, fontSize } = useAppTheme();
   const insets = useSafeAreaInsets();
   const S = createStyles(colors, fontFamily, fontSize, insets.bottom);

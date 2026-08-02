@@ -2,7 +2,7 @@ import { MessageModal } from "@/components/ui/MessageModal";
 import { RECITER_OPTIONS } from "@/features/quran-detail/hooks/useQuranAudio";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
-import { getChapterAudio } from "@/lib/api/quran-data";
+import { getChapterAudio } from "@/lib/api/chapter-audio";
 import { Haptics } from "@/lib/haptics";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { Ionicons } from "@expo/vector-icons";

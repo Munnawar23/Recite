@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Fuse from "fuse.js";
 import { Keyboard } from "react-native";
-import { useQuranData } from "./useQuranData";
 import { Haptics } from "@/lib/haptics";
+import { Chapter } from "@/types/quran";
 
-export function useQuranList(selectedOption?: "read" | "listen") {
+export function useChapterSearch(chapters: Chapter[]) {
   const [inputValue, setInputValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -31,7 +31,7 @@ export function useQuranList(selectedOption?: "read" | "listen") {
     };
   }, [inputValue]);
 
-  // Handle immediate clear
+  // Handle clear search
   const handleClear = useCallback(() => {
     Haptics.medium();
     setInputValue("");
@@ -42,35 +42,30 @@ export function useQuranList(selectedOption?: "read" | "listen") {
     Keyboard.dismiss();
   }, []);
 
-  // Fetch chapters
-  const { data: quranData = [], isLoading, isError, refetch } = useQuranData();
-
+  // Fuse.js fuzzy search configuration
   const fuse = useMemo(() => {
-    if (!quranData.length) return null;
-    return new Fuse(quranData, {
+    if (!chapters.length) return null;
+    return new Fuse(chapters, {
       keys: ["englishName", "englishTranslation", "name", "id"],
       threshold: 0.3,
       distance: 100,
     });
-  }, [quranData]);
+  }, [chapters]);
 
+  // Filter chapters list based on debounced searchQuery
   const filteredData = useMemo(() => {
     if (!searchQuery.trim()) {
-      return quranData;
+      return chapters;
     }
     if (!fuse) return [];
     return fuse.search(searchQuery).map((res) => res.item);
-  }, [searchQuery, quranData, fuse]);
+  }, [searchQuery, chapters, fuse]);
 
   return {
     inputValue,
     setInputValue,
     handleClear,
     searchQuery,
-    chapters: quranData,
     filteredData,
-    isLoading,
-    isError,
-    refetch,
   };
 }

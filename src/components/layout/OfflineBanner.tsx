@@ -16,8 +16,14 @@ export function OfflineBanner() {
 
   if (!isOffline) return null;
 
-  // Suppress banner on splash screen and onboarding flow
-  if (!pathname || pathname === "/" || pathname === "/index" || pathname.includes("onboarding")) {
+  // Suppress banner on splash screen, onboarding flow, and quran-detail screen
+  if (
+    !pathname ||
+    pathname === "/" ||
+    pathname === "/index" ||
+    pathname.includes("onboarding") ||
+    pathname.includes("quran-detail")
+  ) {
     return null;
   }
 

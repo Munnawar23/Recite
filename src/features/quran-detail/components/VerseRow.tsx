@@ -10,7 +10,7 @@ interface VerseRowProps {
   selectedTransId: string;
   isActive?: boolean;
   onLayout?: (y: number) => void;
-  onPress?: () => void;
+  onPress?: (verseKey: string) => void;
 }
 
 function VerseRow({
@@ -51,7 +51,7 @@ function VerseRow({
   return (
     <TouchableOpacity
       activeOpacity={0.85}
-      onPress={onPress}
+      onPress={() => onPress?.(item.verseKey)}
       style={S.verseRow}
       onLayout={(e) => {
         onLayout?.(e.nativeEvent.layout.y);

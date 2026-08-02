@@ -62,29 +62,3 @@ export async function cancelDailyNightlyNotification(identifier: string | null):
     console.error("Failed to cancel scheduled notification:", error);
   }
 }
-
-/**
- * Instantly triggers a test notification for testing.
- */
-export async function triggerInstantTestNotification(): Promise<void> {
-  if (isExpoGo || !Notifications) return;
-  try {
-    const granted = await requestNotificationPermissions();
-    if (!granted) return;
-
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: NIGHTLY_REMINDER_CONTENT.title,
-        body: NIGHTLY_REMINDER_CONTENT.body,
-        sound: "notification.mp3", // iOS uses this; Android uses the channel sound
-      },
-      trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-        seconds: 1,
-        channelId: "recite_reminder_channel_v3",
-      },
-    });
-  } catch (error) {
-    console.error("Failed to trigger instant test notification:", error);
-  }
-}

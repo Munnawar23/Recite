@@ -7,7 +7,7 @@ import { Haptics } from "@/lib/haptics";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { Ionicons } from "@expo/vector-icons";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
@@ -70,7 +70,7 @@ export function ReciterList({
     }
   }, [status.didJustFinish]);
 
-  const safePause = () => {
+  const safePause = useCallback(() => {
     try {
       if (player && status.playing) {
         player.pause();
@@ -78,17 +78,16 @@ export function ReciterList({
     } catch (err) {
       // ignore
     }
-  };
+  }, [player, status.playing]);
 
-  // Clean up audio on unmount
+  // Clean up audio on unmount — player is a stable reference so this is safe
   useEffect(() => {
     return () => {
-      safePause();
+      try { player.pause(); } catch {}
     };
-  }, []);
+  }, [player]);
 
-  // Handle play/pause toggle for Surah 1 audio sample
-  const togglePlayAudio = async (targetReciterId: number) => {
+  const togglePlayAudio = useCallback(async (targetReciterId: number) => {
     Haptics.medium();
 
     if (isOffline) {
@@ -135,15 +134,95 @@ export function ReciterList({
       setIsLoadingAudio(false);
       setPlayingReciterId(null);
     }
-  };
+  }, [isOffline, playingReciterId, status.playing, safePause, player]);
 
-  const handleSelectReciter = (id: number) => {
+  const handleSelectReciter = useCallback((id: number) => {
     Haptics.medium();
     setReciterId(id);
     if (onSelectReciter) onSelectReciter(id);
-  };
+  }, [setReciterId, onSelectReciter]);
 
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const S = useMemo(
+    () => createStyles(colors, fontFamily, fontSize, spacing),
+    [colors, fontFamily, fontSize, spacing],
+  );
+
+  const renderItem = useCallback(
+    ({ item: reciter }: { item: typeof RECITER_OPTIONS[number] }) => {
+      const isSelected = reciterId === reciter.id;
+      const hasError = imageError[reciter.id];
+      const isThisPlaying = playingReciterId === reciter.id && status.playing;
+      const isThisLoading =
+        playingReciterId === reciter.id &&
+        (isLoadingAudio || (!status.isLoaded && !status.playing));
+
+      return (
+        <TouchableOpacity
+          style={[S.reciterItem, isSelected && S.selectedItem]}
+          onPress={() => handleSelectReciter(reciter.id)}
+          activeOpacity={0.7}
+        >
+          <View style={S.leftSection}>
+            {reciter.avatar && !hasError ? (
+              <Image
+                source={
+                  typeof reciter.avatar === "string"
+                    ? { uri: reciter.avatar }
+                    : reciter.avatar
+                }
+                style={S.avatar}
+                onError={() =>
+                  setImageError((prev) => ({ ...prev, [reciter.id]: true }))
+                }
+              />
+            ) : (
+              <View style={S.avatarFallback}>
+                <Ionicons name="person" size={scale(18)} color={colors.primary} />
+              </View>
+            )}
+            <Text style={[S.reciterLabel, isSelected && S.selectedLabel]}>
+              {reciter.label}
+            </Text>
+          </View>
+
+          <View style={S.rightActions}>
+            {showSelectedCheckmark && isSelected && (
+              <Ionicons
+                name="checkmark-circle"
+                size={scale(22)}
+                color={colors.primary}
+                style={S.checkmarkIcon}
+              />
+            )}
+            <TouchableOpacity
+              style={S.playBtn}
+              onPress={(e) => {
+                e.stopPropagation();
+                togglePlayAudio(reciter.id);
+              }}
+              activeOpacity={0.7}
+              hitSlop={PLAY_BTN_HIT_SLOP}
+            >
+              {isThisLoading ? (
+                <ActivityIndicator size="small" color={colors.primary} />
+              ) : (
+                <Ionicons
+                  name={isThisPlaying ? "pause-circle" : "play-circle"}
+                  size={scale(30)}
+                  color={colors.primary}
+                />
+              )}
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      );
+    },
+    [
+      reciterId, imageError, playingReciterId, status.playing, status.isLoaded,
+      isLoadingAudio, S, colors.primary, showSelectedCheckmark,
+      handleSelectReciter, togglePlayAudio,
+    ],
+  );
 
   return (
     <>
@@ -163,82 +242,7 @@ export function ReciterList({
         contentContainerStyle={S.listContainer}
         scrollEnabled={scrollEnabled}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item: reciter }) => {
-          const isSelected = reciterId === reciter.id;
-          const hasError = imageError[reciter.id];
-          const isThisPlaying =
-            playingReciterId === reciter.id && status.playing;
-          const isThisLoading =
-            playingReciterId === reciter.id &&
-            (isLoadingAudio || (!status.isLoaded && !status.playing));
-
-          return (
-            <TouchableOpacity
-              style={[S.reciterItem, isSelected && S.selectedItem]}
-              onPress={() => handleSelectReciter(reciter.id)}
-              activeOpacity={0.7}
-            >
-              <View style={S.leftSection}>
-                {reciter.avatar && !hasError ? (
-                  <Image
-                    source={
-                      typeof reciter.avatar === "string"
-                        ? { uri: reciter.avatar }
-                        : reciter.avatar
-                    }
-                    style={S.avatar}
-                    onError={() =>
-                      setImageError((prev) => ({ ...prev, [reciter.id]: true }))
-                    }
-                  />
-                ) : (
-                  <View style={S.avatarFallback}>
-                    <Ionicons
-                      name="person"
-                      size={scale(18)}
-                      color={colors.primary}
-                    />
-                  </View>
-                )}
-                <Text style={[S.reciterLabel, isSelected && S.selectedLabel]}>
-                  {reciter.label}
-                </Text>
-              </View>
-
-              <View style={S.rightActions}>
-                {showSelectedCheckmark && isSelected && (
-                  <Ionicons
-                    name="checkmark-circle"
-                    size={scale(22)}
-                    color={colors.primary}
-                    style={S.checkmarkIcon}
-                  />
-                )}
-
-                {/* Audio Preview Play/Pause Button */}
-                <TouchableOpacity
-                  style={S.playBtn}
-                  onPress={(e) => {
-                    e.stopPropagation();
-                    togglePlayAudio(reciter.id);
-                  }}
-                  activeOpacity={0.7}
-                  hitSlop={PLAY_BTN_HIT_SLOP}
-                >
-                  {isThisLoading ? (
-                    <ActivityIndicator size="small" color={colors.primary} />
-                  ) : (
-                    <Ionicons
-                      name={isThisPlaying ? "pause-circle" : "play-circle"}
-                      size={scale(30)}
-                      color={colors.primary}
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
+        renderItem={renderItem}
       />
     </>
   );

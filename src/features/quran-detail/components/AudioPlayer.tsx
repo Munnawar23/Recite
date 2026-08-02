@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import Animated, { useAnimatedStyle, type SharedValue } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,6 +16,17 @@ interface AudioPlayerProps {
   scrollTranslateY?: SharedValue<number>;
 }
 
+const formatTime = (seconds: number): string => {
+  if (isNaN(seconds) || seconds == null) return "0:00";
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+  if (hrs > 0) {
+    return `${hrs}:${mins < 10 ? "0" : ""}${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  }
+  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+};
+
 export default function AudioPlayerComponent({
   player,
   status,
@@ -24,19 +35,12 @@ export default function AudioPlayerComponent({
 }: AudioPlayerProps) {
   const { colors, fontFamily, fontSize } = useAppTheme();
   const insets = useSafeAreaInsets();
-  const S = createStyles(colors, fontFamily, fontSize, insets.bottom);
+  const S = useMemo(
+    () => createStyles(colors, fontFamily, fontSize, insets.bottom),
+    [colors, fontFamily, fontSize, insets.bottom],
+  );
 
-  const formatTime = (seconds: number) => {
-    if (isNaN(seconds) || seconds === null || seconds === undefined) return "0:00";
-    const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = Math.floor(seconds % 60);
 
-    if (hrs > 0) {
-      return `${hrs}:${mins < 10 ? "0" : ""}${mins}:${secs < 10 ? "0" : ""}${secs}`;
-    }
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-  };
 
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
   const [sliderValue, setSliderValue] = useState<number>(0);
@@ -59,26 +63,32 @@ export default function AudioPlayerComponent({
     }
   }, [status.currentTime, isDragging]);
 
-  const cycleSpeed = () => {
+  const cycleSpeed = useCallback(() => {
     Haptics.medium();
-    let nextSpeed = 1.0;
-    if (playbackSpeed === 1.0) nextSpeed = 1.25;
-    else if (playbackSpeed === 1.25) nextSpeed = 1.5;
-    else if (playbackSpeed === 1.5) nextSpeed = 2.0;
-    else nextSpeed = 1.0;
-
+    const nextSpeed =
+      playbackSpeed === 1.0 ? 1.25 :
+      playbackSpeed === 1.25 ? 1.5 :
+      playbackSpeed === 1.5 ? 2.0 : 1.0;
     setPlaybackSpeed(nextSpeed);
     player.setPlaybackRate(nextSpeed);
-  };
+  }, [playbackSpeed, player]);
 
-  const handlePlayPause = () => {
+  const handlePlayPause = useCallback(() => {
     Haptics.medium();
     if (status.playing) {
       player.pause();
     } else {
       player.play();
     }
-  };
+  }, [status.playing, player]);
+
+  const handleSkipBack = useCallback(() => {
+    player.seekTo(Math.max(0, status.currentTime - 10));
+  }, [player, status.currentTime]);
+
+  const handleSkipForward = useCallback(() => {
+    player.seekTo(Math.min(status.duration, status.currentTime + 10));
+  }, [player, status.currentTime, status.duration]);
 
   return (
     <Animated.View style={[S.container, animatedStyle]}>
@@ -116,7 +126,7 @@ export default function AudioPlayerComponent({
         <View style={S.centerControls}>
           {/* Skip backward 10s */}
           <TouchableOpacity
-            onPress={() => player.seekTo(Math.max(0, status.currentTime - 10))}
+            onPress={handleSkipBack}
             style={S.skipButton}
           >
             <Ionicons name="play-back" size={scale(19)} color={colors.text} />
@@ -142,7 +152,7 @@ export default function AudioPlayerComponent({
 
           {/* Skip forward 10s */}
           <TouchableOpacity
-            onPress={() => player.seekTo(Math.min(status.duration, status.currentTime + 10))}
+            onPress={handleSkipForward}
             style={S.skipButton}
           >
             <Ionicons name="play-forward" size={scale(19)} color={colors.text} />

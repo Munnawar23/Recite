@@ -15,3 +15,12 @@ export interface SurahVerse {
   arabic: string;
   translation: string;
 }
+
+export interface DownloadedChapter {
+  chapterId: number;
+  downloadedAt: number;        // Unix timestamp (ms)
+  audioLocalFile: string;      // filename only — e.g. "chapter_1.mp3"
+  textLocalFile: string;       // filename only — e.g. "chapter_1_text.json"
+  totalBytes: number;          // combined audio + text size in bytes
+}
+

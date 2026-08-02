@@ -6,7 +6,6 @@ import { scale, verticalScale } from "react-native-size-matters";
 
 import Header from "@/components/layout/Header";
 import AboutSection from "../components/AboutSection";
-import DevSection from "../components/DevSection";
 import DisplayLanguageSection from "../components/DisplayLanguageSection";
 import HelpSupportSection from "../components/HelpSupportSection";
 import NotificationSection from "../components/NotificationSection";
@@ -49,7 +48,6 @@ export default function SettingsScreen() {
         <StorageSection />
         <HelpSupportSection />
         <AboutSection />
-        <DevSection />
 
         {/* Bottom App Version Indicator */}
         <View style={styles.footerVersionContainer}>

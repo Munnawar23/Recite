@@ -91,9 +91,15 @@
       "paused": "Paused • {{written}} / {{total}} MB ({{progress}}%)",
       "pause": "Pause",
       "resume": "Resume",
-      "playingOffline": "Playing offline from your Audio",
+      "playingOffline": "Playing Offline",
+      "playingOfflineTitle": "Playing Offline",
+      "playingOnlineTitle": "Playing Online",
       "deleteTitle": "Delete Download?",
-      "deleteDesc": "Are you sure you want to remove this Surah recitation from your offline downloads?"
+      "deleteDesc": "Are you sure you want to remove this Surah recitation from your offline downloads?",
+      "notReadyTitle": "Audio Not Ready",
+      "notReadyBody": "Audio information is loading. Please try again in a moment.",
+      "errorTitle": "Download Failed",
+      "errorBody": "Could not complete download. Please check your connection and try again."
     }
   },
   "errorBoundary": {

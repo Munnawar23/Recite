@@ -91,9 +91,15 @@
       "paused": "Jeda • {{written}} / {{total}} MB ({{progress}}%)",
       "pause": "Jeda",
       "resume": "Lanjutkan",
-      "playingOffline": "Memutar offline dari Audio Anda",
+      "playingOffline": "Memutar Offline",
+      "playingOfflineTitle": "Memutar Offline",
+      "playingOnlineTitle": "Memutar Online",
       "deleteTitle": "Hapus Unduhan?",
-      "deleteDesc": "Apakah Anda yakin ingin menghapus lantunan Surah ini dari unduhan offline Anda?"
+      "deleteDesc": "Apakah Anda yakin ingin menghapus lantunan Surah ini dari unduhan offline Anda?",
+      "notReadyTitle": "Audio Belum Siap",
+      "notReadyBody": "Informasi audio sedang dimuat. Silakan coba lagi sebentar lagi.",
+      "errorTitle": "Unduhan Gagal",
+      "errorBody": "Tidak dapat menyelesaikan unduhan. Silakan periksa koneksi Anda dan coba lagi."
     }
   },
   "errorBoundary": {

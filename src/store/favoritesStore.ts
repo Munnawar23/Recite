@@ -23,6 +23,23 @@ export const useFavoritesStore = create<FavoritesState>()(
     {
       name: STORAGE_KEYS.FAVORITES,
       storage: createJSONStorage(() => zustandStorage),
+      // Bump `version` whenever the state shape changes.
+      // Add a case in `migrate` to transform old data safely.
+      version: 1,
+      migrate: (persisted: any, fromVersion: number) => {
+        if (fromVersion < 1) {
+          // v0 → v1: ensure favoriteIds is always a clean number array
+          return {
+            favoriteIds: Array.isArray(persisted?.favoriteIds)
+              ? persisted.favoriteIds.filter(
+                  (id: any) => typeof id === "number",
+                )
+              : [],
+          };
+        }
+        return persisted as FavoritesState;
+      },
     }
   )
 );
+

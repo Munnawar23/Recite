@@ -62,3 +62,61 @@ export const zustandStorage: StateStorage = {
     await AsyncStorage.removeItem(name);
   },
 };
+
+// ─── Download Storage ─────────────────────────────────────────────────────────
+
+/**
+ * Shape of a single downloaded chapter record.
+ * Stored as a value inside the downloads map keyed by chapterId.
+ */
+import { DownloadedChapter } from "@/types/quran";
+export type { DownloadedChapter };
+
+/** Internal shape persisted under STORAGE_KEYS.DOWNLOADS */
+type DownloadsRecord = Record<number, DownloadedChapter>;
+
+/**
+ * Read the full downloads map from AsyncStorage.
+ * Returns empty object if nothing saved yet.
+ */
+export async function getDownloadsRecord(): Promise<DownloadsRecord> {
+  const data = await appStorage.getItem<DownloadsRecord>(STORAGE_KEYS.DOWNLOADS);
+  return data ?? {};
+}
+
+/**
+ * Save (upsert) a single chapter download entry.
+ * Merges with existing records — does NOT wipe others.
+ */
+export async function saveDownloadEntry(chapter: DownloadedChapter): Promise<void> {
+  const existing = await getDownloadsRecord();
+  const updated: DownloadsRecord = { ...existing, [chapter.chapterId]: chapter };
+  await appStorage.setItem(STORAGE_KEYS.DOWNLOADS, updated);
+}
+
+/**
+ * Remove a single chapter download entry by chapterId.
+ */
+export async function removeDownloadEntry(chapterId: number): Promise<void> {
+  const existing = await getDownloadsRecord();
+  const updated = { ...existing };
+  delete updated[chapterId];
+  await appStorage.setItem(STORAGE_KEYS.DOWNLOADS, updated);
+}
+
+/**
+ * Check if a chapter is downloaded without loading the full map.
+ * Useful for one-off checks outside of Zustand.
+ */
+export async function isChapterDownloaded(chapterId: number): Promise<boolean> {
+  const record = await getDownloadsRecord();
+  return !!record[chapterId];
+}
+
+/**
+ * Clear all download records from storage entirely.
+ * Use with caution — does not delete the actual files.
+ */
+export async function clearAllDownloads(): Promise<void> {
+  await appStorage.removeItem(STORAGE_KEYS.DOWNLOADS);
+}

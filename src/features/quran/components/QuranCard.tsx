@@ -35,7 +35,7 @@ function QuranCard({ item, onPress }: QuranCardProps) {
       onPress(item);
     } else {
       router.push({
-        pathname: "/surah/[id]",
+        pathname: "/quran-detail/[id]" as const,
         params: {
           id: String(item.id),
           arabicName: item.name,

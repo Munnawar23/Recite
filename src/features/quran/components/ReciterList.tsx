@@ -1,5 +1,5 @@
 import { MessageModal } from "@/components/ui/MessageModal";
-import { RECITER_OPTIONS } from "@/features/quran/hooks/useQuranAudio";
+import { RECITER_OPTIONS } from "@/features/quran-detail/hooks/useQuranAudio";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { getChapterAudio } from "@/lib/api/quran-data";

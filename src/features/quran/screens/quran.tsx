@@ -8,6 +8,7 @@ import EmptyState from "@/components/layout/EmptyState";
 import Header from "@/components/layout/Header";
 import NoConnection from "@/components/layout/NoConnection";
 import QuranCard from "@/features/quran/components/QuranCard";
+import LottieView from "lottie-react-native";
 import { QuranListHeader } from "@/features/quran/components/QuranListHeader";
 import SearchBar from "@/features/quran/components/SearchBar";
 import { useQuranList } from "@/features/quran/hooks/useQuranList";
@@ -15,9 +16,10 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { LastRead, useReadingProgressStore } from "@/store/readingProgressStore";
 import { ThemeSpacing } from "@/theme/spacing";
 import { Chapter } from "@/types/quran";
+import { scale } from "react-native-size-matters";
 
 const formatContinueReadingParams = (lastRead: LastRead) => ({
-  pathname: "/surah/[id]" as const,
+  pathname: "/quran-detail/[id]" as const,
   params: {
     id: String(lastRead.surahNumber),
     englishName: lastRead.surahName,
@@ -94,18 +96,26 @@ export default function QuranScreen() {
     () => (
       <QuranListHeader
         lastRead={lastRead}
-        isLoading={isLoading}
-        refreshing={refreshing}
-        primaryColor={colors.primary}
         onContinueReading={handleContinueReading}
         styles={styles}
       />
     ),
-    [lastRead, isLoading, refreshing, colors.primary, handleContinueReading, styles],
+    [lastRead, handleContinueReading, styles],
   );
 
   const renderListEmpty = useCallback(() => {
-    if (isLoading) return null;
+    if (isLoading) {
+      return (
+        <View style={styles.loadingContainer}>
+          <LottieView
+            source={require("@/../assets/animations/loading.json")}
+            autoPlay
+            loop
+            style={styles.lottieLoader}
+          />
+        </View>
+      );
+    }
     if (isError) {
       return (
         <View style={styles.emptyContainer}>
@@ -174,6 +184,12 @@ const createStyles = (spacing: ThemeSpacing) =>
     loadingContainer: {
       paddingVertical: spacing.vXl,
       alignItems: "center",
+      justifyContent: "center",
+      flex: 1,
+    },
+    lottieLoader: {
+      width: scale(200),
+      height: scale(200),
     },
     bottomSpacer: {
       height: spacing.vXxl,

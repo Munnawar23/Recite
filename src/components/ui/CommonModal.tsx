@@ -103,7 +103,11 @@ export default function CommonModal({
             </View>
 
             {children ? (
-              <ScrollView showsVerticalScrollIndicator={false} style={S.customContent}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                style={S.customContent}
+                contentContainerStyle={S.customContentContainer}
+              >
                 {children}
               </ScrollView>
             ) : data ? (
@@ -162,7 +166,7 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any) =>
     },
     modalContent: {
       width: "100%",
-      maxHeight: "70%",
+      maxHeight: "80%",
       backgroundColor: colors.card,
       borderRadius: scale(16),
       borderWidth: 1,
@@ -196,7 +200,11 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any) =>
       fontSize: fontSize.cardTitle,
     },
     customContent: {
-      paddingVertical: verticalScale(8),
+      flexShrink: 1,
+      paddingVertical: verticalScale(4),
+    },
+    customContentContainer: {
+      paddingBottom: verticalScale(16),
     },
     itemRow: {
       flexDirection: "row",

@@ -8,7 +8,7 @@ import ScreenHeader from "@/components/ui/ScreenHeader";
 import SectionTitle from "@/components/ui/SectionTitle";
 
 import { ReciterList } from "@/features/quran/components/ReciterList";
-import { RECITER_OPTIONS } from "@/features/quran/hooks/useQuranAudio";
+import { RECITER_OPTIONS } from "@/features/quran-detail/hooks/useQuranAudio";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { SUPPORTED_LANGUAGES, SupportedLanguageCode } from "@/i18n";
 import { Haptics } from "@/lib/haptics";

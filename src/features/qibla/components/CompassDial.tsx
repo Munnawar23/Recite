@@ -21,6 +21,7 @@ import Svg, {
 interface CompassDialProps {
   rotation: SharedValue<number>;
   qiblaAngle: number;
+  active?: boolean;
 }
 
 const SIZE = scale(300);
@@ -31,14 +32,20 @@ const INNER_R = OUTER_R - scale(32);
 export default function CompassDial({
   rotation,
   qiblaAngle,
+  active = true,
 }: CompassDialProps) {
   const { colors, fontFamily } = useAppTheme();
   const isAligned = useSharedValue(false);
 
   useAnimatedReaction(
-    () => rotation.value,
-    (currentRotation) => {
-      const screenAngle = (((-currentRotation + qiblaAngle) % 360) + 360) % 360;
+    () => ({ rot: rotation.value, active }),
+    ({ rot, active: isActive }) => {
+      if (!isActive) {
+        isAligned.value = false;
+        return;
+      }
+
+      const screenAngle = (((-rot + qiblaAngle) % 360) + 360) % 360;
       const aligned = screenAngle < 3 || screenAngle > 357;
 
       if (aligned !== isAligned.value) {

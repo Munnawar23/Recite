@@ -122,7 +122,7 @@ export default function HomeScreen() {
               verseNumber={lastRead.verseNumber}
               onPress={() =>
                 router.push({
-                  pathname: "/surah/[id]",
+                  pathname: "/quran-detail/[id]" as const,
                   params: {
                     id: String(lastRead.surahNumber),
                     englishName: lastRead.surahName,

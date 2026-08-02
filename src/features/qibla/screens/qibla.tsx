@@ -5,6 +5,7 @@ import { useCompass } from "@/features/qibla/hooks/useCompass";
 import { useQiblaDirection } from "@/features/qibla/hooks/useQiblaDirection";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLocation } from "@/hooks/useLocation";
+import { usePathname } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import Animated, {
@@ -40,6 +41,8 @@ function LiveHeadingText({
 }
 
 export default function QiblaScreen() {
+  const pathname = usePathname();
+  const isFocused = pathname === "/qibla";
   const { t } = useTranslation();
   const theme = useAppTheme();
   const styles = createStyles(theme);
@@ -48,6 +51,8 @@ export default function QiblaScreen() {
 
   const qiblaAngle = useQiblaDirection(coords);
   const rotation = useCompass();
+
+
 
   const targetDeg = Math.round(qiblaAngle);
 
@@ -96,7 +101,11 @@ export default function QiblaScreen() {
               </View>
 
               {/* Center Compass Dial */}
-              <CompassDial rotation={rotation} qiblaAngle={qiblaAngle} />
+              <CompassDial
+                rotation={rotation}
+                qiblaAngle={qiblaAngle}
+                active={isFocused}
+              />
 
               {/* Bottom Current Heading */}
               <View style={styles.headingContainer}>

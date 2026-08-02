@@ -5,10 +5,6 @@ export const DOWNLOAD_ANIM = require("../../assets/animations/download.json");
 
 // Images
 export const ICON_IMG = require("../../assets/images/icons/icon.png");
-export const BACKGROUND_IMG = ICON_IMG;
-export const FAVICON_IMG = ICON_IMG;
-export const FOREGROUND_IMG = ICON_IMG;
-export const SPLASH_IMG = ICON_IMG;
 
 // Reciter Images
 export const RECITERS_IMAGES: Record<number, any> = {

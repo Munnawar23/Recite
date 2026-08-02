@@ -1,5 +1,5 @@
-import { useActiveQuranDetail } from "@/features/quran/hooks/useQuranDetail";
-import { useQuranDetailScroll } from "@/features/quran/hooks/useQuranDetailScroll";
+import { useActiveQuranDetail } from "@/features/quran-detail/hooks/useQuranDetail";
+import { useQuranDetailScroll } from "@/features/quran-detail/hooks/useQuranDetailScroll";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";

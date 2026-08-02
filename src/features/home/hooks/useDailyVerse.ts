@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getRandomVerse } from "@/lib/api/daily-verse";
 import { appStorage } from "@/lib/storage/appStorage";
 import { useLanguageStore } from "@/store/languageStore";
+import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 
 const STORAGE_KEY_PREFIX = "daily_verse_data_";
 
@@ -27,10 +28,11 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
 
 export function useDailyVerse() {
   const language = useLanguageStore((state) => state.language);
-  const storageKey = `${STORAGE_KEY_PREFIX}${language}`;
+  const translationId = useQuranSettingsStore((state) => state.translationId);
+  const storageKey = `${STORAGE_KEY_PREFIX}${language}_${translationId}`;
 
   return useQuery({
-    queryKey: ["dailyVerse", language],
+    queryKey: ["dailyVerse", language, translationId],
 
     queryFn: async (): Promise<DailyVerse> => {
       const today = new Date().toISOString().split("T")[0];
@@ -46,7 +48,7 @@ export function useDailyVerse() {
       }
 
       try {
-        const verse = await getRandomVerse(language);
+        const verse = await getRandomVerse(language, translationId);
 
         await appStorage.setItem(storageKey, {
           verse,

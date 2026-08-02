@@ -109,47 +109,50 @@ export default function AudioPlayerControls({
 
       {/* Control Buttons */}
       <View style={S.controlsRow}>
-        {/* Speed Selector (Far Left) */}
+        {/* Spacer to balance speed button on left side */}
+        <View style={S.spacerButton} />
+
+        {/* Center Playback Controls */}
+        <View style={S.centerControls}>
+          {/* Skip backward 10s */}
+          <TouchableOpacity
+            onPress={() => player.seekTo(Math.max(0, status.currentTime - 10))}
+            style={S.skipButton}
+          >
+            <Ionicons name="play-back" size={scale(19)} color={colors.text} />
+          </TouchableOpacity>
+
+          {/* Play/Pause Main Button (Exact Center) */}
+          <TouchableOpacity
+            onPress={handlePlayPause}
+            disabled={isLoadingAudio}
+            style={S.playPauseButton}
+          >
+            {isLoadingAudio ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Ionicons
+                name={status.playing ? "pause" : "play"}
+                size={scale(26)}
+                color="#fff"
+                style={!status.playing ? { marginLeft: scale(2.5) } : undefined}
+              />
+            )}
+          </TouchableOpacity>
+
+          {/* Skip forward 10s */}
+          <TouchableOpacity
+            onPress={() => player.seekTo(Math.min(status.duration, status.currentTime + 10))}
+            style={S.skipButton}
+          >
+            <Ionicons name="play-forward" size={scale(19)} color={colors.text} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Speed Selector (Far Right Badge Button) */}
         <TouchableOpacity onPress={cycleSpeed} style={S.speedButton}>
           <Text style={S.speedButtonText}>{playbackSpeed === 1 ? "1.0" : playbackSpeed}x</Text>
         </TouchableOpacity>
-
-        {/* Skip backward 10s */}
-        <TouchableOpacity
-          onPress={() => player.seekTo(Math.max(0, status.currentTime - 10))}
-          style={S.skipButton}
-        >
-          <Ionicons name="play-back-outline" size={scale(22)} color={colors.text} />
-        </TouchableOpacity>
-
-        {/* Play/Pause Main Button (Exact Center) */}
-        <TouchableOpacity
-          onPress={handlePlayPause}
-          disabled={isLoadingAudio}
-          style={S.playPauseButton}
-        >
-          {isLoadingAudio ? (
-            <ActivityIndicator size="small" color="#fff" />
-          ) : (
-            <Ionicons
-              name={status.playing ? "pause" : "play"}
-              size={scale(24)}
-              color="#fff"
-              style={!status.playing ? { marginLeft: scale(2) } : undefined}
-            />
-          )}
-        </TouchableOpacity>
-
-        {/* Skip forward 10s */}
-        <TouchableOpacity
-          onPress={() => player.seekTo(Math.min(status.duration, status.currentTime + 10))}
-          style={S.skipButton}
-        >
-          <Ionicons name="play-forward-outline" size={scale(22)} color={colors.text} />
-        </TouchableOpacity>
-
-        {/* Spacer to balance speed button on opposite side */}
-        <View style={S.spacerButton} />
       </View>
     </Animated.View>
   );
@@ -159,86 +162,92 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, bottomInset: 
   StyleSheet.create({
     container: {
       backgroundColor: colors.card,
-      borderTopWidth: 1,
-      borderTopColor: colors.border + "80",
-      paddingTop: verticalScale(8),
+      borderTopLeftRadius: scale(20),
+      borderTopRightRadius: scale(20),
+      paddingTop: verticalScale(12),
       paddingBottom: Math.max(bottomInset + verticalScale(8), verticalScale(22)),
-      paddingHorizontal: scale(16),
+      paddingHorizontal: scale(18),
       position: "absolute",
       bottom: 0,
       left: 0,
       right: 0,
       shadowColor: "#000",
-      shadowOffset: { width: 0, height: -3 },
-      shadowOpacity: 0.08,
-      shadowRadius: 8,
-      elevation: 10,
+      shadowOffset: { width: 0, height: -4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 10,
+      elevation: 20,
     },
     progressSection: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      gap: scale(6),
-      marginBottom: verticalScale(4),
+      marginBottom: verticalScale(10),
     },
     timeText: {
       fontFamily: fontFamily.text,
-      fontSize: fontSize.caption * 0.9,
+      fontSize: fontSize.caption,
       color: colors.subtext,
-      minWidth: scale(32),
+      minWidth: scale(38),
       textAlign: "center",
+      fontVariant: ["tabular-nums"],
     },
     slider: {
       flex: 1,
-      height: verticalScale(20),
+      height: verticalScale(22),
+      marginHorizontal: scale(6),
     },
     controlsRow: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      paddingHorizontal: scale(16),
+    },
+    centerControls: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: scale(20),
     },
     skipButton: {
-      width: scale(36),
-      height: scale(36),
-      borderRadius: scale(18),
+      width: scale(42),
+      height: scale(42),
+      borderRadius: scale(21),
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: colors.background,
-      borderWidth: 1,
-      borderColor: colors.border + "40",
     },
     speedButton: {
-      width: scale(36),
-      height: scale(36),
-      borderRadius: scale(18),
+      width: scale(38),
+      height: scale(38),
+      borderRadius: scale(19),
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: colors.background,
-      borderWidth: 1,
-      borderColor: colors.border + "40",
+      backgroundColor: colors.primary,
+      shadowColor: colors.primary,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+      elevation: 3,
     },
     speedButtonText: {
       fontFamily: fontFamily.title,
       fontSize: fontSize.caption * 0.9,
-      color: colors.primary,
+      color: "#FFFFFF",
     },
     spacerButton: {
-      width: scale(36),
-      height: scale(36),
+      width: scale(38),
+      height: scale(38),
     },
     playPauseButton: {
-      width: scale(46),
-      height: scale(46),
-      borderRadius: scale(23),
+      width: scale(54),
+      height: scale(54),
+      borderRadius: scale(27),
       backgroundColor: colors.primary,
       alignItems: "center",
       justifyContent: "center",
       shadowColor: colors.primary,
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 3,
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.3,
+      shadowRadius: 6,
+      elevation: 5,
     },
   });
 

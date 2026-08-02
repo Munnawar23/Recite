@@ -24,7 +24,17 @@ export default function HomeScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { colors, spacing } = useAppTheme();
-  const { cityName } = useLocation();
+  const { cityName, isLoading, permissionStatus } = useLocation();
+
+  const getRightLocationText = () => {
+    if (permissionStatus === "granted" && cityName) {
+      return `📍 ${cityName}`;
+    }
+    if (permissionStatus === "denied" || permissionStatus === "undetermined") {
+      return "📍 Mecca";
+    }
+    return undefined;
+  };
   const queryClient = useQueryClient();
   const { lastRead } = useReadingProgressStore();
   const [refreshing, setRefreshing] = useState(false);
@@ -84,7 +94,8 @@ export default function HomeScreen() {
           <SectionTitle
             label={t("home.sectionTitles.prayerTimes", "Prayer Times")}
             icon="time-outline"
-            rightText={cityName ? `📍 ${cityName}` : undefined}
+            rightText={getRightLocationText()}
+            isLoading={isLoading}
           />
           <PrayerTimes />
         </Animated.View>

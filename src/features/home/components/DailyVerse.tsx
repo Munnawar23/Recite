@@ -69,7 +69,9 @@ export default function DailyVerse() {
           </View>
 
           {/* Translation */}
-          <Text style={S.translation}>{currentVerse.translation}</Text>
+          {!!currentVerse.translation && (
+            <Text style={S.translation}>{currentVerse.translation}</Text>
+          )}
 
           {/* Source badge */}
           <View style={S.footer}>

@@ -10,6 +10,7 @@ export const STORAGE_KEYS = {
   FAVORITES: "favorites-storage",
   ONBOARDING: "onboarding-storage",
   READING_PROGRESS: "reading-progress-storage",
+  LOCATION: "user-location-storage",
 } as const;
 
 export const appStorage = {

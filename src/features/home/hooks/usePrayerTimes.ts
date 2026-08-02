@@ -1,13 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import {
-    PrayerTimes as AdhanPrayerTimes,
-    CalculationMethod,
-    Coordinates,
+  PrayerTimes as AdhanPrayerTimes,
+  CalculationMethod,
+  Coordinates,
 } from "adhan";
 import { useMemo } from "react";
 
-import { formatPrayerTime } from "@/utils/dateUtils";
 import { useLocation } from "@/hooks/useLocation";
+import { formatPrayerTime } from "@/utils/dateUtils";
 
 export type Prayer = {
   name: string;
@@ -43,7 +43,7 @@ const getActivePrayer = (
 };
 
 export function usePrayerTimes() {
-  const { coords, permissionStatus, cityName, requestLocation } =
+  const { coords, permissionStatus, cityName, isLoading, requestLocation } =
     useLocation();
 
   const prayerData = useMemo(() => {
@@ -95,6 +95,7 @@ export function usePrayerTimes() {
     prayerData,
     permissionStatus,
     cityName,
+    isLoading,
     requestLocation,
   };
 }

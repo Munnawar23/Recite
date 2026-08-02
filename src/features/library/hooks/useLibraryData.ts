@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { useQuranList } from "@/features/quran/hooks/useQuranList";
-import { useDownloadsStore } from "@/store/downloadsStore";
 import { useFavoritesStore } from "@/store/favoritesStore";
 
 export type TabValue = "favorites" | "downloads";
@@ -9,7 +8,6 @@ export function useLibraryData(activeTab: TabValue) {
   const { chapters, isError, refetch } = useQuranList();
 
   const favoriteIds = useFavoritesStore((state) => state.favoriteIds);
-  const downloadedChapters = useDownloadsStore((state) => state.downloadedChapters);
 
   const favoriteIdSet = useMemo(
     () => new Set(favoriteIds),
@@ -21,19 +19,14 @@ export function useLibraryData(activeTab: TabValue) {
     [chapters, favoriteIdSet],
   );
 
-  const downloadedIdSet = useMemo(
-    () => new Set(Object.keys(downloadedChapters).map(Number)),
-    [downloadedChapters],
-  );
-
-  const downloadedChapterList = useMemo(
-    () => chapters.filter((ch) => downloadedIdSet.has(ch.id)),
-    [chapters, downloadedIdSet],
+  const staticDownloadedChapters = useMemo(
+    () => chapters.slice(0, 2),
+    [chapters],
   );
 
   const listData = useMemo(
-    () => (activeTab === "favorites" ? favoriteChapters : downloadedChapterList),
-    [activeTab, favoriteChapters, downloadedChapterList],
+    () => (activeTab === "favorites" ? favoriteChapters : staticDownloadedChapters),
+    [activeTab, favoriteChapters, staticDownloadedChapters],
   );
 
   return {
@@ -42,3 +35,4 @@ export function useLibraryData(activeTab: TabValue) {
     refetch,
   };
 }
+

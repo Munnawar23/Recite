@@ -4,16 +4,16 @@
     "slug": "Recite",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/icons/icon.png",
     "scheme": "recite",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/images/icon.png"
+      "icon": "./assets/images/icons/icon.png"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#121415",
-        "foregroundImage": "./assets/images/icon.png"
+        "backgroundColor": "#5C745B",
+        "foregroundImage": "./assets/images/icons/icon.png"
       },
       "predictiveBackGestureEnabled": false,
       "permissions": [
@@ -30,7 +30,7 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/icon.png"
+      "favicon": "./assets/images/icons/icon.png"
     },
     "plugins": [
       "expo-router",
@@ -38,7 +38,7 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#121415",
-          "image": "./assets/images/icon.png",
+          "image": "./assets/images/icons/icon.png",
           "imageWidth": 200
         }
       ],
@@ -47,7 +47,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/icon.png",
+          "icon": "./assets/images/icons/icon.png",
           "color": "#208AEF",
           "sounds": [
             "./assets/sfx/notification.mp3"

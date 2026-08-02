@@ -5,8 +5,7 @@ import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scale } from "react-native-size-matters";
-import { useGlobalSearchParams, usePathname } from "expo-router";
-import { useDownloadsStore } from "@/store/downloadsStore";
+import { usePathname } from "expo-router";
 
 export function OfflineBanner() {
   const { isOffline } = useNetworkStatus();
@@ -14,22 +13,12 @@ export function OfflineBanner() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
-  const params = useGlobalSearchParams<{ id?: string }>();
-  const { downloadedChapters } = useDownloadsStore();
 
   if (!isOffline) return null;
 
   // Suppress banner on splash screen and onboarding flow
   if (!pathname || pathname === "/" || pathname === "/index" || pathname.includes("onboarding")) {
     return null;
-  }
-
-  // If user is inside surah detail screen and chapter is downloaded, suppress banner
-  if (pathname?.includes("/surah/") && params?.id) {
-    const chapterId = parseInt(params.id, 10);
-    if (downloadedChapters[chapterId]) {
-      return null;
-    }
   }
 
   const S = createStyles(colors, fontFamily, fontSize, spacing, insets.top);

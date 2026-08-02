@@ -1,3 +1,4 @@
+import { appStorage, STORAGE_KEYS } from "@/lib/storage/appStorage";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as Location from "expo-location";
 import { Linking } from "react-native";
@@ -16,12 +17,20 @@ export function useLocation() {
   const locationQuery = useQuery<LocationData>({
     queryKey: ["user-location"],
     queryFn: async () => {
+      // 1. Try loading last saved location from appStorage as fallback
+      let savedLocationData: LocationData | null = null;
+      try {
+        savedLocationData = await appStorage.getItem<LocationData>(STORAGE_KEYS.LOCATION);
+      } catch (e) {
+        console.warn("[useLocation] Error reading location from appStorage:", e);
+      }
+
       try {
         const { status } = await Location.getForegroundPermissionsAsync();
 
         if (status === "granted") {
-          let coords = MECCA_COORDS;
-          
+          let coords = savedLocationData?.coords || MECCA_COORDS;
+
           try {
             // Get accurate current GPS position
             const loc = await Location.getCurrentPositionAsync({
@@ -34,46 +43,64 @@ export function useLocation() {
               };
             }
           } catch (e) {
-            // Fallback to last known position if current fix fails (e.g. indoors)
-            const lastLoc = await Location.getLastKnownPositionAsync({});
-            if (lastLoc?.coords) {
-              coords = {
-                latitude: lastLoc.coords.latitude,
-                longitude: lastLoc.coords.longitude,
-              };
+            // Fallback to last known system position if current fix fails (e.g. indoors / airplane mode)
+            try {
+              const lastLoc = await Location.getLastKnownPositionAsync({});
+              if (lastLoc?.coords) {
+                coords = {
+                  latitude: lastLoc.coords.latitude,
+                  longitude: lastLoc.coords.longitude,
+                };
+              }
+            } catch (err) {
+              console.warn("[useLocation] Last known position error:", err);
             }
           }
 
-          let cityName: string | undefined;
+          let cityName: string | undefined = savedLocationData?.cityName;
           try {
             const [geocode] = await Location.reverseGeocodeAsync(coords);
-            cityName = geocode?.city || geocode?.subregion || geocode?.region || undefined;
+            const resolvedCity = geocode?.city || geocode?.subregion || geocode?.region || undefined;
+            if (resolvedCity) {
+              cityName = resolvedCity;
+            }
           } catch (e) {
             console.warn("[useLocation] Reverse geocoding error:", e);
           }
 
-          return {
+          const resultData: LocationData = {
             coords,
             permissionStatus: "granted",
             cityName,
           };
+
+          // Save to appStorage whenever permission is granted so it persists forever
+          try {
+            await appStorage.setItem(STORAGE_KEYS.LOCATION, resultData);
+          } catch (e) {
+            console.warn("[useLocation] Error saving location to appStorage:", e);
+          }
+
+          return resultData;
         }
 
+        // Permission not granted
         return {
-          coords: MECCA_COORDS,
+          coords: savedLocationData?.coords || MECCA_COORDS,
           permissionStatus: status === "undetermined" ? "undetermined" : "denied",
-          cityName: "Mecca",
+          cityName: savedLocationData?.cityName,
         };
       } catch (error) {
         console.warn("[useLocation] Could not retrieve user location:", error);
         return {
-          coords: MECCA_COORDS,
-          permissionStatus: "denied",
-          cityName: "Mecca",
+          coords: savedLocationData?.coords || MECCA_COORDS,
+          permissionStatus: savedLocationData ? "granted" : "denied",
+          cityName: savedLocationData?.cityName,
         };
       }
     },
-    staleTime: 1000 * 60 * 30, // 30 minutes fresh
+    staleTime: 1000 * 60 * 10, // 10 minutes fresh - checks location when opening app while protecting against rapid app-switching battery spikes
+    refetchOnWindowFocus: true,
     initialData: {
       coords: MECCA_COORDS,
       permissionStatus: "undetermined",

@@ -2,7 +2,6 @@ import { useActiveQuranDetail } from "@/features/quran/hooks/useQuranDetail";
 import { useQuranDetailScroll } from "@/features/quran/hooks/useQuranDetailScroll";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
-import { useDownloadsStore } from "@/store/downloadsStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { useReadingProgressStore } from "@/store/readingProgressStore";
 import type { SurahVerse } from "@/types/quran";
@@ -10,19 +9,26 @@ import { Ionicons } from "@expo/vector-icons";
 import { FlashList, ListRenderItemInfo } from "@shopify/flash-list";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
-  ActivityIndicator,
   RefreshControl,
   RefreshControlProps,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import Animated, { withTiming } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scale, verticalScale } from "react-native-size-matters";
+
+import LottieView from "lottie-react-native";
 
 // Sub-components & Custom Hooks
 import AudioPlayerControls from "../components/AudioPlayerControls";
@@ -58,15 +64,13 @@ export default function QuranDetailScreen() {
   const chapterId = parseInt(id ?? "1", 10);
 
   const translationId = useQuranSettingsStore((state) => state.translationId);
-  const setTranslationId = useQuranSettingsStore((state) => state.setTranslationId);
+  const setTranslationId = useQuranSettingsStore(
+    (state) => state.setTranslationId,
+  );
   const selectedTransId = translationId || "20";
 
-  const getDownloadedChapter = useDownloadsStore((state) => state.getDownloadedChapter);
-  const currentReciterId = useQuranSettingsStore((state) => state.reciterId);
-  const localChapter = getDownloadedChapter(chapterId, currentReciterId || 7);
-  const isDownloaded = !!localChapter;
-
-  const queryTransId = selectedTransId === "0" ? 20 : parseInt(selectedTransId, 10);
+  const queryTransId =
+    selectedTransId === "0" ? 20 : parseInt(selectedTransId, 10);
   const {
     data: apiVerses = [],
     isLoading: isApiLoading,
@@ -74,11 +78,9 @@ export default function QuranDetailScreen() {
     refetch,
   } = useActiveQuranDetail("chapters", chapterId, queryTransId);
 
-  const verses = isDownloaded
-    ? localChapter.versesByTranslation?.[queryTransId] || localChapter.verses
-    : apiVerses;
-  const isLoading = isDownloaded ? false : isApiLoading;
-  const isError = isDownloaded ? false : isApiError;
+  const verses = apiVerses;
+  const isLoading = isApiLoading;
+  const isError = isApiError;
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -122,11 +124,13 @@ export default function QuranDetailScreen() {
   });
 
   const setLastRead = useReadingProgressStore((state) => state.setLastRead);
-  const setVerseNumber = useReadingProgressStore((state) => state.setVerseNumber);
+  const setVerseNumber = useReadingProgressStore(
+    (state) => state.setVerseNumber,
+  );
   const lastRead = useReadingProgressStore((state) => state.lastRead);
 
   const { isOffline } = useNetworkStatus();
-  const isOfflineBannerShowing = isOffline && !isDownloaded;
+  const isOfflineBannerShowing = isOffline;
   const insets = useSafeAreaInsets();
 
   const S = useMemo(
@@ -159,7 +163,9 @@ export default function QuranDetailScreen() {
   const handleVersePress = useCallback(
     (verseKey: string) => {
       // Bring audio player back into view when a verse is selected
-      playerScrollTranslateY.value = withTiming(0, { duration: PLAYER_SHOW_ANIMATION_MS });
+      playerScrollTranslateY.value = withTiming(0, {
+        duration: PLAYER_SHOW_ANIMATION_MS,
+      });
       isSelectingVerse.value = true;
 
       const index = verses.findIndex((v) => v.verseKey === verseKey);
@@ -175,7 +181,9 @@ export default function QuranDetailScreen() {
         (ts) => ts.verse_key === verseKey,
       );
       if (matchedTimestamp && player) {
-        player.seekTo(matchedTimestamp.timestamp_from / 1000 + PLAYBACK_SEEK_OFFSET_SEC);
+        player.seekTo(
+          matchedTimestamp.timestamp_from / 1000 + PLAYBACK_SEEK_OFFSET_SEC,
+        );
       }
 
       const timer = setTimeout(() => {
@@ -183,7 +191,14 @@ export default function QuranDetailScreen() {
       }, RESET_SELECTION_DELAY_MS);
       return () => clearTimeout(timer);
     },
-    [verses, listRef, timestamps, player, playerScrollTranslateY, isSelectingVerse],
+    [
+      verses,
+      listRef,
+      timestamps,
+      player,
+      playerScrollTranslateY,
+      isSelectingVerse,
+    ],
   );
 
   const renderVerse = useCallback(
@@ -312,8 +327,12 @@ export default function QuranDetailScreen() {
     if (isLoading) {
       return (
         <View style={S.centerContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={S.loadingText}>Loading Surah...</Text>
+          <LottieView
+            source={require("@/../assets/animations/loading.json")}
+            autoPlay
+            loop
+            style={S.lottieLoader}
+          />
         </View>
       );
     }
@@ -422,13 +441,18 @@ const createStyles = (
       flex: 1,
       alignItems: "center",
       justifyContent: "center",
-      gap: verticalScale(12),
+      gap: 0,
       paddingHorizontal: scale(32),
+    },
+    lottieLoader: {
+      width: scale(200),
+      height: scale(200),
+      marginBottom: -verticalScale(10),
     },
     loadingText: {
       color: colors.subtext,
       fontFamily: fontFamily.text,
-      fontSize: fontSize.body,
+      fontSize: fontSize.bodyLg,
     },
     errorTitle: {
       color: colors.text,

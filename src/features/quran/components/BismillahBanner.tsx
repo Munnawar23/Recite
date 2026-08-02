@@ -1,9 +1,8 @@
-import React from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { scale, verticalScale } from "react-native-size-matters";
 import { useFontStore } from "@/store/fontStore";
+import { LinearGradient } from "expo-linear-gradient";
+import { StyleSheet, Text, View } from "react-native";
+import { scale, verticalScale } from "react-native-size-matters";
 
 interface BismillahBannerProps {
   chapterId: number;
@@ -76,8 +75,8 @@ const createStyles = (fontFamily: any, fontSize: any, multiplier: number) =>
     bismillahSub: {
       color: "#E8DFD0",
       fontFamily: fontFamily.text,
-      fontSize: fontSize.caption * multiplier,
+      fontSize: fontSize.bodyLg * multiplier,
       textAlign: "center",
-      lineHeight: fontSize.caption * multiplier * 1.6,
+      lineHeight: fontSize.bodyLg * multiplier * 1.6,
     },
   });

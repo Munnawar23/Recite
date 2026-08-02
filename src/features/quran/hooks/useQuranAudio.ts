@@ -1,7 +1,5 @@
 import { RECITERS_IMAGES } from "@/constants/assets";
-import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { getChapterAudio } from "@/lib/api/quran-data";
-import { useDownloadsStore } from "@/store/downloadsStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { useQuery } from "@tanstack/react-query";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
@@ -49,50 +47,29 @@ export const RECITER_OPTIONS = [
 export function useQuranAudio(chapterId: number, enabled: boolean = true) {
   const { reciterId: globalReciterId, setReciterId: setReciterIdInStore } =
     useQuranSettingsStore();
-  const rawReciterId = globalReciterId || 7;
-  const { isOffline } = useNetworkStatus();
-  const { getDownloadedChapter } = useDownloadsStore();
-
-  const localChapter = getDownloadedChapter(chapterId, rawReciterId);
-  const reciterId = localChapter?.reciterId ?? rawReciterId;
-
-  // Auto sync setting if offline and playing a downloaded reciter
-  useEffect(() => {
-    if (
-      isOffline &&
-      localChapter?.reciterId &&
-      localChapter.reciterId !== rawReciterId
-    ) {
-      setReciterIdInStore(localChapter.reciterId);
-    }
-  }, [isOffline, localChapter, rawReciterId, setReciterIdInStore]);
-
-  // Verify local downloaded audio exists for selected chapter
-  const hasLocalAudio = !!localChapter?.localAudioUri;
+  const reciterId = globalReciterId || 7;
 
   // Fetch audio file details & timestamps
   const { data: audioData, isLoading: isLoadingAudio } = useQuery({
     queryKey: ["chapter-audio", chapterId, reciterId],
     queryFn: () => getChapterAudio(chapterId, reciterId),
-    enabled: enabled && !hasLocalAudio && !!chapterId && chapterId > 0,
+    enabled: enabled && !!chapterId && chapterId > 0,
     staleTime: 1000 * 60 * 60 * 24, // 24 hours fresh
     gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days in AsyncStorage persistence
   });
 
   const audioUrl = useMemo(() => {
-    if (hasLocalAudio) return localChapter.localAudioUri;
     if (!audioData?.audio_url) return null;
     let url = audioData.audio_url;
     if (url.startsWith("//")) {
       url = `https:${url}`;
     }
     return url;
-  }, [audioData, hasLocalAudio, localChapter]);
+  }, [audioData]);
 
   const timestamps = useMemo<AudioTimestamp[]>(() => {
-    if (hasLocalAudio) return localChapter.timestamps || [];
     return audioData?.timestamps || [];
-  }, [audioData, hasLocalAudio, localChapter]);
+  }, [audioData]);
 
   // Initialize the expo-audio player
   const player = useAudioPlayer(

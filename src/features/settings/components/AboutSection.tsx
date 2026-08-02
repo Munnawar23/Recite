@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { scale, verticalScale } from "react-native-size-matters";
 import { useTranslation } from "react-i18next";
@@ -15,7 +15,7 @@ function AboutUsContent() {
   const S = createStyles(colors, fontFamily, fontSize);
 
   return (
-    <View style={S.container}>
+    <ScrollView style={S.scrollContainer} contentContainerStyle={S.scrollContent} showsVerticalScrollIndicator={false}>
       <Text style={S.introText}>
         {t(
           "settings.about.aboutUsContent",
@@ -73,7 +73,7 @@ function AboutUsContent() {
           </Text>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -83,7 +83,7 @@ function AboutTheAppContent() {
   const S = createStyles(colors, fontFamily, fontSize);
 
   return (
-    <View style={S.container}>
+    <ScrollView style={S.scrollContainer} contentContainerStyle={S.scrollContent} showsVerticalScrollIndicator={false}>
       <Text style={S.introText}>
         {t(
           "settings.about.aboutAppIntro",
@@ -158,7 +158,7 @@ function AboutTheAppContent() {
           </Text>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -226,6 +226,13 @@ export default function AboutSection() {
 const createStyles = (colors: any, fontFamily: any, fontSize: any) =>
   StyleSheet.create({
     container: {
+      gap: verticalScale(12),
+      paddingVertical: verticalScale(4),
+    },
+    scrollContainer: {
+      maxHeight: verticalScale(380),
+    },
+    scrollContent: {
       gap: verticalScale(12),
       paddingVertical: verticalScale(4),
     },

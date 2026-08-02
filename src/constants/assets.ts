@@ -4,7 +4,7 @@ export const EMPTY_ANIM = require("../../assets/animations/empty.json");
 export const DOWNLOAD_ANIM = require("../../assets/animations/download.json");
 
 // Images
-export const ICON_IMG = require("../../assets/images/icon.png");
+export const ICON_IMG = require("../../assets/images/icons/icon.png");
 export const BACKGROUND_IMG = ICON_IMG;
 export const FAVICON_IMG = ICON_IMG;
 export const FOREGROUND_IMG = ICON_IMG;

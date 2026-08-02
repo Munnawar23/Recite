@@ -9,8 +9,18 @@ export const TRANSLATION_IDS: Record<string, number> = {
   ar: 20, // English fallback for Arabic UI tab
 };
 
-export const getRandomVerse = async (lang: string = "en") => {
-  const translationId = TRANSLATION_IDS[lang] || TRANSLATION_IDS.en;
+export const getRandomVerse = async (
+  lang: string = "en",
+  customTranslationId?: string,
+) => {
+  let translationId = TRANSLATION_IDS[lang] || TRANSLATION_IDS.en;
+
+  if (customTranslationId && customTranslationId !== "0") {
+    const parsed = parseInt(customTranslationId, 10);
+    if (!isNaN(parsed) && parsed > 0) {
+      translationId = parsed;
+    }
+  }
 
   const { data } = await quranApiClient.get(
     `/verses/random?language=${lang}&translations=${translationId}&fields=text_uthmani`,

@@ -14,7 +14,7 @@ interface SettingsItemCardProps {
   icon: keyof typeof Ionicons.glyphMap;
   title: string;
   subtitle?: string;
-  onPress: () => void;
+  onPress?: () => void;
   iconColor?: string;
   rightElement?: React.ReactNode;
 }
@@ -36,6 +36,7 @@ export default function SettingsItemCard({
   );
 
   const handlePress = useCallback(() => {
+    if (!onPress) return;
     Haptics.medium();
     onPress();
   }, [onPress]);
@@ -44,7 +45,8 @@ export default function SettingsItemCard({
     <TouchableOpacity
       style={styles.card}
       onPress={handlePress}
-      activeOpacity={0.7}
+      disabled={!onPress}
+      activeOpacity={onPress ? 0.7 : 1}
     >
       <View style={styles.leftContainer}>
         <View style={styles.iconContainer}>

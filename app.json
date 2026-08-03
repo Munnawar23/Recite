@@ -60,11 +60,18 @@
           ]
         }
       ],
-      "expo-file-system"
+      "expo-file-system",
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9b47bea5-b465-41da-bfaf-cc28e2c37dcc"
+      }
     }
   }
 }

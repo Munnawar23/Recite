@@ -126,7 +126,7 @@ const createStyles = (
     separatorLine: {
       flex: 1,
       height: 1.5,
-      backgroundColor: colors.primary + "60",
+      backgroundColor: colors.primary + "40",
     },
     separatorOrnament: {
       color: colors.primary,

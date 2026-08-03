@@ -5,8 +5,7 @@ import { useDownloadsStore } from "@/store/downloadsStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { useQuery } from "@tanstack/react-query";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
-import * as FileSystem from "expo-file-system/legacy";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export interface AudioTimestamp {
   verse_key: string;
@@ -57,7 +56,7 @@ export function useQuranAudio(chapterId: number, enabled: boolean = true) {
     (s) => s.isDownloaded(chapterId),
   );
 
-  // Fetch audio file details & timestamps (only online if not downloaded offline)
+  // Fetch audio file details & timestamps (only when NOT downloaded)
   const { data: audioData, isLoading: isLoadingAudio } = useQuery({
     queryKey: ["chapter-audio", chapterId, reciterId],
     queryFn: () => getChapterAudio(chapterId, reciterId),
@@ -75,48 +74,49 @@ export function useQuranAudio(chapterId: number, enabled: boolean = true) {
     return url;
   }, [audioData]);
 
-  // Synchronously compute initial localUri if downloaded to prevent loader delay
-  const initialLocalUri = useMemo(() => {
+  // FIX 1: getLocalAudioPath is pure & synchronous — useMemo is sufficient,
+  // no need for useState + useEffect which caused an extra render cycle.
+  const localUri = useMemo(() => {
     if (enabled && isDownloaded && chapterId) {
       return getLocalAudioPath(chapterId);
     }
     return null;
   }, [enabled, isDownloaded, chapterId]);
 
-  const [localUri, setLocalUri] = useState<string | null>(initialLocalUri);
-
-  useEffect(() => {
-    if (!enabled || !isDownloaded) {
-      setLocalUri(null);
-      return;
-    }
-    const path = getLocalAudioPath(chapterId);
-    setLocalUri(path);
-  }, [chapterId, isDownloaded, enabled]);
-
+  // FIX 2: Always reset localTimestamps immediately when chapterId changes,
+  // then populate asynchronously — prevents previous chapter's timestamps
+  // bleeding into the next chapter before the async read completes.
   const [localTimestamps, setLocalTimestamps] = useState<AudioTimestamp[]>([]);
 
   useEffect(() => {
-    if (!enabled || !isDownloaded) {
-      setLocalTimestamps([]);
-      return;
-    }
+    // Reset immediately so stale timestamps from prior chapter don't linger
+    setLocalTimestamps([]);
+
+    if (!enabled || !isDownloaded) return;
+
+    let cancelled = false;
     getLocalTextData(chapterId).then((data) => {
-      if (data?.timestamps && data.timestamps.length > 0) {
+      if (!cancelled && data?.timestamps && data.timestamps.length > 0) {
         setLocalTimestamps(data.timestamps);
       }
     });
+    return () => {
+      cancelled = true;
+    };
   }, [chapterId, isDownloaded, enabled]);
 
   // Use local file when available, otherwise stream remote URL
   const audioUrl = localUri ?? remoteAudioUrl;
 
+  // FIX 3: Correct priority — when downloaded, local timestamps always win.
+  // Remote timestamps (from audioData) are only used when streaming online.
+  // Previously the logic was inverted: remote could override local.
   const timestamps = useMemo<AudioTimestamp[]>(() => {
-    if (audioData?.timestamps && audioData.timestamps.length > 0) {
-      return audioData.timestamps;
+    if (isDownloaded) {
+      return localTimestamps;
     }
-    return localTimestamps;
-  }, [audioData, localTimestamps]);
+    return audioData?.timestamps ?? [];
+  }, [isDownloaded, localTimestamps, audioData]);
 
   // Initialize the expo-audio player
   const player = useAudioPlayer(
@@ -131,17 +131,33 @@ export function useQuranAudio(chapterId: number, enabled: boolean = true) {
     }
   }, [enabled, audioUrl, player]);
 
-  // Find the active verse key based on current time
+  // FIX 4: Keep last known active verse so the highlight doesn't flicker to null
+  // during the silent gap between timestamp_to of verse N and timestamp_from of N+1.
+  const lastActiveVerseKeyRef = useRef<string | null>(null);
+
+  // Reset ref when chapter changes so stale verse key doesn't carry over
+  useEffect(() => {
+    lastActiveVerseKeyRef.current = null;
+  }, [chapterId]);
+
   const activeVerseKey = useMemo(() => {
     if (!status.currentTime || timestamps.length === 0) return null;
     const currentTimeMs = status.currentTime * 1000;
 
+    // Exact match — current playback time falls within a verse window
     const active = timestamps.find(
       (ts) =>
         currentTimeMs >= ts.timestamp_from && currentTimeMs <= ts.timestamp_to,
     );
 
-    return active ? active.verse_key : null;
+    if (active) {
+      lastActiveVerseKeyRef.current = active.verse_key;
+      return active.verse_key;
+    }
+
+    // In a gap between verses — keep the last highlighted verse visible
+    // instead of returning null and causing a flicker
+    return lastActiveVerseKeyRef.current;
   }, [status.currentTime, timestamps]);
 
   return {

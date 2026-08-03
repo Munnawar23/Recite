@@ -181,9 +181,8 @@ const createStyles = (
     englishName: {
       color: colors.text,
       fontFamily: fontFamily.title,
-      fontWeight: "600",
+      fontWeight: "700",
       fontSize: fontSize.bodyLg,
-      opacity: 0.85,
     },
     metaRow: {
       flexDirection: "row",
@@ -195,6 +194,7 @@ const createStyles = (
       color: colors.subtext,
       fontFamily: fontFamily.title,
       fontSize: fontSize.caption,
+      fontWeight: "600",
       letterSpacing: 0.3,
     },
     dot: {
@@ -202,7 +202,7 @@ const createStyles = (
       height: spacing.xs,
       borderRadius: spacing.xs / 2,
       backgroundColor: colors.subtext,
-      opacity: 0.6,
+      opacity: 0.8,
     },
     rightSection: {
       flex: 0.8,
@@ -218,9 +218,11 @@ const createStyles = (
       writingDirection: "rtl",
     },
     translationText: {
-      color: colors.subtext,
+      color: colors.text,
       fontFamily: fontFamily.text,
       fontSize: fontSize.caption,
+      fontWeight: "500",
+      opacity: 0.8,
       textAlign: "right",
     },
   });

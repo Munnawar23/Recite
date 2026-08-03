@@ -100,6 +100,10 @@ export default function QuranDetailScreen() {
           audioUrl={audioUrl}
           audioTotalBytes={audioTotalBytes}
           isPlayingLocally={isPlayingLocally}
+          arabicName={arabicName}
+          englishName={englishName}
+          versesCount={versesCount}
+          chapterType={type}
         />
 
         {player && status && (

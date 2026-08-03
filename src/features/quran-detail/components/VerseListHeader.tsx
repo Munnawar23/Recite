@@ -23,6 +23,12 @@ interface VerseListHeaderProps {
   audioUrl?: string | null;
   audioTotalBytes?: number | null;
   isPlayingLocally?: boolean;
+  // Chapter display info — needed so DownloadCard can persist it for offline library
+  arabicName?: string;
+  englishName?: string;
+  englishTranslation?: string;
+  versesCount?: string;
+  chapterType?: string;
 }
 
 function VerseListHeader({
@@ -33,6 +39,11 @@ function VerseListHeader({
   audioUrl,
   audioTotalBytes,
   isPlayingLocally,
+  arabicName,
+  englishName,
+  englishTranslation,
+  versesCount,
+  chapterType,
 }: VerseListHeaderProps) {
   return (
     <View>
@@ -54,6 +65,11 @@ function VerseListHeader({
         audioUrl={audioUrl}
         audioTotalBytes={audioTotalBytes}
         isPlayingLocally={isPlayingLocally}
+        arabicName={arabicName}
+        englishName={englishName}
+        englishTranslation={englishTranslation}
+        versesCount={versesCount}
+        chapterType={chapterType}
       />
       <BismillahBanner chapterId={chapterId} />
       <View style={{ height: verticalScale(8) }} />

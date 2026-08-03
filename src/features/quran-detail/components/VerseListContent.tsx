@@ -49,6 +49,12 @@ interface VerseListContentProps {
   audioUrl?: string | null;
   audioTotalBytes?: number | null;
   isPlayingLocally?: boolean;
+  // Chapter info for offline library
+  arabicName?: string;
+  englishName?: string;
+  englishTranslation?: string;
+  versesCount?: string;
+  chapterType?: string;
 }
 
 function VerseListContent({
@@ -71,6 +77,11 @@ function VerseListContent({
   audioUrl,
   audioTotalBytes,
   isPlayingLocally,
+  arabicName,
+  englishName,
+  englishTranslation,
+  versesCount,
+  chapterType,
 }: VerseListContentProps) {
   const { colors, fontFamily, fontSize } = useAppTheme();
   const { paddingTop } = useAppSafeAreaInsets();
@@ -124,6 +135,11 @@ function VerseListContent({
         audioUrl={audioUrl}
         audioTotalBytes={audioTotalBytes}
         isPlayingLocally={isPlayingLocally}
+        arabicName={arabicName}
+        englishName={englishName}
+        englishTranslation={englishTranslation}
+        versesCount={versesCount}
+        chapterType={chapterType}
       />
     ),
     [
@@ -134,6 +150,11 @@ function VerseListContent({
       audioUrl,
       audioTotalBytes,
       isPlayingLocally,
+      arabicName,
+      englishName,
+      englishTranslation,
+      versesCount,
+      chapterType,
     ],
   );
 

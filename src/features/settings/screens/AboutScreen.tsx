@@ -141,15 +141,15 @@ const createStyles = (
     },
     introText: {
       fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg,
+      fontSize: fontSize.bodyLg + 1,
       color: colors.text,
-      lineHeight: fontSize.bodyLg * 1.45,
+      lineHeight: (fontSize.bodyLg + 1) * 1.45,
     },
     introTextSecondParagraph: {
       fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg,
+      fontSize: fontSize.bodyLg + 1,
       color: colors.text,
-      lineHeight: fontSize.bodyLg * 1.45,
+      lineHeight: (fontSize.bodyLg + 1) * 1.45,
       marginTop: verticalScale(10),
     },
     card: {
@@ -180,15 +180,15 @@ const createStyles = (
     },
     cardTitle: {
       fontFamily: fontFamily.title,
-      fontSize: fontSize.bodyLg,
+      fontSize: fontSize.bodyLg + 1,
       color: colors.text,
     },
     cardSubtitle: {
       fontFamily: fontFamily.text,
-      fontSize: fontSize.body,
+      fontSize: fontSize.body + 1,
       color: colors.subtext,
       marginTop: verticalScale(3),
-      lineHeight: fontSize.body * 1.35,
+      lineHeight: (fontSize.body + 1) * 1.35,
     },
     bottomSpacer: {
       height: verticalScale(20),

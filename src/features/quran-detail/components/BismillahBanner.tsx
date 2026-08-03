@@ -73,10 +73,11 @@ const createStyles = (fontFamily: any, fontSize: any, multiplier: number) =>
       lineHeight: fontSize.splashTitle * multiplier * 1.8,
     },
     bismillahSub: {
-      color: "#E8DFD0",
+      color: "rgba(255, 255, 255, 0.95)",
       fontFamily: fontFamily.text,
       fontSize: fontSize.bodyLg * multiplier,
+      fontWeight: "600",
       textAlign: "center",
-      lineHeight: fontSize.bodyLg * multiplier * 1.6,
+      lineHeight: fontSize.bodyLg * multiplier * 1.5,
     },
   });

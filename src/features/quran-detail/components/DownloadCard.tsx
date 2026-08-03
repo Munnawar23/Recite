@@ -31,6 +31,12 @@ interface DownloadCardProps {
   audioUrl?: string | null;
   audioTotalBytes?: number | null; // from API audio_file.file_size
   isPlayingLocally?: boolean;
+  // Chapter display info for offline library
+  arabicName?: string;
+  englishName?: string;
+  englishTranslation?: string;
+  versesCount?: string;
+  chapterType?: string;
 }
 
 type ThemeColors = ReturnType<typeof useAppTheme>["colors"];
@@ -113,6 +119,11 @@ function DownloadCard({
   audioUrl,
   audioTotalBytes,
   isPlayingLocally = false,
+  arabicName,
+  englishName,
+  englishTranslation,
+  versesCount,
+  chapterType,
 }: DownloadCardProps) {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
@@ -214,6 +225,13 @@ function DownloadCard({
         audioLocalFile: `chapter_${chapterId}.mp3`,
         textLocalFile: `chapter_${chapterId}_text.json`,
         totalBytes: audioBytes + textBytes,
+        chapterInfo: arabicName || englishName ? {
+          name: arabicName ?? "",
+          englishName: englishName ?? "",
+          englishTranslation: englishTranslation ?? "",
+          versesCount: versesCount ? parseInt(versesCount, 10) : 0,
+          type: chapterType ?? "",
+        } : undefined,
       });
 
       Haptics.success();

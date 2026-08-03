@@ -7,7 +7,7 @@
     "home": "হোম",
     "recite": "তিলাওয়াত",
     "listen": "শুনুন",
-    "reflect": "অনুধ্যান",
+    "reflect": "চিন্তা করুন",
     "save": "সংরক্ষণ করুন",
     "cancel": "বাতিল",
     "tryAgain": "আবার চেষ্টা করুন",
@@ -27,7 +27,7 @@
   },
   "splash": {
     "title": "Recite",
-    "subtitle": "পড়ুন • শুনুন • অনুধ্যান করুন"
+    "subtitle": "পড়ুন • শুনুন • চিন্তা করুন করুন"
   },
   "tabs": {
     "home": "হোম",
@@ -111,7 +111,7 @@
     "subtitle": "আপনার অ্যাপের পছন্দ এবং থিম পরিবর্তন করুন",
     "sections": {
       "displayLanguage": "প্রদর্শন ও ভাষাসমূহ",
-      "notifications": "নোটিফিকেশনসমূহ",
+      "notifications": "নোটিফিকেশন",
       "storage": "স্টোরেজ",
       "helpSupport": "সাহায্য ও সহায়তা",
       "aboutUs": "আমাদের সম্পর্কে"
@@ -140,9 +140,9 @@
     },
     "languages": {
       "title": "ভাষা ও অডিও",
-      "subtitle": "অ্যাপের ভাষা, অনুবাদ ও তিলওয়াতকারী",
+      "subtitle": "অ্যাপের ভাষা, অনুবাদ ও তিলাওয়াতকারী",
       "optionsTitle": "ভাষা ও অডিও বিকল্পসমূহ",
-      "optionsSubtitle": "ভাষা, অনুবাদ ও তিলওয়াতকারী",
+      "optionsSubtitle": "ভাষা, অনুবাদ ও তিলাওয়াতকারী",
       "appLanguageSection": "অ্যাপের ভাষা",
       "appLanguageTitle": "অ্যাপ ইন্টারফেসের ভাষা",
       "appLanguageSubtitle": "মেনু ও ইন্টারফেসের জন্য মূল ভাষা বেছে নিন",
@@ -151,10 +151,10 @@
       "quranTranslationTitle": "ডিফল্ট কুরআন অনুবাদ",
       "quranTranslationSubtitle": "আয়াতের জন্য প্রদর্শিত অনুবাদ পাঠ্য চয়ন করুন",
       "quranTranslationPlaceholder": "অনুবাদ নির্বাচন করুন",
-      "quranReciterSection": "কুরআন তিলওয়াতকারী",
-      "quranReciterTitle": "ডিফল্ট কুরআন তিলওয়াতকারী",
+      "quranReciterSection": "কুরআন তিলাওয়াতকারী",
+      "quranReciterTitle": "ডিফল্ট কুরআন তিলাওয়াতকারী",
       "quranReciterSubtitle": "অডিও শোনার জন্য কারীর কণ্ঠ নির্বাচন করুন",
-      "quranReciterPlaceholder": "তিলওয়াতকারী নির্বাচন করুন",
+      "quranReciterPlaceholder": "তিলাওয়াতকারী নির্বাচন করুন",
       "translations": {
         "arabicOnly": "শুধু আরবি",
         "english": "ইংরেজি (সহীহ)",
@@ -165,13 +165,13 @@
       }
     },
     "notifications": {
-      "title": "বিজ্ঞপ্তি",
+      "title": "নোটিফিকেশন",
       "enableTitle": "নোটিফিকেশন চালু করুন",
       "enabled": "নোটিফিকেশন চালু আছে",
       "disabled": "বন্ধ",
-      "toastEnabledTitle": "বিজ্ঞপ্তি সক্রিয় হয়েছে",
+      "toastEnabledTitle": "নোটিফিকেশন সক্রিয় হয়েছে",
       "toastEnabledDesc": "দৈনিক অনুস্মারক সক্রিয় করা হয়েছে।",
-      "toastDisabledTitle": "বিজ্ঞপ্তি নিষ্ক্রিয় করা হয়েছে",
+      "toastDisabledTitle": "নোটিফিকেশন নিষ্ক্রিয় করা হয়েছে",
       "toastDisabledDesc": "দৈনিক অনুস্মারক নিষ্ক্রিয় করা হয়েছে।"
     },
     "storage": {
@@ -185,13 +185,13 @@
       "confirmClearDownloadsDesc": "আপনি কি নিশ্চিত যে অফলাইন স্টোরেজ থেকে {{count}} টি ডাউনলোড করা সূরা ({{size}}) মুছে ফেলতে চান?",
       "toastClearedDownloadsTitle": "ডাউনলোড মুছে ফেলা হয়েছে",
       "toastClearedDownloadsDesc": "সমস্ত ডাউনলোড করা সূরা সফলভাবে মুছে ফেলা হয়েছে।",
-      "clearFavoritesTitle": "সমস্ত পছন্দসমূহ মুছে ফেলুন",
+      "clearFavoritesTitle": "সমস্ত পছন্দের মুছে ফেলুন",
       "clearFavoritesSubtitle": "{{count}} টি সূরা পছন্দের তালিকায় সংরক্ষিত",
       "noFavoritesTitle": "কোনো পছন্দ নেই",
       "noFavoritesMessage": "মুছে ফেলার জন্য আপনার কাছে কোনো পছন্দের সূরা নেই।",
-      "confirmClearFavoritesTitle": "সমস্ত পছন্দসমূহ মুছে ফেলবেন?",
+      "confirmClearFavoritesTitle": "সমস্ত পছন্দের মুছে ফেলবেন?",
       "confirmClearFavoritesDesc": "আপনি কি নিশ্চিত যে আপনার তালিকা থেকে {{count}} টি পছন্দের সূরা মুছে ফেলতে চান?",
-      "toastClearedFavoritesTitle": "পছন্দসমূহ মুছে ফেলা হয়েছে",
+      "toastClearedFavoritesTitle": "পছন্দের মুছে ফেলা হয়েছে",
       "toastClearedFavoritesDesc": "সমস্ত পছন্দের সূরা মুছে ফেলা হয়েছে।"
     },
     "helpSupport": {
@@ -217,11 +217,11 @@
       "appFeatureExpoDesc": "সেরা ক্রস-প্ল্যাটফর্ম পারফরম্যান্সের জন্য Expo এবং React Native ব্যবহার করে তৈরি।",
       "featureFreeTitle": "১০০% ফ্রি এবং বিজ্ঞাপনমুক্ত",
       "featureFreeDesc": "কোনো হিডেন চার্জ নেই, ট্র্যাকিং নেই এবং বাণিজ্যিক বিজ্ঞাপন নেই।",
-      "featureRecitersTitle": "বিশ্ববিখ্যাত তিলওয়াতকারীগণ",
+      "featureRecitersTitle": "বিশ্ববিখ্যাত তিলাওয়াতকারীগণ",
       "featureRecitersDesc": "সেরা কারীদের থেকে উচ্চ মানের অডিও তিলাওয়াত শুনুন।",
       "featureLanguagesTitle": "বিভিন্ন ভাষা",
       "featureLanguagesDesc": "বিশ্বের বিভিন্ন ভাষায় আয়াতভিত্তিক অনুবাদ।",
-      "tagline": "পবিত্র কুরআন পড়ুন, শুনুন এবং অনুধ্যান করুন"
+      "tagline": "পবিত্র কুরআন পড়ুন, শুনুন এবং চিন্তা করুন করুন"
     },
     "language": {
       "title": "অ্যাপের ভাষা",
@@ -229,10 +229,10 @@
     },
     "theme": {
       "title": "অ্যাপ থিম",
-      "subtitle": "আপনার পছন্দসই দৃশ্যমানতা নির্বাচন করুন বা সিস্টেম সেটিংসের সাথে সিঙ্ক করুন।",
+      "subtitle": "আপনার পছন্দসই থিম নির্বাচন করুন বা সিস্টেম সেটিংসের সাথে সিঙ্ক করুন।",
       "light": "হালকা",
       "dark": "ডার্ক",
-      "system": "সistem"
+      "system": "সিস্টেম"
     },
     "fontSize": {
       "title": "পাঠ্যের আকার",
@@ -249,10 +249,10 @@
   },
   "library": {
     "title": "লাইব্রেরি",
-    "subtitle": "আপনার সংরক্ষিত সূরা এবং ডাউনলোডসমূহ",
+    "subtitle": "আপনার সংরক্ষিত সূরা এবং ডাউনলোড",
     "tabs": {
-      "favorites": "পছন্দসমূহ",
-      "downloads": "ডাউনলোডসমূহ"
+      "favorites": "পছন্দের",
+      "downloads": "ডাউনলোড"
     },
     "emptyFavorites": {
       "title": "এখনও কোনো পছন্দ নেই",
@@ -292,23 +292,23 @@
       "sectionLabel": "অ্যাপের ভাষা"
     },
     "preferences": {
-      "title": "কুরআন ক্বারী নির্বাচন করুন",
-      "subtitle": "কুরআন অডিও শোনার জন্য আপনার পছন্দের ক্বারীর কণ্ঠস্বর নির্বাচন করুন।",
+      "title": "কুরআন কারী নির্বাচন করুন",
+      "subtitle": "কুরআন অডিও শোনার জন্য আপনার পছন্দের কারীর কণ্ঠস্বর নির্বাচন করুন।",
       "translationLabel": "কুরআন অনুবাদ",
-      "reciterLabel": "ক্বারী"
+      "reciterLabel": "কারী"
     },
     "theme": {
-      "title": "অ্যাপের থিম ও ফন্ট",
-      "subtitle": "স্বাচ্ছন্দ্যে কুরআন পড়ার জন্য থিম মোড এবং ফন্টের আকার কাস্টমাইজ করুন।"
+      "title": "থিম ও প্রদর্শন",
+      "subtitle": "স্বাচ্ছন্দ্যে কুরআন পড়ার জন্য থিম মোড এবং ফন্টের আকার পরিবর্তন করুন।"
     },
     "notifications": {
       "title": "সংযুক্ত থাকুন",
-      "subtitle": "প্রতিদিনের স্মরণিকা চালু করুন যাতে আপনার কুরআন যাত্রায় স্থির থাকতে পারেন।",
-      "benefit1": "দৈনিক তেলাওয়াতের স্মরণিকা",
+      "subtitle": "প্রতিদিনের স্মরণিকা চালু করুন যাতে আপনার কুরআন যাত্রায় নিয়মিত থাকতে পারেন।",
+      "benefit1": "দৈনিক তিলাওয়াতের স্মরণিকা",
       "benefit2": "নামাজের সময় সতর্কতা",
       "benefit3": "ব্যক্তিগতকৃত কুরআনিক টিপস",
-      "enableButton": "বিজ্ঞপ্তি সক্রিয় করুন",
-      "enabledStatus": "বিজ্ঞপ্তি সক্রিয় হয়েছে",
+      "enableButton": "নোটিফিকেশন সক্রিয় করুন",
+      "enabledStatus": "নোটিফিকেশন সক্রিয় হয়েছে",
       "skipHint": "পরে সেটিংসে এটি সক্রিয় করতে পারবেন"
     },
     "location": {

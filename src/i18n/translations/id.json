@@ -5,8 +5,8 @@
     "language": "Bahasa",
     "selectLanguage": "Pilih Bahasa",
     "home": "Beranda",
-    "recite": "Membaca",
-    "listen": "Mendengar",
+    "recite": "Baca",
+    "listen": "Dengar",
     "reflect": "Merenung",
     "save": "Simpan",
     "cancel": "Batal",
@@ -22,7 +22,7 @@
     "offlineReciterChangeMessage": "Mengubah qari memerlukan koneksi internet. Hubungkan ke internet untuk mengganti qari.",
     "quran": "Al-Qur'an",
     "qibla": "Qibla",
-    "library": "Perpustakaan",
+    "library": "Koleksi",
     "back": "Kembali"
   },
   "splash": {
@@ -33,7 +33,7 @@
     "home": "Beranda",
     "quran": "Al-Qur'an",
     "qibla": "Kiblat",
-    "library": "Perpustakaan",
+    "library": "Koleksi",
     "settings": "Pengaturan"
   },
   "home": {
@@ -48,7 +48,7 @@
     "sectionTitles": {
       "prayerTimes": "Waktu Shalat",
       "dailyVerse": "Ayat Hari Ini",
-      "continueReading": "Lanjutkan Membaca"
+      "continueReading": "Lanjutkan Baca"
     },
     "prayerNames": {
       "fajr": "Subuh",
@@ -205,9 +205,9 @@
       "appVersionTitle": "Versi Aplikasi",
       "appVersionSubtitle": "Versi {{version}}",
       "aboutUsTitle": "Tentang Kami",
-      "aboutUsSubtitle": "Aplikasi Al-Quran sumber terbuka & berbasis komunitas",
-      "aboutUsContent": "Recite adalah proyek komunitas non-profit 100% gratis yang didedikasikan untuk menyediakan akses Al-Quran bagi semua orang di seluruh dunia tanpa iklan atau langganan.",
-      "aboutAppIntro": "Dibuat dengan teknologi open-source berkinerja tinggi, Recite menyediakan lantunan ayat otentik, terjemahan berdampingan, dan pencarian cepat.",
+      "aboutUsSubtitle": "Aplikasi Al-Qur'an sumber terbuka & berbasis komunitas",
+      "aboutUsContent": "Recite adalah proyek komunitas non-profit 100% gratis yang didedikasikan untuk menyediakan akses Al-Qur'an bagi semua orang di seluruh dunia tanpa iklan atau langganan.",
+      "aboutAppIntro": "Dibuat dengan teknologi open-source berkinerja tinggi, Recite menghadirkan lantunan ayat yang autentik, terjemahan berdampingan, dan pencarian cepat.",
       "keyHighlights": "Teknologi & Platform",
       "appFeatureOpenSourceTitle": "Sumber Terbuka (Open Source)",
       "appFeatureOpenSourceDesc": "Pengembangan transparan berbasis komunitas dengan kontribusi terbuka.",
@@ -217,7 +217,7 @@
       "appFeatureExpoDesc": "Dirancang menggunakan Expo dan React Native untuk performa lintas platform yang optimal.",
       "featureFreeTitle": "100% Gratis & Tanpa Iklan",
       "featureFreeDesc": "Tanpa biaya, tanpa pelacakan, dan tanpa gangguan iklan.",
-      "featureRecitersTitle": "Qari Ternama Dunia",
+      "featureRecitersTitle": "Qari Terkenal Dunia",
       "featureRecitersDesc": "Dengarkan lantunan audio berkualitas tinggi dari Qari terkemuka.",
       "featureLanguagesTitle": "Banyak Bahasa",
       "featureLanguagesDesc": "Terjemahan ayat berdampingan dalam berbagai bahasa dunia.",
@@ -229,7 +229,7 @@
     },
     "theme": {
       "title": "Tema Aplikasi",
-      "subtitle": "Pilih tampilan yang Anda sukai atau samakan dengan pengaturan sistem.",
+      "subtitle": "Pilih tampilan yang Anda sukai atau sesuaikan dengan pengaturan sistem.",
       "light": "Terang",
       "dark": "Gelap",
       "system": "Sistem"
@@ -244,11 +244,11 @@
     "errorTest": {
       "title": "Tes Error Boundary",
       "subtitle": "Uji bagaimana aplikasi menangani kesalahan yang tidak terduga dengan baik.",
-      "button": "Simulasi Aplikasi Crash"
+      "button": "Simulasikan Crash Aplikasi"
     }
   },
   "library": {
-    "title": "Perpustakaan",
+    "title": "Koleksi",
     "subtitle": "Surah dan unduhan yang Anda simpan",
     "tabs": {
       "favorites": "Favorit",

@@ -6,7 +6,7 @@
     "selectLanguage": "اختر اللغة",
     "home": "الرئيسية",
     "recite": "تلاوة",
-    "listen": "استماع",
+    "listen": "استمع",
     "reflect": "تدبر",
     "save": "حفظ",
     "cancel": "إلغاء",
@@ -16,9 +16,9 @@
     "errorMessage": "فشل في تحميل البيانات. انقر لإعادة المحاولة.",
     "noConnectionTitle": "خطأ في الاتصال",
     "noConnectionSubtitle": "تعذر تحميل البيانات. تحقق من اتصالك بالإنترنت.",
-    "offlineBanner": "أنت غير متصل بالإنترنت. يمكنك قراءة القرآن واستماع التلاوات المحملة.",
+    "offlineBanner": "أنت غير متصل بالإنترنت. يمكنك قراءة القرآن واستمع التلاوات المحملة.",
     "offlineAudioPreviewTitle": "وضع عدم الاتصال",
-    "offlineAudioPreviewMessage": "يتطلب المعاينة الصوتية اتصالاً بالإنترنت. لا يزال بإمكانك الاستماع إلى السور التي قمت بتنزيلها.",
+    "offlineAudioPreviewMessage": "يتطلب المعاينة الصوتية اتصالاً بالإنترنت. لا يزال بإمكانك الاستمع إلى السور التي قمت بتنزيلها.",
     "offlineReciterChangeMessage": "تغيير القارئ يتطلب اتصالاً بالإنترنت. يرجى الاتصال بالإنترنت لتغيير القارئ.",
     "quran": "القرآن الكريم",
     "qibla": "القبلة",
@@ -58,7 +58,7 @@
       "isha": "العشاء"
     },
     "locationNotice": {
-      "showingMecca": "عُرضت أوقات مكة المكرمة.",
+      "showingMecca": "يتم عرض أوقات مكة المكرمة.",
       "enableLocation": "انقر لتمكين الموقع"
     },
     "dailyVerse": {
@@ -91,11 +91,11 @@
       "paused": "متوقف مؤقتاً • {{written}} / {{total}} ميجابايت ({{progress}}%)",
       "pause": "إيقاف مؤقت",
       "resume": "استئناف",
-      "playingOffline": "تشغيل أوفلاين",
-      "playingOfflineTitle": "تشغيل أوفلاين",
-      "playingOnlineTitle": "تشغيل أونلاين",
+      "playingOffline": "تشغيل دون اتصال",
+      "playingOfflineTitle": "تشغيل دون اتصال",
+      "playingOnlineTitle": "تشغيل عبر الإنترنت",
       "deleteTitle": "حذف التنزيل؟",
-      "deleteDesc": "هل أنت تأكد من أنك تريد إزالة تلاوة هذه السورة من التنزيلات أوفلاين؟",
+      "deleteDesc": "هل أنت متأكد من أنك تريد إزالة تلاوة هذه السورة من التنزيلات دون اتصال؟",
       "notReadyTitle": "الصوت غير جاهز",
       "notReadyBody": "معلومات الصوت قيد التحميل. يرجى المحاولة مرة أخرى بعد لحظات.",
       "errorTitle": "فشل التنزيل",
@@ -182,7 +182,7 @@
       "noDownloadsTitle": "لا توجد تنزيلات",
       "noDownloadsMessage": "ليس لديك أي سور منزلة لمسحها.",
       "confirmClearDownloadsTitle": "مسح جميع التنزيلات؟",
-      "confirmClearDownloadsDesc": "هل أنت ألكيد من رغبتك في إزالة {{count}} سورة منزلة ({{size}}) من التخزين؟",
+      "confirmClearDownloadsDesc": "هل أنت متأكد من رغبتك في إزالة {{count}} سورة منزلة ({{size}}) من التخزين؟",
       "toastClearedDownloadsTitle": "تم مسح التنزيلات",
       "toastClearedDownloadsDesc": "تم مسح جميع السور المنزلة بنجاح.",
       "clearFavoritesTitle": "مسح جميع المفضلة",
@@ -190,7 +190,7 @@
       "noFavoritesTitle": "لا توجد مفضلة",
       "noFavoritesMessage": "ليس لديك أي سور مفضلة لمسحها.",
       "confirmClearFavoritesTitle": "مسح جميع المفضلة؟",
-      "confirmClearFavoritesDesc": "هل أنت ألكيد من رغبتك في إزالة {{count}} سورة مفضلة من قائمتك؟",
+      "confirmClearFavoritesDesc": "هل أنت متأكد من رغبتك في إزالة {{count}} سورة مفضلة من قائمتك؟",
       "toastClearedFavoritesTitle": "تم مسح المفضلة",
       "toastClearedFavoritesDesc": "تم إزالة جميع السور المفضلة."
     },
@@ -207,12 +207,12 @@
       "aboutUsTitle": "عن التطبيق",
       "aboutUsSubtitle": "تطبيق قرآني مفتوح المصدر ومجتمعي",
       "aboutUsContent": "رتّل هو مشروع مجتمعي مجاني ١٠٠٪ وغير ربحي مخصص لجعل القرآن الكريم متاحاً للجميع حول العالم بدون إعلانات أو اشتراكات.",
-      "aboutAppIntro": "تم بناؤه تقنيات حديثة مفتوحة المصدر لتوفير تلاوات صحيحة وترجمات متعددة وبحث سريع في واجهة حديثة.",
+      "aboutAppIntro": "تم بناؤه باستخدام تقنيات حديثة مفتوحة المصدر لتوفير تلاوات صحيحة وترجمات متعددة وبحث سريع في واجهة حديثة.",
       "keyHighlights": "التقنية والمنصة",
       "appFeatureOpenSourceTitle": "مفتوح المصدر",
       "appFeatureOpenSourceDesc": "تطوير شفاف بدعم من المجتمع ومساهمات مفتوحة للجميع.",
-      "appFeatureApiTitle": "واجهة Quran.com",
-      "appFeatureApiDesc": "مدعوم من الواجهة البرمجية الرسمية لموقع Quran.com لنصوص صوتية وآيات موثوقة.",
+      "appFeatureApiTitle": "Quran.com API",
+      "appFeatureApiDesc": "مدعوم من الواجهة البرمجية الرسمية لموقع Quran.com لنصوص وآيات وتلاوات موثوقة.",
       "appFeatureExpoTitle": "مبني بـ Expo و React Native",
       "appFeatureExpoDesc": "مصمم باستخدام Expo و React Native لأداء ممتاز عبر المنصات.",
       "featureFreeTitle": "مجاني ١٠٠٪ وبدون إعلانات",
@@ -221,7 +221,7 @@
       "featureRecitersDesc": "استمع إلى تلاوات صوتية عالية الجودة من كبار القراء.",
       "featureLanguagesTitle": "لغات متعددة",
       "featureLanguagesDesc": "ترجمات الآيات جنباً إلى جنب بلغات عالمية متعددة.",
-      "tagline": "اقرأ، استمع، وتدبر القرآن الكريم"
+      "tagline": "اقرأ • استمع • تدبر القرآن الكريم"
     },
     "language": {
       "title": "لغة التطبيق",
@@ -260,7 +260,7 @@
     },
     "emptyDownloads": {
       "title": "لا توجد تنزيلات",
-      "subtitle": "قم بتنزيل السور لقراءتها أو الاستماع إليها دون اتصال بالإنترنت."
+      "subtitle": "قم بتنزيل السور لقراءتها أو الاستمع إليها دون اتصال بالإنترنت."
     }
   },
   "languages": {

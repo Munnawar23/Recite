@@ -33,6 +33,12 @@
       "output": "static",
       "favicon": "./assets/images/icons/icon.png"
     },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/9b47bea5-b465-41da-bfaf-cc28e2c37dcc"
+    },
     "plugins": [
       "expo-router",
       [
@@ -55,9 +61,7 @@
         {
           "icon": "./assets/images/icons/adaptive-icon.png",
           "color": "#2A5941",
-          "sounds": [
-            "./assets/sfx/notification.mp3"
-          ]
+          "sounds": ["./assets/sfx/notification.mp3"]
         }
       ],
       "expo-file-system",

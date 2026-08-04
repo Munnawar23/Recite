@@ -20,7 +20,6 @@
       "permissions": [
         "android.permission.INTERNET",
         "android.permission.MODIFY_AUDIO_SETTINGS",
-        "android.permission.POST_NOTIFICATIONS",
         "android.permission.RECEIVE_BOOT_COMPLETED",
         "android.permission.VIBRATE",
         "android.permission.ACCESS_COARSE_LOCATION",
@@ -56,14 +55,6 @@
         }
       ],
       "expo-web-browser",
-      [
-        "expo-notifications",
-        {
-          "icon": "./assets/images/icons/adaptive-icon.png",
-          "color": "#2A5941",
-          "sounds": ["./assets/sfx/notification.mp3"]
-        }
-      ],
       "expo-file-system",
       "expo-asset"
     ],

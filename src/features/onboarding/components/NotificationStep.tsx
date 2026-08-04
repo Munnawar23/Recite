@@ -1,7 +1,5 @@
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useNotificationStore } from "@/store/notificationStore";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -16,19 +14,9 @@ const BENEFITS = ["onboarding.notifications.benefit1"] as const;
 
 export function NotificationStep({ onNext, onBack }: NotificationStepProps) {
   const { t } = useTranslation();
-  const { isNotificationsEnabled, toggleNotifications } =
-    useNotificationStore();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-  const [loading, setLoading] = useState(false);
 
-  const handleEnable = async () => {
-    if (isNotificationsEnabled) {
-      onNext();
-      return;
-    }
-    setLoading(true);
-    await toggleNotifications(true);
-    setLoading(false);
+  const handleEnable = () => {
     onNext();
   };
 
@@ -43,14 +31,9 @@ export function NotificationStep({ onNext, onBack }: NotificationStepProps) {
         "Enable daily reminders to keep you consistent with your Quran journey.",
       )}
       icon="notifications-outline"
-      primaryLabel={
-        isNotificationsEnabled
-          ? t("onboarding.notifications.enabledStatus", "Notifications Enabled")
-          : t("onboarding.notifications.enableButton", "Enable Notifications")
-      }
+      primaryLabel={t("onboarding.notifications.enableButton", "Continue")}
       onPrimary={handleEnable}
       onBack={onBack}
-      primaryLoading={loading}
     >
       {/* Benefits list */}
       <FlatList
@@ -71,23 +54,6 @@ export function NotificationStep({ onNext, onBack }: NotificationStepProps) {
           </View>
         )}
       />
-
-      {/* Success state */}
-      {isNotificationsEnabled && (
-        <View style={S.successBadge}>
-          <Ionicons
-            name="checkmark-circle"
-            size={scale(18)}
-            color={colors.primary}
-          />
-          <Text style={S.successText}>
-            {t(
-              "onboarding.notifications.enabledStatus",
-              "Notifications Enabled",
-            )}
-          </Text>
-        </View>
-      )}
 
       {/* Skip hint */}
       <Text style={S.hintText}>

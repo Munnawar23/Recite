@@ -4,7 +4,6 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { AppLanguageStep } from "../components/AppLanguageStep";
 import { LocationStep } from "../components/LocationStep";
-import { NotificationStep } from "../components/NotificationStep";
 import { ThemeStep } from "../components/ThemeStep";
 import { Translation } from "../components/Translation";
 
@@ -26,8 +25,7 @@ export default function OnboardingScreen() {
       {step === 1 && <AppLanguageStep onNext={next} />}
       {step === 2 && <Translation onNext={next} onBack={back} />}
       {step === 3 && <ThemeStep onNext={next} onBack={back} />}
-      {step === 4 && <NotificationStep onNext={next} onBack={back} />}
-      {step === 5 && <LocationStep onFinish={finish} onBack={back} />}
+      {step === 4 && <LocationStep onFinish={finish} onBack={back} />}
     </View>
   );
 }

@@ -8,7 +8,6 @@ import Header from "@/components/layout/Header";
 import AboutSection from "../components/AboutSection";
 import DisplayLanguageSection from "../components/DisplayLanguageSection";
 import HelpSupportSection from "../components/HelpSupportSection";
-import NotificationSection from "../components/NotificationSection";
 import StorageSection from "../components/StorageSection";
 
 import { useAppTheme } from "@/hooks/useAppTheme";
@@ -44,7 +43,6 @@ export default function SettingsScreen() {
 
         {/* Sections */}
         <DisplayLanguageSection />
-        <NotificationSection />
         <StorageSection />
         <HelpSupportSection />
         <AboutSection />

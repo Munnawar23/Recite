@@ -12,12 +12,14 @@ interface ScreenHeaderProps {
   title: string;
   subtitle?: string;
   onBackPress?: () => void;
+  titleFontSize?: number;
 }
 
 export default function ScreenHeader({
   title,
   subtitle,
   onBackPress,
+  titleFontSize,
 }: ScreenHeaderProps) {
   const router = useRouter();
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
@@ -46,7 +48,7 @@ export default function ScreenHeader({
       </TouchableOpacity>
 
       <View style={S.titleContainer}>
-        <Text style={S.title} numberOfLines={1}>
+        <Text style={[S.title, titleFontSize ? { fontSize: titleFontSize, lineHeight: titleFontSize * 1.3 } : null]} numberOfLines={1}>
           {title}
         </Text>
         {subtitle ? (

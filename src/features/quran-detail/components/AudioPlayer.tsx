@@ -46,6 +46,10 @@ export default function AudioPlayerComponent({
   const [sliderValue, setSliderValue] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
+  // Keep loader active until audio duration is known — prevents 0:00 flash
+  const isDurationReady = (status.duration ?? 0) > 0;
+  const isPlayerLoading = isLoadingAudio || !isDurationReady;
+
   // Reanimated sliding animation logic
   const animatedStyle = useAnimatedStyle(() => {
     const scrollOffset = scrollTranslateY ? scrollTranslateY.value : 0;
@@ -135,10 +139,10 @@ export default function AudioPlayerComponent({
           {/* Play/Pause Main Button (Exact Center) */}
           <TouchableOpacity
             onPress={handlePlayPause}
-            disabled={isLoadingAudio}
+            disabled={isPlayerLoading}
             style={S.playPauseButton}
           >
-            {isLoadingAudio ? (
+            {isPlayerLoading ? (
               <ActivityIndicator size="small" color="#fff" />
             ) : (
               <Ionicons

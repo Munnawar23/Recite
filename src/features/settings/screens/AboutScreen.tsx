@@ -23,6 +23,7 @@ export default function AboutScreen() {
           "settings.about.aboutUsSubtitle",
           "Open source & community-driven Quran app",
         )}
+        titleFontSize={fontSize.cardTitle - 1}
       />
 
       <ScrollView

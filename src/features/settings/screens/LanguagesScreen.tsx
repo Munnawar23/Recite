@@ -41,6 +41,7 @@ export default function LanguagesScreen() {
           "settings.languages.subtitle",
           "App language, translation & reciter",
         )}
+        titleFontSize={fontSize.cardTitle - 1}
       />
 
       <ScrollView

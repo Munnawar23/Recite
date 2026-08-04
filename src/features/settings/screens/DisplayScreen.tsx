@@ -54,6 +54,7 @@ export default function DisplayScreen() {
       <ScreenHeader
         title={t("settings.display.title", "Display Settings")}
         subtitle={t("settings.display.subtitle", "Theme, fonts & text sizes")}
+        titleFontSize={fontSize.cardTitle - 1}
       />
 
       <ScrollView

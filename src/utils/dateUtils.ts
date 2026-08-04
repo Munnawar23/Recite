@@ -77,8 +77,8 @@ export function getHijriDate(locale: string = "en"): HijriDateInfo {
 
 export function formatPrayerTime(date: Date): string {
   return date.toLocaleTimeString("en-US", {
-    hour: "2-digit",
+    hour: "numeric",
     minute: "2-digit",
-    hour12: false,
+    hour12: true,
   });
 }

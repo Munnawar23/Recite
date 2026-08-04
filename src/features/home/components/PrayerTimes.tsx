@@ -35,11 +35,19 @@ export default function PrayerTimes() {
               color={prayer.active ? "#fff" : colors.subtext}
             />
 
-            <Text style={[S.name, prayer.active && S.nameActive]}>
+            <Text
+              style={[S.name, prayer.active && S.nameActive]}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+            >
               {t(`home.prayerNames.${prayer.name.toLowerCase()}`, prayer.name)}
             </Text>
 
-            <Text style={[S.time, prayer.active && S.timeActive]}>
+            <Text
+              style={[S.time, prayer.active && S.timeActive]}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+            >
               {prayer.time}
             </Text>
           </View>
@@ -77,6 +85,7 @@ const createStyles = (
       backgroundColor: colors.card,
       borderRadius: scale(16),
       paddingVertical: verticalScale(14),
+      paddingHorizontal: scale(2),
 
       alignItems: "center",
       justifyContent: "center",
@@ -114,6 +123,7 @@ const createStyles = (
       fontFamily: fontFamily.title,
       color: colors.subtext,
       letterSpacing: 0.2,
+      textAlign: "center",
     },
 
     nameActive: {
@@ -124,6 +134,7 @@ const createStyles = (
       fontSize: fontSize.caption,
       fontFamily: fontFamily.text,
       color: colors.subtext,
+      textAlign: "center",
     },
 
     timeActive: {

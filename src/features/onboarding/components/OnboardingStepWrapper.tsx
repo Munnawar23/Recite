@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 4;
 
 interface OnboardingStepWrapperProps {
   step: number;

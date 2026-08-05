@@ -24,7 +24,7 @@ export default function TabLayout() {
         ? verticalScale(12)
         : verticalScale(10);
 
-  const tabBarHeight = verticalScale(57) + bottomPadding;
+  const tabBarHeight = verticalScale(50) + bottomPadding;
 
   const handleTabPress = () => {
     Haptics.medium();

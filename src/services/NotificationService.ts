@@ -81,15 +81,15 @@ export class NotificationService {
 
       const id = await Notifications.scheduleNotificationAsync({
         content: {
-          title: "📖 Time for Your Daily Recitation ✨",
+          title: "🌙 Before You Sleep",
           body: "Take a peaceful moment before sleep to read and reflect upon the Holy Quran 🤲",
           data: { type: "daily_read_reminder" },
           sound: "notification.mp3",
         },
         trigger: {
           type: "daily",
-          hour: 17,
-          minute: 33,
+          hour: 23,
+          minute: 0,
           channelId: "daily-reminder-v2",
         } as Notifications.NotificationTriggerInput,
       });

@@ -11,6 +11,7 @@ export const STORAGE_KEYS = {
   ONBOARDING: "onboarding-storage",
   READING_PROGRESS: "reading-progress-storage",
   LOCATION: "user-location-storage",
+  QUERY_CACHE: "RECITE_QUERY_CACHE_V2",
 } as const;
 
 export const appStorage = {

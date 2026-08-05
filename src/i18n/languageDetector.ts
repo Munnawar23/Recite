@@ -14,7 +14,8 @@ export const languageDetector = {
     try {
       const savedLanguage = await appStorage.getItem<string>(STORAGE_KEYS.LANGUAGE);
       if (savedLanguage && isSupportedLanguage(savedLanguage)) {
-        return callback(savedLanguage);
+        callback(savedLanguage);
+        return;
       }
 
       // Fallback to device locale if no saved preference

@@ -27,7 +27,7 @@ export const SUPPORTED_LANGUAGES = Object.freeze([
 
 export type SupportedLanguageCode = (typeof SUPPORTED_LANGUAGES)[number]["code"];
 
-export const SUPPORTED_LANGUAGE_CODES = Object.freeze(Object.keys(resources));
+export const SUPPORTED_LANGUAGE_CODES = Object.freeze(Object.keys(resources) as SupportedLanguageCode[]);
 
 export const isSupportedLanguage = (lng: string): lng is SupportedLanguageCode => {
   return lng in resources;

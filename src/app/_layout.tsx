@@ -17,13 +17,14 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { NotificationService } from "@/services/NotificationService";
 import { useNotificationStore } from "@/store/notificationStore";
+import { STORAGE_KEYS } from "@/lib/storage/appStorage";
 
 // Keep the splash screen visible while we fetch resources
 void SplashScreen.preventAutoHideAsync();
 
 const asyncStoragePersister = createAsyncStoragePersister({
   storage: AsyncStorage,
-  key: "RECITE_QUERY_CACHE_V2",
+  key: STORAGE_KEYS.QUERY_CACHE,
 });
 
 export default function RootLayout() {

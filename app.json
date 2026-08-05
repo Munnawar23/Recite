@@ -16,6 +16,7 @@
         "backgroundColor": "#2A5941",
         "foregroundImage": "./assets/images/icons/adaptive-icon.png"
       },
+      "allowBackup": false,
       "predictiveBackGestureEnabled": false,
       "permissions": [
         "android.permission.INTERNET",

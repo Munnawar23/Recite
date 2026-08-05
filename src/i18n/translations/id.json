@@ -169,10 +169,15 @@
       "enableTitle": "Aktifkan Notifikasi",
       "enabled": "Notifikasi diaktifkan",
       "disabled": "Dinonaktifkan",
+      "dailyReminderTitle": "Pengingat Harian",
+      "dailyReminderSubtitle": "Terima notifikasi harian",
       "toastEnabledTitle": "Notifikasi Diaktifkan",
       "toastEnabledDesc": "Pengingat harian telah diaktifkan.",
       "toastDisabledTitle": "Notifikasi Dinonaktifkan",
-      "toastDisabledDesc": "Pengingat harian telah dinonaktifkan."
+      "toastDisabledDesc": "Pengingat harian telah dinonaktifkan.",
+      "blockedTitle": "Notifikasi Diblokir",
+      "blockedMessage": "Notifikasi dinonaktifkan. Aktifkan di Pengaturan.",
+      "openSettings": "Buka Pengaturan"
     },
     "storage": {
       "title": "Penyimpanan",
@@ -319,7 +324,9 @@
       "benefit3": "Acara kalender Islam lokal",
       "enableButton": "Aktifkan Lokasi",
       "enabledStatus": "Lokasi Diaktifkan",
-      "skipHint": "Waktu Mekkah akan digunakan jika dilewati"
+      "skipHint": "Waktu Makkah akan digunakan jika dilewati",
+      "blockedTitle": "Lokasi Diblokir",
+      "blockedMessage": "Akses lokasi dinonaktifkan. Aktifkan di Pengaturan."
     }
   }
 }

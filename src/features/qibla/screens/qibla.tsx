@@ -1,5 +1,6 @@
 import EmptyState from "@/components/layout/EmptyState";
 import Header from "@/components/layout/Header";
+import MessageModal from "@/components/ui/MessageModal";
 import CompassDial from "@/features/qibla/components/CompassDial";
 import { useCompass } from "@/features/qibla/hooks/useCompass";
 import { useQiblaDirection } from "@/features/qibla/hooks/useQiblaDirection";
@@ -7,6 +8,7 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLocation } from "@/hooks/useLocation";
 import { usePathname } from "expo-router";
 import { useTranslation } from "react-i18next";
+import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import Animated, {
   useAnimatedProps,
@@ -46,8 +48,16 @@ export default function QiblaScreen() {
   const { t } = useTranslation();
   const theme = useAppTheme();
   const styles = createStyles(theme);
-  const { coords, permissionStatus, cityName, requestLocation, isLoading } =
+  const { coords, permissionStatus, cityName, requestLocation, openAppSettings, isLoading } =
     useLocation();
+  const [showBlockedModal, setShowBlockedModal] = useState(false);
+
+  const handleRequestLocation = async () => {
+    const status = await requestLocation();
+    if (status === "blocked") {
+      setShowBlockedModal(true);
+    }
+  };
 
   const qiblaAngle = useQiblaDirection(coords);
   const rotation = useCompass();
@@ -87,7 +97,7 @@ export default function QiblaScreen() {
               buttonLabel={t("qiblaScreen.enableLocation", "Enable Location")}
               buttonIcon="location"
               loading={isLoading}
-              onPress={() => requestLocation()}
+              onPress={handleRequestLocation}
             />
           ) : (
             <>
@@ -122,6 +132,25 @@ export default function QiblaScreen() {
           )}
         </View>
       </View>
+
+      <MessageModal
+        visible={showBlockedModal}
+        onClose={() => setShowBlockedModal(false)}
+        title={t("onboarding.location.blockedTitle", "Location Blocked")}
+        message={t(
+          "onboarding.location.blockedMessage",
+          "Location access disabled. Enable in Settings.",
+        )}
+        icon="location-outline"
+        iconColor="#EF4444"
+        secondaryButtonText={t("common.cancel", "Cancel")}
+        onSecondaryPress={() => setShowBlockedModal(false)}
+        primaryButtonText={t("settings.notifications.openSettings", "Open Settings")}
+        onPrimaryPress={() => {
+          setShowBlockedModal(false);
+          void openAppSettings();
+        }}
+      />
     </View>
   );
 }

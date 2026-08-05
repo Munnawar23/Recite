@@ -169,10 +169,15 @@
       "enableTitle": "Enable Notifications",
       "enabled": "Notification enabled",
       "disabled": "Disabled",
+      "dailyReminderTitle": "Daily Reminder",
+      "dailyReminderSubtitle": "Receive daily notifications",
       "toastEnabledTitle": "Notifications Enabled",
-      "toastEnabledDesc": "Daily reminders have been enabled.",
+      "toastEnabledDesc": "Daily reminder enabled.",
       "toastDisabledTitle": "Notifications Disabled",
-      "toastDisabledDesc": "Daily reminders have been disabled."
+      "toastDisabledDesc": "Daily reminder disabled.",
+      "blockedTitle": "Notifications Blocked",
+      "blockedMessage": "Notifications disabled. Enable in Settings.",
+      "openSettings": "Open Settings"
     },
     "storage": {
       "title": "Storage",
@@ -319,7 +324,9 @@
       "benefit3": "Local Islamic calendar events",
       "enableButton": "Enable Location",
       "enabledStatus": "Location Enabled",
-      "skipHint": "Mecca times will be used if skipped"
+      "skipHint": "Mecca times will be used if skipped",
+      "blockedTitle": "Location Blocked",
+      "blockedMessage": "Location access disabled. Enable in Settings."
     }
   }
 }

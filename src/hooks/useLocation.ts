@@ -109,17 +109,21 @@ export function useLocation() {
   });
 
   const requestMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (): Promise<"granted" | "denied" | "blocked"> => {
       const currentPerm = await Location.getForegroundPermissionsAsync();
+      
+      if (currentPerm.status === "granted") {
+        return "granted";
+      }
+
       if (currentPerm.canAskAgain) {
         const { status } = await Location.requestForegroundPermissionsAsync();
-        return status;
-      }
-      if (currentPerm.status === Location.PermissionStatus.DENIED) {
-        await Linking.openSettings();
+        if (status === "granted") return "granted";
         return "denied";
       }
-      return currentPerm.status;
+
+      // Permission blocked (permanently denied)
+      return "blocked";
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-location"] });
@@ -131,7 +135,10 @@ export function useLocation() {
     coords: locationQuery.data?.coords ?? MECCA_COORDS,
     permissionStatus: locationQuery.data?.permissionStatus ?? "undetermined",
     cityName: locationQuery.data?.cityName,
-    requestLocation: requestMutation.mutate,
+    requestLocation: requestMutation.mutateAsync,
     isLoading: locationQuery.isLoading || requestMutation.isPending,
+    openAppSettings: async () => {
+      await Linking.openSettings();
+    },
   };
 }

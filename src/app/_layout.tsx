@@ -15,6 +15,8 @@ import { I18nextProvider } from "react-i18next";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
+import { NotificationService } from "@/services/NotificationService";
+import { useNotificationStore } from "@/store/notificationStore";
 
 // Keep the splash screen visible while we fetch resources
 void SplashScreen.preventAutoHideAsync();
@@ -45,6 +47,11 @@ export default function RootLayout() {
   });
 
   const { activeScheme } = useAppTheme();
+
+  useEffect(() => {
+    NotificationService.configure();
+    void useNotificationStore.getState().syncOnStartup();
+  }, []);
 
   useEffect(() => {
     if (fontError) {

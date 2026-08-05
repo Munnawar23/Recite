@@ -38,11 +38,18 @@ export default function HijriCard() {
               size={scale(12)}
               color={colors.hijriCardAccent}
             />
-            <Text style={S.badgeText}>
+            <Text style={S.badgeText} numberOfLines={1}>
               {t("home.hijriCard.badge", "ISLAMIC DATE")}
             </Text>
           </View>
-          <Text style={S.gregorianText}>{hijriDate.gregorian}</Text>
+          <Text
+            style={S.gregorianText}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.8}
+          >
+            {hijriDate.gregorian}
+          </Text>
         </View>
 
         {/* Main Content */}
@@ -52,15 +59,27 @@ export default function HijriCard() {
           <View style={S.dividerLine} />
 
           <View style={S.dateDetails}>
-            <Text style={S.month} numberOfLines={1}>
+            <Text
+              style={S.month}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.8}
+            >
               {hijriDate.month}
             </Text>
             <View style={S.detailsRow}>
-              <Text style={S.yearText}>
+              <Text style={S.yearText} numberOfLines={1}>
                 {hijriDate.year} {t("home.hijriCard.yearSuffix", "AH")}
               </Text>
               <View style={S.dividerDot} />
-              <Text style={S.weekday}>{hijriDate.weekday}</Text>
+              <Text
+                style={S.weekday}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                minimumFontScale={0.8}
+              >
+                {hijriDate.weekday}
+              </Text>
             </View>
           </View>
         </View>
@@ -95,7 +114,7 @@ const createStyles = (
     },
     gradient: {
       borderRadius: scale(24),
-      paddingHorizontal: scale(24),
+      paddingHorizontal: scale(18),
       paddingVertical: verticalScale(22),
       overflow: "hidden",
       position: "relative",
@@ -122,15 +141,19 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
+      gap: scale(8),
       marginBottom: verticalScale(18),
     },
     gregorianText: {
+      flexShrink: 1,
       fontSize: moderateScale(13),
       fontFamily: fontFamily.text,
       color: "rgba(255, 255, 255, 0.85)",
       letterSpacing: 0.2,
+      textAlign: "right",
     },
     badge: {
+      flexShrink: 0,
       flexDirection: "row",
       alignItems: "center",
       gap: scale(6),
@@ -163,7 +186,7 @@ const createStyles = (
       width: 1,
       height: verticalScale(40),
       backgroundColor: "rgba(255, 255, 255, 0.2)",
-      marginHorizontal: scale(16),
+      marginHorizontal: scale(14),
     },
     dateDetails: {
       flex: 1,
@@ -179,7 +202,8 @@ const createStyles = (
     detailsRow: {
       flexDirection: "row",
       alignItems: "center",
-      gap: scale(8),
+      flexWrap: "wrap",
+      gap: scale(6),
     },
     yearText: {
       fontSize: moderateScale(13),
@@ -193,6 +217,7 @@ const createStyles = (
       backgroundColor: "rgba(255, 255, 255, 0.4)",
     },
     weekday: {
+      flexShrink: 1,
       fontSize: moderateScale(13),
       fontFamily: fontFamily.text,
       color: "rgba(255, 255, 255, 0.85)",

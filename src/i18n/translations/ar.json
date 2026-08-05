@@ -169,10 +169,15 @@
       "enableTitle": "تفعيل الإشعارات",
       "enabled": "الإشعارات مفعلة",
       "disabled": "معطلة",
+      "dailyReminderTitle": "التذكير اليومي",
+      "dailyReminderSubtitle": "استلام الإشعارات اليومية",
       "toastEnabledTitle": "تم تفعيل الإشعارات",
-      "toastEnabledDesc": "تم تفعيل التذكيرات اليومية.",
+      "toastEnabledDesc": "تم تفعيل التذكير اليومي.",
       "toastDisabledTitle": "تم تعطيل الإشعارات",
-      "toastDisabledDesc": "تم تعطيل التذكيرات اليومية."
+      "toastDisabledDesc": "تم تعطيل التذكير اليومي.",
+      "blockedTitle": "الإشعارات محظورة",
+      "blockedMessage": "الإشعارات معطلة. قم بتفعيلها من الإعدادات.",
+      "openSettings": "فتح الإعدادات"
     },
     "storage": {
       "title": "التخزين",
@@ -319,7 +324,9 @@
       "benefit3": "أحداث التقويم الإسلامي المحلية",
       "enableButton": "تفعيل الموقع",
       "enabledStatus": "الموقع مفعّل",
-      "skipHint": "سيتم استخدام أوقات مكة المكرمة إذا تخطيت"
+      "skipHint": "سيتم استخدام أوقات مكة المكرمة إذا تخطيت",
+      "blockedTitle": "الموقع محظور",
+      "blockedMessage": "تم تعطيل الموقع. قم بتفعيله من الإعدادات."
     }
   }
 }

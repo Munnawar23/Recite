@@ -169,10 +169,15 @@
       "enableTitle": "सूचनाएं सक्षम करें",
       "enabled": "सूचना सक्षम है",
       "disabled": "अक्षम",
+      "dailyReminderTitle": "दैनिक रिमाइंडर्स",
+      "dailyReminderSubtitle": "दैनिक सूचनाएं प्राप्त करें",
       "toastEnabledTitle": "सूचनाएं सक्षम की गईं",
-      "toastEnabledDesc": "दैनिक रिमाइंडर्स सक्षम कर दिए गए हैं।",
+      "toastEnabledDesc": "दैनिक रिमाइंडर सक्षम किया गया।",
       "toastDisabledTitle": "सूचनाएं अक्षम की गईं",
-      "toastDisabledDesc": "दैनिक रिमाइंडर्स अक्षम कर दिए गए हैं।"
+      "toastDisabledDesc": "दैनिक रिमाइंडर अक्षम किया गया।",
+      "blockedTitle": "सूचनाएं अवरुद्ध हैं",
+      "blockedMessage": "सूचनाएं बंद हैं। सेटिंग्स में जाकर चालू करें।",
+      "openSettings": "सेटिंग्स खोलें"
     },
     "storage": {
       "title": "स्टोरेज",
@@ -318,8 +323,10 @@
       "benefit2": "सटीक क़िबला कम्पास दिशा",
       "benefit3": "स्थानीय इस्लामी कैलेंडर आयोजन",
       "enableButton": "स्थान सक्षम करें",
-      "enabledStatus": "स्थान सक्षम है",
-      "skipHint": "छोड़ने पर मक्का समय का उपयोग होगा"
+      "enabledStatus": "स्थान सक्षम किया गया",
+      "skipHint": "यदि छोड़ दिया जाए तो मक्का के समय का उपयोग किया जाएगा",
+      "blockedTitle": "स्थान अवरुद्ध है",
+      "blockedMessage": "स्थान पहुंच बंद है। सेटिंग्स में जाकर चालू करें।"
     }
   }
 }

@@ -13,6 +13,10 @@ interface MessageModalProps {
   message: string;
   icon?: keyof typeof Ionicons.glyphMap;
   iconColor?: string;
+  primaryButtonText?: string;
+  onPrimaryPress?: () => void;
+  secondaryButtonText?: string;
+  onSecondaryPress?: () => void;
 }
 
 export function MessageModal({
@@ -22,6 +26,10 @@ export function MessageModal({
   message,
   icon,
   iconColor,
+  primaryButtonText,
+  onPrimaryPress,
+  secondaryButtonText,
+  onSecondaryPress,
 }: MessageModalProps) {
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
   const { t } = useTranslation();
@@ -29,6 +37,24 @@ export function MessageModal({
   const handleClose = () => {
     Haptics.medium();
     onClose();
+  };
+
+  const handlePrimaryPress = () => {
+    Haptics.medium();
+    if (onPrimaryPress) {
+      onPrimaryPress();
+    } else {
+      onClose();
+    }
+  };
+
+  const handleSecondaryPress = () => {
+    Haptics.medium();
+    if (onSecondaryPress) {
+      onSecondaryPress();
+    } else {
+      onClose();
+    }
   };
 
   const S = createStyles(colors, fontFamily, fontSize, spacing);
@@ -70,12 +96,22 @@ export function MessageModal({
           {/* Message */}
           <Text style={S.message}>{message}</Text>
 
-          {/* OK Button */}
-          <Button
-            title={t("common.ok", "OK")}
-            onPress={handleClose}
-            style={S.okButton}
-          />
+          {/* Buttons */}
+          <View style={S.buttonContainer}>
+            {secondaryButtonText && (
+              <Button
+                title={secondaryButtonText}
+                onPress={handleSecondaryPress}
+                style={[S.actionButton, S.secondaryButton]}
+                textStyle={S.secondaryButtonText}
+              />
+            )}
+            <Button
+              title={primaryButtonText || t("common.ok", "OK")}
+              onPress={handlePrimaryPress}
+              style={S.actionButton}
+            />
+          </View>
         </View>
       </TouchableOpacity>
     </Modal>
@@ -127,8 +163,23 @@ const createStyles = (
       textAlign: "center",
       lineHeight: fontSize.bodyLg * 1.55,
     },
-    okButton: {
+    buttonContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: spacing.itemGap,
       marginTop: spacing.cardMarginTop,
+      width: "100%",
+    },
+    actionButton: {
+      flex: 1,
+    },
+    secondaryButton: {
+      backgroundColor: "transparent",
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    secondaryButtonText: {
+      color: colors.text,
     },
   });
 

@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 
 import Background from "@/components/layout/Background";
 import ScreenHeader from "@/components/ui/ScreenHeader";
-import SectionTitle from "@/components/ui/SectionTitle";
 import { useAppTheme } from "@/hooks/useAppTheme";
 
 export default function AboutScreen() {
@@ -38,35 +37,22 @@ export default function AboutScreen() {
               "Recite is a non-profit, 100% free community project dedicated to making the Holy Quran accessible to everyone worldwide with zero ads, subscriptions, or paywalls.",
             )}
           </Text>
-          <Text style={S.introTextSecondParagraph}>
-            {t(
-              "settings.about.aboutAppIntro",
-              "Built using high-performance open-source technologies, Recite provides authentic verse recitations, side-by-side multi-language translations, and instant search in a modern interface.",
-            )}
-          </Text>
         </View>
 
-        {/* Section Title */}
-        <SectionTitle
-          label={t("settings.about.keyHighlights", "Technology & Platform")}
-          icon="hardware-chip-outline"
-          tightSpacing
-        />
-
-        {/* Essential Highlights Cards */}
+        {/* Feature Highlights Cards */}
         <View style={S.card}>
           <View style={S.cardHeaderRow}>
             <View style={S.iconBadge}>
-              <Ionicons name="code-slash-outline" size={scale(20)} color={colors.primary} />
+              <Ionicons name="volume-high-outline" size={scale(20)} color={colors.primary} />
             </View>
             <View style={S.textWrap}>
               <Text style={S.cardTitle}>
-                {t("settings.about.appFeatureOpenSourceTitle", "Open Source")}
+                {t("settings.about.featureRecitersTitle", "Authentic Recitations")}
               </Text>
               <Text style={S.cardSubtitle}>
                 {t(
-                  "settings.about.appFeatureOpenSourceDesc",
-                  "Transparent community-driven development with open contributions welcomed.",
+                  "settings.about.featureRecitersDesc",
+                  "High-quality audio from world-renowned Qaris with verse-by-verse playback.",
                 )}
               </Text>
             </View>
@@ -76,16 +62,16 @@ export default function AboutScreen() {
         <View style={S.card}>
           <View style={S.cardHeaderRow}>
             <View style={S.iconBadge}>
-              <Ionicons name="cloud-download-outline" size={scale(20)} color={colors.primary} />
+              <Ionicons name="language-outline" size={scale(20)} color={colors.primary} />
             </View>
             <View style={S.textWrap}>
               <Text style={S.cardTitle}>
-                {t("settings.about.appFeatureApiTitle", "Quran.com API")}
+                {t("settings.about.featureLanguagesTitle", "Multi-Language Translations")}
               </Text>
               <Text style={S.cardSubtitle}>
                 {t(
-                  "settings.about.appFeatureApiDesc",
-                  "Powered by official API endpoints from Quran.com for verified authentic verse text & audio.",
+                  "settings.about.featureLanguagesDesc",
+                  "Read side-by-side verse translations across multiple global languages.",
                 )}
               </Text>
             </View>
@@ -95,16 +81,16 @@ export default function AboutScreen() {
         <View style={S.card}>
           <View style={S.cardHeaderRow}>
             <View style={S.iconBadge}>
-              <Ionicons name="hardware-chip-outline" size={scale(20)} color={colors.primary} />
+              <Ionicons name="shield-checkmark-outline" size={scale(20)} color={colors.primary} />
             </View>
             <View style={S.textWrap}>
               <Text style={S.cardTitle}>
-                {t("settings.about.appFeatureExpoTitle", "Built with Expo & React Native")}
+                {t("settings.about.featurePrivacyTitle", "Privacy First")}
               </Text>
               <Text style={S.cardSubtitle}>
                 {t(
-                  "settings.about.appFeatureExpoDesc",
-                  "Engineered using Expo and React Native for optimal cross-platform performance.",
+                  "settings.about.featurePrivacyDesc",
+                  "No tracking, ad profiling, or personal data collection required.",
                 )}
               </Text>
             </View>
@@ -145,13 +131,6 @@ const createStyles = (
       fontSize: fontSize.bodyLg + 1,
       color: colors.text,
       lineHeight: (fontSize.bodyLg + 1) * 1.45,
-    },
-    introTextSecondParagraph: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg + 1,
-      color: colors.text,
-      lineHeight: (fontSize.bodyLg + 1) * 1.45,
-      marginTop: verticalScale(10),
     },
     card: {
       backgroundColor: colors.card,

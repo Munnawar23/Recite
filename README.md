@@ -1,101 +1,86 @@
-# Recite — Read, Listen, Reflect 📖✨
+# 📖 Recite — Read, Listen, Reflect
 
-> **100% Free & Open Source Islamic Mobile App**  
-> Read the Holy Quran, listen to recitations, track daily prayers, and reflect — completely ad-free and subscription-free.
-
----
-
-## 🌟 Features
-
-- 📖 **Read Quran**: Full Quran text with translations, verse explanations, and word-by-word insights.
-- 🎧 **Audio Recitations**: High-quality audio recitations with offline audio playback.
-- 🕋 **Prayer Times & Qibla**: Location-based accurate prayer schedules calculated via Adhan algorithm & live Qibla compass.
-- 🚫 **100% Free & Ad-Free**: No ads, no paywalls, no subscriptions, forever.
+> **A modern, beautiful, and distraction-free Islamic mobile application.**  
+> Read the Holy Quran, listen to world-renowned reciters, track accurate prayer times, and find the Qibla direction — 100% free with zero ads.
 
 ---
 
-## 🛠️ Technology Stack
+## ✨ Features Overview
 
-Recite is built with modern, performant cross-platform technologies:
+### 📖 1. Noble Quran Reader
 
-- **Framework**: [React Native](https://reactnative.dev/) (v0.86) + [Expo](https://expo.dev/) (SDK 57)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Routing**: [Expo Router](https://docs.expo.dev/router/introduction/) (File-based navigation)
-- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
-- **Data Fetching & Cache**: [TanStack Query (React Query v5)](https://tanstack.com/query)
-- **Prayer Calculations**: [Adhan JS](https://github.com/batoulapps/adhan-js)
-- **Storage**: [AsyncStorage](https://react-native-async-storage.github.io/async-storage/)
-- **Animations**: [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/) & [Lottie](https://airbnb.io/lottie/)
-- **Localization**: [i18next](https://www.i18next.com/)
+- **Full Quran Text**: Read all 114 Surahs with clean typography optimized for readability.
+- **Multi-Language Translations**: View verse-by-verse translations side-by-side in English, Urdu, Hindi, Indonesian, Bengali, and Arabic.
+- **Custom Text Size**: Adjust Arabic text size and app UI font sizes for maximum comfort.
 
 ---
 
-## 🚀 Getting Started
+### 🎧 2. Audio Recitations & Downloads
 
-### Prerequisites
-
-- Node.js (v18 or higher)
-- npm, yarn, or pnpm
-- Expo Go app on mobile (or Android Studio / Xcode for native emulator)
-
-### Installation
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/Munnawar23/Recite---Read-Listen-Reflect.git
-   cd Recite
-   ```
-
-2. **Install dependencies:**
-
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server:**
-
-   ```bash
-   npx expo start
-   ```
-
-4. **Run on Android / iOS:**
-
-   ```bash
-   # For Android
-   npm run android
-
-   # For iOS
-   npm run ios
-   ```
+- **Top World-Renowned Qaris**: Listen to authentic verse-by-verse audio recitations.
+- **Offline Audio**: Download full Surahs or audio files to listen anytime without an internet connection.
 
 ---
 
-## 📦 Build Commands
+### 🕋 3. Prayer Times & Qibla Direction
 
-| Command                 | Description                                  |
-| :---------------------- | :------------------------------------------- |
-| `npm start`             | Start Expo dev server                        |
-| `npm run android`       | Run app on connected Android device/emulator |
-| `npm run create-apk`    | Build release APK locally                    |
-| `npm run create-aab`    | Build release Play Store Bundle (AAB)        |
-| `npm run clean-android` | Clean Android build cache                    |
+- **Location-Based Prayer Times**: Accurate daily schedules for Fajr, Dhuhr, Asr, Maghrib, and Isha based on your city.
+- **Real-Time Qibla Compass**: Smooth visual compass accurately pointing towards Mecca.
 
 ---
 
-## 🤝 Open Source & Contributing
+### 📚 4. Personal Library & Favorites
 
-Recite is **100% Open Source**. Contributions, suggestions, bug reports, and feature requests are welcome!
+- **Favorite Surahs**: Bookmark and manage your most-read Surahs for fast access.
+- **Download Management**: View, manage, or clear offline downloaded Surahs and manage local storage.
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git checkout -b feature/AmazingFeature`)
-5. Open a Pull Request
+---
+
+### 🔔 5. Daily Reminders & Personalization
+
+- **Daily Notifications**: Receive daily Quran recitation reminders to stay consistent in your spiritual journey.
+- **Light & Dark Theme**: Seamlessly switch between dark mode, light mode, or system theme preference.
+- **Multi-Language App Interface**: Full UI localization across 6 languages.
+
+---
+
+### 🔒 6. 100% Free & Privacy First
+
+- **No Ads or Paywalls**: Completely free for everyone worldwide.
+- **Privacy Focused**: No personal data tracking, account signups, or ad profiling.
+
+---
+
+## 🛠️ Tech Stack & Key Libraries
+
+- **Framework**: React Native & Expo SDK
+- **Language**: TypeScript
+- **Navigation**: Expo Router (File-based routing)
+- **State & Storage**: Zustand & AsyncStorage
+- **Data Fetching**: TanStack Query (React Query)
+- **Calculations & Audio**: Adhan JS & Expo Audio
+- **Localization**: i18next
+
+---
+
+## 📲 Getting Started
+
+```bash
+# Clone repository
+git clone https://github.com/Munnawar23/Recite---Read-Listen-Reflect.git
+
+# Install dependencies
+npm install
+
+# Start development server
+npx expo start
+```
+
+---
 
 ## 👤 Developer Info
 
-**Munnawar Hussain** — React Native Developer
+**Munnawar Hussain** — _React Native Developer_
 
 - 🌐 **GitHub**: [github.com/Munnawar23](https://github.com/Munnawar23)
 - 💼 **LinkedIn**: [linkedin.com/in/munnawar-hussain-aa544b227](https://www.linkedin.com/in/munnawar-hussain-aa544b227)
@@ -103,7 +88,4 @@ Recite is **100% Open Source**. Contributions, suggestions, bug reports, and fea
 
 ---
 
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
+_May Recite be a source of blessings and guidance for you. 🤲_

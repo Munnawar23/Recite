@@ -4,7 +4,8 @@ import { StateStorage } from "zustand/middleware";
 export const STORAGE_KEYS = {
   THEME: "theme-storage",
   FONT_SCALE: "font-scale-storage",
-  LANGUAGE: "user-language",
+  LANGUAGE: "user-language",           // plain string – read by languageDetector
+  LANGUAGE_STORE: "language-storage",  // zustand persist blob – used by languageStore
   NOTIFICATION: "notification-storage",
   DOWNLOADS: "downloads-storage",
   FAVORITES: "favorites-storage",

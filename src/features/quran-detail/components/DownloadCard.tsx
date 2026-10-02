@@ -21,8 +21,7 @@ import {
   getLocalAudioPath,
 } from "@/services/downloadService";
 import { useDownloadsStore } from "@/store/downloadsStore";
-import MessageModal from "@/components/ui/MessageModal";
-import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal";
+import { MessageModal, DeleteConfirmationModal } from "@/components";
 
 interface DownloadCardProps {
   chapterId?: number;

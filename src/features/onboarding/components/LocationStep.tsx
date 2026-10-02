@@ -1,6 +1,6 @@
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLocation } from "@/hooks/useLocation";
-import MessageModal from "@/components/ui/MessageModal";
+import { MessageModal } from "@/components";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import React, { useState } from "react";

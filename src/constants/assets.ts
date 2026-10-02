@@ -2,9 +2,11 @@
 export const QURAN_ANIM = require("../../assets/animations/quran.json");
 export const EMPTY_ANIM = require("../../assets/animations/empty.json");
 export const DOWNLOAD_ANIM = require("../../assets/animations/download.json");
+export const LOADING_ANIM = require("../../assets/animations/loading.json");
 
 // Images
 export const ICON_IMG = require("../../assets/images/icons/icon.png");
+export const ADAPTIVE_ICON_IMG = require("../../assets/images/icons/adaptive-icon.png");
 
 // Reciter Images
 export const RECITERS_IMAGES: Record<number, any> = {

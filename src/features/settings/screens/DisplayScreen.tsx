@@ -2,11 +2,13 @@ import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { verticalScale } from "react-native-size-matters";
 
-import Background from "@/components/layout/Background";
-import ScreenHeader from "@/components/ui/ScreenHeader";
-import SectionTitle from "@/components/ui/SectionTitle";
-import TabSwitcher from "@/components/ui/TabSwitcher";
-import { ThemePhonePicker } from "@/components/ui/ThemePhonePicker";
+import {
+  Background,
+  ScreenHeader,
+  SectionTitle,
+  TabSwitcher,
+  ThemePhonePicker,
+} from "@/components";
 
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { FontSizeScale, useFontStore } from "@/store/fontStore";

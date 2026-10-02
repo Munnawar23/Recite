@@ -5,9 +5,7 @@ import { useTranslation } from "react-i18next";
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
-import EmptyState from "@/components/layout/EmptyState";
-import Header from "@/components/layout/Header";
-import SectionTitle from "@/components/ui/SectionTitle";
+import { EmptyState, Header, SectionTitle } from "@/components";
 import PrayerTimes from "@/features/home/components/PrayerTimes";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import { useAppTheme } from "@/hooks/useAppTheme";

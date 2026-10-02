@@ -2,12 +2,13 @@ import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 
-import Background from "@/components/layout/Background";
-import CommonModal from "@/components/ui/CommonModal";
-import ScreenHeader from "@/components/ui/ScreenHeader";
-import SectionTitle from "@/components/ui/SectionTitle";
-
-import { ReciterList } from "@/components/ui/ReciterList";
+import {
+  Background,
+  CommonModal,
+  ScreenHeader,
+  SectionTitle,
+  ReciterList,
+} from "@/components";
 import { RECITER_OPTIONS } from "@/features/quran-detail/hooks/useQuranAudio";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { SUPPORTED_LANGUAGES, SupportedLanguageCode } from "@/i18n";

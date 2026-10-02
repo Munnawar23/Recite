@@ -1,8 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshControlProps, ScrollView, StyleSheet } from "react-native";
-import EmptyState from "@/components/layout/EmptyState";
-import { DOWNLOAD_ANIM, EMPTY_ANIM } from "@/constants/assets";
+import { EmptyState } from "@/components";
+import { DOWNLOAD_ANIM, EMPTY_ANIM } from "@/constants";
 import { ThemeSpacing } from "@/theme/spacing";
 
 type TabValue = "favorites" | "downloads";

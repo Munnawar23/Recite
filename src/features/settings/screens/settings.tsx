@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 
-import Header from "@/components/layout/Header";
+import { Header } from "@/components";
 import AboutSection from "../components/AboutSection";
 import DisplayLanguageSection from "../components/DisplayLanguageSection";
 import HelpSupportSection from "../components/HelpSupportSection";

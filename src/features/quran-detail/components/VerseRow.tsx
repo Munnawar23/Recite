@@ -1,6 +1,6 @@
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useFontStore } from "@/store/fontStore";
-import type { SurahVerse } from "@/types/quran";
+import type { SurahVerse } from "@/types";
 import React, { useMemo } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";

@@ -1,4 +1,4 @@
-import Background from "@/components/layout/Background";
+import { Background } from "@/components";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";

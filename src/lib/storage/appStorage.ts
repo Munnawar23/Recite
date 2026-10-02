@@ -71,7 +71,7 @@ export const zustandStorage: StateStorage = {
  * Shape of a single downloaded chapter record.
  * Stored as a value inside the downloads map keyed by chapterId.
  */
-import { DownloadedChapter } from "@/types/quran";
+import { DownloadedChapter } from "@/types";
 export type { DownloadedChapter };
 
 /** Internal shape persisted under STORAGE_KEYS.DOWNLOADS */

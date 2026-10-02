@@ -1,5 +1,5 @@
-import Background from "@/components/layout/Background";
-import Button from "@/components/ui/Button";
+import Background from "./Background";
+import { Button } from "../ui/Button";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import "@/i18n";
 import { Ionicons } from "@expo/vector-icons";

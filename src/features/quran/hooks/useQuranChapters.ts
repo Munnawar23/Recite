@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getChapters } from "@/lib/api/chapters";
-import { Chapter } from "@/types/quran";
+import { getChapters } from "@/lib/api";
+import { Chapter } from "@/types";
 
 const QUERY_KEYS = {
   chapters: ["quranData", "chapters"] as const,

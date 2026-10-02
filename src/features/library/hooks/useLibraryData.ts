@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useQuranChapters } from "@/features/quran/hooks/useQuranChapters";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import { useDownloadsStore } from "@/store/downloadsStore";
-import { Chapter } from "@/types/quran";
+import { Chapter } from "@/types";
 
 export type TabValue = "favorites" | "downloads";
 

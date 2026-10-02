@@ -10,7 +10,7 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { ThemeColors } from "@/theme/colors";
 import { ThemeSpacing } from "@/theme/spacing";
-import { Chapter as QuranItem } from "@/types/quran";
+import { Chapter as QuranItem } from "@/types";
 import { scale } from "react-native-size-matters";
 
 interface QuranCardProps {

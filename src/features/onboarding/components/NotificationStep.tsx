@@ -1,7 +1,7 @@
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNotificationStore } from "@/store/notificationStore";
-import { NotificationService } from "@/services/NotificationService";
-import MessageModal from "@/components/ui/MessageModal";
+import { NotificationService } from "@/services/notificationService";
+import { MessageModal } from "@/components";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import React, { useState } from "react";

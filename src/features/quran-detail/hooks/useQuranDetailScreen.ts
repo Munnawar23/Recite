@@ -4,7 +4,7 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { useReadingProgressStore } from "@/store/readingProgressStore";
-import type { SurahVerse } from "@/types/quran";
+import type { SurahVerse } from "@/types";
 import { useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { withTiming } from "react-native-reanimated";

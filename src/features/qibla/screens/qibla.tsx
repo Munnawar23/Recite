@@ -1,6 +1,4 @@
-import EmptyState from "@/components/layout/EmptyState";
-import Header from "@/components/layout/Header";
-import MessageModal from "@/components/ui/MessageModal";
+import { EmptyState, Header, MessageModal } from "@/components";
 import CompassDial from "@/features/qibla/components/CompassDial";
 import { useCompass } from "@/features/qibla/hooks/useCompass";
 import { useQiblaDirection } from "@/features/qibla/hooks/useQiblaDirection";

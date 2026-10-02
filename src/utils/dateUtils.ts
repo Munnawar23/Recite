@@ -1,4 +1,4 @@
-import { HijriDateInfo } from "@/types/hijri-date";
+import { HijriDateInfo } from "@/types";
 
 export function getHijriDate(locale: string = "en"): HijriDateInfo {
   const date = new Date();

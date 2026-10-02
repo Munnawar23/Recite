@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { DownloadedChapter } from "@/types/quran";
+import { DownloadedChapter } from "@/types";
 import { STORAGE_KEYS, zustandStorage } from "@/lib/storage/appStorage";
 
 export type { DownloadedChapter };

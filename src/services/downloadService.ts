@@ -1,5 +1,4 @@
-import { getChapterAudio } from "@/lib/api/chapter-audio";
-import { getVersesByChapter } from "@/lib/api/chapter-verses";
+import { getChapterAudio, getVersesByChapter } from "@/lib/api";
 import * as FileSystem from "expo-file-system/legacy";
 
 // ─── Directory Paths ────────────────────────────────────────────────────────

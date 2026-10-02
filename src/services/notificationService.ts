@@ -1,62 +1,101 @@
-import * as Notifications from "expo-notifications";
+import Constants, { ExecutionEnvironment } from "expo-constants";
 import { Linking, Platform } from "react-native";
+
+export const isExpoGo =
+  Constants.appOwnership === "expo" ||
+  Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
+
+let Notifications: typeof import("expo-notifications") | null = null;
+
+if (!isExpoGo) {
+  try {
+    Notifications = require("expo-notifications");
+  } catch (error) {
+    console.warn("[NotificationService] expo-notifications could not be loaded:", error);
+  }
+}
 
 export class NotificationService {
   private static isConfigured = false;
 
+  static get isSupported(): boolean {
+    return !isExpoGo && Notifications !== null;
+  }
+
   static configure() {
+    if (!this.isSupported || !Notifications) return;
     if (this.isConfigured) return;
     this.isConfigured = true;
 
-    Notifications.setNotificationHandler({
-      handleNotification: async () => ({
-        shouldShowBanner: true,
-        shouldShowList: true,
-        shouldPlaySound: true,
-        shouldSetBadge: false,
-      }),
-    });
+    try {
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowBanner: true,
+          shouldShowList: true,
+          shouldPlaySound: true,
+          shouldSetBadge: false,
+        }),
+      });
 
-    // Set up the Android notification channel.
-    // NOTE: Before releasing to production, bump the channel ID (e.g. v3)
-    // any time you change the sound — Android caches channel settings permanently.
-    if (Platform.OS === "android") {
-      void (async () => {
-        await Notifications.setNotificationChannelAsync("daily-reminder-v2", {
-          name: "Daily Reminder",
-          importance: Notifications.AndroidImportance.HIGH,
-          vibrationPattern: [0, 250, 250, 250],
-          lightColor: "#FF231F7C",
-          sound: "notification.mp3",
-        });
-      })();
+      // Set up the Android notification channel.
+      if (Platform.OS === "android") {
+        void (async () => {
+          await Notifications!.setNotificationChannelAsync("daily-reminder-v2", {
+            name: "Daily Reminder",
+            importance: Notifications!.AndroidImportance.HIGH,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: "#FF231F7C",
+            sound: "notification.mp3",
+          });
+        })();
+      }
+    } catch (error) {
+      console.warn("[NotificationService] configure error:", error);
+    }
+  }
+
+  static async getPermissionsAsync(): Promise<{ status: string; canAskAgain: boolean }> {
+    if (!this.isSupported || !Notifications) {
+      return { status: "denied", canAskAgain: false };
+    }
+    try {
+      return await Notifications.getPermissionsAsync();
+    } catch {
+      return { status: "denied", canAskAgain: false };
     }
   }
 
   static async requestPermissionsAsync(): Promise<
     "granted" | "denied" | "blocked"
   > {
+    if (!this.isSupported || !Notifications) {
+      return "denied";
+    }
     this.configure();
 
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
+    try {
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
 
-    if (existingStatus === "granted") {
-      return "granted";
+      if (existingStatus === "granted") {
+        return "granted";
+      }
+
+      const { status, canAskAgain } =
+        await Notifications.requestPermissionsAsync();
+
+      if (status === "granted") {
+        return "granted";
+      }
+
+      if (!canAskAgain) {
+        return "blocked";
+      }
+
+      return "denied";
+    } catch {
+      return "denied";
     }
-
-    const { status, canAskAgain } =
-      await Notifications.requestPermissionsAsync();
-
-    if (status === "granted") {
-      return "granted";
-    }
-
-    if (!canAskAgain) {
-      return "blocked";
-    }
-
-    return "denied";
   }
 
   static async openAppSettings(): Promise<void> {
@@ -64,6 +103,9 @@ export class NotificationService {
   }
 
   static async scheduleDailyNotification(): Promise<string | null> {
+    if (!this.isSupported || !Notifications) {
+      return null;
+    }
     this.configure();
 
     try {
@@ -91,7 +133,7 @@ export class NotificationService {
           hour: 23,
           minute: 0,
           channelId: "daily-reminder-v2",
-        } as Notifications.NotificationTriggerInput,
+        } as any,
       });
 
       console.log("Daily notification scheduled with ID:", id);
@@ -106,6 +148,9 @@ export class NotificationService {
    * Triggers an instant notification (for Developer testing)
    */
   static async sendTestNotification(): Promise<boolean> {
+    if (!this.isSupported || !Notifications) {
+      return false;
+    }
     this.configure();
     try {
       const permission = await this.requestPermissionsAsync();
@@ -133,6 +178,9 @@ export class NotificationService {
   }
 
   static async cancelDailyNotification(): Promise<void> {
+    if (!this.isSupported || !Notifications) {
+      return;
+    }
     try {
       const scheduled = await Notifications.getAllScheduledNotificationsAsync();
       const daily = scheduled.find(
@@ -149,7 +197,14 @@ export class NotificationService {
   }
 
   static async isPermissionGranted(): Promise<boolean> {
-    const { status } = await Notifications.getPermissionsAsync();
-    return status === "granted";
+    if (!this.isSupported || !Notifications) {
+      return false;
+    }
+    try {
+      const { status } = await Notifications.getPermissionsAsync();
+      return status === "granted";
+    } catch {
+      return false;
+    }
   }
 }

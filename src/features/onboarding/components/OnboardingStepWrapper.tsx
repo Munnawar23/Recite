@@ -1,5 +1,4 @@
-import Background from "@/components/layout/Background";
-import { Button } from "@/components/ui/Button";
+import { Background, Button } from "@/components";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Ionicons } from "@expo/vector-icons";

@@ -1,5 +1,5 @@
-import { RECITERS_IMAGES } from "@/constants/assets";
-import { getChapterAudio } from "@/lib/api/chapter-audio";
+import { RECITERS_IMAGES } from "@/constants";
+import { getChapterAudio } from "@/lib/api";
 import { getLocalAudioPath, getLocalTextData } from "@/services/downloadService";
 import { useDownloadsStore } from "@/store/downloadsStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";

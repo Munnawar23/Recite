@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Switch, ActivityIndicator } from "react-native";
-import SectionTitle from "@/components/ui/SectionTitle";
-import SettingsItemCard from "@/components/ui/SettingsItemCard";
-import MessageModal from "@/components/ui/MessageModal";
+import { SectionTitle, SettingsItemCard, MessageModal } from "@/components";
 import { useNotificationStore } from "@/store/notificationStore";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { NotificationService } from "@/services/NotificationService";
+import { NotificationService } from "@/services/notificationService";
 import { Haptics } from "@/lib/haptics";
 import Toast from "react-native-toast-message";
 

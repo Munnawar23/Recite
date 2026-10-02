@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getRandomVerse } from "@/lib/api/daily-verse";
+import { getRandomVerse } from "@/lib/api";
 import { appStorage } from "@/lib/storage/appStorage";
 import { useLanguageStore } from "@/store/languageStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";

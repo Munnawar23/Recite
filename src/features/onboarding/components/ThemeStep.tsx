@@ -1,5 +1,4 @@
-import TabSwitcher from "@/components/ui/TabSwitcher";
-import { ThemePhonePicker } from "@/components/ui/ThemePhonePicker";
+import { TabSwitcher, ThemePhonePicker } from "@/components";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { FontSizeScale, useFontStore } from "@/store/fontStore";

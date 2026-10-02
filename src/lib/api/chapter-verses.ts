@@ -1,5 +1,5 @@
 import { quranApiClient } from "./client";
-import { SurahVerse } from "@/types/quran";
+import { SurahVerse } from "@/types";
 
 export const getVersesByChapter = async (
   chapterId: number,

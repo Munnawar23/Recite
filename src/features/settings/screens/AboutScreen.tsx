@@ -4,8 +4,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 
-import Background from "@/components/layout/Background";
-import ScreenHeader from "@/components/ui/ScreenHeader";
+import { Background, ScreenHeader } from "@/components";
 import { useAppTheme } from "@/hooks/useAppTheme";
 
 export default function AboutScreen() {

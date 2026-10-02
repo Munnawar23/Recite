@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { getHijriDate } from "@/utils/dateUtils";
+import { getHijriDate } from "@/utils";
 
 export default function HijriCard() {
   const { t, i18n } = useTranslation();

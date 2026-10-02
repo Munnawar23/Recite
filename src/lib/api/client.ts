@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ENV } from "@/config/env";
+import { ENV } from "@/config";
 
 export const quranApiClient = axios.create({
   baseURL: ENV.QURAN_API_URL,

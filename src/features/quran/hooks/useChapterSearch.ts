@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Fuse from "fuse.js";
 import { Keyboard } from "react-native";
 import { Haptics } from "@/lib/haptics";
-import { Chapter } from "@/types/quran";
+import { Chapter } from "@/types";
 
 export function useChapterSearch(chapters: Chapter[]) {
   const [inputValue, setInputValue] = useState("");

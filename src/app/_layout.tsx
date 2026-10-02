@@ -1,5 +1,4 @@
-import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
-import { OfflineBanner } from "@/components/layout/OfflineBanner";
+import { ErrorBoundary, OfflineBanner } from "@/components";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import i18n from "@/i18n";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,7 +14,7 @@ import { I18nextProvider } from "react-i18next";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-import { NotificationService } from "@/services/NotificationService";
+import { NotificationService } from "@/services/notificationService";
 import { useNotificationStore } from "@/store/notificationStore";
 import { STORAGE_KEYS } from "@/lib/storage/appStorage";
 

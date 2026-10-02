@@ -1,8 +1,7 @@
 import { STORAGE_KEYS, zustandStorage } from "@/lib/storage/appStorage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { NotificationService } from "@/services/NotificationService";
-import * as Notifications from "expo-notifications";
+import { NotificationService } from "@/services/notificationService";
 
 interface NotificationState {
   isDailyReminderEnabled: boolean;
@@ -66,7 +65,7 @@ export const useNotificationStore = create<NotificationState>()(
 
         if (!granted) {
           // Permission was revoked from system settings → reflect in store
-          const { status, canAskAgain } = await Notifications.getPermissionsAsync();
+          const { status, canAskAgain } = await NotificationService.getPermissionsAsync();
           set({
             isDailyReminderEnabled: false,
             isPermissionBlocked: !canAskAgain && status !== 'granted',

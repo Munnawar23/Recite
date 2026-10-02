@@ -1,5 +1,5 @@
 import { useAppTheme } from "@/hooks/useAppTheme";
-import type { SurahVerse } from "@/types/quran";
+import type { SurahVerse } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { FlashList, ListRenderItemInfo } from "@shopify/flash-list";
 import LottieView from "lottie-react-native";

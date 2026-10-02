@@ -1,5 +1,5 @@
 import { quranApiClient } from "./client";
-import { Chapter } from "@/types/quran";
+import { Chapter } from "@/types";
 
 const DEFAULT_LANGUAGE = "en";
 

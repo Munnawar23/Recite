@@ -4,9 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next";
 import { RefreshControl, RefreshControlProps, StyleSheet, View } from "react-native";
 
-import EmptyState from "@/components/layout/EmptyState";
-import Header from "@/components/layout/Header";
-import NoConnection from "@/components/layout/NoConnection";
+import { EmptyState, Header, NoConnection } from "@/components";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import QuranCard from "@/features/quran/components/QuranCard";
 import SearchBar from "@/features/quran/components/SearchBar";
@@ -15,7 +13,8 @@ import { useQuranChapters } from "@/features/quran/hooks/useQuranChapters";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { LastRead, useReadingProgressStore } from "@/store/readingProgressStore";
 import { ThemeSpacing } from "@/theme/spacing";
-import { Chapter } from "@/types/quran";
+import { Chapter } from "@/types";
+import { LOADING_ANIM } from "@/constants";
 import LottieView from "lottie-react-native";
 import { scale } from "react-native-size-matters";
 
@@ -112,7 +111,7 @@ export default function QuranScreen() {
       return (
         <View style={styles.loadingContainer}>
           <LottieView
-            source={require("@/../assets/animations/loading.json")}
+            source={LOADING_ANIM}
             autoPlay
             loop
             style={styles.lottieLoader}

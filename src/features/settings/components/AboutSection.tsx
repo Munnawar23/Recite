@@ -1,8 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "expo-router";
-import SectionTitle from "@/components/ui/SectionTitle";
-import SettingsItemCard from "@/components/ui/SettingsItemCard";
+import { SectionTitle, SettingsItemCard } from "@/components";
 import { Haptics } from "@/lib/haptics";
 
 export default function AboutSection() {

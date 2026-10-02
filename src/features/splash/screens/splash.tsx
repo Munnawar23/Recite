@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 
-import { QURAN_ANIM } from "@/constants/assets";
+import { QURAN_ANIM } from "@/constants";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { lightColors } from "@/theme/colors";
 import { useOnboardingStore } from "@/store/onboardingStore";

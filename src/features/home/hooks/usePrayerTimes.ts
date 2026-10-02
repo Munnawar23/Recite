@@ -7,7 +7,7 @@ import {
 import { useMemo } from "react";
 
 import { useLocation } from "@/hooks/useLocation";
-import { formatPrayerTime } from "@/utils/dateUtils";
+import { formatPrayerTime } from "@/utils";
 
 export type Prayer = {
   name: string;

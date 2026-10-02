@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { scale } from "react-native-size-matters";
 
-import Button from "@/components/ui/Button";
+import Button from "./Button";
 import { useAppFonts } from "@/hooks/useAppFonts";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { ThemeColors } from "@/theme/colors";

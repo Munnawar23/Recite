@@ -9,13 +9,11 @@ import {
   View,
 } from "react-native";
 
-import Header from "@/components/layout/Header";
-import NoConnection from "@/components/layout/NoConnection";
-import TabSwitcher from "@/components/ui/TabSwitcher";
+import { Header, NoConnection, TabSwitcher } from "@/components";
 import QuranCard from "@/features/quran/components/QuranCard";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { ThemeSpacing } from "@/theme/spacing";
-import { Chapter } from "@/types/quran";
+import { Chapter } from "@/types";
 import { LibraryEmptyState } from "../components/LibraryEmptyState";
 import { TabValue, useLibraryData } from "../hooks/useLibraryData";
 

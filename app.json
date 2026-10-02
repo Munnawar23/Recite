@@ -57,15 +57,18 @@
           "enableAudioRecording": false
         }
       ],
-      "expo-web-browser",
       "expo-file-system",
       "expo-asset",
       [
         "expo-notifications",
         {
-          "sounds": ["./assets/sfx/notification.mp3"]
+          "sounds": [
+            "./assets/sfx/notification.mp3"
+          ]
         }
-      ]
+      ],
+      "expo-font",
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true,

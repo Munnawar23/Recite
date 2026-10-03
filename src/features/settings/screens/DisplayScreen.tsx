@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { verticalScale } from "react-native-size-matters";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 import {
+  AppText,
   Background,
   ScreenHeader,
   SectionTitle,
@@ -10,12 +10,13 @@ import {
   ThemePhonePicker,
 } from "@/components";
 
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { FontSizeScale, useFontStore } from "@/store/fontStore";
 
 export default function DisplayScreen() {
   const { t } = useTranslation();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, fontSize, spacing } = useAppTheme();
 
   const {
     fontSizeScale,
@@ -41,14 +42,7 @@ export default function DisplayScreen() {
   if (quranFontSizeScale === "small") quranMultiplier = 0.90;
   else if (quranFontSizeScale === "large") quranMultiplier = 1.12;
 
-  const S = createStyles(
-    colors,
-    fontFamily,
-    fontSize,
-    spacing,
-    textMultiplier,
-    quranMultiplier,
-  );
+  const S = createStyles(colors, spacing);
 
   return (
     <View style={{ flex: 1 }}>
@@ -73,7 +67,7 @@ export default function DisplayScreen() {
         {/* Phone Theme Cards */}
         <ThemePhonePicker />
 
-        <View style={{ height: verticalScale(14) }} />
+        <View style={{ height: rs.space(14) }} />
 
         {/* 2. App Font Size */}
         <SectionTitle
@@ -89,7 +83,7 @@ export default function DisplayScreen() {
           }}
         />
 
-        <View style={{ height: verticalScale(8) }} />
+        <View style={{ height: rs.space(8) }} />
 
         {/* 3. Quran Font Size */}
         <SectionTitle
@@ -107,24 +101,39 @@ export default function DisplayScreen() {
 
         {/* Clean Live Preview Box */}
         <View style={S.previewCard}>
-          <Text style={S.previewHeader}>
+          <AppText
+            variant="title"
+            family="title"
+            color="primary"
+          >
             {t("settings.display.livePreview", "Live Preview")}
-          </Text>
-          <Text style={S.previewTranslation}>
+          </AppText>
+          <AppText
+            size={fontSize.body * textMultiplier}
+            lineHeight={Math.round(fontSize.body * textMultiplier * 1.5)}
+            color="text"
+          >
             {t(
               "settings.display.sampleTranslation",
               "In the name of Allah, the Most Gracious, the Most Merciful",
             )}
-          </Text>
-          <Text style={S.previewArabic}>
+          </AppText>
+          <AppText
+            size={fontSize.arabic * quranMultiplier}
+            lineHeight={Math.round(fontSize.arabic * quranMultiplier * 1.8)}
+            family="quran"
+            color="primary"
+            align="right"
+            style={S.previewArabic}
+          >
             {t(
               "settings.display.sampleArabic",
               "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
             )}
-          </Text>
+          </AppText>
         </View>
 
-        <View style={{ height: verticalScale(30) }} />
+        <View style={{ height: rs.space(30) }} />
       </ScrollView>
     </View>
   );
@@ -132,11 +141,7 @@ export default function DisplayScreen() {
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
-  textMultiplier: number = 1,
-  quranMultiplier: number = 1,
 ) =>
   StyleSheet.create({
     scrollContent: {
@@ -152,23 +157,7 @@ const createStyles = (
       borderColor: colors.border,
       gap: spacing.itemGap,
     },
-    previewHeader: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.title,
-      color: colors.primary,
-    },
-    previewTranslation: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.body * textMultiplier,
-      color: colors.text,
-      lineHeight: fontSize.body * textMultiplier * 1.5,
-    },
     previewArabic: {
-      fontFamily: fontFamily.quran,
-      fontSize: fontSize.arabic * quranMultiplier,
-      color: colors.primary,
-      textAlign: "right",
-      marginTop: verticalScale(4),
-      lineHeight: fontSize.arabic * quranMultiplier * 1.8,
+      marginTop: rs.space(4),
     },
   });

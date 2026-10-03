@@ -1,8 +1,9 @@
-import { Ionicons } from "@expo/vector-icons";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
-
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { AppText } from "./AppText";
 
 interface Props {
   label: string;
@@ -19,19 +20,26 @@ export default function SectionTitle({
   isLoading,
   tightSpacing,
 }: Props) {
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-  const S = createStyles(colors, fontFamily, fontSize, spacing, tightSpacing);
+  const { colors, spacing } = useAppTheme();
+  const S = createStyles(colors, spacing, tightSpacing);
 
   return (
     <View style={S.row}>
       <View style={S.leftRow}>
         {icon && (
           <View style={S.iconWrap}>
-            <Ionicons name={icon} size={scale(14)} color={colors.primary} />
+            <Ionicons name={icon} size={rs.icon(14)} color={colors.primary} />
           </View>
         )}
 
-        <Text style={S.text}>{label}</Text>
+        <AppText
+          variant="bodyLg"
+          color="primary"
+          family="title"
+          letterSpacing={0.4}
+        >
+          {label}
+        </AppText>
       </View>
 
       {isLoading ? (
@@ -39,7 +47,9 @@ export default function SectionTitle({
           <ActivityIndicator size="small" color={colors.primary} />
         </View>
       ) : rightText ? (
-        <Text style={S.rightText}>{rightText}</Text>
+        <AppText variant="body" color="subtext" style={S.rightText}>
+          {rightText}
+        </AppText>
       ) : null}
     </View>
   );
@@ -47,8 +57,6 @@ export default function SectionTitle({
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
   tightSpacing?: boolean,
 ) =>
@@ -57,7 +65,9 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      marginTop: tightSpacing ? spacing.sectionHeaderTop - verticalScale(4) : spacing.sectionHeaderTop,
+      marginTop: tightSpacing
+        ? spacing.sectionHeaderTop - rs.space(4)
+        : spacing.sectionHeaderTop,
       marginBottom: spacing.sectionHeaderBottom,
       paddingHorizontal: spacing.screenPadding,
     },
@@ -72,23 +82,14 @@ const createStyles = (
       marginRight: spacing.sm,
     },
     iconWrap: {
-      width: scale(24),
-      height: scale(24),
-      borderRadius: scale(7),
+      width: rs.space(24),
+      height: rs.space(24),
+      borderRadius: rs.space(7),
       backgroundColor: colors.primary + "18",
       alignItems: "center",
       justifyContent: "center",
     },
-    text: {
-      fontSize: scale(14),
-      fontFamily: fontFamily.title,
-      color: colors.primary,
-      letterSpacing: 0.4,
-    },
     rightText: {
-      fontSize: fontSize.body,
-      fontFamily: fontFamily.text,
-      color: colors.subtext,
       marginRight: spacing.sm,
     },
   });

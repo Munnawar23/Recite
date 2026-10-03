@@ -1,3 +1,5 @@
+import { AppText } from "@/components";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
@@ -5,15 +7,13 @@ import { useFavoritesStore } from "@/store/favoritesStore";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { useRouter } from "expo-router";
-import React, { useMemo, useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   Platform,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
 import Toast from "react-native-toast-message";
 
 interface DetailHeaderProps {
@@ -25,8 +25,6 @@ interface DetailHeaderProps {
 }
 
 type ThemeColors = ReturnType<typeof useAppTheme>["colors"];
-type ThemeFontFamily = ReturnType<typeof useAppTheme>["fontFamily"];
-type ThemeFontSize = ReturnType<typeof useAppTheme>["fontSize"];
 
 function DetailHeader({
   chapterId,
@@ -36,7 +34,7 @@ function DetailHeader({
   type,
 }: DetailHeaderProps) {
   const router = useRouter();
-  const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
+  const { colors, activeScheme } = useAppTheme();
   const { paddingTop } = useAppSafeAreaInsets();
   const isDark = activeScheme === "dark";
 
@@ -46,8 +44,8 @@ function DetailHeader({
   const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
 
   const S = useMemo(
-    () => createStyles(colors, fontFamily, fontSize, isDark, paddingTop),
-    [colors, fontFamily, fontSize, isDark, paddingTop],
+    () => createStyles(colors, isDark, paddingTop),
+    [colors, isDark, paddingTop],
   );
 
   const handleBack = useCallback(() => {
@@ -101,20 +99,37 @@ function DetailHeader({
           >
             <Ionicons
               name="chevron-back"
-              size={scale(22)}
+              size={rs.icon(22)}
               color={colors.text}
             />
           </TouchableOpacity>
         </View>
 
         <View style={S.headerCenter}>
-          <Text style={S.headerArabic}>{arabicName || "—"}</Text>
-          <Text
-            style={S.headerTitle}
-          >{`Surah ${chapterId}: ${englishName || "—"}`}</Text>
-          <Text style={S.headerSubtitle}>
+          <AppText
+            variant="cardTitle"
+            family="quran"
+            color="primary"
+            align="center"
+          >
+            {arabicName || "—"}
+          </AppText>
+          <AppText
+            variant="bodyLg"
+            family="title"
+            color="text"
+            align="center"
+          >
+            {`Surah ${chapterId}: ${englishName || "—"}`}
+          </AppText>
+          <AppText
+            variant="caption"
+            family="text"
+            color="subtext"
+            align="center"
+          >
             {type || "—"} • {versesCount || "—"} Verses
-          </Text>
+          </AppText>
         </View>
 
         <View style={S.rightActions}>
@@ -128,7 +143,7 @@ function DetailHeader({
           >
             <Ionicons
               name={isFavorite ? "heart" : "heart-outline"}
-              size={scale(20)}
+              size={rs.icon(20)}
               color={isFavorite ? colors.primary : colors.text}
             />
           </TouchableOpacity>
@@ -142,8 +157,6 @@ export default React.memo(DetailHeader);
 
 const createStyles = (
   colors: ThemeColors,
-  fontFamily: ThemeFontFamily,
-  fontSize: ThemeFontSize,
   isDark: boolean,
   paddingTop: number,
 ) =>
@@ -154,32 +167,32 @@ const createStyles = (
       borderBottomColor: colors.border,
       overflow: "hidden",
       zIndex: 10,
-      paddingBottom: verticalScale(2),
+      paddingBottom: rs.space(2),
     },
     topBar: {
       flexDirection: "row",
       alignItems: "center",
-      paddingHorizontal: scale(12),
-      paddingTop: verticalScale(4),
-      paddingBottom: verticalScale(2),
+      paddingHorizontal: rs.space(12),
+      paddingTop: rs.space(4),
+      paddingBottom: rs.space(2),
     },
     leftActions: {
-      width: scale(60),
+      width: rs.space(60),
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "flex-start",
     },
     rightActions: {
-      width: scale(60),
+      width: rs.space(60),
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "flex-end",
-      gap: scale(6),
+      gap: rs.space(6),
     },
     actionButton: {
-      width: scale(32),
-      height: scale(32),
-      borderRadius: scale(16),
+      width: rs.space(32),
+      height: rs.space(32),
+      borderRadius: rs.space(16),
       backgroundColor: colors.primary + "15",
       alignItems: "center",
       justifyContent: "center",
@@ -188,21 +201,5 @@ const createStyles = (
       flex: 1,
       alignItems: "center",
       gap: 0,
-    },
-    headerArabic: {
-      color: colors.primary,
-      fontFamily: fontFamily.quran,
-      fontSize: fontSize.cardTitle,
-      lineHeight: fontSize.cardTitle * 1.2,
-    },
-    headerTitle: {
-      color: colors.text,
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.bodyLg,
-    },
-    headerSubtitle: {
-      color: colors.subtext,
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.caption,
     },
   });

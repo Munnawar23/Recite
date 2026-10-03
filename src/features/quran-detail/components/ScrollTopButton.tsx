@@ -1,10 +1,10 @@
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Ionicons } from "@expo/vector-icons";
 import { useMemo } from "react";
 import { StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
 import Animated from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { scale, verticalScale } from "react-native-size-matters";
 
 interface ScrollTopButtonProps {
   showScrollTop: boolean;
@@ -34,31 +34,31 @@ export default function ScrollTopButton({
       pointerEvents={showScrollTop ? "auto" : "none"}
     >
       <TouchableOpacity style={S.button} activeOpacity={0.8} onPress={onPress}>
-        <Ionicons name="chevron-up" size={scale(24)} color="#FFFFFF" />
+        <Ionicons name="chevron-up" size={rs.icon(24)} color="#FFFFFF" />
       </TouchableOpacity>
     </Animated.View>
   );
 }
 
 const createStyles = (colors: any, bottomInset: number) => {
-  const playerBottomOffset = Math.max(bottomInset + verticalScale(8), verticalScale(22));
+  const playerBottomOffset = Math.max(bottomInset + rs.space(8), rs.space(22));
 
   return StyleSheet.create({
     container: {
       position: "absolute",
-      right: scale(16),
+      right: rs.space(16),
       zIndex: 25,
     },
     withAudioPlayer: {
-      bottom: playerBottomOffset + verticalScale(100),
+      bottom: playerBottomOffset + rs.space(100),
     },
     withoutAudioPlayer: {
-      bottom: Math.max(bottomInset + verticalScale(12), verticalScale(20)),
+      bottom: Math.max(bottomInset + rs.space(12), rs.space(20)),
     },
     button: {
-      width: scale(44),
-      height: scale(44),
-      borderRadius: scale(22),
+      width: rs.space(44),
+      height: rs.space(44),
+      borderRadius: rs.space(22),
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: colors.primary,

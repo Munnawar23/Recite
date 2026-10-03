@@ -3819,11 +3819,6 @@ react-native-screens@^4.26.0, react-native-screens@~4.26.0:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
-react-native-size-matters@^0.4.2:
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/react-native-size-matters/-/react-native-size-matters-0.4.2.tgz#4348bdd6fc47383f60326d58ad69870c998a5f9a"
-  integrity sha512-DKE3f/sdcozd24oASgkP1iGg+YU3HoajRa5k3a4wkRzpiqREq8SGX12Y5zBgAt/8IivLQoTMYkyQu1/Giuy+zQ==
-
 react-native-svg@15.15.4:
   version "15.15.4"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-15.15.4.tgz#c029be85c20ead09c63dffa6b1ade06012f095ed"

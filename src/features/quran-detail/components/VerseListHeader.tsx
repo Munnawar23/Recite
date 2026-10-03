@@ -1,8 +1,8 @@
 import { CommonModal } from "@/components";
+import { rs, verticalScale } from "@/helpers/responsiveHelper";
 import { Haptics } from "@/lib/haptics";
 import React from "react";
 import { View } from "react-native";
-import { verticalScale } from "react-native-size-matters";
 import BismillahBanner from "./BismillahBanner";
 import DownloadCard from "./DownloadCard";
 
@@ -47,7 +47,7 @@ function VerseListHeader({
 }: VerseListHeaderProps) {
   return (
     <View>
-      <View style={{ marginTop: verticalScale(4) }}>
+      <View style={{ marginTop: verticalScale(12) }}>
         <CommonModal
           data={TRANSLATION_OPTIONS}
           value={selectedTransId}
@@ -72,7 +72,7 @@ function VerseListHeader({
         chapterType={chapterType}
       />
       <BismillahBanner chapterId={chapterId} />
-      <View style={{ height: verticalScale(8) }} />
+      <View style={{ height: rs.space(8) }} />
     </View>
   );
 }

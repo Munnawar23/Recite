@@ -7,22 +7,22 @@ import { Tabs } from "expo-router";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Platform, StyleSheet, View } from "react-native";
-import { moderateScale, scale, verticalScale } from "react-native-size-matters";
+import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
 
 export default function TabLayout() {
   const { t } = useTranslation();
   const { colors, fontFamily, fontSize } = useAppTheme();
   const { bottom: bottomInset } = useAppSafeAreaInsets();
 
-  const iconSize = scale(20);
+  const iconSize = rs.icon(22);
 
-  // Use safe area if available, otherwise give a comfortable padding
+  // Use safe area if available, plus comfortable bottom clearance matching Play Store
   const bottomPadding =
     bottomInset > 0
-      ? bottomInset
+      ? bottomInset + verticalScale(10)
       : Platform.OS === "ios"
-        ? verticalScale(12)
-        : verticalScale(10);
+        ? verticalScale(18)
+        : verticalScale(16);
 
   const tabBarHeight = verticalScale(50) + bottomPadding;
 
@@ -64,7 +64,7 @@ export default function TabLayout() {
 
         height: tabBarHeight,
 
-        paddingTop: verticalScale(3),
+        paddingTop: verticalScale(6),
         paddingBottom: bottomPadding,
 
         elevation: 8,
@@ -80,7 +80,8 @@ export default function TabLayout() {
 
       tabBarLabelStyle: {
         fontFamily: fontFamily.text,
-        fontSize: fontSize.caption ?? moderateScale(11),
+        fontSize: fontSize.caption,
+        marginTop: verticalScale(2),
       },
     }),
     [colors, fontFamily, fontSize, bottomPadding, tabBarHeight],

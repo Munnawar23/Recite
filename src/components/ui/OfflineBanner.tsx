@@ -1,15 +1,16 @@
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { Ionicons } from "@expo/vector-icons";
-import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { scale } from "react-native-size-matters";
 import { usePathname } from "expo-router";
+import { useTranslation } from "react-i18next";
+import { StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { AppText } from "./AppText";
 
 export function OfflineBanner() {
   const { isOffline } = useNetworkStatus();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
@@ -27,30 +28,28 @@ export function OfflineBanner() {
     return null;
   }
 
-  const S = createStyles(colors, fontFamily, fontSize, spacing, insets.top);
+  const S = createStyles(colors, spacing, insets.top);
 
   return (
     <View style={S.banner}>
       <Ionicons
         name="cloud-offline-outline"
-        size={scale(18)}
+        size={rs.icon(18)}
         color="#FFF"
         style={S.icon}
       />
-      <Text style={S.text}>
+      <AppText variant="bodySm" color="#FFFFFF" style={S.text}>
         {t(
           "common.offlineBanner",
           "You are offline. You can still read the Quran and listen to downloaded audio.",
         )}
-      </Text>
+      </AppText>
     </View>
   );
 }
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
   topInset: number,
 ) =>
@@ -59,8 +58,8 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       paddingHorizontal: spacing.screenPadding,
-      paddingTop: topInset + scale(4),
-      paddingBottom: scale(6),
+      paddingTop: topInset + rs.space(4),
+      paddingBottom: rs.space(6),
       justifyContent: "center",
       backgroundColor: colors.primary + "E6",
     },
@@ -69,9 +68,9 @@ const createStyles = (
     },
     text: {
       color: "#FFFFFF",
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.body ?? scale(13),
       flex: 1,
       textAlign: "left",
     },
   });
+
+export default OfflineBanner;

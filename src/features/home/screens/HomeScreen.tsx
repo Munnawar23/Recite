@@ -11,7 +11,7 @@ import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLocation } from "@/hooks/useLocation";
 import { useReadingProgressStore } from "@/store/readingProgressStore";
-import { ThemeSpacing } from "@/theme/spacing";
+import { type ThemeSpacing } from "@/theme";
 import DailyVerse from "../components/DailyVerse";
 import HijriCard from "../components/HijriCard";
 

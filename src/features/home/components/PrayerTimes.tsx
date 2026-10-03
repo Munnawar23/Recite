@@ -1,20 +1,18 @@
-import { Ionicons } from "@expo/vector-icons";
-import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
-
+import { AppText } from "@/components";
+import { rs, verticalScale } from "@/helpers/responsiveHelper";
 import { usePrayerTimes } from "@/features/home/hooks/usePrayerTimes";
 import { useAppTheme } from "@/hooks/useAppTheme";
-
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { StyleSheet, View } from "react-native";
 import LocationNotice from "./LocationNotice";
 
 export default function PrayerTimes() {
   const { t } = useTranslation();
-  const { colors, fontFamily, fontSize, spacing, activeScheme } = useAppTheme();
+  const { colors, fontSize, spacing, activeScheme } = useAppTheme();
   const S = createStyles(
     colors,
-    fontFamily,
-    fontSize,
     spacing,
     activeScheme === "dark",
   );
@@ -35,21 +33,28 @@ export default function PrayerTimes() {
               color={prayer.active ? "#fff" : colors.subtext}
             />
 
-            <Text
-              style={[S.name, prayer.active && S.nameActive]}
+            <AppText
+              variant="caption"
+              family="title"
+              color={prayer.active ? "#fff" : "subtext"}
+              letterSpacing={0.2}
+              align="center"
               numberOfLines={1}
               adjustsFontSizeToFit
             >
               {t(`home.prayerNames.${prayer.name.toLowerCase()}`, prayer.name)}
-            </Text>
+            </AppText>
 
-            <Text
-              style={[S.time, prayer.active && S.timeActive]}
+            <AppText
+              variant="caption"
+              family="text"
+              color={prayer.active ? "rgba(255,255,255,0.85)" : "subtext"}
+              align="center"
               numberOfLines={1}
               adjustsFontSizeToFit
             >
               {prayer.time}
-            </Text>
+            </AppText>
           </View>
         ))}
       </View>
@@ -64,8 +69,6 @@ export default function PrayerTimes() {
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
   isDark: boolean,
 ) =>
@@ -77,15 +80,15 @@ const createStyles = (
     row: {
       flexDirection: "row",
       paddingHorizontal: spacing.screenPadding,
-      gap: scale(7),
+      gap: rs.space(7),
     },
 
     pill: {
       flex: 1,
       backgroundColor: colors.card,
-      borderRadius: scale(16),
+      borderRadius: rs.space(16),
       paddingVertical: verticalScale(14),
-      paddingHorizontal: scale(2),
+      paddingHorizontal: rs.space(2),
 
       alignItems: "center",
       justifyContent: "center",
@@ -97,10 +100,10 @@ const createStyles = (
       shadowColor: "#000",
       shadowOffset: {
         width: 0,
-        height: verticalScale(1),
+        height: rs.space(1),
       },
       shadowOpacity: isDark ? 0.2 : 0.04,
-      shadowRadius: scale(4),
+      shadowRadius: rs.space(4),
       elevation: 2,
     },
 
@@ -111,33 +114,10 @@ const createStyles = (
       shadowColor: colors.primary,
       shadowOffset: {
         width: 0,
-        height: verticalScale(4),
+        height: rs.space(4),
       },
       shadowOpacity: 0.35,
-      shadowRadius: scale(10),
+      shadowRadius: rs.space(10),
       elevation: 6,
-    },
-
-    name: {
-      fontSize: fontSize.caption,
-      fontFamily: fontFamily.title,
-      color: colors.subtext,
-      letterSpacing: 0.2,
-      textAlign: "center",
-    },
-
-    nameActive: {
-      color: "#fff",
-    },
-
-    time: {
-      fontSize: fontSize.caption,
-      fontFamily: fontFamily.text,
-      color: colors.subtext,
-      textAlign: "center",
-    },
-
-    timeActive: {
-      color: "rgba(255,255,255,0.85)",
     },
   });

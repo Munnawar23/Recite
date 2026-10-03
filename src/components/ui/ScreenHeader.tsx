@@ -1,12 +1,13 @@
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
-
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { Haptics } from "@/lib/haptics";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import React from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { AppText } from "./AppText";
 
 interface ScreenHeaderProps {
   title: string;
@@ -22,10 +23,10 @@ export default function ScreenHeader({
   titleFontSize,
 }: ScreenHeaderProps) {
   const router = useRouter();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
   const { isOffline } = useNetworkStatus();
   const { paddingTop } = useAppSafeAreaInsets();
-  const S = createStyles(colors, fontFamily, fontSize, spacing, isOffline, paddingTop);
+  const S = createStyles(colors, spacing, isOffline, paddingTop);
 
   const handleBack = () => {
     Haptics.medium();
@@ -44,17 +45,31 @@ export default function ScreenHeader({
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         activeOpacity={0.7}
       >
-        <Ionicons name="chevron-back" size={scale(22)} color={colors.text} />
+        <Ionicons name="chevron-back" size={rs.icon(22)} color={colors.text} />
       </TouchableOpacity>
 
       <View style={S.titleContainer}>
-        <Text style={[S.title, titleFontSize ? { fontSize: titleFontSize, lineHeight: titleFontSize * 1.3 } : null]} numberOfLines={1}>
+        <AppText
+          variant="cardTitle"
+          color="text"
+          family="title"
+          size={titleFontSize}
+          numberOfLines={1}
+          align="center"
+        >
           {title}
-        </Text>
+        </AppText>
         {subtitle ? (
-          <Text style={S.subtitle} numberOfLines={1}>
+          <AppText
+            variant="body"
+            color="text"
+            family="title"
+            numberOfLines={1}
+            align="center"
+            style={S.subtitle}
+          >
             {subtitle}
-          </Text>
+          </AppText>
         ) : null}
       </View>
 
@@ -65,8 +80,6 @@ export default function ScreenHeader({
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
   isOffline: boolean,
   paddingTop: number,
@@ -77,14 +90,14 @@ const createStyles = (
       alignItems: "center",
       justifyContent: "space-between",
       paddingHorizontal: spacing.screenPadding,
-      paddingTop: paddingTop + verticalScale(6),
-      paddingBottom: verticalScale(8),
-      marginTop: isOffline ? verticalScale(2) : 0,
+      paddingTop: paddingTop + rs.space(6),
+      paddingBottom: rs.space(8),
+      marginTop: isOffline ? rs.space(2) : 0,
     },
     backButton: {
-      width: scale(36),
-      height: scale(36),
-      borderRadius: scale(18),
+      width: rs.space(36),
+      height: rs.space(36),
+      borderRadius: rs.space(18),
       backgroundColor: colors.primary + "15",
       alignItems: "center",
       justifyContent: "center",
@@ -92,23 +105,13 @@ const createStyles = (
     titleContainer: {
       flex: 1,
       alignItems: "center",
-      paddingHorizontal: scale(12),
-    },
-    title: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.cardTitle,
-      color: colors.text,
-      lineHeight: fontSize.cardTitle * 1.3,
+      paddingHorizontal: rs.space(12),
     },
     subtitle: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.body,
-      color: colors.text,
-      marginTop: verticalScale(2),
-      lineHeight: fontSize.body * 1.3,
+      marginTop: rs.space(2),
       opacity: 0.9,
     },
     placeholder: {
-      width: scale(36),
+      width: rs.space(36),
     },
   });

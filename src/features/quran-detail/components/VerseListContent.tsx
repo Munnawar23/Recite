@@ -1,3 +1,6 @@
+import { AppText } from "@/components";
+import { rs, verticalScale } from "@/helpers/responsiveHelper";
+import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import type { SurahVerse } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,16 +10,12 @@ import React, { useCallback, useMemo } from "react";
 import {
   RefreshControl,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import Animated from "react-native-reanimated";
-import { scale, verticalScale } from "react-native-size-matters";
 import VerseListHeader from "./VerseListHeader";
 import VerseRow from "./VerseRow";
-
-import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 
 const AnimatedFlashList = Animated.createAnimatedComponent(
   FlashList as unknown as React.ComponentType<any>,
@@ -83,21 +82,21 @@ function VerseListContent({
   versesCount,
   chapterType,
 }: VerseListContentProps) {
-  const { colors, fontFamily, fontSize } = useAppTheme();
+  const { colors } = useAppTheme();
   const { paddingTop } = useAppSafeAreaInsets();
 
   const contentContainerStyle = useMemo(
     () => ({
-      paddingHorizontal: scale(20),
-      paddingTop: paddingTop + verticalScale(75),
-      paddingBottom: verticalScale(180),
+      paddingHorizontal: rs.space(20),
+      paddingTop: paddingTop + verticalScale(70),
+      paddingBottom: rs.space(180),
     }),
     [paddingTop],
   );
 
   const S = useMemo(
-    () => createStyles(colors, fontFamily, fontSize),
-    [colors, fontFamily, fontSize],
+    () => createStyles(colors),
+    [colors],
   );
 
   const refreshControl = useMemo(
@@ -107,7 +106,7 @@ function VerseListContent({
         onRefresh={onRefresh}
         colors={[colors.primary]}
         tintColor={colors.primary}
-        progressViewOffset={verticalScale(60)}
+        progressViewOffset={rs.space(60)}
       />
     ),
     [refreshing, onRefresh, colors.primary],
@@ -176,15 +175,19 @@ function VerseListContent({
       <View style={S.centerContainer}>
         <Ionicons
           name="cloud-offline-outline"
-          size={scale(52)}
+          size={rs.icon(52)}
           color={colors.subtext}
         />
-        <Text style={S.errorTitle}>Failed to Load</Text>
-        <Text style={S.errorSubtitle}>
+        <AppText variant="title" family="title" color="text">
+          Failed to Load
+        </AppText>
+        <AppText variant="body" color="subtext" align="center">
           Check your internet connection and try again.
-        </Text>
+        </AppText>
         <TouchableOpacity style={S.retryButton} onPress={refetch}>
-          <Text style={S.retryButtonText}>Retry</Text>
+          <AppText variant="body" family="title" color="card">
+            Retry
+          </AppText>
         </TouchableOpacity>
       </View>
     );
@@ -212,43 +215,25 @@ export default React.memo(VerseListContent);
 
 const createStyles = (
   colors: ReturnType<typeof useAppTheme>["colors"],
-  fontFamily: ReturnType<typeof useAppTheme>["fontFamily"],
-  fontSize: ReturnType<typeof useAppTheme>["fontSize"],
 ) =>
   StyleSheet.create({
     centerContainer: {
       flex: 1,
       alignItems: "center",
       justifyContent: "center",
-      paddingHorizontal: scale(32),
+      paddingHorizontal: rs.space(32),
+      gap: rs.space(8),
     },
     lottieLoader: {
-      width: scale(170),
-      height: scale(170),
-      marginBottom: -verticalScale(10),
-    },
-    errorTitle: {
-      color: colors.text,
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.title,
-    },
-    errorSubtitle: {
-      color: colors.subtext,
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.body,
-      textAlign: "center",
-      lineHeight: fontSize.body * 1.6,
+      width: rs.space(170),
+      height: rs.space(170),
+      marginBottom: -rs.space(10),
     },
     retryButton: {
-      marginTop: verticalScale(8),
-      paddingHorizontal: scale(28),
-      paddingVertical: verticalScale(10),
+      marginTop: rs.space(8),
+      paddingHorizontal: rs.space(28),
+      paddingVertical: rs.space(10),
       backgroundColor: colors.primary,
-      borderRadius: scale(20),
-    },
-    retryButtonText: {
-      color: colors.card,
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.body,
+      borderRadius: rs.space(20),
     },
   });

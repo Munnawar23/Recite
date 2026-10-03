@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import SectionTitle from "@/components/ui/SectionTitle";
-import SettingsItemCard from "@/components/ui/SettingsItemCard";
+import SettingsItemCard from "./SettingsItemCard";
 import MessageModal from "@/components/ui/MessageModal";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { NotificationService } from "@/services/NotificationService";
+import { NotificationService } from "@/services/notificationService";
 import Toast from "react-native-toast-message";
 
 export default function DevSection() {

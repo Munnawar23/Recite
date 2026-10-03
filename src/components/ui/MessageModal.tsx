@@ -1,10 +1,12 @@
 import Button from "@/components/ui/Button";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { Ionicons } from "@expo/vector-icons";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { scale } from "react-native-size-matters";
+import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
+import { AppText } from "./AppText";
 
 interface MessageModalProps {
   visible: boolean;
@@ -31,7 +33,7 @@ export function MessageModal({
   secondaryButtonText,
   onSecondaryPress,
 }: MessageModalProps) {
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
   const { t } = useTranslation();
 
   const handleClose = () => {
@@ -57,7 +59,7 @@ export function MessageModal({
     }
   };
 
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const S = createStyles(colors, spacing);
 
   return (
     <Modal
@@ -84,17 +86,26 @@ export function MessageModal({
             >
               <Ionicons
                 name={icon}
-                size={scale(28)}
+                size={rs.icon(28)}
                 color={iconColor || colors.primary}
               />
             </View>
           )}
 
           {/* Title */}
-          <Text style={S.title}>{title}</Text>
+          <AppText variant="cardTitle" color="text" family="title" align="center">
+            {title}
+          </AppText>
 
           {/* Message */}
-          <Text style={S.message}>{message}</Text>
+          <AppText
+            variant="bodyLg"
+            color="subtext"
+            align="center"
+            style={S.message}
+          >
+            {message}
+          </AppText>
 
           {/* Buttons */}
           <View style={S.buttonContainer}>
@@ -120,8 +131,6 @@ export function MessageModal({
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
 ) =>
   StyleSheet.create({
@@ -135,7 +144,7 @@ const createStyles = (
     container: {
       width: "100%",
       backgroundColor: colors.card,
-      borderRadius: scale(20),
+      borderRadius: rs.space(20),
       borderWidth: 1,
       borderColor: colors.border,
       padding: spacing.screenPadding,
@@ -143,25 +152,15 @@ const createStyles = (
       gap: spacing.itemGap,
     },
     iconBadge: {
-      width: scale(60),
-      height: scale(60),
-      borderRadius: scale(18),
+      width: rs.space(60),
+      height: rs.space(60),
+      borderRadius: rs.space(18),
       alignItems: "center",
       justifyContent: "center",
       marginBottom: spacing.cardMarginTop,
     },
-    title: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.cardTitle,
-      color: colors.text,
-      textAlign: "center",
-    },
     message: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg,
-      color: colors.subtext,
-      textAlign: "center",
-      lineHeight: fontSize.bodyLg * 1.55,
+      lineHeight: rs.font(15) * 1.55,
     },
     buttonContainer: {
       flexDirection: "row",

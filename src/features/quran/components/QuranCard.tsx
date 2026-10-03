@@ -1,17 +1,16 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
-import { useAppFonts } from "@/hooks/useAppFonts";
+import { AppText } from "@/components";
+import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
-import { ThemeColors } from "@/theme/colors";
-import { ThemeSpacing } from "@/theme/spacing";
+import { type ThemeColors, type ThemeSpacing } from "@/theme";
 import { Chapter as QuranItem } from "@/types";
-import { scale } from "react-native-size-matters";
 
 interface QuranCardProps {
   item: QuranItem;
@@ -20,11 +19,11 @@ interface QuranCardProps {
 
 function QuranCard({ item, onPress }: QuranCardProps) {
   const { t } = useTranslation();
-  const { colors, fontFamily, fontSize, spacing, activeScheme } = useAppTheme();
+  const { colors, spacing, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
   const S = useMemo(
-    () => createStyles(colors, fontFamily, fontSize, spacing, isDark),
-    [colors, fontFamily, fontSize, spacing, isDark],
+    () => createStyles(colors, spacing, isDark),
+    [colors, spacing, isDark],
   );
 
   const router = useRouter();
@@ -82,36 +81,74 @@ function QuranCard({ item, onPress }: QuranCardProps) {
                 strokeLinecap="round"
               />
             </Svg>
-            <Text style={S.numberText}>{item.id}</Text>
+            <AppText
+              variant="caption"
+              family="title"
+              fontWeight="700"
+              color="primary"
+            >
+              {item.id}
+            </AppText>
           </View>
 
           {/* Names & Translation */}
           <View style={S.infoContainer}>
-            <Text style={S.englishName} numberOfLines={1} ellipsizeMode="tail">
+            <AppText
+              variant="bodyLg"
+              family="title"
+              fontWeight="700"
+              color="text"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
               {item.englishName}
-            </Text>
+            </AppText>
             <View style={S.metaRow}>
-              <Text style={S.metaText}>{t(typeTranslationKey)}</Text>
+              <AppText
+                variant="caption"
+                family="title"
+                fontWeight="600"
+                color="subtext"
+                letterSpacing={0.3}
+              >
+                {t(typeTranslationKey)}
+              </AppText>
               <View style={S.dot} />
-              <Text style={S.metaText}>
+              <AppText
+                variant="caption"
+                family="title"
+                fontWeight="600"
+                color="subtext"
+                letterSpacing={0.3}
+              >
                 {t("quran.versesCount", { count: item.versesCount })}
-              </Text>
+              </AppText>
             </View>
           </View>
         </View>
 
         {/* Right Section: Arabic Calligraphy / Text */}
         <View style={S.rightSection}>
-          <Text style={S.arabicText} numberOfLines={1}>
+          <AppText
+            variant="arabic"
+            family="quran"
+            color="primary"
+            numberOfLines={1}
+          >
             {item.name}
-          </Text>
-          <Text
-            style={S.translationText}
+          </AppText>
+          <AppText
+            variant="caption"
+            family="text"
+            color="subtext"
+            align="right"
+            fontWeight="500"
             numberOfLines={1}
             ellipsizeMode="tail"
+            style={S.translationText}
           >
             {item.englishTranslation}
-          </Text>
+          </AppText>
         </View>
       </TouchableOpacity>
     </View>
@@ -120,34 +157,30 @@ function QuranCard({ item, onPress }: QuranCardProps) {
 
 export default React.memo(QuranCard);
 
-type AppFonts = ReturnType<typeof useAppFonts>;
-
 const createStyles = (
   colors: ThemeColors,
-  fontFamily: AppFonts["fontFamily"],
-  fontSize: AppFonts["fontSize"],
   spacing: ThemeSpacing,
   isDark: boolean,
 ) =>
   StyleSheet.create({
     cardWrapper: {
       paddingHorizontal: spacing.screenPadding,
-      marginBottom: spacing.itemGap,
+      marginBottom: verticalScale(8),
     },
     card: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      paddingVertical: spacing.vXs,
-      paddingHorizontal: spacing.md,
-      borderRadius: spacing.md,
+      paddingVertical: verticalScale(10),
+      paddingHorizontal: scale(16),
+      borderRadius: scale(16),
       backgroundColor: colors.card,
       borderWidth: 1,
       borderColor: colors.border,
       shadowColor: isDark ? "#000" : colors.primary,
       shadowOffset: { width: 0, height: 1 },
       shadowOpacity: isDark ? 0.2 : 0.05,
-      shadowRadius: spacing.xs,
+      shadowRadius: scale(4),
       elevation: 2,
       overflow: "hidden",
     },
@@ -155,9 +188,9 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       flex: 1.2,
-      gap: spacing.sm,
+      gap: scale(12),
       zIndex: 1,
-      marginRight: spacing.xs,
+      marginRight: scale(6),
     },
     numberBadge: {
       width: scale(36),
@@ -167,40 +200,21 @@ const createStyles = (
       flexShrink: 0,
       position: "relative",
     },
-    numberText: {
-      color: colors.primary,
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.caption,
-      fontWeight: "700",
-    },
     infoContainer: {
       flex: 1,
       justifyContent: "center",
-      gap: spacing.vXs / 4,
-    },
-    englishName: {
-      color: colors.text,
-      fontFamily: fontFamily.title,
-      fontWeight: "700",
-      fontSize: fontSize.bodyLg,
+      gap: verticalScale(2),
     },
     metaRow: {
       flexDirection: "row",
       alignItems: "center",
       flexWrap: "wrap",
-      gap: spacing.xs,
-    },
-    metaText: {
-      color: colors.subtext,
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.caption,
-      fontWeight: "600",
-      letterSpacing: 0.3,
+      gap: scale(6),
     },
     dot: {
-      width: spacing.xs,
-      height: spacing.xs,
-      borderRadius: spacing.xs / 2,
+      width: scale(4),
+      height: scale(4),
+      borderRadius: scale(2),
       backgroundColor: colors.subtext,
       opacity: 0.8,
     },
@@ -208,21 +222,10 @@ const createStyles = (
       flex: 0.8,
       alignItems: "flex-end",
       justifyContent: "center",
-      gap: spacing.vXs / 4,
+      gap: verticalScale(2),
       zIndex: 1,
     },
-    arabicText: {
-      color: colors.primary,
-      fontFamily: fontFamily.quran,
-      fontSize: fontSize.arabic,
-      writingDirection: "rtl",
-    },
     translationText: {
-      color: colors.text,
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.caption,
-      fontWeight: "500",
       opacity: 0.8,
-      textAlign: "right",
     },
   });

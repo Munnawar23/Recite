@@ -1,9 +1,10 @@
+import { AppText } from "@/components";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useFontStore } from "@/store/fontStore";
 import type { SurahVerse } from "@/types";
 import React, { useMemo } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 interface VerseRowProps {
   item: SurahVerse;
@@ -20,7 +21,7 @@ function VerseRow({
   onLayout,
   onPress,
 }: VerseRowProps) {
-  const { colors, fontFamily, fontSize } = useAppTheme();
+  const { colors, fontSize } = useAppTheme();
   const fontSizeScale = useFontStore((state) => state.fontSizeScale);
   const quranFontSizeScale = useFontStore((state) => state.quranFontSizeScale);
 
@@ -37,15 +38,8 @@ function VerseRow({
   }, [quranFontSizeScale]);
 
   const S = useMemo(
-    () =>
-      createStyles(
-        colors,
-        fontFamily,
-        fontSize,
-        textMultiplier,
-        quranMultiplier,
-      ),
-    [colors, fontFamily, fontSize, textMultiplier, quranMultiplier],
+    () => createStyles(colors),
+    [colors],
   );
 
   return (
@@ -59,27 +53,48 @@ function VerseRow({
     >
       {/* Centered Verse Number Header */}
       <View style={S.verseHeader}>
-        <Text style={[S.verseOrnament, isActive && { color: colors.primary }]}>
+        <AppText
+          size={fontSize.title * quranMultiplier}
+          family="quran"
+          color={isActive ? "primary" : "subtext"}
+        >
           ﴿ {item.verseKey} ﴾
-        </Text>
+        </AppText>
       </View>
 
       {/* Arabic text — centered, highlighted when active */}
       <View style={[S.arabicWrapper, isActive && S.activeArabicWrapper]}>
-        <Text style={[S.arabicText, isActive && { color: colors.primary }]}>
+        <AppText
+          size={fontSize.arabic * quranMultiplier}
+          lineHeight={Math.round(fontSize.arabic * quranMultiplier * 2.2)}
+          family="quran"
+          letterSpacing={2.5}
+          align="center"
+          color={isActive ? "primary" : colors.quranVerse}
+          style={S.arabicText}
+        >
           {item.arabic}
-        </Text>
+        </AppText>
       </View>
 
       {/* Translation below arabic */}
       {selectedTransId !== "0" && item.translation ? (
-        <Text style={S.translationText}>{item.translation}</Text>
+        <AppText
+          size={fontSize.title * textMultiplier}
+          lineHeight={Math.round(fontSize.title * textMultiplier * 1.7)}
+          family="text"
+          color="text"
+          align="center"
+          style={S.translationText}
+        >
+          {item.translation}
+        </AppText>
       ) : null}
 
       {/* Elegant Separator */}
       <View style={S.separatorContainer}>
         <View style={S.separatorLine} />
-        <Text style={S.separatorOrnament}>◈</Text>
+        <AppText size={13} color="primary">◈</AppText>
         <View style={S.separatorLine} />
       </View>
     </TouchableOpacity>
@@ -88,25 +103,19 @@ function VerseRow({
 
 export default React.memo(VerseRow);
 
-const createStyles = (
-  colors: any,
-  fontFamily: any,
-  fontSize: any,
-  textMultiplier: number,
-  quranMultiplier: number,
-) =>
+const createStyles = (colors: any) =>
   StyleSheet.create({
     verseRow: {
-      paddingTop: verticalScale(8),
-      paddingBottom: verticalScale(8),
+      paddingTop: rs.space(8),
+      paddingBottom: rs.space(8),
       paddingHorizontal: 0,
       marginVertical: 0,
       width: "100%",
     },
     arabicWrapper: {
-      paddingVertical: verticalScale(8),
+      paddingVertical: rs.space(8),
       paddingHorizontal: 0,
-      borderRadius: scale(12),
+      borderRadius: rs.space(12),
       width: "100%",
     },
     activeArabicWrapper: {
@@ -118,49 +127,29 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
-      gap: scale(10),
-      marginTop: verticalScale(18),
-      marginBottom: verticalScale(8),
-      paddingHorizontal: scale(20),
+      gap: rs.space(10),
+      marginTop: rs.space(18),
+      marginBottom: rs.space(8),
+      paddingHorizontal: rs.space(20),
     },
     separatorLine: {
       flex: 1,
       height: 1.5,
       backgroundColor: colors.primary + "40",
     },
-    separatorOrnament: {
-      color: colors.primary,
-      fontSize: scale(13),
-    },
     arabicText: {
-      color: colors.quranVerse,
-      fontFamily: fontFamily.quran,
       fontWeight: "600",
-      fontSize: fontSize.arabic * quranMultiplier,
-      lineHeight: fontSize.arabic * quranMultiplier * 2.2,
-      letterSpacing: 2.5,
-      textAlign: "center",
       width: "100%",
     },
     verseHeader: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
-      marginBottom: verticalScale(6),
-    },
-    verseOrnament: {
-      color: colors.subtext,
-      fontFamily: fontFamily.quran,
-      fontSize: fontSize.title * quranMultiplier,
+      marginBottom: rs.space(6),
     },
     translationText: {
-      color: colors.text,
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.title * textMultiplier,
-      lineHeight: fontSize.title * textMultiplier * 1.7,
-      marginTop: verticalScale(10),
-      marginBottom: verticalScale(4),
-      textAlign: "center",
+      marginTop: rs.space(10),
+      marginBottom: rs.space(4),
       paddingHorizontal: 0,
       width: "100%",
     },

@@ -1,4 +1,4 @@
-import { EmptyState, Header, MessageModal } from "@/components";
+import { AppText, EmptyState, Header, MessageModal } from "@/components";
 import CompassDial from "@/features/qibla/components/CompassDial";
 import { useCompass } from "@/features/qibla/hooks/useCompass";
 import { useQiblaDirection } from "@/features/qibla/hooks/useQiblaDirection";
@@ -7,7 +7,7 @@ import { useLocation } from "@/hooks/useLocation";
 import { usePathname } from "expo-router";
 import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import Animated, {
   useAnimatedProps,
   type SharedValue,
@@ -34,6 +34,7 @@ function LiveHeadingText({
     <AnimatedTextInput
       underlineColorAndroid="transparent"
       editable={false}
+      maxFontSizeMultiplier={1.2}
       style={style}
       animatedProps={animatedProps}
     />
@@ -59,8 +60,6 @@ export default function QiblaScreen() {
 
   const qiblaAngle = useQiblaDirection(coords);
   const rotation = useCompass();
-
-
 
   const targetDeg = Math.round(qiblaAngle);
 
@@ -101,11 +100,24 @@ export default function QiblaScreen() {
             <>
               {/* Top Qibla Target Header (Big Font) */}
               <View style={styles.targetContainer}>
-                <Text style={styles.targetLabel}>
+                <AppText
+                  variant="caption"
+                  family="text"
+                  color="subtext"
+                  letterSpacing={1.5}
+                  style={styles.targetLabel}
+                >
                   {t("qiblaScreen.title", "Qibla")}
-                </Text>
+                </AppText>
 
-                <Text style={styles.targetValue}>{targetDeg}°</Text>
+                <AppText
+                  variant="splashTitle"
+                  family="title"
+                  color="primary"
+                  style={styles.targetValue}
+                >
+                  {targetDeg}°
+                </AppText>
               </View>
 
               {/* Center Compass Dial */}
@@ -117,9 +129,13 @@ export default function QiblaScreen() {
 
               {/* Bottom Current Heading */}
               <View style={styles.headingContainer}>
-                <Text style={styles.headingLabel}>
+                <AppText
+                  variant="body"
+                  family="text"
+                  color="subtext"
+                >
                   {t("qiblaScreen.currentHeading", "Current Heading")}
-                </Text>
+                </AppText>
 
                 <LiveHeadingText
                   rotation={rotation}
@@ -172,26 +188,14 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>) =>
       marginTop: theme.spacing.xs,
     },
     targetLabel: {
-      fontFamily: theme.fontFamily.text,
-      fontSize: theme.fontSize.caption,
-      color: theme.colors.subtext,
-      letterSpacing: 1.5,
       textTransform: "uppercase",
     },
     targetValue: {
-      fontFamily: theme.fontFamily.title,
-      fontSize: theme.fontSize.splashTitle,
-      color: theme.colors.primary,
       marginTop: theme.spacing.xs,
     },
     headingContainer: {
       alignItems: "center",
       marginBottom: theme.spacing.md,
-    },
-    headingLabel: {
-      fontFamily: theme.fontFamily.text,
-      fontSize: theme.fontSize.body,
-      color: theme.colors.subtext,
     },
     headingValue: {
       fontFamily: theme.fontFamily.title,

@@ -1,7 +1,6 @@
 import { useAppFonts } from "@/hooks/useAppFonts";
 import { useThemeStore } from "@/store/themeStore";
-import { spacing } from "@/theme/spacing";
-import { theme } from "@/theme/theme";
+import { spacing, theme } from "@/theme";
 import { useColorScheme } from "react-native";
 
 export function useAppTheme() {
@@ -27,6 +26,3 @@ export function useAppTheme() {
     ...appFonts,
   };
 }
-
-
-

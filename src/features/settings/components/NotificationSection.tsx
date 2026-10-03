@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Switch, ActivityIndicator } from "react-native";
-import { SectionTitle, SettingsItemCard, MessageModal } from "@/components";
+import { SectionTitle, MessageModal } from "@/components";
+import SettingsItemCard from "./SettingsItemCard";
 import { useNotificationStore } from "@/store/notificationStore";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { NotificationService } from "@/services/notificationService";

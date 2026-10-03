@@ -1,4 +1,4 @@
-import { scale, verticalScale } from "react-native-size-matters";
+import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
 
 export const spacing = {
   xs: scale(4),
@@ -19,11 +19,20 @@ export const spacing = {
 
   // Semantic layout tokens
   screenPadding: scale(16),
-  sectionHeaderTop: verticalScale(16),
+  sectionHeaderTop: verticalScale(18),
   sectionHeaderBottom: verticalScale(10),
   cardMarginTop: verticalScale(6),
   cardMarginBottom: verticalScale(16),
   itemGap: scale(8),
+
+  // Icon sizes
+  iconSm: rs.icon(18),
+  iconMd: rs.icon(24),
+  iconLg: rs.icon(36),
+
+  // Component sizes
+  avatarMd: scale(48),
+  avatarLg: scale(68),
 };
 
 export type ThemeSpacing = typeof spacing;

@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 import {
+  AppText,
   Background,
   CommonModal,
   ScreenHeader,
@@ -10,11 +10,11 @@ import {
   ReciterList,
 } from "@/components";
 import { RECITER_OPTIONS } from "@/features/quran-detail/hooks/useQuranAudio";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { SUPPORTED_LANGUAGES, SupportedLanguageCode } from "@/i18n";
 import { Haptics } from "@/lib/haptics";
 import { useLanguageStore } from "@/store/languageStore";
-import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 
 export const RECITER_DROPDOWN_DATA = RECITER_OPTIONS.map((reciter) => ({
   label: reciter.label,
@@ -24,14 +24,14 @@ export const RECITER_DROPDOWN_DATA = RECITER_OPTIONS.map((reciter) => ({
 export default function LanguagesScreen() {
   const { t } = useTranslation();
   const { language, setLanguage } = useLanguageStore();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, fontSize, spacing } = useAppTheme();
 
   const languageDropdownData = SUPPORTED_LANGUAGES.map((lang) => ({
     label: t(`languages.${lang.code}`, lang.label),
     value: lang.code,
   }));
 
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const S = createStyles(colors, spacing);
 
   return (
     <View style={{ flex: 1 }}>
@@ -56,15 +56,15 @@ export default function LanguagesScreen() {
           tightSpacing
         />
         <View style={S.card}>
-          <Text style={S.cardTitle}>
+          <AppText variant="bodyLg" family="title" color="text">
             {t("settings.languages.appLanguageTitle", "App Interface Language")}
-          </Text>
-          <Text style={S.cardSubtitle}>
+          </AppText>
+          <AppText variant="body" color="subtext" style={S.cardSubtitle}>
             {t(
               "settings.languages.appLanguageSubtitle",
               "Select primary language for menus & interface",
             )}
-          </Text>
+          </AppText>
           <CommonModal
             data={languageDropdownData}
             value={language}
@@ -86,19 +86,19 @@ export default function LanguagesScreen() {
           tightSpacing
         />
         <View style={S.card}>
-          <Text style={S.cardTitle}>
+          <AppText variant="bodyLg" family="title" color="text">
             {t("settings.languages.quranReciterTitle", "Default Quran Reciter")}
-          </Text>
-          <Text style={S.cardSubtitle}>
+          </AppText>
+          <AppText variant="body" color="subtext" style={S.cardSubtitle}>
             {t(
               "settings.languages.quranReciterSubtitle",
               "Select Qari / Reciter voice for audio playback",
             )}
-          </Text>
+          </AppText>
           <ReciterList />
         </View>
 
-        <View style={{ height: verticalScale(20) }} />
+        <View style={{ height: rs.space(20) }} />
       </ScrollView>
     </View>
   );
@@ -106,8 +106,6 @@ export default function LanguagesScreen() {
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
 ) =>
   StyleSheet.create({
@@ -117,22 +115,14 @@ const createStyles = (
     card: {
       backgroundColor: colors.card,
       marginHorizontal: spacing.screenPadding,
-      marginBottom: verticalScale(7),
-      borderRadius: scale(16),
-      padding: scale(14),
+      marginBottom: rs.space(7),
+      borderRadius: rs.space(16),
+      padding: rs.space(14),
       borderWidth: 1,
       borderColor: colors.border,
     },
-    cardTitle: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.bodyLg,
-      color: colors.text,
-    },
     cardSubtitle: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.body,
-      color: colors.subtext,
-      marginTop: verticalScale(2),
-      marginBottom: verticalScale(10),
+      marginTop: rs.space(2),
+      marginBottom: rs.space(10),
     },
   });

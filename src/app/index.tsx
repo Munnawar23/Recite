@@ -1,2 +1,2 @@
-import SplashScreen from "@/features/splash/screens/splash";
+import SplashScreen from "@/features/splash/screens/SplashScreen";
 export default SplashScreen;

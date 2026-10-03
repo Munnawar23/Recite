@@ -1,10 +1,11 @@
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { ThemeMode, useThemeStore } from "@/store/themeStore";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { AppText } from "./AppText";
 
 interface ThemePhonePickerProps {
   showHorizontalPadding?: boolean;
@@ -13,9 +14,9 @@ interface ThemePhonePickerProps {
 export function ThemePhonePicker({ showHorizontalPadding = true }: ThemePhonePickerProps) {
   const { t } = useTranslation();
   const { themeMode, setThemeMode } = useThemeStore();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
 
-  const S = createStyles(colors, fontFamily, fontSize, spacing, showHorizontalPadding);
+  const S = createStyles(colors, spacing, showHorizontalPadding);
 
   const themeOptions: { key: ThemeMode; label: string }[] = [
     { key: "light", label: t("settings.display.theme.light", "Light") },
@@ -53,9 +54,13 @@ export function ThemePhonePicker({ showHorizontalPadding = true }: ThemePhonePic
             </View>
 
             {/* Card Title Label */}
-            <Text style={[S.phoneCardLabel, isSelected && S.phoneCardLabelSelected]}>
+            <AppText
+              variant="body"
+              family="title"
+              color={isSelected ? "primary" : "subtext"}
+            >
               {opt.label}
-            </Text>
+            </AppText>
           </TouchableOpacity>
         );
       })}
@@ -130,112 +135,110 @@ const mockStyles = StyleSheet.create({
   lightBody: {
     flex: 1,
     backgroundColor: "#F2E9DD",
-    borderRadius: scale(10),
-    padding: scale(6),
-    gap: verticalScale(4),
+    borderRadius: rs.space(10),
+    padding: rs.space(6),
+    gap: rs.space(4),
   },
   lightHeader: {
-    height: verticalScale(6),
+    height: rs.space(6),
     width: "40%",
     backgroundColor: "#3F7A5C",
-    borderRadius: scale(3),
+    borderRadius: rs.space(3),
   },
   lightBanner: {
-    height: verticalScale(20),
+    height: rs.space(20),
     backgroundColor: "#3F7A5C",
-    borderRadius: scale(6),
+    borderRadius: rs.space(6),
     opacity: 0.85,
   },
   lightCard: {
-    height: verticalScale(12),
+    height: rs.space(12),
     backgroundColor: "#FAF4EC",
-    borderRadius: scale(4),
+    borderRadius: rs.space(4),
     borderWidth: 0.5,
     borderColor: "#E3D5C1",
   },
   lightBox: {
     flex: 1,
-    height: verticalScale(18),
+    height: rs.space(18),
     backgroundColor: "#FAF4EC",
-    borderRadius: scale(4),
+    borderRadius: rs.space(4),
     borderWidth: 0.5,
     borderColor: "#E3D5C1",
   },
   lightNav: {
-    height: verticalScale(10),
+    height: rs.space(10),
     backgroundColor: "#E3D5C1",
-    borderRadius: scale(3),
+    borderRadius: rs.space(3),
     marginTop: "auto",
   },
   darkBody: {
     flex: 1,
     backgroundColor: "#121415",
-    borderRadius: scale(10),
-    padding: scale(6),
-    gap: verticalScale(4),
+    borderRadius: rs.space(10),
+    padding: rs.space(6),
+    gap: rs.space(4),
   },
   darkHeader: {
-    height: verticalScale(6),
+    height: rs.space(6),
     width: "40%",
     backgroundColor: "#D4A86A",
-    borderRadius: scale(3),
+    borderRadius: rs.space(3),
   },
   darkBanner: {
-    height: verticalScale(20),
+    height: rs.space(20),
     backgroundColor: "#192223",
-    borderRadius: scale(6),
+    borderRadius: rs.space(6),
     borderWidth: 0.5,
     borderColor: "#1E2B2C",
   },
   darkCard: {
-    height: verticalScale(12),
+    height: rs.space(12),
     backgroundColor: "#192223",
-    borderRadius: scale(4),
+    borderRadius: rs.space(4),
     borderWidth: 0.5,
     borderColor: "#1E2B2C",
   },
   darkBox: {
     flex: 1,
-    height: verticalScale(18),
+    height: rs.space(18),
     backgroundColor: "#192223",
-    borderRadius: scale(4),
+    borderRadius: rs.space(4),
     borderWidth: 0.5,
     borderColor: "#1E2B2C",
   },
   darkNav: {
-    height: verticalScale(10),
+    height: rs.space(10),
     backgroundColor: "#1E2B2C",
-    borderRadius: scale(3),
+    borderRadius: rs.space(3),
     marginTop: "auto",
   },
   systemContainer: {
     flex: 1,
     flexDirection: "row",
-    borderRadius: scale(10),
+    borderRadius: rs.space(10),
     overflow: "hidden",
   },
   splitLeft: {
     flex: 1,
     backgroundColor: "#F2E9DD",
-    padding: scale(6),
-    gap: verticalScale(4),
+    padding: rs.space(6),
+    gap: rs.space(4),
   },
   splitRight: {
     flex: 1,
     backgroundColor: "#121415",
-    padding: scale(6),
-    gap: verticalScale(4),
+    padding: rs.space(6),
+    gap: rs.space(4),
   },
   gridRow: {
     flexDirection: "row",
-    gap: scale(3),
+    gap: rs.space(3),
   },
 });
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
   showHorizontalPadding: boolean,
 ) =>
@@ -248,9 +251,9 @@ const createStyles = (
     phoneCardContainer: {
       flex: 1,
       backgroundColor: colors.card,
-      borderRadius: scale(16),
-      paddingVertical: verticalScale(12),
-      paddingHorizontal: scale(8),
+      borderRadius: rs.space(16),
+      paddingVertical: rs.space(14),
+      paddingHorizontal: rs.space(8),
       alignItems: "center",
       borderWidth: 1.5,
       borderColor: colors.border,
@@ -260,35 +263,27 @@ const createStyles = (
       backgroundColor: colors.primary + "10",
     },
     radioOuter: {
-      width: scale(18),
-      height: scale(18),
-      borderRadius: scale(9),
+      width: rs.space(18),
+      height: rs.space(18),
+      borderRadius: rs.space(9),
       borderWidth: 1.5,
       borderColor: colors.subtext,
       alignItems: "center",
       justifyContent: "center",
-      marginBottom: verticalScale(10),
+      marginBottom: rs.space(10),
     },
     radioInner: {
-      width: scale(9),
-      height: scale(9),
-      borderRadius: scale(4.5),
+      width: rs.space(9),
+      height: rs.space(9),
+      borderRadius: rs.space(4.5),
       backgroundColor: colors.primary,
     },
     phoneFrame: {
       width: "100%",
-      height: verticalScale(120),
-      borderRadius: scale(14),
-      padding: scale(6),
-      marginBottom: verticalScale(10),
-    },
-    phoneCardLabel: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.body,
-      color: colors.subtext,
-    },
-    phoneCardLabelSelected: {
-      color: colors.primary,
+      height: rs.space(140),
+      borderRadius: rs.space(14),
+      padding: rs.space(6),
+      marginBottom: rs.space(10),
     },
   });
 

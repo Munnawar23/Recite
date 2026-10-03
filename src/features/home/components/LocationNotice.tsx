@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
-import { MessageModal } from "@/components";
+import { AppText, MessageModal } from "@/components";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLocation } from "@/hooks/useLocation";
 import { Haptics } from "@/lib/haptics";
@@ -17,10 +17,10 @@ export default function LocationNotice({
   onPress,
 }: LocationNoticeProps) {
   const { t } = useTranslation();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { spacing } = useAppTheme();
   const { requestLocation, openAppSettings } = useLocation();
   const [showBlockedModal, setShowBlockedModal] = useState(false);
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const S = createStyles(spacing);
 
   const handlePress = async () => {
     Haptics.medium();
@@ -40,9 +40,9 @@ export default function LocationNotice({
   return (
     <>
       <View style={S.container}>
-        <Text style={S.infoText}>
+        <AppText variant="body" color="subtext" align="center">
           {t("home.locationNotice.showingMecca", "Showing Mecca times.")}{" "}
-        </Text>
+        </AppText>
         <Pressable
           onPress={handlePress}
           style={({ pressed }) => [pressed && S.pressed]}
@@ -52,9 +52,14 @@ export default function LocationNotice({
             "Enable location permission",
           )}
         >
-          <Text style={S.settingsLink}>
+          <AppText
+            variant="body"
+            color="primary"
+            family="title"
+            style={S.settingsLink}
+          >
             {t("home.locationNotice.enableLocation", "Tap to enable location")}
-          </Text>
+          </AppText>
         </Pressable>
       </View>
 
@@ -80,12 +85,7 @@ export default function LocationNotice({
   );
 }
 
-const createStyles = (
-  colors: any,
-  fontFamily: any,
-  fontSize: any,
-  spacing: any,
-) =>
+const createStyles = (spacing: any) =>
   StyleSheet.create({
     container: {
       marginTop: spacing.vLg,
@@ -95,17 +95,7 @@ const createStyles = (
       justifyContent: "center",
       flexWrap: "wrap",
     },
-
-    infoText: {
-      textAlign: "center",
-      color: colors.subtext,
-      fontSize: fontSize.body,
-      fontFamily: fontFamily.text,
-    },
-
     settingsLink: {
-      color: colors.primary,
-      fontFamily: fontFamily.title,
       textDecorationLine: "underline",
     },
     pressed: {

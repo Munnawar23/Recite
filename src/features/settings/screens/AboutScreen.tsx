@@ -1,16 +1,16 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 
-import { Background, ScreenHeader } from "@/components";
+import { AppText, Background, ScreenHeader } from "@/components";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 
 export default function AboutScreen() {
   const { t } = useTranslation();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const { colors, fontSize, spacing } = useAppTheme();
+  const S = createStyles(colors, spacing);
 
   return (
     <View style={S.container}>
@@ -30,30 +30,39 @@ export default function AboutScreen() {
       >
         {/* Main Descriptive Paragraphs */}
         <View style={S.descriptionCard}>
-          <Text style={S.introText}>
+          <AppText
+            size={fontSize.bodyLg + 1}
+            lineHeight={Math.round((fontSize.bodyLg + 1) * 1.45)}
+            color="text"
+          >
             {t(
               "settings.about.aboutUsContent",
               "Recite is a non-profit, 100% free community project dedicated to making the Holy Quran accessible to everyone worldwide with zero ads, subscriptions, or paywalls.",
             )}
-          </Text>
+          </AppText>
         </View>
 
         {/* Feature Highlights Cards */}
         <View style={S.card}>
           <View style={S.cardHeaderRow}>
             <View style={S.iconBadge}>
-              <Ionicons name="volume-high-outline" size={scale(20)} color={colors.primary} />
+              <Ionicons name="volume-high-outline" size={rs.icon(20)} color={colors.primary} />
             </View>
             <View style={S.textWrap}>
-              <Text style={S.cardTitle}>
+              <AppText size={fontSize.bodyLg + 1} family="title" color="text">
                 {t("settings.about.featureRecitersTitle", "Authentic Recitations")}
-              </Text>
-              <Text style={S.cardSubtitle}>
+              </AppText>
+              <AppText
+                size={fontSize.body + 1}
+                lineHeight={Math.round((fontSize.body + 1) * 1.35)}
+                color="subtext"
+                style={S.cardSubtitle}
+              >
                 {t(
                   "settings.about.featureRecitersDesc",
                   "High-quality audio from world-renowned Qaris with verse-by-verse playback.",
                 )}
-              </Text>
+              </AppText>
             </View>
           </View>
         </View>
@@ -61,18 +70,23 @@ export default function AboutScreen() {
         <View style={S.card}>
           <View style={S.cardHeaderRow}>
             <View style={S.iconBadge}>
-              <Ionicons name="language-outline" size={scale(20)} color={colors.primary} />
+              <Ionicons name="language-outline" size={rs.icon(20)} color={colors.primary} />
             </View>
             <View style={S.textWrap}>
-              <Text style={S.cardTitle}>
+              <AppText size={fontSize.bodyLg + 1} family="title" color="text">
                 {t("settings.about.featureLanguagesTitle", "Multi-Language Translations")}
-              </Text>
-              <Text style={S.cardSubtitle}>
+              </AppText>
+              <AppText
+                size={fontSize.body + 1}
+                lineHeight={Math.round((fontSize.body + 1) * 1.35)}
+                color="subtext"
+                style={S.cardSubtitle}
+              >
                 {t(
                   "settings.about.featureLanguagesDesc",
                   "Read side-by-side verse translations across multiple global languages.",
                 )}
-              </Text>
+              </AppText>
             </View>
           </View>
         </View>
@@ -80,18 +94,23 @@ export default function AboutScreen() {
         <View style={S.card}>
           <View style={S.cardHeaderRow}>
             <View style={S.iconBadge}>
-              <Ionicons name="shield-checkmark-outline" size={scale(20)} color={colors.primary} />
+              <Ionicons name="shield-checkmark-outline" size={rs.icon(20)} color={colors.primary} />
             </View>
             <View style={S.textWrap}>
-              <Text style={S.cardTitle}>
+              <AppText size={fontSize.bodyLg + 1} family="title" color="text">
                 {t("settings.about.featurePrivacyTitle", "Privacy First")}
-              </Text>
-              <Text style={S.cardSubtitle}>
+              </AppText>
+              <AppText
+                size={fontSize.body + 1}
+                lineHeight={Math.round((fontSize.body + 1) * 1.35)}
+                color="subtext"
+                style={S.cardSubtitle}
+              >
                 {t(
                   "settings.about.featurePrivacyDesc",
                   "No tracking, ad profiling, or personal data collection required.",
                 )}
-              </Text>
+              </AppText>
             </View>
           </View>
         </View>
@@ -104,8 +123,6 @@ export default function AboutScreen() {
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
 ) =>
   StyleSheet.create({
@@ -118,58 +135,43 @@ const createStyles = (
     descriptionCard: {
       backgroundColor: colors.card,
       marginHorizontal: spacing.screenPadding,
-      marginTop: verticalScale(8),
-      marginBottom: verticalScale(14),
-      borderRadius: scale(16),
-      padding: scale(16),
+      marginTop: rs.space(8),
+      marginBottom: rs.space(14),
+      borderRadius: rs.space(16),
+      padding: rs.space(16),
       borderWidth: 1,
       borderColor: colors.border,
-    },
-    introText: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg + 1,
-      color: colors.text,
-      lineHeight: (fontSize.bodyLg + 1) * 1.45,
     },
     card: {
       backgroundColor: colors.card,
       marginHorizontal: spacing.screenPadding,
-      marginBottom: verticalScale(8),
-      borderRadius: scale(16),
-      padding: scale(14),
+      marginBottom: rs.space(8),
+      borderRadius: rs.space(16),
+      padding: rs.space(14),
       borderWidth: 1,
       borderColor: colors.border,
     },
     cardHeaderRow: {
       flexDirection: "row",
       alignItems: "flex-start",
-      gap: scale(12),
+      gap: rs.space(12),
     },
     iconBadge: {
-      width: scale(36),
-      height: scale(36),
-      borderRadius: scale(10),
+      width: rs.space(36),
+      height: rs.space(36),
+      borderRadius: rs.space(10),
       backgroundColor: colors.primary + "18",
       alignItems: "center",
       justifyContent: "center",
-      marginTop: verticalScale(2),
+      marginTop: rs.space(2),
     },
     textWrap: {
       flex: 1,
     },
-    cardTitle: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.bodyLg + 1,
-      color: colors.text,
-    },
     cardSubtitle: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.body + 1,
-      color: colors.subtext,
-      marginTop: verticalScale(3),
-      lineHeight: (fontSize.body + 1) * 1.35,
+      marginTop: rs.space(3),
     },
     bottomSpacer: {
-      height: verticalScale(20),
+      height: rs.space(20),
     },
   });

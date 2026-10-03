@@ -1,11 +1,11 @@
+import { AppText, MessageModal } from "@/components";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLocation } from "@/hooks/useLocation";
-import { MessageModal } from "@/components";
 import { Ionicons } from "@expo/vector-icons";
-import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { useTranslation } from "react-i18next";
+import { StyleSheet, View } from "react-native";
 import { OnboardingStepWrapper } from "./OnboardingStepWrapper";
 
 interface LocationStepProps {
@@ -39,7 +39,7 @@ export function LocationStep({ onFinish, onBack }: LocationStepProps) {
     onFinish();
   };
 
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const S = createStyles(colors);
 
   return (
     <>
@@ -67,11 +67,13 @@ export function LocationStep({ onFinish, onBack }: LocationStepProps) {
               <View style={S.checkCircle}>
                 <Ionicons
                   name="checkmark"
-                  size={scale(14)}
+                  size={rs.icon(14)}
                   color={colors.primary}
                 />
               </View>
-              <Text style={S.benefitText}>{t(key)}</Text>
+              <AppText variant="bodyLg" color="text" style={S.benefitText}>
+                {t(key)}
+              </AppText>
             </View>
           ))}
         </View>
@@ -81,22 +83,27 @@ export function LocationStep({ onFinish, onBack }: LocationStepProps) {
           <View style={S.successBadge}>
             <Ionicons
               name="checkmark-circle"
-              size={scale(18)}
+              size={rs.icon(18)}
               color={colors.primary}
             />
-            <Text style={S.successText}>
+            <AppText variant="body" family="title" color="primary">
               {t("onboarding.location.enabledStatus", "Location Enabled")}
-            </Text>
+            </AppText>
           </View>
         )}
 
         {/* Skip hint */}
-        <Text style={S.hintText}>
+        <AppText
+          variant="bodyLg"
+          color="subtext"
+          align="center"
+          style={S.hintText}
+        >
           {t(
             "onboarding.location.skipHint",
             "Mecca times will be used if skipped",
           )}
-        </Text>
+        </AppText>
       </OnboardingStepWrapper>
 
       <MessageModal
@@ -121,31 +128,26 @@ export function LocationStep({ onFinish, onBack }: LocationStepProps) {
   );
 }
 
-const createStyles = (
-  colors: any,
-  fontFamily: any,
-  fontSize: any,
-  spacing: any,
-) =>
+const createStyles = (colors: any) =>
   StyleSheet.create({
     benefitsList: {
       backgroundColor: colors.card,
-      borderRadius: scale(16),
-      padding: scale(16),
+      borderRadius: rs.space(16),
+      padding: rs.space(16),
       borderWidth: 1,
       borderColor: colors.border,
-      gap: verticalScale(12),
-      marginBottom: verticalScale(12),
+      gap: rs.space(12),
+      marginBottom: rs.space(12),
     },
     benefitRow: {
       flexDirection: "row",
       alignItems: "center",
-      gap: scale(12),
+      gap: rs.space(12),
     },
     checkCircle: {
-      width: scale(26),
-      height: scale(26),
-      borderRadius: scale(13),
+      width: rs.space(26),
+      height: rs.space(26),
+      borderRadius: rs.space(13),
       backgroundColor: colors.primary + "18",
       alignItems: "center",
       justifyContent: "center",
@@ -154,34 +156,22 @@ const createStyles = (
     },
     benefitText: {
       flex: 1,
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg,
-      color: colors.text,
     },
     successBadge: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
-      gap: scale(6),
+      gap: rs.space(6),
       backgroundColor: colors.primary + "18",
-      borderRadius: scale(10),
-      paddingVertical: verticalScale(8),
-      paddingHorizontal: scale(14),
-      marginBottom: verticalScale(8),
+      borderRadius: rs.space(10),
+      paddingVertical: rs.space(8),
+      paddingHorizontal: rs.space(14),
+      marginBottom: rs.space(8),
       borderWidth: 1,
       borderColor: colors.primary + "30",
     },
-    successText: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.body,
-      color: colors.primary,
-    },
     hintText: {
-      textAlign: "center",
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg,
-      color: colors.subtext,
-      marginTop: verticalScale(6),
+      marginTop: rs.space(6),
     },
   });
 

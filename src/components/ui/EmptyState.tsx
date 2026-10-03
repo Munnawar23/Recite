@@ -1,19 +1,17 @@
+import { rs } from "@/helpers/responsiveHelper";
+import { useAppTheme } from "@/hooks/useAppTheme";
+import { type ThemeColors, type ThemeSpacing } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
+import React from "react";
 import {
   StyleSheet,
-  Text,
   View,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
-import { scale } from "react-native-size-matters";
-
+import { AppText } from "./AppText";
 import Button from "./Button";
-import { useAppFonts } from "@/hooks/useAppFonts";
-import { useAppTheme } from "@/hooks/useAppTheme";
-import { ThemeColors } from "@/theme/colors";
-import { ThemeSpacing } from "@/theme/spacing";
 
 type BaseProps = {
   icon?: keyof typeof Ionicons.glyphMap;
@@ -49,8 +47,8 @@ export default function EmptyState({
   onPress,
   style,
 }: Props) {
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const { colors, spacing } = useAppTheme();
+  const S = createStyles(colors, spacing);
 
   return (
     <View style={[S.container, style]}>
@@ -63,12 +61,16 @@ export default function EmptyState({
         />
       ) : (
         <View style={S.iconCircle}>
-          <Ionicons name={icon} size={scale(34)} color={colors.primary} />
+          <Ionicons name={icon} size={rs.icon(34)} color={colors.primary} />
         </View>
       )}
 
-      <Text style={S.title}>{title}</Text>
-      <Text style={S.subtitle}>{subtitle}</Text>
+      <AppText variant="title" color="text" align="center">
+        {title}
+      </AppText>
+      <AppText variant="body" color="subtext" align="center">
+        {subtitle}
+      </AppText>
 
       {buttonLabel && onPress && (
         <Button
@@ -83,12 +85,8 @@ export default function EmptyState({
   );
 }
 
-type AppFonts = ReturnType<typeof useAppFonts>;
-
 const createStyles = (
   colors: ThemeColors,
-  fontFamily: AppFonts["fontFamily"],
-  fontSize: AppFonts["fontSize"],
   spacing: ThemeSpacing,
 ) =>
   StyleSheet.create({
@@ -99,36 +97,24 @@ const createStyles = (
       gap: spacing.vSm,
     },
     iconCircle: {
-      width: scale(68),
-      height: scale(68),
-      borderRadius: scale(34),
+      width: rs.space(68),
+      height: rs.space(68),
+      borderRadius: rs.space(34),
       backgroundColor: colors.primary + "18",
       alignItems: "center",
       justifyContent: "center",
       marginBottom: spacing.vSm,
     },
     animation: {
-      width: scale(200),
-      height: scale(200),
+      width: rs.space(200),
+      height: rs.space(200),
       marginBottom: spacing.vSm,
-    },
-    title: {
-      fontSize: fontSize.title,
-      color: colors.text,
-      fontFamily: fontFamily.title,
-    },
-    subtitle: {
-      fontSize: fontSize.body,
-      color: colors.subtext,
-      fontFamily: fontFamily.text,
-      textAlign: "center",
-      lineHeight: fontSize.body * 1.5,
     },
     buttonContainer: {
       marginTop: spacing.vSm,
       width: "auto",
       alignSelf: "center",
       paddingHorizontal: spacing.xxl,
-      borderRadius: scale(30),
+      borderRadius: rs.space(30),
     },
   });

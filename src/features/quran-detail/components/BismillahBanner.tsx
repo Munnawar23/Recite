@@ -1,8 +1,10 @@
+import { AppText } from "@/components";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useFontStore } from "@/store/fontStore";
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Text, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 
 interface BismillahBannerProps {
   chapterId: number;
@@ -11,14 +13,12 @@ interface BismillahBannerProps {
 const NO_BISMILLAH = [1, 9];
 
 export default function BismillahBanner({ chapterId }: BismillahBannerProps) {
-  const { colors, fontFamily, fontSize } = useAppTheme();
+  const { colors, fontSize } = useAppTheme();
   const { fontSizeScale } = useFontStore();
 
   let multiplier = 1.0;
   if (fontSizeScale === "small") multiplier = 0.90;
   else if (fontSizeScale === "large") multiplier = 1.12;
-
-  const S = createStyles(fontFamily, fontSize, multiplier);
 
   if (NO_BISMILLAH.includes(chapterId)) {
     return null;
@@ -34,50 +34,46 @@ export default function BismillahBanner({ chapterId }: BismillahBannerProps) {
         end={{ x: 1, y: 1 }}
         style={S.bismillahGradient}
       >
-        <Text style={S.bismillahText}>
+        <AppText
+          family="quran"
+          align="center"
+          color="#FFFFFF"
+          size={fontSize.splashTitle * multiplier}
+          lineHeight={fontSize.splashTitle * multiplier * 1.8}
+        >
           بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-        </Text>
-        <Text style={S.bismillahSub}>
+        </AppText>
+        <AppText
+          semiBold
+          align="center"
+          color="rgba(255, 255, 255, 0.95)"
+          size={fontSize.bodyLg * multiplier}
+          lineHeight={fontSize.bodyLg * multiplier * 1.5}
+        >
           In the name of Allah, the Most Gracious, the Most Merciful
-        </Text>
+        </AppText>
       </LinearGradient>
     </View>
   );
 }
 
-const createStyles = (fontFamily: any, fontSize: any, multiplier: number) =>
-  StyleSheet.create({
-    bismillahContainer: {
-      marginTop: verticalScale(16),
-      marginBottom: verticalScale(8),
-      borderRadius: scale(16),
-      overflow: "hidden",
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: verticalScale(4) },
-      shadowOpacity: 0.15,
-      shadowRadius: scale(8),
-      elevation: 4,
-    },
-    bismillahGradient: {
-      alignItems: "center",
-      paddingVertical: verticalScale(20),
-      paddingHorizontal: scale(16),
-      gap: verticalScale(8),
-      borderRadius: scale(16),
-    },
-    bismillahText: {
-      color: "#FFFFFF",
-      fontFamily: fontFamily.quran,
-      fontSize: fontSize.splashTitle * multiplier,
-      textAlign: "center",
-      lineHeight: fontSize.splashTitle * multiplier * 1.8,
-    },
-    bismillahSub: {
-      color: "rgba(255, 255, 255, 0.95)",
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg * multiplier,
-      fontWeight: "600",
-      textAlign: "center",
-      lineHeight: fontSize.bodyLg * multiplier * 1.5,
-    },
-  });
+const S = StyleSheet.create({
+  bismillahContainer: {
+    marginTop: rs.space(16),
+    marginBottom: rs.space(8),
+    borderRadius: rs.space(16),
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: rs.space(4) },
+    shadowOpacity: 0.15,
+    shadowRadius: rs.space(8),
+    elevation: 4,
+  },
+  bismillahGradient: {
+    alignItems: "center",
+    paddingVertical: rs.space(20),
+    paddingHorizontal: rs.space(16),
+    gap: rs.space(8),
+    borderRadius: rs.space(16),
+  },
+});

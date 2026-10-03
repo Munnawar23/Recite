@@ -2,7 +2,6 @@ import React, { useState, useRef, useMemo, useCallback, useEffect } from "react"
 import {
   StyleSheet,
   View,
-  Text,
   TouchableOpacity,
   Pressable,
 } from "react-native";
@@ -11,7 +10,7 @@ import Svg, { Circle } from "react-native-svg";
 import { useTranslation } from "react-i18next";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
-import { scale, verticalScale } from "react-native-size-matters";
+import { rs } from "@/helpers/responsiveHelper";
 import * as FileSystem from "expo-file-system/legacy";
 import {
   createAudioDownload,
@@ -21,7 +20,7 @@ import {
   getLocalAudioPath,
 } from "@/services/downloadService";
 import { useDownloadsStore } from "@/store/downloadsStore";
-import { MessageModal, DeleteConfirmationModal } from "@/components";
+import { MessageModal, DeleteConfirmationModal, AppText } from "@/components";
 
 interface DownloadCardProps {
   chapterId?: number;
@@ -39,8 +38,6 @@ interface DownloadCardProps {
 }
 
 type ThemeColors = ReturnType<typeof useAppTheme>["colors"];
-type ThemeFontFamily = ReturnType<typeof useAppTheme>["fontFamily"];
-type ThemeFontSize = ReturnType<typeof useAppTheme>["fontSize"];
 
 // ─── Circular Progress ────────────────────────────────────────────────────────
 
@@ -55,7 +52,7 @@ function CircularProgressControl({
   primaryColor: string;
   trackColor: string;
 }) {
-  const size = scale(34);
+  const size = rs.space(34);
   const strokeWidth = 3;
   const radius = (size - strokeWidth - 2) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -99,7 +96,7 @@ function CircularProgressControl({
           strokeLinecap="round"
         />
       </Svg>
-      <Ionicons name="close" size={scale(14)} color={primaryColor} />
+      <Ionicons name="close" size={rs.icon(14)} color={primaryColor} />
     </Pressable>
   );
 }
@@ -125,7 +122,7 @@ function DownloadCard({
   chapterType,
 }: DownloadCardProps) {
   const { t } = useTranslation();
-  const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
+  const { colors, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
 
   const isDownloaded = useDownloadsStore(
@@ -282,8 +279,8 @@ function DownloadCard({
   }, [chapterId, removeDownload]);
 
   const S = useMemo(
-    () => createStyles(colors, fontFamily, fontSize, isDark),
-    [colors, fontFamily, fontSize, isDark],
+    () => createStyles(colors),
+    [colors],
   );
 
   // ─── Title text ─────────────────────────────────────────────────────────────
@@ -329,7 +326,7 @@ function DownloadCard({
         <View style={[S.squircle, { backgroundColor: colors.primary + "20" }]}>
           <Ionicons
             name={isDownloaded ? "checkmark-circle-outline" : "download-outline"}
-            size={scale(20)}
+            size={rs.icon(20)}
             color={colors.primary}
           />
         </View>
@@ -344,24 +341,24 @@ function DownloadCard({
                   backgroundColor: colors.primary + "18",
                   borderColor: colors.primary + "35",
                   alignSelf: "flex-start",
-                  paddingHorizontal: scale(8),
-                  paddingVertical: verticalScale(3),
-                  marginBottom: verticalScale(2),
+                  paddingHorizontal: rs.space(8),
+                  paddingVertical: rs.space(3),
+                  marginBottom: rs.space(2),
                 },
               ]}
             >
-              <Text numberOfLines={1} style={[S.title, { color: colors.primary }]}>
+              <AppText variant="body" family="title" color="primary" numberOfLines={1}>
                 {titleText}
-              </Text>
+              </AppText>
             </View>
           ) : (
-            <Text numberOfLines={1} style={S.title}>
+            <AppText variant="body" family="title" color="text" numberOfLines={1}>
               {titleText}
-            </Text>
+            </AppText>
           )}
-          <Text numberOfLines={1} style={S.subtitle}>
+          <AppText variant="body" color="subtext" numberOfLines={1} style={S.subtitle}>
             {subtitleText}
-          </Text>
+          </AppText>
         </View>
 
         {/* Right Action */}
@@ -384,7 +381,7 @@ function DownloadCard({
             >
               <Ionicons
                 name="trash-outline"
-                size={scale(20)}
+                size={rs.icon(20)}
                 color="#EF4444"
               />
             </TouchableOpacity>
@@ -401,12 +398,12 @@ function DownloadCard({
             >
               <Ionicons
                 name="download-outline"
-                size={scale(14)}
+                size={rs.icon(14)}
                 color={colors.card}
               />
-              <Text style={S.downloadBtnText}>
+              <AppText variant="caption" family="title" color={colors.card}>
                 {t("quran.downloadCard.download", "Download")}
-              </Text>
+              </AppText>
             </TouchableOpacity>
           )}
         </View>
@@ -442,17 +439,14 @@ export default React.memo(DownloadCard);
 
 const createStyles = (
   colors: ThemeColors,
-  fontFamily: ThemeFontFamily,
-  fontSize: ThemeFontSize,
-  _isDark: boolean,
 ) =>
   StyleSheet.create({
     container: {
       backgroundColor: colors.card,
       marginHorizontal: 0,
-      marginTop: verticalScale(12),
-      marginBottom: verticalScale(4),
-      borderRadius: scale(16),
+      marginTop: rs.space(12),
+      marginBottom: rs.space(4),
+      borderRadius: rs.space(16),
       overflow: "hidden",
       borderWidth: 1,
       borderColor: colors.border,
@@ -460,55 +454,30 @@ const createStyles = (
     cardContent: {
       flexDirection: "row",
       alignItems: "center",
-      paddingHorizontal: scale(16),
-      paddingVertical: verticalScale(12),
+      paddingHorizontal: rs.space(16),
+      paddingVertical: rs.space(12),
     },
     squircle: {
-      width: scale(40),
-      height: scale(40),
-      borderRadius: scale(12),
+      width: rs.space(40),
+      height: rs.space(40),
+      borderRadius: rs.space(12),
       alignItems: "center",
       justifyContent: "center",
     },
     textContainer: {
       flex: 1,
-      marginLeft: scale(12),
-      marginRight: scale(8),
-    },
-    title: {
-      color: colors.text,
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.body,
+      marginLeft: rs.space(12),
+      marginRight: rs.space(8),
     },
     subtitle: {
-      color: colors.subtext,
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.body,
-      marginTop: verticalScale(2),
-    },
-    subtitleRow: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: scale(6),
-      marginTop: verticalScale(2),
+      marginTop: rs.space(2),
     },
     badge: {
       flexDirection: "row",
       alignItems: "center",
-      gap: scale(4),
-      paddingHorizontal: scale(7),
-      paddingVertical: verticalScale(2),
-      borderRadius: scale(10),
+      gap: rs.space(4),
+      borderRadius: rs.space(10),
       borderWidth: 1,
-    },
-    badgeDot: {
-      width: scale(5),
-      height: scale(5),
-      borderRadius: scale(3),
-    },
-    badgeText: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.caption,
     },
     rightAction: {
       justifyContent: "center",
@@ -517,21 +486,16 @@ const createStyles = (
     downloadBtn: {
       flexDirection: "row",
       alignItems: "center",
-      gap: scale(4),
+      gap: rs.space(4),
       backgroundColor: colors.primary,
-      paddingHorizontal: scale(12),
-      paddingVertical: verticalScale(6),
-      borderRadius: scale(20),
-    },
-    downloadBtnText: {
-      color: colors.card,
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.caption,
+      paddingHorizontal: rs.space(12),
+      paddingVertical: rs.space(6),
+      borderRadius: rs.space(20),
     },
     deleteIconBtn: {
-      width: scale(34),
-      height: scale(34),
-      borderRadius: scale(17),
+      width: rs.space(34),
+      height: rs.space(34),
+      borderRadius: rs.space(17),
       backgroundColor: "rgba(239, 68, 68, 0.12)",
       borderWidth: 1,
       borderColor: "rgba(239, 68, 68, 0.25)",

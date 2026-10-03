@@ -1,2 +1,2 @@
-import HomeScreen from "@/features/home/screens/home";
+import HomeScreen from "@/features/home/screens/HomeScreen";
 export default HomeScreen;

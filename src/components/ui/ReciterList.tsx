@@ -1,5 +1,6 @@
 import { MessageModal } from "./MessageModal";
 import { RECITER_OPTIONS } from "@/features/quran-detail/hooks/useQuranAudio";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { getChapterAudio } from "@/lib/api";
@@ -14,11 +15,10 @@ import {
   FlatList,
   Image,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { AppText } from "./AppText";
 
 const PLAY_BTN_HIT_SLOP = { top: 8, bottom: 8, left: 8, right: 8 };
 
@@ -34,7 +34,7 @@ export function ReciterList({
   scrollEnabled = false,
 }: ReciterListProps) {
   const { reciterId, setReciterId } = useQuranSettingsStore();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
   const { isOffline } = useNetworkStatus();
   const { t } = useTranslation();
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
@@ -143,8 +143,8 @@ export function ReciterList({
   }, [setReciterId, onSelectReciter]);
 
   const S = useMemo(
-    () => createStyles(colors, fontFamily, fontSize, spacing),
-    [colors, fontFamily, fontSize, spacing],
+    () => createStyles(colors, spacing),
+    [colors, spacing],
   );
 
   const renderItem = useCallback(
@@ -177,19 +177,24 @@ export function ReciterList({
               />
             ) : (
               <View style={S.avatarFallback}>
-                <Ionicons name="person" size={scale(18)} color={colors.primary} />
+                <Ionicons name="person" size={rs.icon(18)} color={colors.primary} />
               </View>
             )}
-            <Text style={[S.reciterLabel, isSelected && S.selectedLabel]}>
+            <AppText
+              variant="bodyLg"
+              family="title"
+              color={isSelected ? "primary" : "text"}
+              style={S.reciterLabel}
+            >
               {reciter.label}
-            </Text>
+            </AppText>
           </View>
 
           <View style={S.rightActions}>
             {showSelectedCheckmark && isSelected && (
               <Ionicons
                 name="checkmark-circle"
-                size={scale(22)}
+                size={rs.icon(22)}
                 color={colors.primary}
                 style={S.checkmarkIcon}
               />
@@ -208,7 +213,7 @@ export function ReciterList({
               ) : (
                 <Ionicons
                   name={isThisPlaying ? "pause-circle" : "play-circle"}
-                  size={scale(30)}
+                  size={rs.icon(30)}
                   color={colors.primary}
                 />
               )}
@@ -250,8 +255,6 @@ export function ReciterList({
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
 ) =>
   StyleSheet.create({
@@ -263,9 +266,9 @@ const createStyles = (
       alignItems: "center",
       justifyContent: "space-between",
       backgroundColor: colors.card,
-      borderRadius: scale(14),
-      paddingHorizontal: scale(14),
-      paddingVertical: verticalScale(12),
+      borderRadius: rs.space(14),
+      paddingHorizontal: rs.space(14),
+      paddingVertical: rs.space(12),
       borderWidth: 1,
       borderColor: colors.border,
     },
@@ -277,20 +280,20 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       flex: 1,
-      marginRight: scale(8),
+      marginRight: rs.space(8),
     },
     avatar: {
-      width: scale(46),
-      height: scale(46),
-      borderRadius: scale(23),
-      marginRight: scale(12),
+      width: rs.space(46),
+      height: rs.space(46),
+      borderRadius: rs.space(23),
+      marginRight: rs.space(12),
       backgroundColor: colors.border,
     },
     avatarFallback: {
-      width: scale(46),
-      height: scale(46),
-      borderRadius: scale(23),
-      marginRight: scale(12),
+      width: rs.space(46),
+      height: rs.space(46),
+      borderRadius: rs.space(23),
+      marginRight: rs.space(12),
       backgroundColor: colors.primary + "18",
       alignItems: "center",
       justifyContent: "center",
@@ -298,24 +301,18 @@ const createStyles = (
       borderColor: colors.primary + "30",
     },
     reciterLabel: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.bodyLg,
-      color: colors.text,
       flex: 1,
-    },
-    selectedLabel: {
-      color: colors.primary,
     },
     rightActions: {
       flexDirection: "row",
       alignItems: "center",
-      gap: scale(6),
+      gap: rs.space(6),
     },
     checkmarkIcon: {
-      marginRight: scale(4),
+      marginRight: rs.space(4),
     },
     playBtn: {
-      padding: scale(2),
+      padding: rs.space(2),
       justifyContent: "center",
       alignItems: "center",
     },

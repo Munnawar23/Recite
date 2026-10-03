@@ -1,18 +1,20 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, View } from "react-native";
-import { moderateScale, scale, verticalScale } from "react-native-size-matters";
+import { StyleSheet, View } from "react-native";
 
+import { AppText } from "@/components";
+import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { getHijriDate } from "@/utils";
 
 export default function HijriCard() {
   const { t, i18n } = useTranslation();
-  const { colors, fontFamily, fontSize, spacing, activeScheme } = useAppTheme();
+  const { colors, spacing, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
 
-  const S = createStyles(colors, fontFamily, fontSize, spacing, isDark);
+  const S = createStyles(colors, spacing, isDark);
   const hijriDate = getHijriDate(i18n.language);
 
   // Gradient colors from theme
@@ -35,51 +37,79 @@ export default function HijriCard() {
           <View style={S.badge}>
             <Ionicons
               name="moon"
-              size={scale(12)}
+              size={rs.icon(12)}
               color={colors.hijriCardAccent}
             />
-            <Text style={S.badgeText} numberOfLines={1}>
+            <AppText
+              variant="caption"
+              family="title"
+              color="rgba(255,255,255,0.95)"
+              letterSpacing={1.2}
+              numberOfLines={1}
+            >
               {t("home.hijriCard.badge", "ISLAMIC DATE")}
-            </Text>
+            </AppText>
           </View>
-          <Text
-            style={S.gregorianText}
+          <AppText
+            variant="bodySm"
+            color="rgba(255, 255, 255, 0.85)"
+            letterSpacing={0.2}
+            align="right"
             numberOfLines={1}
             adjustsFontSizeToFit
             minimumFontScale={0.8}
+            style={S.gregorianText}
           >
             {hijriDate.gregorian}
-          </Text>
+          </AppText>
         </View>
 
         {/* Main Content */}
         <View style={S.mainContent}>
-          <Text style={S.dayNumber}>{hijriDate.day}</Text>
+          <AppText
+            size={52}
+            family="heading"
+            color="#FFFFFF"
+            lineHeight={rs.font(56)}
+            style={S.dayNumber}
+          >
+            {hijriDate.day}
+          </AppText>
 
           <View style={S.dividerLine} />
 
           <View style={S.dateDetails}>
-            <Text
-              style={S.month}
+            <AppText
+              size={22}
+              family="heading"
+              color="#FFFFFF"
+              letterSpacing={0.5}
               numberOfLines={1}
               adjustsFontSizeToFit
               minimumFontScale={0.8}
             >
               {hijriDate.month}
-            </Text>
+            </AppText>
             <View style={S.detailsRow}>
-              <Text style={S.yearText} numberOfLines={1}>
+              <AppText
+                variant="bodySm"
+                family="title"
+                color={colors.hijriCardAccent}
+                numberOfLines={1}
+              >
                 {hijriDate.year} {t("home.hijriCard.yearSuffix", "AH")}
-              </Text>
+              </AppText>
               <View style={S.dividerDot} />
-              <Text
-                style={S.weekday}
+              <AppText
+                variant="bodySm"
+                color="rgba(255, 255, 255, 0.85)"
                 numberOfLines={1}
                 adjustsFontSizeToFit
                 minimumFontScale={0.8}
+                style={S.weekday}
               >
                 {hijriDate.weekday}
-              </Text>
+              </AppText>
             </View>
           </View>
         </View>
@@ -90,8 +120,6 @@ export default function HijriCard() {
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
   isDark: boolean,
 ) =>
@@ -121,7 +149,7 @@ const createStyles = (
     },
     decoCircleLarge: {
       position: "absolute",
-      top: -scale(30),
+      top: -verticalScale(30),
       right: -scale(30),
       width: scale(150),
       height: scale(150),
@@ -130,7 +158,7 @@ const createStyles = (
     },
     decoCircleSmall: {
       position: "absolute",
-      bottom: -scale(20),
+      bottom: -verticalScale(20),
       left: -scale(40),
       width: scale(100),
       height: scale(100),
@@ -146,11 +174,6 @@ const createStyles = (
     },
     gregorianText: {
       flexShrink: 1,
-      fontSize: moderateScale(13),
-      fontFamily: fontFamily.text,
-      color: "rgba(255, 255, 255, 0.85)",
-      letterSpacing: 0.2,
-      textAlign: "right",
     },
     badge: {
       flexShrink: 0,
@@ -164,27 +187,16 @@ const createStyles = (
       borderWidth: 1,
       borderColor: "rgba(255, 255, 255, 0.1)",
     },
-    badgeText: {
-      fontSize: moderateScale(10),
-      fontFamily: fontFamily.title,
-      color: "rgba(255,255,255,0.95)",
-      letterSpacing: 1.2,
-      textTransform: "uppercase",
-    },
     mainContent: {
       flexDirection: "row",
       alignItems: "center",
     },
     dayNumber: {
-      fontSize: moderateScale(52),
-      fontFamily: fontFamily.heading,
-      color: "#FFFFFF",
       includeFontPadding: false,
-      lineHeight: moderateScale(56),
     },
     dividerLine: {
       width: 1,
-      height: verticalScale(40),
+      height: verticalScale(42),
       backgroundColor: "rgba(255, 255, 255, 0.2)",
       marginHorizontal: scale(14),
     },
@@ -193,22 +205,11 @@ const createStyles = (
       justifyContent: "center",
       gap: verticalScale(4),
     },
-    month: {
-      fontSize: moderateScale(22),
-      fontFamily: fontFamily.heading,
-      color: "#FFFFFF",
-      letterSpacing: 0.5,
-    },
     detailsRow: {
       flexDirection: "row",
       alignItems: "center",
       flexWrap: "wrap",
       gap: scale(6),
-    },
-    yearText: {
-      fontSize: moderateScale(13),
-      fontFamily: fontFamily.title,
-      color: colors.hijriCardAccent,
     },
     dividerDot: {
       width: scale(4),
@@ -218,8 +219,5 @@ const createStyles = (
     },
     weekday: {
       flexShrink: 1,
-      fontSize: moderateScale(13),
-      fontFamily: fontFamily.text,
-      color: "rgba(255, 255, 255, 0.85)",
     },
   });

@@ -1,9 +1,17 @@
 import React from "react";
-import { StyleSheet, View, Text, Modal, TouchableOpacity, FlatList, ScrollView } from "react-native";
+import {
+  FlatList,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { scale, verticalScale } from "react-native-size-matters";
 import { Haptics } from "@/lib/haptics";
+import { AppText } from "./AppText";
 
 export interface DropdownItem {
   label: string;
@@ -40,7 +48,7 @@ export default function CommonModal({
   iconColor,
   children,
 }: CommonModalProps) {
-  const { colors, fontFamily, fontSize } = useAppTheme();
+  const { colors } = useAppTheme();
   const [internalVisible, setInternalVisible] = React.useState(false);
 
   const isControlled = propVisible !== undefined;
@@ -68,7 +76,7 @@ export default function CommonModal({
 
   const selectedItem = data ? data.find((d) => d.value === value) : undefined;
   const modalTitle = propTitle || placeholder;
-  const S = createStyles(colors, fontFamily, fontSize);
+  const S = createStyles(colors);
 
   return (
     <>
@@ -78,10 +86,16 @@ export default function CommonModal({
           onPress={handleOpen}
           activeOpacity={0.8}
         >
-          <Text style={S.selectedText} numberOfLines={1}>
+          <AppText
+            variant="bodyLg"
+            family="title"
+            color="text"
+            numberOfLines={1}
+            style={S.selectedText}
+          >
             {selectedItem ? selectedItem.label : placeholder}
-          </Text>
-          <Ionicons name="chevron-down" size={scale(18)} color={colors.subtext} />
+          </AppText>
+          <Ionicons name="chevron-down" size={rs.icon(18)} color={colors.subtext} />
         </TouchableOpacity>
       )}
 
@@ -92,13 +106,15 @@ export default function CommonModal({
               <View style={S.modalHeaderTitleRow}>
                 {icon && (
                   <View style={[S.headerIconBadge, { backgroundColor: (iconColor || colors.primary) + "18" }]}>
-                    <Ionicons name={icon} size={scale(18)} color={iconColor || colors.primary} />
+                    <Ionicons name={icon} size={rs.icon(18)} color={iconColor || colors.primary} />
                   </View>
                 )}
-                <Text style={S.modalTitle}>{modalTitle}</Text>
+                <AppText variant="cardTitle" family="title" color="text">
+                  {modalTitle}
+                </AppText>
               </View>
               <TouchableOpacity onPress={handleClose} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-                <Ionicons name="close" size={scale(22)} color={colors.subtext} />
+                <Ionicons name="close" size={rs.icon(22)} color={colors.subtext} />
               </TouchableOpacity>
             </View>
 
@@ -121,10 +137,14 @@ export default function CommonModal({
                       style={[S.itemRow, isSelected && S.selectedItemRow]}
                       onPress={() => handleSelect(item)}
                     >
-                      <Text style={[S.itemText, isSelected && S.selectedItemText]}>
+                      <AppText
+                        variant="bodyLg"
+                        family={isSelected ? "title" : "text"}
+                        color={isSelected ? "primary" : "text"}
+                      >
                         {item.label}
-                      </Text>
-                      {isSelected && <Ionicons name="checkmark" size={scale(20)} color={colors.primary} />}
+                      </AppText>
+                      {isSelected && <Ionicons name="checkmark" size={rs.icon(20)} color={colors.primary} />}
                     </TouchableOpacity>
                   );
                 }}
@@ -137,7 +157,7 @@ export default function CommonModal({
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any) =>
+const createStyles = (colors: any) =>
   StyleSheet.create({
     dropdownButton: {
       flexDirection: "row",
@@ -146,84 +166,67 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any) =>
       backgroundColor: colors.card,
       borderWidth: 1,
       borderColor: colors.border,
-      borderRadius: scale(10),
-      paddingHorizontal: scale(12),
-      paddingVertical: verticalScale(10),
+      borderRadius: rs.space(10),
+      paddingHorizontal: rs.space(12),
+      paddingVertical: rs.space(10),
     },
     selectedText: {
-      color: colors.text,
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.bodyLg,
       flex: 1,
-      marginRight: scale(6),
+      marginRight: rs.space(6),
     },
     overlay: {
       flex: 1,
       backgroundColor: "rgba(0, 0, 0, 0.55)",
       justifyContent: "center",
       alignItems: "center",
-      paddingHorizontal: scale(20),
+      paddingHorizontal: rs.space(20),
     },
     modalContent: {
       width: "100%",
       maxHeight: "80%",
       backgroundColor: colors.card,
-      borderRadius: scale(16),
+      borderRadius: rs.space(16),
       borderWidth: 1,
       borderColor: colors.border,
-      padding: scale(16),
+      padding: rs.space(16),
     },
     modalHeader: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      paddingBottom: verticalScale(12),
+      paddingBottom: rs.space(12),
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
-      marginBottom: verticalScale(8),
+      marginBottom: rs.space(8),
     },
     modalHeaderTitleRow: {
       flexDirection: "row",
       alignItems: "center",
-      gap: scale(10),
+      gap: rs.space(10),
     },
     headerIconBadge: {
-      width: scale(32),
-      height: scale(32),
-      borderRadius: scale(9),
+      width: rs.space(32),
+      height: rs.space(32),
+      borderRadius: rs.space(9),
       alignItems: "center",
       justifyContent: "center",
     },
-    modalTitle: {
-      color: colors.text,
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.cardTitle,
-    },
     customContent: {
       flexShrink: 1,
-      paddingVertical: verticalScale(4),
+      paddingVertical: rs.space(4),
     },
     customContentContainer: {
-      paddingBottom: verticalScale(16),
+      paddingBottom: rs.space(16),
     },
     itemRow: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      paddingVertical: verticalScale(12),
-      paddingHorizontal: scale(10),
-      borderRadius: scale(8),
+      paddingVertical: rs.space(12),
+      paddingHorizontal: rs.space(10),
+      borderRadius: rs.space(8),
     },
     selectedItemRow: {
       backgroundColor: colors.primary + "12",
-    },
-    itemText: {
-      color: colors.text,
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg,
-    },
-    selectedItemText: {
-      color: colors.primary,
-      fontFamily: fontFamily.title,
     },
   });

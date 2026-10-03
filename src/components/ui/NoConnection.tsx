@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 
 import EmptyState from "./EmptyState";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { ThemeSpacing } from "@/theme/spacing";
+import { type ThemeSpacing } from "@/theme";
 
 interface NoConnectionProps {
   onRetry?: () => void;

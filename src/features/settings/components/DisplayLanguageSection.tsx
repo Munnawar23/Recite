@@ -1,7 +1,8 @@
 import React from "react";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { SectionTitle, SettingsItemCard } from "@/components";
+import { SectionTitle } from "@/components";
+import SettingsItemCard from "./SettingsItemCard";
 import { Haptics } from "@/lib/haptics";
 
 export default function DisplayLanguageSection() {

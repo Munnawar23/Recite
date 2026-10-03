@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { useFonts } from "expo-font";
+import { useLoadFonts } from "@/hooks/useLoadFonts";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
@@ -39,13 +39,7 @@ export default function RootLayout() {
       }),
   );
 
-  const [fontsLoaded, fontError] = useFonts({
-    "PlusJakartaSans-Bold": require("../../assets/fonts/PlusJakartaSans-Bold.ttf"),
-    "Nunito-SemiBold": require("../../assets/fonts/Nunito-SemiBold.ttf"),
-    "Nunito-Medium": require("../../assets/fonts/Nunito-Medium.ttf"),
-    "Amiri-Bold": require("../../assets/fonts/Amiri-Bold.ttf"),
-  });
-
+  const { isReady } = useLoadFonts();
   const { activeScheme } = useAppTheme();
 
   useEffect(() => {
@@ -53,17 +47,7 @@ export default function RootLayout() {
     void useNotificationStore.getState().syncOnStartup();
   }, []);
 
-  useEffect(() => {
-    if (fontError) {
-      console.error("Failed to load fonts:", fontError);
-    }
-
-    if (fontsLoaded || fontError) {
-      void SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontError]);
-
-  if (!fontsLoaded && !fontError) {
+  if (!isReady) {
     return null;
   }
 

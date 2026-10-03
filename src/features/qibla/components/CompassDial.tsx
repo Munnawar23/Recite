@@ -1,6 +1,7 @@
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
   runOnJS,
@@ -9,7 +10,6 @@ import Animated, {
   useSharedValue,
   type SharedValue,
 } from "react-native-reanimated";
-import { scale, verticalScale } from "react-native-size-matters";
 import Svg, {
   Circle,
   G,
@@ -24,10 +24,10 @@ interface CompassDialProps {
   active?: boolean;
 }
 
-const SIZE = scale(300);
+const SIZE = rs.space(300);
 const CENTER = SIZE / 2;
-const OUTER_R = CENTER - scale(10);
-const INNER_R = OUTER_R - scale(32);
+const OUTER_R = CENTER - rs.space(10);
+const INNER_R = OUTER_R - rs.space(32);
 
 export default function CompassDial({
   rotation,
@@ -68,7 +68,7 @@ export default function CompassDial({
       const isMajor = deg % 30 === 0 && !isCard;
       const isMid = deg % 10 === 0 && !isMajor && !isCard;
 
-      const len = isCard ? scale(12) : isMajor ? scale(9) : isMid ? scale(6) : scale(4);
+      const len = isCard ? rs.space(12) : isMajor ? rs.space(9) : isMid ? rs.space(6) : rs.space(4);
       const strokeWidth = isCard ? 2.5 : isMajor ? 1.8 : 1;
       const rad = (deg * Math.PI) / 180;
 
@@ -112,7 +112,7 @@ export default function CompassDial({
       <G>
         {cardinals.map(({ label, deg, color }) => {
           const rad = (deg * Math.PI) / 180;
-          const r = OUTER_R - scale(20);
+          const r = OUTER_R - rs.space(20);
           const x = CENTER + r * Math.sin(rad);
           const y = CENTER - r * Math.cos(rad);
 
@@ -122,7 +122,7 @@ export default function CompassDial({
               x={x}
               y={y}
               fill={color}
-              fontSize={scale(17)}
+              fontSize={rs.font(17)}
               fontWeight="800"
               fontFamily={fontFamily.title}
               textAnchor="middle"
@@ -135,7 +135,7 @@ export default function CompassDial({
 
         {degrees.map((deg) => {
           const rad = (deg * Math.PI) / 180;
-          const r = OUTER_R - scale(18);
+          const r = OUTER_R - rs.space(18);
           const x = CENTER + r * Math.sin(rad);
           const y = CENTER - r * Math.cos(rad);
 
@@ -145,7 +145,7 @@ export default function CompassDial({
               x={x}
               y={y}
               fill={colors.subtext}
-              fontSize={scale(10)}
+              fontSize={rs.font(10)}
               fontWeight="600"
               fontFamily={fontFamily.text}
               textAnchor="middle"
@@ -162,7 +162,7 @@ export default function CompassDial({
 
   // Qibla marker position calculations
   const qiblaRad = (qiblaAngle * Math.PI) / 180;
-  const qiblaR = INNER_R + scale(12);
+  const qiblaR = INNER_R + rs.space(12);
   const qiblaX = CENTER + qiblaR * Math.sin(qiblaRad);
   const qiblaY = CENTER - qiblaR * Math.cos(qiblaRad);
 
@@ -170,7 +170,7 @@ export default function CompassDial({
     <View style={styles.container}>
       {/* Modern Top Arrow Needle Indicator */}
       <View style={styles.pointerWrap}>
-        <Svg width={scale(24)} height={scale(26)}>
+        <Svg width={rs.space(24)} height={rs.space(26)}>
           <Polygon
             points="12,2 20,24 12,19 4,24"
             fill={colors.primary}
@@ -185,7 +185,7 @@ export default function CompassDial({
           <Circle
             cx={CENTER}
             cy={CENTER}
-            r={OUTER_R + scale(4)}
+            r={OUTER_R + rs.space(4)}
             fill={colors.card}
             stroke={colors.border}
             strokeWidth={1.5}
@@ -194,7 +194,7 @@ export default function CompassDial({
           <Circle
             cx={CENTER}
             cy={CENTER}
-            r={OUTER_R - scale(2)}
+            r={OUTER_R - rs.space(2)}
             fill={colors.card}
             stroke={colors.border}
             strokeWidth={1}
@@ -229,20 +229,20 @@ export default function CompassDial({
 
           {/* Kaaba Emoji Badge Marker */}
           <G
-            transform={`translate(${qiblaX - scale(16)}, ${qiblaY - scale(16)}) rotate(${qiblaAngle}, ${scale(16)}, ${scale(16)})`}
+            transform={`translate(${qiblaX - rs.space(16)}, ${qiblaY - rs.space(16)}) rotate(${qiblaAngle}, ${rs.space(16)}, ${rs.space(16)})`}
           >
             <Circle
-              cx={scale(16)}
-              cy={scale(16)}
-              r={scale(15)}
+              cx={rs.space(16)}
+              cy={rs.space(16)}
+              r={rs.space(15)}
               fill={colors.card}
               stroke={colors.primary}
               strokeWidth={2}
             />
             <SvgText
-              x={scale(16)}
-              y={scale(14)}
-              fontSize={scale(18)}
+              x={rs.space(16)}
+              y={rs.space(14)}
+              fontSize={rs.font(18)}
               textAnchor="middle"
               alignmentBaseline="central"
             >
@@ -251,11 +251,11 @@ export default function CompassDial({
           </G>
 
           {/* Center pivot needle pin */}
-          <Circle cx={CENTER} cy={CENTER} r={scale(6)} fill={colors.primary} />
+          <Circle cx={CENTER} cy={CENTER} r={rs.space(6)} fill={colors.primary} />
           <Circle
             cx={CENTER}
             cy={CENTER}
-            r={scale(12)}
+            r={rs.space(12)}
             fill="none"
             stroke={colors.primary}
             strokeWidth={1.5}
@@ -273,11 +273,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: SIZE,
     height: SIZE,
-    marginVertical: verticalScale(16),
+    marginVertical: rs.space(16),
   },
   pointerWrap: {
     position: "absolute",
-    top: -scale(16),
+    top: -rs.space(16),
     zIndex: 10,
   },
 });

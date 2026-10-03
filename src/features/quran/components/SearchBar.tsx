@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
+import { AppTextInput } from "@/components";
 import { useAppFonts } from "@/hooks/useAppFonts";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { ThemeColors } from "@/theme/colors";
-import { ThemeSpacing } from "@/theme/spacing";
+import { type ThemeColors, type ThemeSpacing } from "@/theme";
 
 interface SearchBarInputProps {
   value: string;
@@ -47,7 +47,7 @@ export const SearchBar = React.memo(function SearchBar({
           color={colors.subtext}
           style={styles.searchIcon}
         />
-        <TextInput
+        <AppTextInput
           testID={`${testID}-input`}
           style={styles.searchInput}
           placeholder={placeholder}

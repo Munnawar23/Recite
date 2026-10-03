@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from "react-native";
 import Animated, { useAnimatedStyle, type SharedValue } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
-import { useAppTheme } from "@/hooks/useAppTheme";
-import { scale, verticalScale } from "react-native-size-matters";
 import Slider from "@react-native-community/slider";
 import type { AudioPlayer } from "expo-audio";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { AppText } from "@/components";
+import { rs } from "@/helpers/responsiveHelper";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 
 interface AudioPlayerProps {
@@ -33,14 +35,12 @@ export default function AudioPlayerComponent({
   isLoadingAudio,
   scrollTranslateY,
 }: AudioPlayerProps) {
-  const { colors, fontFamily, fontSize } = useAppTheme();
+  const { colors } = useAppTheme();
   const insets = useSafeAreaInsets();
   const S = useMemo(
-    () => createStyles(colors, fontFamily, fontSize, insets.bottom),
-    [colors, fontFamily, fontSize, insets.bottom],
+    () => createStyles(colors, insets.bottom),
+    [colors, insets.bottom],
   );
-
-
 
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
   const [sliderValue, setSliderValue] = useState<number>(0);
@@ -98,7 +98,9 @@ export default function AudioPlayerComponent({
     <Animated.View style={[S.container, animatedStyle]}>
       {/* Progress Bar (Slider) */}
       <View style={S.progressSection}>
-        <Text style={S.timeText}>{formatTime(isDragging ? sliderValue : status.currentTime)}</Text>
+        <AppText variant="caption" color="subtext" align="center" style={S.timeText}>
+          {formatTime(isDragging ? sliderValue : status.currentTime)}
+        </AppText>
 
         <Slider
           style={S.slider}
@@ -118,7 +120,9 @@ export default function AudioPlayerComponent({
           }}
         />
 
-        <Text style={S.timeText}>{formatTime(status.duration)}</Text>
+        <AppText variant="caption" color="subtext" align="center" style={S.timeText}>
+          {formatTime(status.duration)}
+        </AppText>
       </View>
 
       {/* Control Buttons */}
@@ -133,7 +137,7 @@ export default function AudioPlayerComponent({
             onPress={handleSkipBack}
             style={S.skipButton}
           >
-            <Ionicons name="play-back" size={scale(19)} color={colors.text} />
+            <Ionicons name="play-back" size={rs.icon(19)} color={colors.text} />
           </TouchableOpacity>
 
           {/* Play/Pause Main Button (Exact Center) */}
@@ -147,9 +151,9 @@ export default function AudioPlayerComponent({
             ) : (
               <Ionicons
                 name={status.playing ? "pause" : "play"}
-                size={scale(26)}
+                size={rs.icon(26)}
                 color="#fff"
-                style={!status.playing ? { marginLeft: scale(2.5) } : undefined}
+                style={!status.playing ? { marginLeft: rs.space(2.5) } : undefined}
               />
             )}
           </TouchableOpacity>
@@ -159,28 +163,30 @@ export default function AudioPlayerComponent({
             onPress={handleSkipForward}
             style={S.skipButton}
           >
-            <Ionicons name="play-forward" size={scale(19)} color={colors.text} />
+            <Ionicons name="play-forward" size={rs.icon(19)} color={colors.text} />
           </TouchableOpacity>
         </View>
 
         {/* Speed Selector (Far Right Badge Button) */}
         <TouchableOpacity onPress={cycleSpeed} style={S.speedButton}>
-          <Text style={S.speedButtonText}>{playbackSpeed === 1 ? "1.0" : playbackSpeed}x</Text>
+          <AppText variant="caption" family="title" color="#FFFFFF">
+            {playbackSpeed === 1 ? "1.0" : playbackSpeed}x
+          </AppText>
         </TouchableOpacity>
       </View>
     </Animated.View>
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, bottomInset: number) =>
+const createStyles = (colors: any, bottomInset: number) =>
   StyleSheet.create({
     container: {
       backgroundColor: colors.card,
-      borderTopLeftRadius: scale(20),
-      borderTopRightRadius: scale(20),
-      paddingTop: verticalScale(12),
-      paddingBottom: Math.max(bottomInset + verticalScale(8), verticalScale(22)),
-      paddingHorizontal: scale(18),
+      borderTopLeftRadius: rs.space(20),
+      borderTopRightRadius: rs.space(20),
+      paddingTop: rs.space(12),
+      paddingBottom: Math.max(bottomInset + rs.space(8), rs.space(22)),
+      paddingHorizontal: rs.space(18),
       position: "absolute",
       bottom: 0,
       left: 0,
@@ -195,20 +201,16 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, bottomInset: 
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      marginBottom: verticalScale(10),
+      marginBottom: rs.space(10),
     },
     timeText: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.caption,
-      color: colors.subtext,
-      minWidth: scale(38),
-      textAlign: "center",
+      minWidth: rs.space(38),
       fontVariant: ["tabular-nums"],
     },
     slider: {
       flex: 1,
-      height: verticalScale(22),
-      marginHorizontal: scale(6),
+      height: rs.space(22),
+      marginHorizontal: rs.space(6),
     },
     controlsRow: {
       flexDirection: "row",
@@ -218,20 +220,20 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, bottomInset: 
     centerControls: {
       flexDirection: "row",
       alignItems: "center",
-      gap: scale(20),
+      gap: rs.space(20),
     },
     skipButton: {
-      width: scale(42),
-      height: scale(42),
-      borderRadius: scale(21),
+      width: rs.space(42),
+      height: rs.space(42),
+      borderRadius: rs.space(21),
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: colors.background,
     },
     speedButton: {
-      width: scale(38),
-      height: scale(38),
-      borderRadius: scale(19),
+      width: rs.space(38),
+      height: rs.space(38),
+      borderRadius: rs.space(19),
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: colors.primary,
@@ -241,19 +243,14 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, bottomInset: 
       shadowRadius: 3,
       elevation: 3,
     },
-    speedButtonText: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.caption,
-      color: "#FFFFFF",
-    },
     spacerButton: {
-      width: scale(38),
-      height: scale(38),
+      width: rs.space(38),
+      height: rs.space(38),
     },
     playPauseButton: {
-      width: scale(54),
-      height: scale(54),
-      borderRadius: scale(27),
+      width: rs.space(54),
+      height: rs.space(54),
+      borderRadius: rs.space(27),
       backgroundColor: colors.primary,
       alignItems: "center",
       justifyContent: "center",
@@ -264,4 +261,3 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, bottomInset: 
       elevation: 5,
     },
   });
-

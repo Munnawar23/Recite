@@ -1,2 +1,2 @@
-import QiblaScreen from "@/features/qibla/screens/qibla";
+import QiblaScreen from "@/features/qibla/screens/QiblaScreen";
 export default QiblaScreen;

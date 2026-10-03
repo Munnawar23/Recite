@@ -1,14 +1,13 @@
-import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
-
-import { useAppFonts } from "@/hooks/useAppFonts";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { Haptics } from "@/lib/haptics";
-import { ThemeColors } from "@/theme/colors";
-import { ThemeSpacing } from "@/theme/spacing";
+import { type ThemeColors, type ThemeSpacing } from "@/theme";
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { AppText } from "./AppText";
 
 interface HeaderProps {
   title: string;
@@ -23,10 +22,10 @@ export default function Header({
   rightIcon,
   onRightIconPress,
 }: HeaderProps) {
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, fontSize, spacing } = useAppTheme();
   const { isOffline } = useNetworkStatus();
   const { paddingTop } = useAppSafeAreaInsets();
-  const S = createStyles(colors, fontFamily, fontSize, spacing, isOffline, paddingTop);
+  const S = createStyles(colors, spacing, isOffline, paddingTop);
 
   const handlePress = () => {
     Haptics.medium();
@@ -36,7 +35,14 @@ export default function Header({
   return (
     <View style={S.headerRow}>
       <View style={S.topRow}>
-        <Text style={S.titleText}>{title}</Text>
+        <AppText
+          variant="heading"
+          color="text"
+          style={S.titleText}
+          numberOfLines={1}
+        >
+          {title}
+        </AppText>
         {rightIcon && (
           <TouchableOpacity
             style={S.iconButton}
@@ -51,17 +57,22 @@ export default function Header({
           </TouchableOpacity>
         )}
       </View>
-      {subtitle && <Text style={S.subtitleText}>{subtitle}</Text>}
+      {subtitle && (
+        <AppText
+          variant="body"
+          color="text"
+          family="title"
+          style={S.subtitleText}
+        >
+          {subtitle}
+        </AppText>
+      )}
     </View>
   );
 }
 
-type AppFonts = ReturnType<typeof useAppFonts>;
-
 const createStyles = (
   colors: ThemeColors,
-  fontFamily: AppFonts["fontFamily"],
-  fontSize: AppFonts["fontSize"],
   spacing: ThemeSpacing,
   isOffline: boolean,
   paddingTop: number,
@@ -78,25 +89,18 @@ const createStyles = (
       alignItems: "center",
     },
     titleText: {
-      fontSize: fontSize.heading,
-      color: colors.text,
-      fontFamily: fontFamily.heading,
-      letterSpacing: 0.5,
       flex: 1,
     },
     iconButton: {
-      width: scale(36),
-      height: scale(36),
-      borderRadius: scale(18),
+      width: rs.space(36),
+      height: rs.space(36),
+      borderRadius: rs.space(18),
       backgroundColor: colors.primary + "12",
       alignItems: "center",
       justifyContent: "center",
       marginLeft: spacing.sm,
     },
     subtitleText: {
-      fontSize: fontSize.body,
-      color: colors.text,
-      fontFamily: fontFamily.title,
       marginTop: spacing.vXs,
       opacity: 0.9,
     },

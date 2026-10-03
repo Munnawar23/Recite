@@ -1,14 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { useAppFonts } from "@/hooks/useAppFonts";
+import { AppText } from "@/components";
+import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
-import { ThemeColors } from "@/theme/colors";
-import { ThemeSpacing } from "@/theme/spacing";
-import { scale, verticalScale } from "react-native-size-matters";
+import { type ThemeColors, type ThemeSpacing } from "@/theme";
 
 interface ContinueReadingCardProps {
   surahName: string;
@@ -22,9 +22,9 @@ export default function ContinueReadingCard({
   onPress,
 }: ContinueReadingCardProps) {
   const { t } = useTranslation();
-  const { colors, fontFamily, fontSize, spacing, activeScheme } = useAppTheme();
+  const { colors, spacing, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
-  const S = createStyles(colors, fontFamily, fontSize, spacing, isDark);
+  const S = createStyles(colors, spacing, isDark);
 
   const handlePress = () => {
     Haptics.medium();
@@ -47,19 +47,39 @@ export default function ContinueReadingCard({
           <View style={S.container}>
             <View style={S.leftSection}>
               <View style={S.iconContainer}>
-                <Ionicons name="book" size={scale(18)} color="#FFD98E" />
+                <Ionicons name="book" size={rs.icon(20)} color="#FFD98E" />
               </View>
               <View style={S.textContainer}>
-                <Text style={S.tagText}>{t("quran.continueReadingTag")}</Text>
-                <Text style={S.titleText}>{surahName}</Text>
-                <Text style={S.verseText}>
+                <AppText
+                  variant="caption"
+                  family="title"
+                  color="rgba(255,255,255,0.9)"
+                  letterSpacing={0.8}
+                  style={S.tagText}
+                >
+                  {t("quran.continueReadingTag")}
+                </AppText>
+                <AppText
+                  variant="bodyLg"
+                  family="heading"
+                  color="#fff"
+                  letterSpacing={0.3}
+                >
+                  {surahName}
+                </AppText>
+                <AppText
+                  variant="body"
+                  family="text"
+                  color="rgba(255,255,255,0.88)"
+                  letterSpacing={0.5}
+                >
                   {t("quran.verseNumber", { number: verseNumber })}
-                </Text>
+                </AppText>
               </View>
             </View>
             <Ionicons
               name="arrow-forward-outline"
-              size={scale(20)}
+              size={rs.icon(22)}
               color="rgba(255,255,255,0.85)"
               style={S.arrowIcon}
             />
@@ -70,12 +90,8 @@ export default function ContinueReadingCard({
   );
 }
 
-type AppFonts = ReturnType<typeof useAppFonts>;
-
 const createStyles = (
   colors: ThemeColors,
-  fontFamily: AppFonts["fontFamily"],
-  fontSize: AppFonts["fontSize"],
   spacing: ThemeSpacing,
   isDark: boolean,
 ) =>
@@ -86,12 +102,12 @@ const createStyles = (
       marginBottom: spacing.vMd,
     },
     card: {
-      borderRadius: scale(20),
+      borderRadius: rs.space(20),
       overflow: "hidden",
       shadowColor: isDark ? "#000" : "#2B5E40",
-      shadowOffset: { width: 0, height: verticalScale(6) },
+      shadowOffset: { width: 0, height: rs.space(6) },
       shadowOpacity: isDark ? 0.4 : 0.2,
-      shadowRadius: scale(14),
+      shadowRadius: rs.space(14),
       elevation: 8,
     },
     gradient: {
@@ -102,19 +118,19 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      paddingVertical: verticalScale(14),
+      paddingVertical: verticalScale(18),
       paddingHorizontal: scale(18),
     },
     leftSection: {
       flexDirection: "row",
       alignItems: "center",
-      gap: scale(14),
+      gap: rs.space(14),
       flex: 1,
     },
     iconContainer: {
-      width: scale(38),
-      height: scale(38),
-      borderRadius: scale(19),
+      width: scale(42),
+      height: scale(42),
+      borderRadius: scale(21),
       backgroundColor: "rgba(255,255,255,0.12)",
       alignItems: "center",
       justifyContent: "center",
@@ -123,28 +139,12 @@ const createStyles = (
     },
     textContainer: {
       flex: 1,
-      gap: verticalScale(2),
+      gap: verticalScale(3),
     },
     tagText: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.caption,
-      color: "rgba(255,255,255,0.9)",
-      letterSpacing: 0.8,
       textTransform: "uppercase",
     },
-    titleText: {
-      fontFamily: fontFamily.heading,
-      fontSize: fontSize.bodyLg,
-      color: "#fff",
-      letterSpacing: 0.3,
-    },
-    verseText: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.body,
-      color: "rgba(255,255,255,0.88)",
-      letterSpacing: 0.5,
-    },
     arrowIcon: {
-      marginLeft: scale(10),
+      marginLeft: rs.space(10),
     },
   });

@@ -12,7 +12,7 @@ import {
 import { Header, NoConnection, TabSwitcher } from "@/components";
 import QuranCard from "@/features/quran/components/QuranCard";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { ThemeSpacing } from "@/theme/spacing";
+import { type ThemeSpacing } from "@/theme";
 import { Chapter } from "@/types";
 import { LibraryEmptyState } from "../components/LibraryEmptyState";
 import { TabValue, useLibraryData } from "../hooks/useLibraryData";

@@ -1,10 +1,11 @@
-import { TabSwitcher, ThemePhonePicker } from "@/components";
+import { AppText, TabSwitcher, ThemePhonePicker } from "@/components";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { FontSizeScale, useFontStore } from "@/store/fontStore";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { OnboardingStepWrapper } from "./OnboardingStepWrapper";
 
 interface ThemeStepProps {
@@ -20,7 +21,7 @@ export function ThemeStep({ onNext, onBack }: ThemeStepProps) {
     quranFontSizeScale,
     setQuranFontSizeScale,
   } = useFontStore();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, fontSize, spacing } = useAppTheme();
 
   const fontSizeTabs = [
     { label: t("settings.display.fontSize.small", "Small"), value: "small" },
@@ -39,14 +40,7 @@ export function ThemeStep({ onNext, onBack }: ThemeStepProps) {
   if (quranFontSizeScale === "small") quranMultiplier = 0.90;
   else if (quranFontSizeScale === "large") quranMultiplier = 1.12;
 
-  const S = createStyles(
-    colors,
-    fontFamily,
-    fontSize,
-    spacing,
-    textMultiplier,
-    quranMultiplier,
-  );
+  const S = createStyles(colors, spacing);
 
   return (
     <OnboardingStepWrapper
@@ -65,16 +59,21 @@ export function ThemeStep({ onNext, onBack }: ThemeStepProps) {
         contentContainerStyle={S.scrollContainer}
       >
         {/* ── Theme Selection Phone Cards ── */}
-        <Text style={S.sectionLabel}>
+        <AppText variant="bodyLg" family="title" color="text" style={S.sectionLabel}>
           {t("settings.display.appTheme", "App Theme")}
-        </Text>
+        </AppText>
 
         <ThemePhonePicker showHorizontalPadding={false} />
 
         {/* ── App Font Size Switcher ── */}
-        <Text style={[S.sectionLabel, { marginTop: verticalScale(16) }]}>
+        <AppText
+          variant="bodyLg"
+          family="title"
+          color="text"
+          style={[S.sectionLabel, { marginTop: rs.space(16) }]}
+        >
           {t("settings.display.appFontSize", "App Font Size")}
-        </Text>
+        </AppText>
         <TabSwitcher
           tabs={fontSizeTabs}
           activeTab={fontSizeScale}
@@ -86,9 +85,14 @@ export function ThemeStep({ onNext, onBack }: ThemeStepProps) {
         />
 
         {/* ── Quran Font Size Switcher ── */}
-        <Text style={[S.sectionLabel, { marginTop: verticalScale(14) }]}>
+        <AppText
+          variant="bodyLg"
+          family="title"
+          color="text"
+          style={[S.sectionLabel, { marginTop: rs.space(14) }]}
+        >
           {t("settings.display.quranFontSize", "Quran Arabic Font Size")}
-        </Text>
+        </AppText>
         <TabSwitcher
           tabs={fontSizeTabs}
           activeTab={quranFontSizeScale}
@@ -101,21 +105,36 @@ export function ThemeStep({ onNext, onBack }: ThemeStepProps) {
 
         {/* ── Clean Live Preview Box ── */}
         <View style={S.previewCard}>
-          <Text style={S.previewHeader}>
+          <AppText
+            variant="title"
+            family="title"
+            color="primary"
+          >
             {t("settings.display.livePreview", "Live Preview")}
-          </Text>
-          <Text style={S.previewTranslation}>
+          </AppText>
+          <AppText
+            size={fontSize.body * textMultiplier}
+            lineHeight={Math.round(fontSize.body * textMultiplier * 1.5)}
+            color="text"
+          >
             {t(
               "settings.display.sampleTranslation",
               "In the name of Allah, the Most Gracious, the Most Merciful",
             )}
-          </Text>
-          <Text style={S.previewArabic}>
+          </AppText>
+          <AppText
+            size={fontSize.arabic * quranMultiplier}
+            lineHeight={Math.round(fontSize.arabic * quranMultiplier * 1.8)}
+            family="quran"
+            color="primary"
+            align="right"
+            style={S.previewArabic}
+          >
             {t(
               "settings.display.sampleArabic",
               "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
             )}
-          </Text>
+          </AppText>
         </View>
       </ScrollView>
     </OnboardingStepWrapper>
@@ -124,49 +143,26 @@ export function ThemeStep({ onNext, onBack }: ThemeStepProps) {
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
-  textMultiplier: number = 1,
-  quranMultiplier: number = 1,
 ) =>
   StyleSheet.create({
     scrollContainer: {
       paddingBottom: spacing.cardMarginBottom,
     },
     sectionLabel: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.bodyLg,
-      color: colors.text,
       marginBottom: spacing.sectionHeaderBottom,
     },
     previewCard: {
       backgroundColor: colors.card,
       marginTop: spacing.cardMarginBottom,
-      borderRadius: scale(16),
-      padding: scale(14),
+      borderRadius: rs.space(16),
+      padding: rs.space(14),
       borderWidth: 1,
       borderColor: colors.border,
       gap: spacing.itemGap,
     },
-    previewHeader: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.title,
-      color: colors.primary,
-    },
-    previewTranslation: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.body * textMultiplier,
-      color: colors.text,
-      lineHeight: fontSize.body * textMultiplier * 1.5,
-    },
     previewArabic: {
-      fontFamily: fontFamily.quran,
-      fontSize: fontSize.arabic * quranMultiplier,
-      color: colors.primary,
-      textAlign: "right",
-      marginTop: verticalScale(4),
-      lineHeight: fontSize.arabic * quranMultiplier * 1.8,
+      marginTop: rs.space(4),
     },
   });
 

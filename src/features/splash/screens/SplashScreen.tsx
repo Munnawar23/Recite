@@ -1,23 +1,22 @@
+import { AppText } from "@/components";
+import { QURAN_ANIM } from "@/constants";
+import { rs } from "@/helpers/responsiveHelper";
+import { useAppTheme } from "@/hooks/useAppTheme";
+import { useOnboardingStore } from "@/store/onboardingStore";
 import { LinearGradient } from "expo-linear-gradient";
 import { Href, useRouter } from "expo-router";
 import LottieView from "lottie-react-native";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
-
-import { QURAN_ANIM } from "@/constants";
-import { useAppTheme } from "@/hooks/useAppTheme";
-import { lightColors } from "@/theme/colors";
-import { useOnboardingStore } from "@/store/onboardingStore";
+import { StyleSheet, View } from "react-native";
 
 export default function SplashScreen() {
   const router = useRouter();
   const { t } = useTranslation();
 
-  const { colors, fontFamily, fontSize: fontSizes, spacing } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
 
-  const styles = createStyles(colors, fontFamily, fontSizes, spacing);
+  const styles = createStyles(spacing);
 
   const { hasCompletedOnboarding } = useOnboardingStore();
 
@@ -47,17 +46,32 @@ export default function SplashScreen() {
       />
 
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{t("splash.title", "Recite")}</Text>
+        <AppText
+          variant="splashTitle"
+          color={colors.splashText}
+          family="heading"
+          align="center"
+          letterSpacing={0.5}
+        >
+          {t("splash.title", "Recite")}
+        </AppText>
 
-        <Text style={styles.subtitle}>
+        <AppText
+          variant="title"
+          color={colors.splashSubtext}
+          family="text"
+          align="center"
+          letterSpacing={1.5}
+          style={styles.subtitle}
+        >
           {t("splash.subtitle", "Read • Listen • Reflect")}
-        </Text>
+        </AppText>
       </View>
     </View>
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSizes: any, spacing: any) =>
+const createStyles = (spacing: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -66,7 +80,7 @@ const createStyles = (colors: any, fontFamily: any, fontSizes: any, spacing: any
     },
 
     animation: {
-      width: scale(240),
+      width: rs.space(240),
       aspectRatio: 1,
     },
 
@@ -75,20 +89,7 @@ const createStyles = (colors: any, fontFamily: any, fontSizes: any, spacing: any
       marginTop: spacing.vXl,
     },
 
-    title: {
-      fontSize: fontSizes.splashTitle,
-      color: colors.splashText,
-      fontFamily: fontFamily.heading,
-      letterSpacing: 0.5,
-      textAlign: "center",
-    },
-
     subtitle: {
       marginTop: spacing.vXs,
-      fontSize: fontSizes.title,
-      color: colors.splashSubtext,
-      fontFamily: fontFamily.text,
-      textAlign: "center",
-      letterSpacing: 1.5,
     },
   });

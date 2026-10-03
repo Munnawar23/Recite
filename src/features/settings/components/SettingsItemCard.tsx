@@ -1,14 +1,11 @@
-import React, { useMemo, useCallback } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import React, { useCallback, useMemo } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { scale, verticalScale } from "react-native-size-matters";
-
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
-import { ThemeColors } from "@/theme/colors";
-import { ThemeSpacing } from "@/theme/spacing";
-
-type ThemeObject = ReturnType<typeof useAppTheme>;
+import { type ThemeColors, type ThemeSpacing } from "@/theme";
+import { AppText } from "@/components";
 
 interface SettingsItemCardProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -27,12 +24,12 @@ export default function SettingsItemCard({
   iconColor,
   rightElement,
 }: SettingsItemCardProps) {
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
   const effectiveIconColor = iconColor || colors.primary;
 
   const styles = useMemo(
-    () => createStyles(colors, fontFamily, fontSize, spacing, effectiveIconColor),
-    [colors, fontFamily, fontSize, spacing, effectiveIconColor],
+    () => createStyles(colors, spacing, effectiveIconColor),
+    [colors, spacing, effectiveIconColor],
   );
 
   const handlePress = useCallback(() => {
@@ -50,17 +47,22 @@ export default function SettingsItemCard({
     >
       <View style={styles.leftContainer}>
         <View style={styles.iconContainer}>
-          <Ionicons name={icon} size={scale(20)} color={effectiveIconColor} />
+          <Ionicons name={icon} size={rs.icon(20)} color={effectiveIconColor} />
         </View>
 
         <View style={styles.textContainer}>
-          <Text style={styles.title} numberOfLines={1}>
+          <AppText variant="bodyLg" family="title" color="text" numberOfLines={1}>
             {title}
-          </Text>
+          </AppText>
           {subtitle ? (
-            <Text style={styles.subtitle} numberOfLines={1}>
+            <AppText
+              variant="body"
+              color="subtext"
+              numberOfLines={1}
+              style={styles.subtitle}
+            >
               {subtitle}
-            </Text>
+            </AppText>
           ) : null}
         </View>
       </View>
@@ -68,7 +70,11 @@ export default function SettingsItemCard({
       {rightElement ? (
         <View style={styles.rightContainer}>{rightElement}</View>
       ) : (
-        <Ionicons name="chevron-forward" size={scale(18)} color={colors.subtext} />
+        <Ionicons
+          name="chevron-forward"
+          size={rs.icon(18)}
+          color={colors.subtext}
+        />
       )}
     </TouchableOpacity>
   );
@@ -76,8 +82,6 @@ export default function SettingsItemCard({
 
 const createStyles = (
   colors: ThemeColors,
-  fontFamily: ThemeObject["fontFamily"],
-  fontSize: ThemeObject["fontSize"],
   spacing: ThemeSpacing,
   iconColor: string,
 ) =>
@@ -89,8 +93,8 @@ const createStyles = (
       backgroundColor: colors.card,
       marginHorizontal: spacing.screenPadding,
       marginBottom: spacing.itemGap,
-      borderRadius: scale(16),
-      padding: scale(14),
+      borderRadius: rs.space(16),
+      padding: rs.space(14),
       borderWidth: 1,
       borderColor: colors.border,
     },
@@ -98,34 +102,26 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       flex: 1,
-      marginRight: scale(8),
+      marginRight: rs.space(8),
     },
     iconContainer: {
-      width: scale(40),
-      height: scale(40),
-      borderRadius: scale(11),
+      width: rs.space(40),
+      height: rs.space(40),
+      borderRadius: rs.space(11),
       alignItems: "center",
       justifyContent: "center",
-      marginRight: scale(12),
+      marginRight: rs.space(12),
       backgroundColor: iconColor + "18",
     },
     textContainer: {
       flex: 1,
     },
-    title: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.bodyLg,
-      color: colors.text,
-    },
     subtitle: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.body,
-      color: colors.subtext,
-      marginTop: verticalScale(2),
+      marginTop: rs.space(2),
     },
     rightContainer: {
       alignItems: "center",
       justifyContent: "center",
-      marginLeft: scale(8),
+      marginLeft: rs.space(8),
     },
   });

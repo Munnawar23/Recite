@@ -1,11 +1,11 @@
-import { Background, Button } from "@/components";
+import { AppText, Background, Button } from "@/components";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { StyleSheet, View } from "react-native";
 
 const TOTAL_STEPS = 5;
 
@@ -33,7 +33,7 @@ export function OnboardingStepWrapper({
   primaryLoading = false,
 }: OnboardingStepWrapperProps) {
   const { t } = useTranslation();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
   const { paddingTop, paddingBottom } = useAppSafeAreaInsets();
 
   const isLastStep = step === TOTAL_STEPS;
@@ -45,8 +45,6 @@ export function OnboardingStepWrapper({
 
   const S = createStyles(
     colors,
-    fontFamily,
-    fontSize,
     spacing,
     paddingTop,
     paddingBottom,
@@ -71,21 +69,42 @@ export function OnboardingStepWrapper({
         </View>
 
         {/* ── Step counter ── */}
-        <Text style={S.stepCounter}>
+        <AppText
+          variant="caption"
+          color="subtext"
+          align="center"
+          style={S.stepCounter}
+        >
           {t("onboarding.stepOf", "{{current}} of {{total}}", {
             current: step,
             total: TOTAL_STEPS,
           })}
-        </Text>
+        </AppText>
 
         {/* ── Icon badge ── */}
         <View style={S.iconBadge}>
-          <Ionicons name={icon} size={scale(28)} color={colors.primary} />
+          <Ionicons name={icon} size={rs.icon(28)} color={colors.primary} />
         </View>
 
         {/* ── Title & subtitle ── */}
-        <Text style={S.title}>{title}</Text>
-        <Text style={S.subtitle}>{subtitle}</Text>
+        <AppText
+          variant="cardTitle"
+          family="heading"
+          color="text"
+          align="center"
+          style={S.title}
+        >
+          {title}
+        </AppText>
+        <AppText
+          variant="bodyLg"
+          color="subtext"
+          align="center"
+          lineHeight={rs.space(20)}
+          style={S.subtitle}
+        >
+          {subtitle}
+        </AppText>
 
         {/* ── Step-specific content ── */}
         <View style={S.content}>{children}</View>
@@ -124,8 +143,6 @@ export function OnboardingStepWrapper({
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
   paddingTop: number,
   paddingBottom: number,
@@ -138,20 +155,20 @@ const createStyles = (
       flex: 1,
       backgroundColor: colors.background,
       paddingHorizontal: spacing.screenPadding,
-      paddingTop: paddingTop + verticalScale(4),
-      paddingBottom: paddingBottom + verticalScale(10),
+      paddingTop: paddingTop + rs.space(4),
+      paddingBottom: paddingBottom + rs.space(10),
     },
     progressRow: {
       flexDirection: "row",
       justifyContent: "center",
-      gap: scale(6),
-      marginTop: verticalScale(10),
-      marginBottom: verticalScale(2),
+      gap: rs.space(6),
+      marginTop: rs.space(10),
+      marginBottom: rs.space(2),
     },
     dot: {
-      width: scale(28),
-      height: scale(4),
-      borderRadius: scale(2),
+      width: rs.space(28),
+      height: rs.space(4),
+      borderRadius: rs.space(2),
       backgroundColor: colors.border,
     },
     dotActive: {
@@ -161,50 +178,37 @@ const createStyles = (
       backgroundColor: colors.primary + "55",
     },
     stepCounter: {
-      textAlign: "center",
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.caption,
-      color: colors.subtext,
-      marginBottom: verticalScale(14),
+      marginBottom: rs.space(14),
     },
     iconBadge: {
-      width: scale(62),
-      height: scale(62),
-      borderRadius: scale(18),
+      width: rs.space(62),
+      height: rs.space(62),
+      borderRadius: rs.space(18),
       backgroundColor: colors.primary + "18",
       alignItems: "center",
       justifyContent: "center",
       alignSelf: "center",
-      marginBottom: verticalScale(12),
+      marginBottom: rs.space(12),
       borderWidth: 1,
       borderColor: colors.primary + "30",
     },
     title: {
-      fontFamily: fontFamily.heading,
-      fontSize: fontSize.cardTitle,
-      color: colors.text,
-      textAlign: "center",
-      marginBottom: verticalScale(4),
+      marginBottom: rs.space(4),
     },
     subtitle: {
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg,
-      color: colors.subtext,
-      textAlign: "center",
-      lineHeight: verticalScale(20),
-      marginBottom: verticalScale(16),
+      marginBottom: rs.space(16),
     },
     content: {
       flex: 1,
     },
     actions: {
-      gap: verticalScale(8),
-      marginTop: verticalScale(12),
+      gap: rs.space(8),
+      marginTop: rs.space(12),
     },
     buttonsRow: {
       flexDirection: "row",
       alignItems: "center",
-      gap: scale(10),
+      gap: rs.space(10),
     },
     backBtn: {
       flex: 1,

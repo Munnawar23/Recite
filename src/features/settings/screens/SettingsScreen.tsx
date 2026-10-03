@@ -1,30 +1,29 @@
 import Constants from "expo-constants";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { ScrollView, StyleSheet, View } from "react-native";
 
-import { Header } from "@/components";
+import { AppText, Header } from "@/components";
 import AboutSection from "../components/AboutSection";
 import DisplayLanguageSection from "../components/DisplayLanguageSection";
 import HelpSupportSection from "../components/HelpSupportSection";
 import NotificationSection from "../components/NotificationSection";
 import StorageSection from "../components/StorageSection";
 
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { ThemeColors } from "@/theme/colors";
-import { ThemeSpacing } from "@/theme/spacing";
+import { type ThemeColors, type ThemeSpacing } from "@/theme";
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { spacing } = useAppTheme();
 
   const appName = Constants.expoConfig?.name || "Recite";
   const appVersion = Constants.expoConfig?.version || "1.0.0";
 
   const styles = useMemo(
-    () => createStyles(colors, fontFamily, fontSize, spacing),
-    [colors, fontFamily, fontSize, spacing],
+    () => createStyles(spacing),
+    [spacing],
   );
 
   return (
@@ -51,9 +50,15 @@ export default function SettingsScreen() {
 
         {/* Bottom App Version Indicator */}
         <View style={styles.footerVersionContainer}>
-          <Text style={styles.footerVersionText}>
+          <AppText
+            variant="bodyLg"
+            family="title"
+            color="primary"
+            letterSpacing={0.5}
+            align="center"
+          >
             {`${appName} v${appVersion}`}
-          </Text>
+          </AppText>
         </View>
 
         <View style={styles.bottomSpacer} />
@@ -63,9 +68,6 @@ export default function SettingsScreen() {
 }
 
 const createStyles = (
-  colors: ThemeColors,
-  fontFamily: any,
-  fontSize: any,
   spacing: ThemeSpacing,
 ) =>
   StyleSheet.create({
@@ -78,16 +80,10 @@ const createStyles = (
     footerVersionContainer: {
       alignItems: "center",
       justifyContent: "center",
-      marginTop: verticalScale(24),
-      marginBottom: verticalScale(12),
-    },
-    footerVersionText: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.bodyLg,
-      color: colors.primary,
-      letterSpacing: scale(0.5),
+      marginTop: rs.space(24),
+      marginBottom: rs.space(12),
     },
     bottomSpacer: {
-      height: verticalScale(10),
+      height: rs.space(10),
     },
   });

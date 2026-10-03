@@ -1,2 +1,2 @@
-import QuranScreen from "@/features/quran/screens/quran";
+import QuranScreen from "@/features/quran/screens/QuranScreen";
 export default QuranScreen;

@@ -4,7 +4,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Platform, StyleSheet, View, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { verticalScale } from "react-native-size-matters";
+import { verticalScale } from "@/helpers/responsiveHelper";
 
 // ── Star data ─────────────────────────────────────────────────────────────
 const STARS = [

@@ -3,20 +3,20 @@ import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshControl, RefreshControlProps, StyleSheet, View } from "react-native";
+import LottieView from "lottie-react-native";
 
 import { EmptyState, Header, NoConnection } from "@/components";
+import { LOADING_ANIM } from "@/constants";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import QuranCard from "@/features/quran/components/QuranCard";
 import SearchBar from "@/features/quran/components/SearchBar";
 import { useChapterSearch } from "@/features/quran/hooks/useChapterSearch";
 import { useQuranChapters } from "@/features/quran/hooks/useQuranChapters";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { LastRead, useReadingProgressStore } from "@/store/readingProgressStore";
-import { ThemeSpacing } from "@/theme/spacing";
+import { type ThemeSpacing } from "@/theme";
 import { Chapter } from "@/types";
-import { LOADING_ANIM } from "@/constants";
-import LottieView from "lottie-react-native";
-import { scale } from "react-native-size-matters";
 
 const formatContinueReadingParams = (lastRead: LastRead) => ({
   pathname: "/quran-detail/[id]" as const,
@@ -191,8 +191,8 @@ const createStyles = (spacing: ThemeSpacing) =>
       flex: 1,
     },
     lottieLoader: {
-      width: scale(200),
-      height: scale(200),
+      width: rs.space(200),
+      height: rs.space(200),
     },
     bottomSpacer: {
       height: spacing.vXxl,

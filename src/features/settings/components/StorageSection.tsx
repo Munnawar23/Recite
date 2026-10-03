@@ -1,9 +1,9 @@
 import {
   SectionTitle,
-  SettingsItemCard,
   DeleteConfirmationModal,
   MessageModal,
 } from "@/components";
+import SettingsItemCard from "./SettingsItemCard";
 import { useDownloadsStore } from "@/store/downloadsStore";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import { deleteChapterDownload } from "@/services/downloadService";

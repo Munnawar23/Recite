@@ -2,7 +2,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { verticalScale } from "react-native-size-matters";
 
 import AudioPlayer from "../components/AudioPlayer";
 import Header from "../components/Header";

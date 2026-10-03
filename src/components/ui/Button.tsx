@@ -1,3 +1,4 @@
+import { rs, scale } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,10 +9,9 @@ import {
   Pressable,
   StyleProp,
   StyleSheet,
-  Text,
   ViewStyle,
 } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { AppText } from "./AppText";
 
 export interface ButtonProps {
   title?: string;
@@ -39,8 +39,8 @@ export function Button({
   textStyle,
 }: ButtonProps) {
   const { t } = useTranslation();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
-  const styles = createStyles(colors, fontFamily, fontSize, spacing);
+  const { colors, spacing } = useAppTheme();
+  const styles = createStyles(colors, spacing);
   const buttonTitle = tx ? t(tx, txOptions) : title;
 
   const handlePress = () => {
@@ -64,12 +64,20 @@ export function Button({
       ) : (
         <>
           {icon && (
-            <Ionicons name={icon} size={scale(18)} color={colors.card} />
+            <Ionicons name={icon} size={rs.icon(18)} color={colors.card} />
           )}
           {buttonTitle ? (
-            <Text style={[styles.text, textStyle]} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.85}>
+            <AppText
+              variant="body"
+              color="card"
+              family="title"
+              style={[styles.text, textStyle]}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.85}
+            >
               {buttonTitle}
-            </Text>
+            </AppText>
           ) : null}
           {children}
         </>
@@ -78,14 +86,14 @@ export function Button({
   );
 }
 
-const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any) =>
+const createStyles = (colors: any, spacing: any) =>
   StyleSheet.create({
     button: {
       width: "100%",
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
-      borderRadius: scale(12),
+      borderRadius: rs.space(12),
       paddingVertical: spacing.vMd,
       paddingHorizontal: spacing.md,
       gap: spacing.xs,
@@ -100,8 +108,6 @@ const createStyles = (colors: any, fontFamily: any, fontSize: any, spacing: any)
     },
     text: {
       color: colors.card,
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.body,
     },
   });
 

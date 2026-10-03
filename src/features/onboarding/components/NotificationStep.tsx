@@ -1,12 +1,12 @@
+import { AppText, MessageModal } from "@/components";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useNotificationStore } from "@/store/notificationStore";
 import { NotificationService } from "@/services/notificationService";
-import { MessageModal } from "@/components";
+import { useNotificationStore } from "@/store/notificationStore";
 import { Ionicons } from "@expo/vector-icons";
-import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { useTranslation } from "react-i18next";
+import { FlatList, StyleSheet, View } from "react-native";
 import { OnboardingStepWrapper } from "./OnboardingStepWrapper";
 
 interface NotificationStepProps {
@@ -18,7 +18,7 @@ const BENEFITS = ["onboarding.notifications.benefit1", "onboarding.notifications
 
 export function NotificationStep({ onNext, onBack }: NotificationStepProps) {
   const { t } = useTranslation();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
   const { isDailyReminderEnabled, toggleDailyReminder } = useNotificationStore();
   const [isLoading, setIsLoading] = useState(false);
   const [showBlockedModal, setShowBlockedModal] = useState(false);
@@ -34,15 +34,13 @@ export function NotificationStep({ onNext, onBack }: NotificationStepProps) {
 
     if (result === 'blocked') {
       setShowBlockedModal(true);
-      // Don't advance — let user fix the permission first
       return;
     }
 
-    // 'enabled' or 'denied' — move forward either way
     onNext();
   };
 
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const S = createStyles(colors, spacing);
 
   return (
     <>
@@ -75,22 +73,24 @@ export function NotificationStep({ onNext, onBack }: NotificationStepProps) {
               <View style={S.checkCircle}>
                 <Ionicons
                   name="checkmark"
-                  size={scale(14)}
+                  size={rs.icon(14)}
                   color={colors.primary}
                 />
               </View>
-              <Text style={S.benefitText}>{t(key)}</Text>
+              <AppText variant="bodyLg" color="text" style={S.benefitText}>
+                {t(key)}
+              </AppText>
             </View>
           )}
         />
 
         {/* Skip hint */}
-        <Text style={S.hintText}>
+        <AppText variant="bodyLg" color="subtext" align="center" style={S.hintText}>
           {t(
             "onboarding.notifications.skipHint",
             "You can always enable this later in Settings",
           )}
-        </Text>
+        </AppText>
       </OnboardingStepWrapper>
 
       <MessageModal
@@ -117,32 +117,30 @@ export function NotificationStep({ onNext, onBack }: NotificationStepProps) {
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
 ) =>
   StyleSheet.create({
     benefitsList: {
       flexGrow: 0,
       backgroundColor: colors.card,
-      borderRadius: scale(16),
-      padding: scale(18),
+      borderRadius: rs.space(16),
+      padding: rs.space(18),
       borderWidth: 1,
       borderColor: colors.border,
-      marginBottom: verticalScale(16),
+      marginBottom: rs.space(16),
     },
     itemSeparator: {
-      height: verticalScale(8),
+      height: rs.space(8),
     },
     benefitRow: {
       flexDirection: "row",
       alignItems: "center",
-      gap: scale(14),
+      gap: rs.space(14),
     },
     checkCircle: {
-      width: scale(26),
-      height: scale(26),
-      borderRadius: scale(13),
+      width: rs.space(26),
+      height: rs.space(26),
+      borderRadius: rs.space(13),
       backgroundColor: colors.primary + "18",
       alignItems: "center",
       justifyContent: "center",
@@ -151,34 +149,9 @@ const createStyles = (
     },
     benefitText: {
       flex: 1,
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg,
-      color: colors.text,
-    },
-    successBadge: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: scale(6),
-      backgroundColor: colors.primary + "18",
-      borderRadius: scale(10),
-      paddingVertical: verticalScale(8),
-      paddingHorizontal: scale(14),
-      marginBottom: verticalScale(8),
-      borderWidth: 1,
-      borderColor: colors.primary + "30",
-    },
-    successText: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.body,
-      color: colors.primary,
     },
     hintText: {
-      textAlign: "center",
-      fontFamily: fontFamily.text,
-      fontSize: fontSize.bodyLg,
-      color: colors.subtext,
-      marginTop: verticalScale(6),
+      marginTop: rs.space(6),
     },
   });
 

@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, type ViewStyle, LayoutChangeEvent, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  type ViewStyle,
+  LayoutChangeEvent,
+  Dimensions,
+} from "react-native";
 import { Haptics } from "@/lib/haptics";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { scale, verticalScale } from "react-native-size-matters";
+import { rs } from "@/helpers/responsiveHelper";
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -11,6 +18,7 @@ import Animated, {
   type WithSpringConfig,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { AppText } from "./AppText";
 
 export interface TabOption {
   label: string;
@@ -42,16 +50,17 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
   onTabChange,
   containerStyle,
 }) => {
-  const { colors, fontFamily, fontSize, activeScheme, spacing } = useAppTheme();
+  const { colors, activeScheme, spacing } = useAppTheme();
   const isDark = activeScheme === "dark";
 
-  // Pre-calculate estimated widths to prevent 1-2s delay on mount
+  // Pre-calculate estimated widths to prevent delay on mount
   const estimatedContainerWidth = SCREEN_WIDTH - spacing.screenPadding * 2;
-  const estimatedTabWidth = (estimatedContainerWidth - scale(8)) / tabs.length;
+  const estimatedTabWidth = (estimatedContainerWidth - rs.space(8)) / tabs.length;
 
   const [containerWidth, setContainerWidth] = useState(0);
   const activeIndex = Math.max(tabs.findIndex((t) => t.value === activeTab), 0);
-  const tabWidth = containerWidth > 0 ? (containerWidth - scale(8)) / tabs.length : estimatedTabWidth;
+  const tabWidth =
+    containerWidth > 0 ? (containerWidth - rs.space(8)) / tabs.length : estimatedTabWidth;
 
   const translateX = useSharedValue(activeIndex * estimatedTabWidth);
   const scaleAnim = useSharedValue(1);
@@ -60,7 +69,6 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
   useEffect(() => {
     const targetX = activeIndex * tabWidth;
     if (!isInitialized.current) {
-      // Direct assignment on first layout calculation to avoid spring delay on mount
       translateX.value = targetX;
       isInitialized.current = true;
     } else {
@@ -106,7 +114,6 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
       }
     });
 
-  // All colors computed fresh on every render — no stale closure issue
   const trackBg = isDark ? "rgba(255,255,255,0.06)" : colors.border + "70";
   const pillBg = isDark ? "rgba(255,255,255,0.15)" : colors.card;
   const activeTxtColor = colors.primary;
@@ -128,7 +135,6 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
             style={styles.tabContainer}
             onLayout={(e: LayoutChangeEvent) => setContainerWidth(e.nativeEvent.layout.width)}
           >
-            {/* Render active pill immediately to prevent flashing/delay */}
             <Animated.View
               style={[
                 styles.activePill,
@@ -151,15 +157,13 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({
                     }
                   }}
                 >
-                  <Text
-                    style={{
-                      fontSize: fontSize.body,
-                      fontFamily: isActive ? fontFamily.title : fontFamily.text,
-                      color: isActive ? activeTxtColor : inactiveTxtColor,
-                    }}
+                  <AppText
+                    variant="body"
+                    family={isActive ? "title" : "text"}
+                    color={isActive ? activeTxtColor : inactiveTxtColor}
                   >
                     {tab.label}
-                  </Text>
+                  </AppText>
                 </TouchableOpacity>
               );
             })}
@@ -174,32 +178,30 @@ export default TabSwitcher;
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: verticalScale(2),
+    paddingBottom: rs.space(2),
   },
   track: {
-    borderRadius: scale(14),
+    borderRadius: rs.space(14),
     overflow: "hidden",
     borderWidth: 1,
   },
   tabContainer: {
     flexDirection: "row",
-    padding: scale(4),
+    padding: rs.space(4),
     position: "relative",
   },
   activePill: {
     position: "absolute",
-    top: scale(4),
-    bottom: scale(4),
-    left: scale(4),
-    borderRadius: scale(10),
+    top: rs.space(4),
+    bottom: rs.space(4),
+    left: rs.space(4),
+    borderRadius: rs.space(10),
   },
   tab: {
     flex: 1,
-    paddingVertical: verticalScale(10),
+    paddingVertical: rs.space(10),
     alignItems: "center",
     justifyContent: "center",
     zIndex: 1,
   },
 });
-
-

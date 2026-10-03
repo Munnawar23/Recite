@@ -1,11 +1,13 @@
+import { AppText } from "@/components";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { SUPPORTED_LANGUAGES, SupportedLanguageCode } from "@/i18n";
 import { Haptics } from "@/lib/haptics";
 import { useLanguageStore } from "@/store/languageStore";
 import { Ionicons } from "@expo/vector-icons";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { OnboardingStepWrapper } from "./OnboardingStepWrapper";
 
 interface AppLanguageStepProps {
@@ -15,9 +17,9 @@ interface AppLanguageStepProps {
 export function AppLanguageStep({ onNext }: AppLanguageStepProps) {
   const { t } = useTranslation();
   const { language, setLanguage } = useLanguageStore();
-  const { colors, fontFamily, fontSize, spacing } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
 
-  const S = createStyles(colors, fontFamily, fontSize, spacing);
+  const S = createStyles(colors, spacing);
 
   return (
     <OnboardingStepWrapper
@@ -46,13 +48,17 @@ export function AppLanguageStep({ onNext }: AppLanguageStepProps) {
               }}
               activeOpacity={0.7}
             >
-              <Text style={[S.languageLabel, isSelected && S.selectedLabel]}>
+              <AppText
+                variant="bodyLg"
+                family="title"
+                color={isSelected ? "primary" : "text"}
+              >
                 {t(`languages.${lang.code}`, lang.label)}
-              </Text>
+              </AppText>
               {isSelected && (
                 <Ionicons
                   name="checkmark-circle"
-                  size={scale(20)}
+                  size={rs.icon(20)}
                   color={colors.primary}
                 />
               )}
@@ -66,37 +72,27 @@ export function AppLanguageStep({ onNext }: AppLanguageStepProps) {
 
 const createStyles = (
   colors: any,
-  fontFamily: any,
-  fontSize: any,
   spacing: any,
 ) =>
   StyleSheet.create({
     listContainer: {
       gap: spacing.vSm,
-      paddingBottom: verticalScale(12),
+      paddingBottom: rs.space(12),
     },
     languageItem: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
       backgroundColor: colors.card,
-      borderRadius: scale(12),
-      paddingHorizontal: scale(16),
-      paddingVertical: verticalScale(14),
+      borderRadius: rs.space(12),
+      paddingHorizontal: rs.space(16),
+      paddingVertical: rs.space(14),
       borderWidth: 1,
       borderColor: colors.border,
     },
     selectedItem: {
       borderColor: colors.primary,
       backgroundColor: colors.primary + "12",
-    },
-    languageLabel: {
-      fontFamily: fontFamily.title,
-      fontSize: fontSize.bodyLg,
-      color: colors.text,
-    },
-    selectedLabel: {
-      color: colors.primary,
     },
   });
 

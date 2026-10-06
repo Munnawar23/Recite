@@ -1,19 +1,11 @@
 import { CommonModal } from "@/components";
+import { TRANSLATION_OPTIONS } from "@/constants";
 import { rs, verticalScale } from "@/helpers/responsiveHelper";
 import { Haptics } from "@/lib/haptics";
 import React from "react";
 import { View } from "react-native";
-import BismillahBanner from "./BismillahBanner";
+import BismillahCard from "./BismillahCard";
 import DownloadCard from "./DownloadCard";
-
-const TRANSLATION_OPTIONS = [
-  { label: "Arabic Only", value: "0" },
-  { label: "English (Saheeh)", value: "20" },
-  { label: "Urdu (Maududi)", value: "97" },
-  { label: "Hindi (Azizul Haque)", value: "122" },
-  { label: "Indonesian (Ministry)", value: "33" },
-  { label: "Bengali (Taisirul)", value: "161" },
-];
 
 interface VerseListHeaderProps {
   chapterId: number;
@@ -71,7 +63,10 @@ function VerseListHeader({
         versesCount={versesCount}
         chapterType={chapterType}
       />
-      <BismillahBanner chapterId={chapterId} />
+      <BismillahCard
+        chapterId={chapterId}
+        selectedTransId={selectedTransId}
+      />
       <View style={{ height: rs.space(8) }} />
     </View>
   );

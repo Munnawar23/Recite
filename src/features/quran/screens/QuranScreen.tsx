@@ -6,7 +6,7 @@ import { RefreshControl, RefreshControlProps, StyleSheet, View } from "react-nat
 import LottieView from "lottie-react-native";
 
 import { EmptyState, Header, NoConnection } from "@/components";
-import { LOADING_ANIM } from "@/constants";
+import { getLocalizedSurah, LOADING_ANIM } from "@/constants";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import QuranCard from "@/features/quran/components/QuranCard";
 import SearchBar from "@/features/quran/components/SearchBar";
@@ -14,15 +14,20 @@ import { useChapterSearch } from "@/features/quran/hooks/useChapterSearch";
 import { useQuranChapters } from "@/features/quran/hooks/useQuranChapters";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useLanguageStore } from "@/store/languageStore";
 import { LastRead, useReadingProgressStore } from "@/store/readingProgressStore";
 import { type ThemeSpacing } from "@/theme";
 import { Chapter } from "@/types";
 
-const formatContinueReadingParams = (lastRead: LastRead) => ({
+const formatContinueReadingParams = (lastRead: LastRead, language: string) => ({
   pathname: "/quran-detail/[id]" as const,
   params: {
     id: String(lastRead.surahNumber),
-    englishName: lastRead.surahName,
+    englishName: getLocalizedSurah(
+      lastRead.surahNumber,
+      language,
+      lastRead.surahName,
+    ).name,
     arabicName: lastRead.arabicName,
     versesCount: lastRead.versesCount,
     type: lastRead.type,
@@ -65,10 +70,15 @@ export default function QuranScreen() {
     }
   }, [refetch]);
 
+  const language = useLanguageStore((state) => state.language);
+  const localizedLastReadName = lastRead
+    ? getLocalizedSurah(lastRead.surahNumber, language, lastRead.surahName).name
+    : "";
+
   const handleContinueReading = useCallback(() => {
     if (!lastRead) return;
-    router.push(formatContinueReadingParams(lastRead));
-  }, [lastRead, router]);
+    router.push(formatContinueReadingParams(lastRead, language));
+  }, [lastRead, router, language]);
 
   const keyExtractor = useCallback((item: Chapter) => String(item.id), []);
 
@@ -94,7 +104,7 @@ export default function QuranScreen() {
       <>
         {lastRead ? (
           <ContinueReadingCard
-            surahName={lastRead.surahName}
+            surahName={localizedLastReadName}
             verseNumber={lastRead.verseNumber}
             onPress={handleContinueReading}
           />
@@ -103,7 +113,7 @@ export default function QuranScreen() {
         )}
       </>
     ),
-    [lastRead, handleContinueReading, styles],
+    [lastRead, localizedLastReadName, handleContinueReading, styles],
   );
 
   const renderListEmpty = useCallback(() => {

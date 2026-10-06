@@ -6,10 +6,12 @@ import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { EmptyState, Header, SectionTitle } from "@/components";
+import { getLocalizedSurah } from "@/constants";
 import PrayerTimes from "@/features/home/components/PrayerTimes";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLocation } from "@/hooks/useLocation";
+import { useLanguageStore } from "@/store/languageStore";
 import { useReadingProgressStore } from "@/store/readingProgressStore";
 import { type ThemeSpacing } from "@/theme";
 import DailyVerse from "../components/DailyVerse";
@@ -47,7 +49,7 @@ export default function HomeScreen() {
         queryClient.invalidateQueries({ queryKey: ["user-location"] }),
         queryClient.invalidateQueries({ queryKey: ["hijri-date"] }),
         queryClient.invalidateQueries({ queryKey: ["prayer-times"] }),
-        queryClient.invalidateQueries({ queryKey: ["daily-verse"] }),
+        queryClient.invalidateQueries({ queryKey: ["dailyVerse"] }),
       ]);
     } catch (error) {
       console.warn("Pull-to-refresh failed:", error);
@@ -115,23 +117,32 @@ export default function HomeScreen() {
           />
 
           {lastRead ? (
-            <ContinueReadingCard
-              surahName={lastRead.surahName}
-              verseNumber={lastRead.verseNumber}
-              onPress={() =>
-                router.push({
-                  pathname: "/quran-detail/[id]" as const,
-                  params: {
-                    id: String(lastRead.surahNumber),
-                    englishName: lastRead.surahName,
-                    arabicName: lastRead.arabicName,
-                    versesCount: lastRead.versesCount,
-                    type: lastRead.type,
-                    initialVerse: String(lastRead.verseNumber),
-                  },
-                })
-              }
-            />
+            (() => {
+              const localizedName = getLocalizedSurah(
+                lastRead.surahNumber,
+                useLanguageStore.getState().language,
+                lastRead.surahName,
+              ).name;
+              return (
+                <ContinueReadingCard
+                  surahName={localizedName}
+                  verseNumber={lastRead.verseNumber}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/quran-detail/[id]" as const,
+                      params: {
+                        id: String(lastRead.surahNumber),
+                        englishName: localizedName,
+                        arabicName: lastRead.arabicName,
+                        versesCount: lastRead.versesCount,
+                        type: lastRead.type,
+                        initialVerse: String(lastRead.verseNumber),
+                      },
+                    })
+                  }
+                />
+              );
+            })()
           ) : (
             <EmptyState
               icon="book-outline"

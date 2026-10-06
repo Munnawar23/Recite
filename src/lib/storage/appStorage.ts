@@ -13,6 +13,7 @@ export const STORAGE_KEYS = {
   READING_PROGRESS: "reading-progress-storage",
   LOCATION: "user-location-storage",
   QUERY_CACHE: "RECITE_QUERY_CACHE_V2",
+  QURAN_SETTINGS: "quran-settings-storage",
 } as const;
 
 export const appStorage = {

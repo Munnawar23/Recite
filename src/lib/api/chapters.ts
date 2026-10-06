@@ -30,10 +30,12 @@ function mapChapter(ch: ApiChapterDto): Chapter {
 }
 
 /** Fetches full list of 114 Quran chapters */
-export const getChapters = async (): Promise<Chapter[]> => {
+export const getChapters = async (
+  language: string = DEFAULT_LANGUAGE,
+): Promise<Chapter[]> => {
   const { data } = await quranApiClient.get<ChaptersResponse>("/chapters", {
     params: {
-      language: DEFAULT_LANGUAGE,
+      language,
     },
   });
 

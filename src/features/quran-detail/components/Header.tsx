@@ -1,9 +1,11 @@
 import { AppText } from "@/components";
+import { getLocalizedSurah } from "@/constants";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { useFavoritesStore } from "@/store/favoritesStore";
+import { useLanguageStore } from "@/store/languageStore";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { useRouter } from "expo-router";
@@ -36,6 +38,11 @@ function DetailHeader({
   const router = useRouter();
   const { colors, activeScheme } = useAppTheme();
   const { paddingTop } = useAppSafeAreaInsets();
+  const language = useLanguageStore((state) => state.language);
+  const localizedSurahName = useMemo(
+    () => getLocalizedSurah(chapterId, language, englishName).name,
+    [chapterId, language, englishName],
+  );
   const isDark = activeScheme === "dark";
 
   const isFavorite = useFavoritesStore(
@@ -62,10 +69,10 @@ function DetailHeader({
         ? "Added to Favorites"
         : "Removed from Favorites",
       text2: !isFavorite
-        ? `${englishName || `Surah ${chapterId}`} has been saved to your favorites.`
-        : `${englishName || `Surah ${chapterId}`} removed from your favorites.`,
+        ? `${localizedSurahName || `Surah ${chapterId}`} has been saved to your favorites.`
+        : `${localizedSurahName || `Surah ${chapterId}`} removed from your favorites.`,
     });
-  }, [toggleFavorite, chapterId, isFavorite, englishName]);
+  }, [toggleFavorite, chapterId, isFavorite, localizedSurahName]);
 
   const androidBgStyle = useMemo(
     () => [
@@ -120,7 +127,7 @@ function DetailHeader({
             color="text"
             align="center"
           >
-            {`Surah ${chapterId}: ${englishName || "—"}`}
+            {`Surah ${chapterId}: ${localizedSurahName || "—"}`}
           </AppText>
           <AppText
             variant="caption"

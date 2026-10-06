@@ -1,13 +1,7 @@
 import { quranApiClient } from "./client";
+import { TRANSLATION_IDS } from "@/constants";
 
-export const TRANSLATION_IDS: Record<string, number> = {
-  en: 20, // Saheeh International
-  ur: 54, // Maulana Muhammad Junagarhi
-  hi: 122, // Maulana Azizul Haque al-Umari (Correct Official Hindi ID)
-  id: 33, // Indonesian Islamic Affairs Ministry
-  bn: 161, // Taisirul Quran (Correct Official Bengali ID)
-  ar: 20, // English fallback for Arabic UI tab
-};
+export { TRANSLATION_IDS };
 
 export const getRandomVerse = async (
   lang: string = "en",

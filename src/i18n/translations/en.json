@@ -84,6 +84,11 @@
     "noResultsTitle": "No Surahs Found",
     "noResultsSubtitle": "Try searching with a different keyword.",
     "errorMessage": "Failed to load Quran chapters. Tap to try again.",
+    "versesError": {
+      "title": "Failed to Load",
+      "subtitle": "Check your internet connection and try again.",
+      "retry": "Retry"
+    },
     "downloadCard": {
       "download": "Download",
       "downloading": "Downloading",
@@ -268,7 +273,9 @@
     "ur": "Urdu",
     "hi": "Hindi",
     "id": "Indonesian",
-    "bn": "Bengali"
+    "bn": "Bengali",
+    "ms": "Malay",
+    "ru": "Russian"
   },
   "qiblaScreen": {
     "title": "Qibla",

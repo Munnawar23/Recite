@@ -1,8 +1,9 @@
+import { DEFAULT_RECITER_ID } from "@/constants";
 import { quranApiClient } from "./client";
 
 export const getChapterAudio = async (
   chapterId: number,
-  reciterId: number = 7,
+  reciterId: number = DEFAULT_RECITER_ID,
 ) => {
   const { data } = await quranApiClient.get(
     `/chapter_recitations/${reciterId}/${chapterId}?segments=true`,

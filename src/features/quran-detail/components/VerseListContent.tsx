@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { FlashList, ListRenderItemInfo } from "@shopify/flash-list";
 import LottieView from "lottie-react-native";
 import React, { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   RefreshControl,
   StyleSheet,
@@ -82,6 +83,7 @@ function VerseListContent({
   versesCount,
   chapterType,
 }: VerseListContentProps) {
+  const { t } = useTranslation();
   const { colors } = useAppTheme();
   const { paddingTop } = useAppSafeAreaInsets();
 
@@ -179,14 +181,17 @@ function VerseListContent({
           color={colors.subtext}
         />
         <AppText variant="title" family="title" color="text">
-          Failed to Load
+          {t("quran.versesError.title", "Failed to Load")}
         </AppText>
         <AppText variant="body" color="subtext" align="center">
-          Check your internet connection and try again.
+          {t(
+            "quran.versesError.subtitle",
+            "Check your internet connection and try again.",
+          )}
         </AppText>
         <TouchableOpacity style={S.retryButton} onPress={refetch}>
           <AppText variant="body" family="title" color="card">
-            Retry
+            {t("quran.versesError.retry", "Retry")}
           </AppText>
         </TouchableOpacity>
       </View>

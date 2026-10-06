@@ -1,4 +1,6 @@
+import { TRANSLATION_IDS } from "@/constants";
 import { appStorage, STORAGE_KEYS, zustandStorage } from "@/lib/storage/appStorage";
+import { useQuranSettingsStore } from "./quranSettingsStore";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import i18n, { SupportedLanguageCode } from "@/i18n";
@@ -18,6 +20,15 @@ export const useLanguageStore = create<LanguageState>()(
         // Also persist the plain language code so languageDetector
         // can read it correctly on the next cold start / cache clear.
         appStorage.setItem(STORAGE_KEYS.LANGUAGE, lang);
+
+        // Sync Quran detail translation dropdown to match the newly selected language
+        const matchedTransId = TRANSLATION_IDS[lang];
+        if (matchedTransId) {
+          useQuranSettingsStore
+            .getState()
+            .setTranslationId(String(matchedTransId));
+        }
+
         set({ language: lang });
       },
       t: (key: string) => i18n.t(key),

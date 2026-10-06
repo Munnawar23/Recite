@@ -13,7 +13,11 @@ export const RECITERS_IMAGES: Record<number, any> = {
   7: require("../../assets/images/reciters/mishary.jpg"),
   2: require("../../assets/images/reciters/abdulbaset.webp"),
   4: require("../../assets/images/reciters/shatri.webp"),
-  12: require("../../assets/images/reciters/husary.webp"),
+  6: require("../../assets/images/reciters/husary.webp"),
   5: require("../../assets/images/reciters/rifai.webp"),
-  161: require("../../assets/images/reciters/yasser.webp"),
+  174: require("../../assets/images/reciters/yasser.webp"),
+  10: require("../../assets/images/reciters/al-shuraim.webp"),
 };
+
+
+

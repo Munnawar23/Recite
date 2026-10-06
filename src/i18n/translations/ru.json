@@ -1,0 +1,335 @@
+{
+  "common": {
+    "welcome": "Добро пожаловать",
+    "settings": "Настройки",
+    "language": "Язык",
+    "selectLanguage": "Выберите язык",
+    "home": "Главная",
+    "recite": "Чтение",
+    "listen": "Слушать",
+    "reflect": "Размышлять",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "tryAgain": "Попробовать снова",
+    "retry": "Повторить",
+    "errorTitle": "Что-то пошло не так",
+    "errorMessage": "Не удалось загрузить данные. Нажмите, чтобы повторить попытку.",
+    "noConnectionTitle": "Нет подключения",
+    "noConnectionSubtitle": "Не удалось загрузить данные. Проверьте подключение к интернету.",
+    "offlineBanner": "Вы офлайн. Вы можете продолжать читать Коран и слушать скачанные суры.",
+    "offlineAudioPreviewTitle": "Офлайн-режим",
+    "offlineAudioPreviewMessage": "Для прослушивания нужен интернет. Скачанные суры доступны офлайн.",
+    "offlineReciterChangeMessage": "Для смены чтеца требуется подключение к интернету.",
+    "quran": "Коран",
+    "qibla": "Кибла",
+    "library": "Библиотека",
+    "back": "Назад"
+  },
+  "splash": {
+    "title": "Recite",
+    "subtitle": "Читай • Слушай • Размышляй"
+  },
+  "tabs": {
+    "home": "Главная",
+    "quran": "Священный Коран",
+    "qibla": "Кибла",
+    "library": "Библиотека",
+    "settings": "Настройки"
+  },
+  "home": {
+    "greeting": {
+      "title": "Ассаляму алейкум",
+      "subtitle": "Пусть ваш день будет наполнен благодатью"
+    },
+    "hijriCard": {
+      "badge": "Исламский календарь",
+      "yearSuffix": "г. х."
+    },
+    "sectionTitles": {
+      "prayerTimes": "Время намаза",
+      "dailyVerse": "Аят дня",
+      "continueReading": "Продолжить чтение"
+    },
+    "prayerNames": {
+      "fajr": "Фаджр",
+      "dhuhr": "Зухр",
+      "asr": "Аср",
+      "maghrib": "Магриб",
+      "isha": "Иша"
+    },
+    "locationNotice": {
+      "showingMecca": "Показано время для Мекки.",
+      "enableLocation": "Нажмите, чтобы включить геопозицию"
+    },
+    "dailyVerse": {
+      "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      "defaultTranslation": "Воистину, за каждой тягостью наступает облегчение.",
+      "defaultSource": "Сура Аш-Шарх · 94:6"
+    },
+    "continueReadingEmpty": {
+      "title": "Начните чтение",
+      "subtitle": "Откройте Коран, и ваш прогресс чтения сохранится здесь.",
+      "buttonLabel": "Открыть Коран"
+    }
+  },
+  "quran": {
+    "title": "Коран",
+    "subtitle": "Читайте, изучайте и слушайте Священный Коран",
+    "searchPlaceholder": "Поиск суры...",
+    "continueReadingTag": "ПРОДОЛЖИТЬ ЧТЕНИЕ",
+    "verseNumber": "Аят № {{number}}",
+    "versesCount": "{{count}} АЯТОВ",
+    "meccan": "МЕККАНСКАЯ",
+    "medinan": "МЕДИНСКАЯ",
+    "noResultsTitle": "Суры не найдены",
+    "noResultsSubtitle": "Попробуйте поискать по другому названию.",
+    "errorMessage": "Не удалось загрузить список сур. Нажмите, чтобы повторить попытку.",
+    "versesError": {
+      "title": "Не удалось загрузить",
+      "subtitle": "Проверьте подключение к интернету и попробуйте снова.",
+      "retry": "Повторить"
+    },
+    "downloadCard": {
+      "download": "Скачать",
+      "downloading": "Скачивание",
+      "downloadingProgress": "Скачивание • {{written}} / {{total}} МБ ({{progress}}%)",
+      "paused": "Пауза • {{written}} / {{total}} МБ ({{progress}}%)",
+      "pause": "Приостановить",
+      "resume": "Продолжить",
+      "playingOffline": "Воспроизведение офлайн",
+      "playingOfflineTitle": "Воспроизведение офлайн",
+      "playingOnlineTitle": "Воспроизведение онлайн",
+      "deleteTitle": "Удалить аудио?",
+      "deleteDesc": "Вы уверены, что хотите удалить аудиозапись этой суры из памяти устройства?",
+      "notReadyTitle": "Аудио готовится",
+      "notReadyBody": "Данные аудио загружаются. Пожалуйста, подождите несколько секунд.",
+      "errorTitle": "Ошибка скачивания",
+      "errorBody": "Не удалось завершить скачивание. Проверьте интернет и попробуйте снова."
+    }
+  },
+  "errorBoundary": {
+    "title": "Что-то пошло не так",
+    "subtitle": "В приложении произошла неожиданная ошибка. Вы можете перезапустить приложение или обновить этот экран."
+  },
+  "settings": {
+    "title": "Настройки",
+    "subtitle": "Оформление и параметры приложения",
+    "sections": {
+      "displayLanguage": "Экран и язык",
+      "notifications": "Уведомления",
+      "storage": "Хранилище",
+      "helpSupport": "Помощь и поддержка",
+      "aboutUs": "О приложении"
+    },
+    "display": {
+      "title": "Настройки экрана",
+      "subtitle": "Тема, шрифты и размер текста",
+      "optionsTitle": "Параметры отображения",
+      "optionsSubtitle": "Тема оформления и размер шрифта",
+      "appTheme": "Тема приложения",
+      "appFontSize": "Размер шрифта приложения",
+      "quranFontSize": "Размер арабского шрифта",
+      "livePreview": "Предпросмотр",
+      "sampleTranslation": "С именем Аллаха, Милостивого, Милосердного",
+      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "theme": {
+        "light": "Светлая",
+        "dark": "Темная",
+        "system": "Как в системе"
+      },
+      "fontSize": {
+        "small": "Маленький",
+        "default": "Обычный",
+        "large": "Большой"
+      }
+    },
+    "languages": {
+      "title": "Язык и аудио",
+      "subtitle": "Язык интерфейса, перевод и чтец",
+      "optionsTitle": "Параметры языка и звука",
+      "optionsSubtitle": "Язык, перевод и чтец",
+      "appLanguageSection": "Язык приложения",
+      "appLanguageTitle": "Язык интерфейса",
+      "appLanguageSubtitle": "Основной язык для меню и разделов приложения",
+      "appLanguagePlaceholder": "Выберите язык",
+      "quranTranslationSection": "Перевод Корана",
+      "quranTranslationTitle": "Перевод по умолчанию",
+      "quranTranslationSubtitle": "Выберите перевод смыслов, отображаемый для аятов",
+      "quranTranslationPlaceholder": "Выберите перевод",
+      "quranReciterSection": "Чтец Корана",
+      "quranReciterTitle": "Чтец по умолчанию",
+      "quranReciterSubtitle": "Выберите голос чтеца для воспроизведения сур",
+      "quranReciterPlaceholder": "Выберите чтеца",
+      "translations": {
+        "arabicOnly": "Только арабский текст",
+        "english": "Английский (Saheeh)",
+        "urdu": "Урду (Maududi)",
+        "hindi": "Хинди (Azizul Haque)",
+        "indonesian": "Индонезийский (Ministry)",
+        "bengali": "Бенгальский (Taisirul)",
+        "malay": "Малайский (Basmeih)",
+        "russian": "Русский (Эльмир Кулиев)"
+      }
+    },
+    "notifications": {
+      "title": "Уведомления",
+      "enableTitle": "Включить уведомления",
+      "enabled": "Уведомления включены",
+      "disabled": "Выключены",
+      "dailyReminderTitle": "Ежедневное напоминание",
+      "dailyReminderSubtitle": "Получать напоминания каждый день",
+      "toastEnabledTitle": "Уведомления включены",
+      "toastEnabledDesc": "Ежедневное напоминание успешно включено.",
+      "toastDisabledTitle": "Уведомления выключены",
+      "toastDisabledDesc": "Ежедневное напоминание отключено.",
+      "blockedTitle": "Уведомления заблокированы",
+      "blockedMessage": "Уведомления отключены в системе. Разрешите их в настройках телефона.",
+      "openSettings": "Открыть настройки"
+    },
+    "storage": {
+      "title": "Хранилище",
+      "clearDownloadsTitle": "Удалить все скачанные суры",
+      "clearDownloadsSubtitleEmpty": "Нет скачанных сур (0 МБ)",
+      "clearDownloadsSubtitle": "Скачано сур: {{count}} ({{size}})",
+      "noDownloadsTitle": "Нет загрузок",
+      "noDownloadsMessage": "У вас нет сохраненных сур для удаления.",
+      "confirmClearDownloadsTitle": "Удалить все скачанные файлы?",
+      "confirmClearDownloadsDesc": "Вы действительно хотите удалить {{count}} скачанных сур ({{size}}) из памяти устройства?",
+      "toastClearedDownloadsTitle": "Загрузки удалены",
+      "toastClearedDownloadsDesc": "Все скачанные суры были успешно удалены.",
+      "clearFavoritesTitle": "Очистить избранное",
+      "clearFavoritesSubtitle": "В избранном: {{count}}",
+      "noFavoritesTitle": "Нет избранного",
+      "noFavoritesMessage": "Вы пока не добавили ни одной суры в избранное.",
+      "confirmClearFavoritesTitle": "Очистить список избранного?",
+      "confirmClearFavoritesDesc": "Вы уверены, что хотите удалить {{count}} сур из списка избранного?",
+      "toastClearedFavoritesTitle": "Избранное очищено",
+      "toastClearedFavoritesDesc": "Все суры удалены из избранного."
+    },
+    "helpSupport": {
+      "title": "Помощь и поддержка",
+      "contactTitle": "Связаться с поддержкой",
+      "contactEmail": "munawwarh48@gmail.com"
+    },
+    "about": {
+      "title": "О приложении",
+      "subtitle": "Бесплатное приложение Корана для каждого",
+      "appVersionTitle": "Версия приложения",
+      "appVersionSubtitle": "Версия {{version}}",
+      "aboutUsTitle": "О нас",
+      "aboutUsSubtitle": "Открытое сообщество и свободное приложение Корана",
+      "aboutUsContent": "Recite — это некоммерческий, полностью бесплатный проект, созданный для того, чтобы Священный Коран был доступен каждому без рекламы, подписок и платных ограничений.",
+      "aboutAppIntro": "Разработанное на современных открытых технологиях, приложение Recite предлагает качественные чтения, параллельные переводы на мировые языки и удобный быстрый поиск.",
+      "keyHighlights": "Главные возможности",
+      "featureRecitersTitle": "Красивые чтения",
+      "featureRecitersDesc": "Высокое качество звука от известных чтецов мира с воспроизведением каждого аята.",
+      "featureLanguagesTitle": "Многоязычные переводы",
+      "featureLanguagesDesc": "Удобное чтение параллельных переводов аятов на разные языки.",
+      "featurePrivacyTitle": "Полная конфиденциальность",
+      "featurePrivacyDesc": "Без отслеживания, рекламы и сбора персональных данных.",
+      "tagline": "Читай, слушай и размышляй над Кораном"
+    },
+    "language": {
+      "title": "Язык приложения",
+      "subtitle": "Выберите язык, на котором будет отображаться интерфейс."
+    },
+    "theme": {
+      "title": "Тема оформления",
+      "subtitle": "Выберите светлую, темную тему или синхронизацию с системой.",
+      "light": "Светлая",
+      "dark": "Темная",
+      "system": "Как в системе"
+    },
+    "fontSize": {
+      "title": "Размер текста",
+      "subtitle": "Настройте удобный для чтения размер шрифта во всем приложении.",
+      "small": "Маленький",
+      "default": "Обычный",
+      "large": "Большой"
+    },
+    "errorTest": {
+      "title": "Тест Error Boundary",
+      "subtitle": "Проверьте, как приложение реагирует на возникновение ошибок.",
+      "button": "Симулировать сбой приложения"
+    }
+  },
+  "library": {
+    "title": "Библиотека",
+    "subtitle": "Ваши сохраненные суры и скачанные файлы",
+    "tabs": {
+      "favorites": "Избранное",
+      "downloads": "Загрузки"
+    },
+    "emptyFavorites": {
+      "title": "В избранном пока пусто",
+      "subtitle": "Отмечайте понравившиеся суры и аяты, чтобы быстро находить их здесь."
+    },
+    "emptyDownloads": {
+      "title": "Нет скачанных файлов",
+      "subtitle": "Скачивайте суры, чтобы слушать их в любое время без интернета."
+    }
+  },
+  "languages": {
+    "en": "Английский",
+    "ar": "Арабский",
+    "ur": "Урду",
+    "hi": "Хинди",
+    "id": "Индонезийский",
+    "bn": "Бенгальский",
+    "ms": "Малайский",
+    "ru": "Русский"
+  },
+  "qiblaScreen": {
+    "title": "Кибла",
+    "subtitleWithCity": "Направление из города {{cityName}}",
+    "subtitleDefault": "Узнайте точное направление на Мекку",
+    "currentHeading": "Текущее направление",
+    "qiblaTarget": "Направление на Киблу: {{deg}}°",
+    "locationRequiredTitle": "Нужен доступ к геопозиции",
+    "locationRequiredSubtitle": "Геопозиция необходима для точного определения направления Киблы.",
+    "enableLocation": "Включить геопозицию"
+  },
+  "onboarding": {
+    "stepOf": "{{current}} из {{total}}",
+    "next": "Далее",
+    "skip": "Пропустить",
+    "getStarted": "Начать",
+    "language": {
+      "title": "Выберите язык",
+      "subtitle": "Выберите язык для меню и интерфейса приложения.",
+      "sectionLabel": "Язык приложения"
+    },
+    "preferences": {
+      "title": "Выберите чтеца Корана",
+      "subtitle": "Выберите голос чтеца, чье чтение вы хотите слушать.",
+      "translationLabel": "Перевод Корана",
+      "reciterLabel": "Чтец Корана"
+    },
+    "theme": {
+      "title": "Тема и экран",
+      "subtitle": "Настройте тему оформления и размер шрифта для комфортного чтения."
+    },
+    "notifications": {
+      "title": "Оставайтесь на связи",
+      "subtitle": "Включите ежедневные напоминания, чтобы не забывать читать Коран регулярно.",
+      "benefit1": "Ежедневные напоминания о чтении",
+      "benefit2": "Напоминания о времени намаза",
+      "benefit3": "Полезные напоминания и аяты",
+      "enableButton": "Включить уведомления",
+      "enabledStatus": "Уведомления включены",
+      "skipHint": "Вы всегда сможете включить их позже в Настройках"
+    },
+    "location": {
+      "title": "Точное время намаза",
+      "subtitle": "Разрешите доступ к местоположению для расчета времени намаза и поиска Киблы.",
+      "benefit1": "Точное расписание намаза для вашего города",
+      "benefit2": "Точный компас Киблы",
+      "benefit3": "Даты исламского календаря",
+      "enableButton": "Включить геопозицию",
+      "enabledStatus": "Геопозиция включена",
+      "skipHint": "Если пропустить, по умолчанию будет использоваться время Мекки",
+      "blockedTitle": "Доступ к геопозиции отключен",
+      "blockedMessage": "Геопозиция отключена. Вы можете разрешить доступ в настройках устройства."
+    }
+  }
+}

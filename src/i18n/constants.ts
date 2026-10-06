@@ -3,6 +3,8 @@ import bn from "./translations/bn.json";
 import en from "./translations/en.json";
 import hi from "./translations/hi.json";
 import indonesia from "./translations/id.json";
+import ms from "./translations/ms.json";
+import ru from "./translations/ru.json";
 import ur from "./translations/ur.json";
 
 export const DEFAULT_LANGUAGE = "en";
@@ -14,6 +16,8 @@ export const resources = Object.freeze({
   hi: { translation: hi },
   id: { translation: indonesia },
   bn: { translation: bn },
+  ms: { translation: ms },
+  ru: { translation: ru },
 } as const);
 
 export const SUPPORTED_LANGUAGES = Object.freeze([
@@ -23,6 +27,8 @@ export const SUPPORTED_LANGUAGES = Object.freeze([
   { code: "hi", label: "हिन्दी (Hindi)", isRTL: false },
   { code: "id", label: "Bahasa Indonesia", isRTL: false },
   { code: "bn", label: "বাংলা (Bengali)", isRTL: false },
+  { code: "ms", label: "Bahasa Melayu", isRTL: false },
+  { code: "ru", label: "Русский (Russian)", isRTL: false },
 ] as const);
 
 export type SupportedLanguageCode = (typeof SUPPORTED_LANGUAGES)[number]["code"];

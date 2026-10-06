@@ -1,23 +1,33 @@
 import { AppText } from "@/components";
+import { DEFAULT_TRANSLATION_ID_STRING, getBismillahTranslation } from "@/constants";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useFontStore } from "@/store/fontStore";
+import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-interface BismillahBannerProps {
+export interface BismillahCardProps {
   chapterId: number;
+  selectedTransId?: string;
 }
 
 const NO_BISMILLAH = [1, 9];
 
-export default function BismillahBanner({ chapterId }: BismillahBannerProps) {
+export default function BismillahCard({
+  chapterId,
+  selectedTransId,
+}: BismillahCardProps) {
   const { colors, fontSize } = useAppTheme();
   const { fontSizeScale } = useFontStore();
+  const storeTransId = useQuranSettingsStore((state) => state.translationId);
+
+  const activeTransId =
+    selectedTransId ?? storeTransId ?? DEFAULT_TRANSLATION_ID_STRING;
 
   let multiplier = 1.0;
-  if (fontSizeScale === "small") multiplier = 0.90;
+  if (fontSizeScale === "small") multiplier = 0.9;
   else if (fontSizeScale === "large") multiplier = 1.12;
 
   if (NO_BISMILLAH.includes(chapterId)) {
@@ -25,6 +35,7 @@ export default function BismillahBanner({ chapterId }: BismillahBannerProps) {
   }
 
   const gradientColors = colors.gradient;
+  const translationText = getBismillahTranslation(activeTransId);
 
   return (
     <View style={S.bismillahContainer}>
@@ -43,15 +54,17 @@ export default function BismillahBanner({ chapterId }: BismillahBannerProps) {
         >
           بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
         </AppText>
-        <AppText
-          semiBold
-          align="center"
-          color="rgba(255, 255, 255, 0.95)"
-          size={fontSize.bodyLg * multiplier}
-          lineHeight={fontSize.bodyLg * multiplier * 1.5}
-        >
-          In the name of Allah, the Most Gracious, the Most Merciful
-        </AppText>
+        {activeTransId !== "0" && Boolean(translationText) ? (
+          <AppText
+            semiBold
+            align="center"
+            color="rgba(255, 255, 255, 0.95)"
+            size={fontSize.bodyLg * multiplier}
+            lineHeight={fontSize.bodyLg * multiplier * 1.6}
+          >
+            {translationText}
+          </AppText>
+        ) : null}
       </LinearGradient>
     </View>
   );

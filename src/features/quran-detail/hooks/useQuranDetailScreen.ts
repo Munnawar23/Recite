@@ -1,3 +1,7 @@
+import {
+  DEFAULT_TRANSLATION_ID,
+  DEFAULT_TRANSLATION_ID_STRING,
+} from "@/constants";
 import { useActiveQuranDetail } from "@/features/quran-detail/hooks/useQuranDetail";
 import { useQuranDetailScroll } from "@/features/quran-detail/hooks/useQuranDetailScroll";
 import { useAppTheme } from "@/hooks/useAppTheme";
@@ -36,10 +40,12 @@ export function useQuranDetailScreen() {
   const setTranslationId = useQuranSettingsStore(
     (state) => state.setTranslationId,
   );
-  const selectedTransId = translationId || "20";
+  const selectedTransId = translationId || DEFAULT_TRANSLATION_ID_STRING;
 
   const queryTransId =
-    selectedTransId === "0" ? 20 : parseInt(selectedTransId, 10);
+    selectedTransId === "0"
+      ? DEFAULT_TRANSLATION_ID
+      : parseInt(selectedTransId, 10);
   const {
     data: verses = [],
     isLoading,

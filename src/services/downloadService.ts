@@ -1,3 +1,4 @@
+import { ALL_TRANSLATION_IDS } from "@/constants";
 import { getChapterAudio, getVersesByChapter } from "@/lib/api";
 import * as FileSystem from "expo-file-system/legacy";
 
@@ -5,9 +6,6 @@ import * as FileSystem from "expo-file-system/legacy";
 
 const AUDIO_DIR = `${FileSystem.documentDirectory}audio/`;
 const TEXT_DIR = `${FileSystem.documentDirectory}text/`;
-
-// All 6 translation IDs available in the app
-const ALL_TRANSLATION_IDS = [20, 97, 122, 33, 161, 131];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 

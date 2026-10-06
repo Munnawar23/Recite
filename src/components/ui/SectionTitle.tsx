@@ -37,6 +37,7 @@ export default function SectionTitle({
           color="primary"
           family="title"
           letterSpacing={0.4}
+          numberOfLines={1}
         >
           {label}
         </AppText>

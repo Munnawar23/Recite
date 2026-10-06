@@ -6,34 +6,34 @@
     "selectLanguage": "Pilih Bahasa",
     "home": "Beranda",
     "recite": "Baca",
-    "listen": "Dengar",
-    "reflect": "Merenung",
+    "listen": "Dengarkan",
+    "reflect": "Tadabur",
     "save": "Simpan",
     "cancel": "Batal",
     "tryAgain": "Coba Lagi",
-    "retry": "Coba Lagi",
-    "errorTitle": "Ada yang Salah",
+    "retry": "Ulangi",
+    "errorTitle": "Terjadi Kesalahan",
     "errorMessage": "Gagal memuat data. Ketuk untuk mencoba lagi.",
-    "noConnectionTitle": "Kesalahan Koneksi",
+    "noConnectionTitle": "Tidak Ada Koneksi",
     "noConnectionSubtitle": "Gagal memuat data. Periksa koneksi internet Anda.",
-    "offlineBanner": "Anda sedang offline. Anda tetap dapat membaca Al-Qur'an dan mendengarkan audio yang diunduh.",
+    "offlineBanner": "Anda sedang offline. Anda tetap bisa membaca Al-Qur'an dan mendengarkan audio yang telah diunduh.",
     "offlineAudioPreviewTitle": "Mode Offline",
-    "offlineAudioPreviewMessage": "Pratinjau audio memerlukan koneksi internet. Anda tetap dapat mendengarkan surah yang sudah diunduh.",
-    "offlineReciterChangeMessage": "Mengubah qari memerlukan koneksi internet. Hubungkan ke internet untuk mengganti qari.",
+    "offlineAudioPreviewMessage": "Pratinjau audio memerlukan koneksi internet. Anda tetap bisa mendengarkan surah yang sudah diunduh.",
+    "offlineReciterChangeMessage": "Mengganti qari memerlukan koneksi internet. Hubungkan ke internet untuk mengganti qari.",
     "quran": "Al-Qur'an",
-    "qibla": "Qibla",
-    "library": "Koleksi",
+    "qibla": "Kiblat",
+    "library": "Pustaka",
     "back": "Kembali"
   },
   "splash": {
     "title": "Recite",
-    "subtitle": "Baca • Dengar • Renungkan"
+    "subtitle": "Baca • Dengarkan • Tadaburi"
   },
   "tabs": {
     "home": "Beranda",
     "quran": "Al-Qur'an",
     "qibla": "Kiblat",
-    "library": "Koleksi",
+    "library": "Pustaka",
     "settings": "Pengaturan"
   },
   "home": {
@@ -46,29 +46,29 @@
       "yearSuffix": "H"
     },
     "sectionTitles": {
-      "prayerTimes": "Waktu Shalat",
+      "prayerTimes": "Jadwal Shalat",
       "dailyVerse": "Ayat Hari Ini",
-      "continueReading": "Lanjutkan Baca"
+      "continueReading": "Lanjutkan Membaca"
     },
     "prayerNames": {
       "fajr": "Subuh",
-      "dhuhr": "Dzuhur",
+      "dhuhr": "Zuhur",
       "asr": "Ashar",
       "maghrib": "Maghrib",
       "isha": "Isya"
     },
     "locationNotice": {
-      "showingMecca": "Menampilkan waktu Mekkah.",
+      "showingMecca": "Menampilkan waktu Makkah.",
       "enableLocation": "Ketuk untuk mengaktifkan lokasi"
     },
     "dailyVerse": {
       "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
       "defaultTranslation": "Maka sesungguhnya bersama kesulitan ada kemudahan.",
-      "defaultSource": "Surah Ash-Sharh · 94:6"
+      "defaultSource": "Surah Asy-Syarh · 94:6"
     },
     "continueReadingEmpty": {
-      "title": "Mulai perjalanan Anda",
-      "subtitle": "Buka Al-Qur'an dan kemajuan membaca Anda akan muncul di sini.",
+      "title": "Mulai Perjalanan Anda",
+      "subtitle": "Buka Al-Qur'an, progres membaca Anda akan otomatis tercatat di sini.",
       "buttonLabel": "Buka Al-Qur'an"
     }
   },
@@ -83,32 +83,37 @@
     "medinan": "MADANIYAH",
     "noResultsTitle": "Surah Tidak Ditemukan",
     "noResultsSubtitle": "Coba cari dengan kata kunci lain.",
-    "errorMessage": "Gagal memuat daftar Surah. Ketuk untuk mencoba lagi.",
+    "errorMessage": "Gagal memuat daftar surah. Ketuk untuk mencoba lagi.",
+    "versesError": {
+      "title": "Gagal Memuat",
+      "subtitle": "Periksa koneksi internetmu dan coba lagi ya.",
+      "retry": "Coba Lagi"
+    },
     "downloadCard": {
       "download": "Unduh",
       "downloading": "Mengunduh",
       "downloadingProgress": "Mengunduh • {{written}} / {{total}} MB ({{progress}}%)",
-      "paused": "Jeda • {{written}} / {{total}} MB ({{progress}}%)",
+      "paused": "Dijeda • {{written}} / {{total}} MB ({{progress}}%)",
       "pause": "Jeda",
       "resume": "Lanjutkan",
       "playingOffline": "Memutar Offline",
       "playingOfflineTitle": "Memutar Offline",
       "playingOnlineTitle": "Memutar Online",
       "deleteTitle": "Hapus Unduhan?",
-      "deleteDesc": "Apakah Anda yakin ingin menghapus lantunan Surah ini dari unduhan offline Anda?",
+      "deleteDesc": "Apakah Anda yakin ingin menghapus audio surah ini dari penyimpanan offline?",
       "notReadyTitle": "Audio Belum Siap",
-      "notReadyBody": "Informasi audio sedang dimuat. Silakan coba lagi sebentar lagi.",
+      "notReadyBody": "Data audio sedang dimuat. Silakan coba lagi beberapa saat lagi.",
       "errorTitle": "Unduhan Gagal",
-      "errorBody": "Tidak dapat menyelesaikan unduhan. Silakan periksa koneksi Anda dan coba lagi."
+      "errorBody": "Gagal menyelesaikan unduhan. Periksa koneksi internet Anda dan coba lagi."
     }
   },
   "errorBoundary": {
-    "title": "Ada yang Salah",
-    "subtitle": "Terjadi kesalahan yang tidak terduga dalam aplikasi. Anda dapat mencoba memulai ulang atau menyetel ulang tampilan saat ini."
+    "title": "Terjadi Kesalahan",
+    "subtitle": "Terjadi kendala tak terduga pada aplikasi. Anda dapat mencoba membuka ulang aplikasi atau memuat ulang halaman ini."
   },
   "settings": {
     "title": "Pengaturan",
-    "subtitle": "Sesuaikan preferensi aplikasi dan tema Anda",
+    "subtitle": "Atur preferensi aplikasi dan tema tampilan",
     "sections": {
       "displayLanguage": "Tampilan & Bahasa",
       "notifications": "Notifikasi",
@@ -118,23 +123,23 @@
     },
     "display": {
       "title": "Pengaturan Tampilan",
-      "subtitle": "Tema, font & ukuran teks",
-      "optionsTitle": "Opsi Tampilan",
+      "subtitle": "Tema, jenis font & ukuran teks",
+      "optionsTitle": "Pilihan Tampilan",
       "optionsSubtitle": "Tema & ukuran font",
       "appTheme": "Tema Aplikasi",
       "appFontSize": "Ukuran Font Aplikasi",
       "quranFontSize": "Ukuran Font Arab Al-Qur'an",
       "livePreview": "Pratinjau Langsung",
-      "sampleTranslation": "Dengan menyebut nama Allah Yang Maha Pengasih lagi Maha Penyayang",
-      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "sampleTranslation": "Dengan nama Allah Yang Maha Pengasih, Maha Penyayang",
+      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
       "theme": {
         "light": "Terang",
         "dark": "Gelap",
-        "system": "Sistem"
+        "system": "Ikuti Sistem"
       },
       "fontSize": {
         "small": "Kecil",
-        "default": "Default",
+        "default": "Standar",
         "large": "Besar"
       }
     },
@@ -144,19 +149,19 @@
       "optionsTitle": "Opsi Bahasa & Audio",
       "optionsSubtitle": "Bahasa, terjemahan & qari",
       "appLanguageSection": "Bahasa Aplikasi",
-      "appLanguageTitle": "Bahasa Antarmuka Aplikasi",
-      "appLanguageSubtitle": "Pilih bahasa utama untuk menu & antarmuka",
+      "appLanguageTitle": "Bahasa Tampilan Aplikasi",
+      "appLanguageSubtitle": "Pilih bahasa utama untuk menu dan antarmuka",
       "appLanguagePlaceholder": "Pilih Bahasa Aplikasi",
       "quranTranslationSection": "Terjemahan Al-Qur'an",
       "quranTranslationTitle": "Terjemahan Utama Al-Qur'an",
-      "quranTranslationSubtitle": "Pilih teks terjemahan yang ditampilkan untuk ayat",
+      "quranTranslationSubtitle": "Pilih terjemahan yang ditampilkan di setiap ayat",
       "quranTranslationPlaceholder": "Pilih Terjemahan",
       "quranReciterSection": "Qari Al-Qur'an",
-      "quranReciterTitle": "Qari Al-Qur'an Default",
-      "quranReciterSubtitle": "Pilih suara Qari untuk pemutaran audio",
+      "quranReciterTitle": "Qari Utama",
+      "quranReciterSubtitle": "Pilih suara qari untuk lantunan audio Al-Qur'an",
       "quranReciterPlaceholder": "Pilih Qari",
       "translations": {
-        "arabicOnly": "Hanya Arab",
+        "arabicOnly": "Hanya Bahasa Arab",
         "english": "Inggris (Saheeh)",
         "urdu": "Urdu (Maududi)",
         "hindi": "Hindi (Azizul Haque)",
@@ -167,99 +172,99 @@
     "notifications": {
       "title": "Notifikasi",
       "enableTitle": "Aktifkan Notifikasi",
-      "enabled": "Notifikasi diaktifkan",
-      "disabled": "Dinonaktifkan",
+      "enabled": "Notifikasi Aktif",
+      "disabled": "Nonaktif",
       "dailyReminderTitle": "Pengingat Harian",
-      "dailyReminderSubtitle": "Terima notifikasi harian",
+      "dailyReminderSubtitle": "Dapatkan notifikasi harian",
       "toastEnabledTitle": "Notifikasi Diaktifkan",
-      "toastEnabledDesc": "Pengingat harian telah diaktifkan.",
-      "toastDisabledTitle": "Notifikasi Dinonaktifkan",
+      "toastEnabledDesc": "Pengingat harian telah aktif.",
+      "toastDisabledTitle": "Notifikasi Dimatikan",
       "toastDisabledDesc": "Pengingat harian telah dinonaktifkan.",
       "blockedTitle": "Notifikasi Diblokir",
-      "blockedMessage": "Notifikasi dinonaktifkan. Aktifkan di Pengaturan.",
+      "blockedMessage": "Izin notifikasi dinonaktifkan. Silakan aktifkan melalui Pengaturan ponsel.",
       "openSettings": "Buka Pengaturan"
     },
     "storage": {
       "title": "Penyimpanan",
       "clearDownloadsTitle": "Hapus Semua Unduhan",
-      "clearDownloadsSubtitleEmpty": "0 Surah tersimpan offline (0 MB)",
-      "clearDownloadsSubtitle": "{{count}} Surah tersimpan ({{size}})",
+      "clearDownloadsSubtitleEmpty": "Belum ada surah yang diunduh (0 MB)",
+      "clearDownloadsSubtitle": "{{count}} surah tersimpan ({{size}})",
       "noDownloadsTitle": "Tidak Ada Unduhan",
-      "noDownloadsMessage": "Anda tidak memiliki Surah yang diunduh untuk dihapus.",
+      "noDownloadsMessage": "Anda belum memiliki surah yang diunduh.",
       "confirmClearDownloadsTitle": "Hapus Semua Unduhan?",
-      "confirmClearDownloadsDesc": "Apakah Anda yakin ingin menghapus {{count}} Surah yang diunduh ({{size}}) dari penyimpanan offline?",
+      "confirmClearDownloadsDesc": "Apakah Anda yakin ingin menghapus {{count}} surah yang diunduh ({{size}}) dari penyimpanan?",
       "toastClearedDownloadsTitle": "Unduhan Dihapus",
-      "toastClearedDownloadsDesc": "Semua Surah yang diunduh telah dihapus.",
+      "toastClearedDownloadsDesc": "Semua surah yang diunduh telah berhasil dihapus.",
       "clearFavoritesTitle": "Hapus Semua Favorit",
-      "clearFavoritesSubtitle": "{{count}} Surah tersimpan di favorit",
+      "clearFavoritesSubtitle": "{{count}} surah tersimpan di favorit",
       "noFavoritesTitle": "Tidak Ada Favorit",
-      "noFavoritesMessage": "Anda tidak memiliki Surah favorit untuk dihapus.",
+      "noFavoritesMessage": "Belum ada surah favorit yang disimpan.",
       "confirmClearFavoritesTitle": "Hapus Semua Favorit?",
-      "confirmClearFavoritesDesc": "Apakah Anda yakin ingin menghapus {{count}} Surah favorit dari daftar Anda?",
+      "confirmClearFavoritesDesc": "Apakah Anda yakin ingin menghapus {{count}} surah favorit dari daftar Anda?",
       "toastClearedFavoritesTitle": "Favorit Dihapus",
-      "toastClearedFavoritesDesc": "Semua Surah favorit telah dihapus."
+      "toastClearedFavoritesDesc": "Semua surah favorit telah dihapus dari daftar."
     },
     "helpSupport": {
       "title": "Bantuan & Dukungan",
-      "contactTitle": "Hubungi Dukungan",
+      "contactTitle": "Hubungi Tim Dukungan",
       "contactEmail": "munawwarh48@gmail.com"
     },
     "about": {
       "title": "Tentang Kami",
-      "subtitle": "Aplikasi Al-Qur'an komunitas gratis",
+      "subtitle": "Aplikasi Al-Qur'an gratis untuk umat",
       "appVersionTitle": "Versi Aplikasi",
       "appVersionSubtitle": "Versi {{version}}",
       "aboutUsTitle": "Tentang Kami",
-      "aboutUsSubtitle": "Aplikasi Al-Qur'an sumber terbuka & berbasis komunitas",
-      "aboutUsContent": "Recite adalah proyek komunitas non-profit 100% gratis yang didedikasikan untuk menyediakan akses Al-Qur'an bagi semua orang di seluruh dunia tanpa iklan atau langganan.",
-      "aboutAppIntro": "Dibuat dengan teknologi open-source berkinerja tinggi, Recite menghadirkan lantunan ayat yang autentik, terjemahan berdampingan, dan pencarian cepat.",
-      "keyHighlights": "Fitur Utama",
-      "featureRecitersTitle": "Lantunan Autentik",
-      "featureRecitersDesc": "Audio berkualitas tinggi dari Qari ternama dunia dengan pemutaran per ayat.",
+      "aboutUsSubtitle": "Aplikasi Al-Qur'an open-source berbasis komunitas",
+      "aboutUsContent": "Recite adalah proyek komunitas nirlaba yang 100% gratis, bertujuan menyediakan akses Al-Qur'an bagi siapa pun di seluruh dunia tanpa iklan, langganan, ataupun biaya tersembunyi.",
+      "aboutAppIntro": "Dibangun dengan teknologi open-source modern, Recite menghadirkan lantunan ayat yang jernih, pilihan terjemahan berdampingan, dan pencarian cepat dalam antarmuka yang bersih.",
+      "keyHighlights": "Fitur Unggulan",
+      "featureRecitersTitle": "Lantunan Tilawah Merdu",
+      "featureRecitersDesc": "Audio jernih berkualitas tinggi dari qari kenamaan dunia dengan pemutaran per ayat.",
       "featureLanguagesTitle": "Terjemahan Multi-Bahasa",
-      "featureLanguagesDesc": "Baca terjemahan ayat berdampingan dalam berbagai bahasa dunia.",
-      "featurePrivacyTitle": "Privasi Utama",
-      "featurePrivacyDesc": "Tanpa pelacakan, profil iklan, atau pengumpulan data pribadi.",
-      "tagline": "Baca, Dengarkan & Renungkan Al-Qur'an"
+      "featureLanguagesDesc": "Baca terjemahan ayat secara berdampingan dalam berbagai bahasa dunia.",
+      "featurePrivacyTitle": "Privasi Terjaga",
+      "featurePrivacyDesc": "Tanpa pelacakan, profil iklan, maupun pengumpulan data pribadi.",
+      "tagline": "Baca, Dengarkan & Tadaburi Al-Qur'an"
     },
     "language": {
       "title": "Bahasa Aplikasi",
-      "subtitle": "Pilih bahasa pilihan Anda untuk antarmuka aplikasi."
+      "subtitle": "Pilih bahasa tampilan untuk aplikasi."
     },
     "theme": {
       "title": "Tema Aplikasi",
-      "subtitle": "Pilih tampilan yang Anda sukai atau sesuaikan dengan pengaturan sistem.",
+      "subtitle": "Pilih tampilan terang, gelap, atau ikuti pengaturan sistem ponsel.",
       "light": "Terang",
       "dark": "Gelap",
-      "system": "Sistem"
+      "system": "Ikuti Sistem"
     },
     "fontSize": {
       "title": "Ukuran Teks",
-      "subtitle": "Sesuaikan ukuran font bacaan di seluruh aplikasi.",
+      "subtitle": "Atur ukuran teks bacaan di seluruh aplikasi.",
       "small": "Kecil",
-      "default": "Default",
+      "default": "Standar",
       "large": "Besar"
     },
     "errorTest": {
-      "title": "Tes Error Boundary",
-      "subtitle": "Uji bagaimana aplikasi menangani kesalahan yang tidak terduga dengan baik.",
-      "button": "Simulasikan Crash Aplikasi"
+      "title": "Uji Error Boundary",
+      "subtitle": "Uji respons aplikasi saat menghadapi galat yang tidak terduga.",
+      "button": "Simulasi Aplikasi Crash"
     }
   },
   "library": {
-    "title": "Koleksi",
-    "subtitle": "Surah dan unduhan yang Anda simpan",
+    "title": "Pustaka",
+    "subtitle": "Daftar surah tersimpan dan hasil unduhan",
     "tabs": {
       "favorites": "Favorit",
       "downloads": "Unduhan"
     },
     "emptyFavorites": {
       "title": "Belum Ada Favorit",
-      "subtitle": "Tandai Surah atau ayat favorit Anda untuk mengaksesnya dengan cepat di sini."
+      "subtitle": "Tandai surah atau ayat favorit Anda agar mudah dibuka kembali di sini."
     },
     "emptyDownloads": {
       "title": "Tidak Ada Unduhan",
-      "subtitle": "Unduh Surah untuk membaca atau mendengarkannya secara offline."
+      "subtitle": "Unduh surah untuk membaca atau mendengarkannya kapan saja tanpa internet."
     }
   },
   "languages": {
@@ -268,59 +273,61 @@
     "ur": "Urdu",
     "hi": "Hindi",
     "id": "Bahasa Indonesia",
-    "bn": "Bengali"
+    "bn": "Bengali",
+    "ms": "Bahasa Melayu",
+    "ru": "Rusia"
   },
   "qiblaScreen": {
     "title": "Kiblat",
     "subtitleWithCity": "Menampilkan arah dari {{cityName}}",
-    "subtitleDefault": "Temukan arah ke Mekkah",
+    "subtitleDefault": "Cari arah kiblat ke Makkah",
     "currentHeading": "Arah Saat Ini",
-    "qiblaTarget": "Target Kiblat: {{deg}}°",
-    "locationRequiredTitle": "Lokasi Diperlukan",
-    "locationRequiredSubtitle": "Kami membutuhkan lokasi Anda untuk menghitung arah Kiblat yang akurat.",
+    "qiblaTarget": "Arah Kiblat: {{deg}}°",
+    "locationRequiredTitle": "Izin Lokasi Diperlukan",
+    "locationRequiredSubtitle": "Kami membutuhkan akses lokasi Anda untuk menghitung arah kiblat yang presisi.",
     "enableLocation": "Aktifkan Lokasi"
   },
   "onboarding": {
     "stepOf": "{{current}} dari {{total}}",
     "next": "Lanjut",
     "skip": "Lewati",
-    "getStarted": "Mulai",
+    "getStarted": "Mulai Sekarang",
     "language": {
       "title": "Pilih Bahasa Anda",
-      "subtitle": "Pilih bahasa pilihan Anda untuk menu dan antarmuka aplikasi.",
+      "subtitle": "Pilih bahasa tampilan yang nyaman untuk menu dan antarmuka aplikasi.",
       "sectionLabel": "Bahasa Aplikasi"
     },
     "preferences": {
       "title": "Pilih Qari Al-Qur'an",
-      "subtitle": "Pilih suara qari favorit Anda untuk pemutaran audio Al-Qur'an.",
+      "subtitle": "Pilih suara qari favorit Anda untuk memutar lantunan Al-Qur'an.",
       "translationLabel": "Terjemahan Al-Qur'an",
       "reciterLabel": "Qari"
     },
     "theme": {
       "title": "Tampilan & Tema",
-      "subtitle": "Sesuaikan mode tema dan ukuran font untuk membaca Al-Qur'an dengan nyaman."
+      "subtitle": "Sesuaikan tema tampilan dan ukuran teks agar nyaman saat membaca Al-Qur'an."
     },
     "notifications": {
       "title": "Tetap Terhubung",
-      "subtitle": "Aktifkan pengingat harian agar konsisten dalam perjalanan Al-Qur'an Anda.",
+      "subtitle": "Aktifkan pengingat harian agar rutin dan istiqomah membaca Al-Qur'an.",
       "benefit1": "Pengingat tilawah harian",
       "benefit2": "Notifikasi waktu shalat",
-      "benefit3": "Tips Al-Qur'an yang dipersonalisasi",
+      "benefit3": "Inspirasi & mutiara Al-Qur'an",
       "enableButton": "Aktifkan Notifikasi",
-      "enabledStatus": "Notifikasi Diaktifkan",
-      "skipHint": "Anda dapat mengaktifkan ini nanti di Pengaturan"
+      "enabledStatus": "Notifikasi Aktif",
+      "skipHint": "Anda dapat mengaktifkannya kapan saja di Pengaturan"
     },
     "location": {
-      "title": "Waktu Shalat Akurat",
-      "subtitle": "Izinkan akses lokasi untuk waktu shalat dan arah Kiblat yang akurat.",
-      "benefit1": "Waktu shalat akurat untuk kota Anda",
-      "benefit2": "Arah kompas Kiblat yang presisi",
-      "benefit3": "Acara kalender Islam lokal",
+      "title": "Jadwal Shalat Akurat",
+      "subtitle": "Izinkan akses lokasi untuk mendapatkan jadwal shalat dan arah kiblat yang tepat.",
+      "benefit1": "Jadwal shalat akurat sesuai kota Anda",
+      "benefit2": "Kompas penunjuk arah kiblat yang presisi",
+      "benefit3": "Info kalender Hijriah setempat",
       "enableButton": "Aktifkan Lokasi",
-      "enabledStatus": "Lokasi Diaktifkan",
+      "enabledStatus": "Lokasi Aktif",
       "skipHint": "Waktu Makkah akan digunakan jika dilewati",
-      "blockedTitle": "Lokasi Diblokir",
-      "blockedMessage": "Akses lokasi dinonaktifkan. Aktifkan di Pengaturan."
+      "blockedTitle": "Akses Lokasi Dinonaktifkan",
+      "blockedMessage": "Akses lokasi belum diizinkan. Silakan aktifkan melalui Pengaturan ponsel."
     }
   }
 }

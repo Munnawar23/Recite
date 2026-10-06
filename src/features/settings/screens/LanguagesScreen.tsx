@@ -9,7 +9,7 @@ import {
   SectionTitle,
   ReciterList,
 } from "@/components";
-import { RECITER_OPTIONS } from "@/features/quran-detail/hooks/useQuranAudio";
+import { RECITER_OPTIONS } from "@/constants";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { SUPPORTED_LANGUAGES, SupportedLanguageCode } from "@/i18n";

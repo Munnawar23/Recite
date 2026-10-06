@@ -1,9 +1,10 @@
+import { DEFAULT_TRANSLATION_ID } from "@/constants";
 import { quranApiClient } from "./client";
 import { SurahVerse } from "@/types";
 
 export const getVersesByChapter = async (
   chapterId: number,
-  translationId: number = 20,
+  translationId: number = DEFAULT_TRANSLATION_ID,
 ): Promise<SurahVerse[]> => {
   const { data } = await quranApiClient.get(
     `/verses/by_chapter/${chapterId}?language=en&translations=${translationId}&fields=text_uthmani&per_page=300`,

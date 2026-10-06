@@ -1,25 +1,25 @@
 {
   "common": {
-    "welcome": "مرحباً",
+    "welcome": "مرحباً بك",
     "settings": "الإعدادات",
     "language": "اللغة",
     "selectLanguage": "اختر اللغة",
     "home": "الرئيسية",
     "recite": "تلاوة",
-    "listen": "استمع",
+    "listen": "استماع",
     "reflect": "تدبر",
     "save": "حفظ",
     "cancel": "إلغاء",
-    "tryAgain": "إعادة المحاولة",
+    "tryAgain": "حاول مرة أخرى",
     "retry": "إعادة المحاولة",
     "errorTitle": "حدث خطأ ما",
-    "errorMessage": "فشل في تحميل البيانات. انقر لإعادة المحاولة.",
-    "noConnectionTitle": "خطأ في الاتصال",
-    "noConnectionSubtitle": "تعذر تحميل البيانات. تحقق من اتصالك بالإنترنت.",
-    "offlineBanner": "أنت غير متصل بالإنترنت. يمكنك قراءة القرآن واستمع التلاوات المحملة.",
+    "errorMessage": "تعذر تحميل البيانات. اضغط للمحاولة مرة أخرى.",
+    "noConnectionTitle": "لا يوجد اتصال",
+    "noConnectionSubtitle": "تعذر تحميل البيانات. يرجى التحقق من اتصالك بالإنترنت.",
+    "offlineBanner": "أنت غير متصل بالإنترنت. لا يزال بإمكانك قراءة القرآن والاستماع للتلاوات المحملة.",
     "offlineAudioPreviewTitle": "وضع عدم الاتصال",
-    "offlineAudioPreviewMessage": "يتطلب المعاينة الصوتية اتصالاً بالإنترنت. لا يزال بإمكانك الاستمع إلى السور التي قمت بتنزيلها.",
-    "offlineReciterChangeMessage": "تغيير القارئ يتطلب اتصالاً بالإنترنت. يرجى الاتصال بالإنترنت لتغيير القارئ.",
+    "offlineAudioPreviewMessage": "معاينة الصوت تحتاج إلى اتصال بالإنترنت. يمكنك دائماً الاستماع إلى السور المحملة.",
+    "offlineReciterChangeMessage": "تغيير القارئ يتطلب اتصالاً بالإنترنت. اتصل بالإنترنت لتغيير القارئ.",
     "quran": "القرآن الكريم",
     "qibla": "القبلة",
     "library": "المكتبة",
@@ -39,14 +39,14 @@
   "home": {
     "greeting": {
       "title": "السَّلامُ عَلَيْكُم",
-      "subtitle": "أتمنى لك يوماً مليئاً بالبركات"
+      "subtitle": "أتمنى لك يوماً مباركاً"
     },
     "hijriCard": {
       "badge": "التاريخ الهجري",
       "yearSuffix": "هـ"
     },
     "sectionTitles": {
-      "prayerTimes": "أوقات الصلاة",
+      "prayerTimes": "مواقيت الصلاة",
       "dailyVerse": "آية اليوم",
       "continueReading": "متابعة القراءة"
     },
@@ -58,8 +58,8 @@
       "isha": "العشاء"
     },
     "locationNotice": {
-      "showingMecca": "يتم عرض أوقات مكة المكرمة.",
-      "enableLocation": "انقر لتمكين الموقع"
+      "showingMecca": "يتم عرض توقيت مكة المكرمة.",
+      "enableLocation": "اضغط لتفعيل الموقع"
     },
     "dailyVerse": {
       "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
@@ -68,69 +68,74 @@
     },
     "continueReadingEmpty": {
       "title": "ابدأ رحلتك",
-      "subtitle": "افتح القرآن وسيظهر تقدمك في القراءة هنا.",
-      "buttonLabel": "افتح القرآن"
+      "subtitle": "افتح المصحف وسيظهر تقدمك في القراءة هنا.",
+      "buttonLabel": "فتح المصحف"
     }
   },
   "quran": {
     "title": "القرآن الكريم",
-    "subtitle": "اقرأ وتدبر واستمع إلى القرآن الكريم",
-    "searchPlaceholder": "البحث عن سورة...",
+    "subtitle": "اقرأ، وتدبر، واستمع إلى القرآن الكريم",
+    "searchPlaceholder": "ابحث عن سورة...",
     "continueReadingTag": "متابعة القراءة",
-    "verseNumber": "الآية رقم {{number}}",
+    "verseNumber": "الآية {{number}}",
     "versesCount": "{{count}} آية",
     "meccan": "مكية",
     "medinan": "مدنية",
-    "noResultsTitle": "لم يتم العثور على أي سورة",
-    "noResultsSubtitle": "جرب البحث باستخدام كلمة رئيسية أخرى.",
-    "errorMessage": "فشل في تحميل سور القرآن. انقر لإعادة المحاولة.",
+    "noResultsTitle": "لم يتم العثور على نتائج",
+    "noResultsSubtitle": "جرب البحث باسم سورة آخر.",
+    "errorMessage": "تعذر تحميل السور. اضغط للمحاولة مرة أخرى.",
+    "versesError": {
+      "title": "تعذر التحميل",
+      "subtitle": "يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.",
+      "retry": "إعادة المحاولة"
+    },
     "downloadCard": {
       "download": "تنزيل",
-      "downloading": "جاري التنزيل",
-      "downloadingProgress": "جاري التنزيل • {{written}} / {{total}} ميجابايت ({{progress}}%)",
-      "paused": "متوقف مؤقتاً • {{written}} / {{total}} ميجابايت ({{progress}}%)",
+      "downloading": "جارٍ التنزيل",
+      "downloadingProgress": "جارٍ التنزيل • {{written}} / {{total}} ميجابايت ({{progress}}%)",
+      "paused": "مؤقت • {{written}} / {{total}} ميجابايت ({{progress}}%)",
       "pause": "إيقاف مؤقت",
-      "resume": "استئناف",
+      "resume": "متابعة التنزيل",
       "playingOffline": "تشغيل دون اتصال",
       "playingOfflineTitle": "تشغيل دون اتصال",
       "playingOnlineTitle": "تشغيل عبر الإنترنت",
-      "deleteTitle": "حذف التنزيل؟",
-      "deleteDesc": "هل أنت متأكد من أنك تريد إزالة تلاوة هذه السورة من التنزيلات دون اتصال؟",
-      "notReadyTitle": "الصوت غير جاهز",
-      "notReadyBody": "معلومات الصوت قيد التحميل. يرجى المحاولة مرة أخرى بعد لحظات.",
+      "deleteTitle": "حذف السورة المحملة؟",
+      "deleteDesc": "هل أنت متأكد من حذف تلاوة هذه السورة من التنزيلات؟",
+      "notReadyTitle": "الملف الصوتي غير جاهز",
+      "notReadyBody": "يتم تجهيز بيانات الصوت. يرجى المحاولة بعد قليل.",
       "errorTitle": "فشل التنزيل",
-      "errorBody": "تعذر إكمال التنزيل. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى."
+      "errorBody": "تعذر إكمال التنزيل. تحقق من اتصالك وحاول مرة أخرى."
     }
   },
   "errorBoundary": {
     "title": "حدث خطأ ما",
-    "subtitle": "حدث خطأ غير متوقع في التطبيق. يمكنك محاولة إعادة التشغيل أو إعادة تعيين العرض الحالي."
+    "subtitle": "حدث خطأ غير متوقع. يمكنك إعادة تشغيل التطبيق أو تحديث الصفحة الحالية."
   },
   "settings": {
     "title": "الإعدادات",
-    "subtitle": "تخصيص تفضيلات التطبيق والمظهر",
+    "subtitle": "تخصيص خيارات التطبيق والمظهر",
     "sections": {
-      "displayLanguage": "العرض واللغات",
+      "displayLanguage": "المظهر واللغة",
       "notifications": "الإشعارات",
-      "storage": "التخزين",
+      "storage": "التخزين والملفات",
       "helpSupport": "المساعدة والدعم",
       "aboutUs": "عن التطبيق"
     },
     "display": {
-      "title": "إعدادات العرض",
-      "subtitle": "المظهر والخطوط وأحجام النصوص",
+      "title": "إعدادات المظهر",
+      "subtitle": "المظهر وحجم الخط",
       "optionsTitle": "خيارات العرض",
       "optionsSubtitle": "المظهر وأحجام الخطوط",
       "appTheme": "مظهر التطبيق",
       "appFontSize": "حجم خط التطبيق",
-      "quranFontSize": "حجم الخط العربي للقرآن",
+      "quranFontSize": "حجم خط القرآن",
       "livePreview": "معاينة مباشرة",
-      "sampleTranslation": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
-      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "sampleTranslation": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
       "theme": {
         "light": "فاتح",
         "dark": "داكن",
-        "system": "النظام"
+        "system": "حسب النظام"
       },
       "fontSize": {
         "small": "صغير",
@@ -139,28 +144,28 @@
       }
     },
     "languages": {
-      "title": "اللغات والصوتيات",
-      "subtitle": "لغة التطبيق، الترجمة والقارئ",
+      "title": "اللغة والصوتيات",
+      "subtitle": "لغة التطبيق، الترجمة، واختيار القارئ",
       "optionsTitle": "خيارات اللغة والصوت",
-      "optionsSubtitle": "اللغة والترجمة والقارئ",
+      "optionsSubtitle": "اللغة، الترجمة والقارئ",
       "appLanguageSection": "لغة التطبيق",
       "appLanguageTitle": "لغة واجهة التطبيق",
-      "appLanguageSubtitle": "اختر اللغة الرئيسية للقوائم والواجهة",
+      "appLanguageSubtitle": "اختر لغة القوائم والواجهة",
       "appLanguagePlaceholder": "اختر لغة التطبيق",
-      "quranTranslationSection": "ترجمة القرآن",
-      "quranTranslationTitle": "ترجمة القرآن الافتراضية",
-      "quranTranslationSubtitle": "اختر نص الترجمة المعروض للآيات",
+      "quranTranslationSection": "ترجمة معاني القرآن",
+      "quranTranslationTitle": "الترجمة الافتراضية",
+      "quranTranslationSubtitle": "اختر لغة ترجمة المعاني المعروضة مع الآيات",
       "quranTranslationPlaceholder": "اختر الترجمة",
       "quranReciterSection": "قارئ القرآن",
-      "quranReciterTitle": "قارئ القرآن الافتراضي",
-      "quranReciterSubtitle": "اختر صوت القارئ لتشغيل الصوت",
+      "quranReciterTitle": "القارئ الافتراضي",
+      "quranReciterSubtitle": "اختر صوت القارئ المفضل لديك للتلاوة",
       "quranReciterPlaceholder": "اختر القارئ",
       "translations": {
-        "arabicOnly": "النص العربي فقط",
-        "english": "الإنجليزية (صحيح)",
+        "arabicOnly": "النص القرآني فقط",
+        "english": "الإنجليزية (صحيح انترناشونال)",
         "urdu": "الأردية (المودودي)",
         "hindi": "الهندية (عزيز الحق)",
-        "indonesian": "الإندونيسية (الوزارة)",
+        "indonesian": "الإندونيسية (وزارة الشؤون الدينية)",
         "bengali": "البنغالية (تيسير)"
       }
     },
@@ -170,56 +175,56 @@
       "enabled": "الإشعارات مفعلة",
       "disabled": "معطلة",
       "dailyReminderTitle": "التذكير اليومي",
-      "dailyReminderSubtitle": "استلام الإشعارات اليومية",
+      "dailyReminderSubtitle": "استلام تنبيهات التذكير اليومية",
       "toastEnabledTitle": "تم تفعيل الإشعارات",
-      "toastEnabledDesc": "تم تفعيل التذكير اليومي.",
-      "toastDisabledTitle": "تم تعطيل الإشعارات",
-      "toastDisabledDesc": "تم تعطيل التذكير اليومي.",
+      "toastEnabledDesc": "تم ضبط التذكير اليومي بنجاح.",
+      "toastDisabledTitle": "تم إيقاف الإشعارات",
+      "toastDisabledDesc": "تم إيقاف التذكير اليومي.",
       "blockedTitle": "الإشعارات محظورة",
-      "blockedMessage": "الإشعارات معطلة. قم بتفعيلها من الإعدادات.",
+      "blockedMessage": "الإشعارات معطلة. يرجى السماح بها من إعدادات الهاتف.",
       "openSettings": "فتح الإعدادات"
     },
     "storage": {
       "title": "التخزين",
-      "clearDownloadsTitle": "مسح جميع التنزيلات",
-      "clearDownloadsSubtitleEmpty": "٠ سور محفوظة دون اتصال (٠ ميجابايت)",
+      "clearDownloadsTitle": "حذف جميع التنزيلات",
+      "clearDownloadsSubtitleEmpty": "لا توجد سور محفوظة دون اتصال (0 ميجابايت)",
       "clearDownloadsSubtitle": "تم حفظ {{count}} سورة ({{size}})",
       "noDownloadsTitle": "لا توجد تنزيلات",
-      "noDownloadsMessage": "ليس لديك أي سور منزلة لمسحها.",
-      "confirmClearDownloadsTitle": "مسح جميع التنزيلات؟",
-      "confirmClearDownloadsDesc": "هل أنت متأكد من رغبتك في إزالة {{count}} سورة منزلة ({{size}}) من التخزين؟",
-      "toastClearedDownloadsTitle": "تم مسح التنزيلات",
-      "toastClearedDownloadsDesc": "تم مسح جميع السور المنزلة بنجاح.",
-      "clearFavoritesTitle": "مسح جميع المفضلة",
-      "clearFavoritesSubtitle": "تم حفظ {{count}} سورة في المفضلة",
-      "noFavoritesTitle": "لا توجد مفضلة",
-      "noFavoritesMessage": "ليس لديك أي سور مفضلة لمسحها.",
+      "noDownloadsMessage": "ليس لديك أي سور منزلة في التخزين.",
+      "confirmClearDownloadsTitle": "حذف جميع التنزيلات؟",
+      "confirmClearDownloadsDesc": "هل أنت متأكد من رغبتك في حذف {{count}} سورة منزلة ({{size}}) من الهاتف؟",
+      "toastClearedDownloadsTitle": "تم حذف التنزيلات",
+      "toastClearedDownloadsDesc": "تم حذف جميع السور المحملة.",
+      "clearFavoritesTitle": "مسح قائمة المفضلة",
+      "clearFavoritesSubtitle": "{{count}} سورة في قائمة المفضلة",
+      "noFavoritesTitle": "لا توجد عناصر مفضلة",
+      "noFavoritesMessage": "لم تقم بإضافة أي سور إلى المفضلة بعد.",
       "confirmClearFavoritesTitle": "مسح جميع المفضلة؟",
-      "confirmClearFavoritesDesc": "هل أنت متأكد من رغبتك في إزالة {{count}} سورة مفضلة من قائمتك؟",
+      "confirmClearFavoritesDesc": "هل أنت متأكد من إزالة {{count}} سورة من قائمة المفضلة؟",
       "toastClearedFavoritesTitle": "تم مسح المفضلة",
-      "toastClearedFavoritesDesc": "تم إزالة جميع السور المفضلة."
+      "toastClearedFavoritesDesc": "تمت إزالة جميع السور من المفضلة."
     },
     "helpSupport": {
       "title": "المساعدة والدعم",
-      "contactTitle": "التواصل مع الدعم",
+      "contactTitle": "تواصل معنا",
       "contactEmail": "munawwarh48@gmail.com"
     },
     "about": {
       "title": "عن التطبيق",
-      "subtitle": "تطبيق قرآني مجاني للمجتمع",
+      "subtitle": "تطبيق قرآني مجاني للجميع",
       "appVersionTitle": "إصدار التطبيق",
       "appVersionSubtitle": "الإصدار {{version}}",
-      "aboutUsTitle": "عن التطبيق",
+      "aboutUsTitle": "من نحن",
       "aboutUsSubtitle": "تطبيق قرآني مفتوح المصدر ومجتمعي",
-      "aboutUsContent": "رتّل هو مشروع مجتمعي مجاني ١٠٠٪ وغير ربحي مخصص لجعل القرآن الكريم متاحاً للجميع حول العالم بدون إعلانات أو اشتراكات.",
-      "aboutAppIntro": "تم بناؤه باستخدام تقنيات حديثة مفتوحة المصدر لتوفير تلاوات صحيحة وترجمات متعددة وبحث سريع في واجهة حديثة.",
-      "keyHighlights": "أبرز الميزات",
-      "featureRecitersTitle": "تلاوات موثوقة",
-      "featureRecitersDesc": "تلاوات صوتية عالية الجودة من كبار القراء مع تشغيل آية بآية.",
-      "featureLanguagesTitle": "ترجمات متعددة اللغات",
-      "featureLanguagesDesc": "قراءة ترجمات الآيات جنباً إلى جنب بلغات عالمية متعددة.",
-      "featurePrivacyTitle": "الخصوصية أولاً",
-      "featurePrivacyDesc": "بدون تتبع، أو جمع بيانات شخصية، أو إعلانات.",
+      "aboutUsContent": "«رتّل» هو مشروع مجتمعي مجاني 100% وغير ربحي، يهدف إلى تسهيل قراءة القرآن الكريم والاستماع إليه للجميع دون إعلانات أو رسوم.",
+      "aboutAppIntro": "صُمم التطبيق باستخدام أحدث التقنيات مفتوحة المصدر لتقديم تلاوات قرآنية عذبة، وترجمات دقيقة، وبحث فوري في واجهة سهلة وبسيطة.",
+      "keyHighlights": "أهم المميزات",
+      "featureRecitersTitle": "تلاوات قرآنية نقية",
+      "featureRecitersDesc": "تسجيلات عالية النقاء لأشهر القراء مع ميزة المتابعة آية بآية.",
+      "featureLanguagesTitle": "ترجمات متعددة",
+      "featureLanguagesDesc": "قراءة ترجمات معاني الآيات بعدة لغات جنباً إلى جنب.",
+      "featurePrivacyTitle": "أولوية الخصوصية",
+      "featurePrivacyDesc": "بدون أي تتبع، أو إعلانات، أو جمع لبياناتك الشخصية.",
       "tagline": "اقرأ • استمع • تدبر القرآن الكريم"
     },
     "language": {
@@ -228,22 +233,22 @@
     },
     "theme": {
       "title": "مظهر التطبيق",
-      "subtitle": "اختر المظهر المفضل لديك أو قم بالمزامنة مع إعدادات النظام.",
+      "subtitle": "اختر الوضع الفاتح أو الداكن، أو طابقه تلقائياً مع نظام جهازك.",
       "light": "فاتح",
       "dark": "داكن",
-      "system": "النظام"
+      "system": "حسب النظام"
     },
     "fontSize": {
       "title": "حجم النص",
-      "subtitle": "ضبط حجم خط القراءة عبر التطبيق بأكمله.",
+      "subtitle": "تعديل حجم خط القراءة في كامل التطبيق.",
       "small": "صغير",
       "default": "افتراضي",
       "large": "كبير"
     },
     "errorTest": {
-      "title": "اختبار جدار الأخطاء",
-      "subtitle": "اختبار كيفية تعامل التطبيق مع الأخطاء غير المتوقعة بسلاسة.",
-      "button": "محاكاة تعطل التطبيق"
+      "title": "اختبار معالجة الأخطاء",
+      "subtitle": "تجربة طريقة تعامل التطبيق مع الأخطاء غير المتوقعة.",
+      "button": "محاكاة حدوث عطل"
     }
   },
   "library": {
@@ -254,12 +259,12 @@
       "downloads": "التنزيلات"
     },
     "emptyFavorites": {
-      "title": "لا توجد مفضلة بعد",
-      "subtitle": "قم بتمييز السور أو الآيات المفضلة لديك للوصول إليها بسرعة هنا."
+      "title": "لا توجد سور في المفضلة",
+      "subtitle": "أضف سورك أو آياتك المفضلة لتصل إليها بسهولة وسرعة هنا."
     },
     "emptyDownloads": {
-      "title": "لا توجد تنزيلات",
-      "subtitle": "قم بتنزيل السور لقراءتها أو الاستمع إليها دون اتصال بالإنترنت."
+      "title": "لا توجد ملفات محملة",
+      "subtitle": "قم بتنزيل السور لقراءتها أو الاستماع إليها في أي وقت دون إنترنت."
     }
   },
   "languages": {
@@ -268,16 +273,18 @@
     "ur": "الأردية",
     "hi": "الهندية",
     "id": "الإندونيسية",
-    "bn": "البنغالية"
+    "bn": "البنغالية",
+    "ms": "الملايو",
+    "ru": "الروسية"
   },
   "qiblaScreen": {
     "title": "القبلة",
-    "subtitleWithCity": "عرض الاتجاه من {{cityName}}",
-    "subtitleDefault": "حدد اتجاه القبلة نحو مكة المكرمة",
+    "subtitleWithCity": "عرض اتجاه القبلة من {{cityName}}",
+    "subtitleDefault": "معرفة اتجاه القبلة نحو مكة المكرمة",
     "currentHeading": "الاتجاه الحالي",
-    "qiblaTarget": "اتجاه القبلة: {{deg}}°",
-    "locationRequiredTitle": "الموقع مطلوب",
-    "locationRequiredSubtitle": "نحتاج إلى موقعك لحساب اتجاه القبلة بدقة.",
+    "qiblaTarget": "زاوية القبلة: {{deg}}°",
+    "locationRequiredTitle": "يلزم تفعيل الموقع",
+    "locationRequiredSubtitle": "نحتاج إلى معرفة موقعك لتحديد اتجاه القبلة بدقة.",
     "enableLocation": "تفعيل الموقع"
   },
   "onboarding": {
@@ -287,40 +294,40 @@
     "getStarted": "ابدأ الآن",
     "language": {
       "title": "اختر لغتك",
-      "subtitle": "اختر لغتك المفضلة لقوائم التطبيق وواجهته.",
+      "subtitle": "اختر لغة الواجهة والقوائم التي تناسبك.",
       "sectionLabel": "لغة التطبيق"
     },
     "preferences": {
-      "title": "اختر قارئ القرآن",
-      "subtitle": "اختر صوت القارئ المفضل لديك لتلاوة القرآن الكريم.",
+      "title": "اختر القارئ",
+      "subtitle": "اختر صوت القارئ المفضل لديك لسماع التلاوات.",
       "translationLabel": "ترجمة القرآن",
       "reciterLabel": "القارئ"
     },
     "theme": {
-      "title": "المظهر والعرض",
-      "subtitle": "خصص مظهر التطبيق وأحجام الخطوط لقراءة القرآن براحة."
+      "title": "المظهر وحجم الخط",
+      "subtitle": "اضبط مظهر التطبيق وحجم الخط لتسهيل القراءة براحة تامة."
     },
     "notifications": {
       "title": "ابقَ على تواصل",
-      "subtitle": "فعّل التذكيرات اليومية لتلتزم برحلتك مع القرآن الكريم.",
-      "benefit1": "تذكيرات التلاوة اليومية",
-      "benefit2": "تنبيهات أوقات الصلاة",
-      "benefit3": "نصائح قرآنية مخصصة",
+      "subtitle": "فعّل التذكير اليومي لتداوم على وردك القرآني بسهولة.",
+      "benefit1": "تذكير يومي بالورد القرآني",
+      "benefit2": "تنبيهات مواقيت الصلاة",
+      "benefit3": "فوائد قرآنية يومية",
       "enableButton": "تفعيل الإشعارات",
-      "enabledStatus": "الإشعارات مفعّلة",
-      "skipHint": "يمكنك تفعيل هذا لاحقاً في الإعدادات"
+      "enabledStatus": "الإشعارات مفعلة",
+      "skipHint": "يمكنك دائماً تفعيلها لاحقاً من الإعدادات"
     },
     "location": {
-      "title": "أوقات صلاة دقيقة",
-      "subtitle": "اسمح بالوصول إلى الموقع لأوقات صلاة دقيقة واتجاه القبلة.",
-      "benefit1": "أوقات الصلاة الدقيقة لمدينتك",
-      "benefit2": "اتجاه القبلة بدقة",
-      "benefit3": "أحداث التقويم الإسلامي المحلية",
+      "title": "مواقيت صلاة دقيقة",
+      "subtitle": "اسمح بالوصول إلى موقعك للحصول على أوقات الصلاة الصحيحة واتجاه القبلة بدقة.",
+      "benefit1": "مواقيت صلاة دقيقة لمدينتك",
+      "benefit2": "بوصلة دقيقة لاتجاه القبلة",
+      "benefit3": "مناسبات التقويم الهجري المحلي",
       "enableButton": "تفعيل الموقع",
-      "enabledStatus": "الموقع مفعّل",
-      "skipHint": "سيتم استخدام أوقات مكة المكرمة إذا تخطيت",
-      "blockedTitle": "الموقع محظور",
-      "blockedMessage": "تم تعطيل الموقع. قم بتفعيله من الإعدادات."
+      "enabledStatus": "تم تفعيل الموقع",
+      "skipHint": "سيتم الاعتماد على توقيت مكة المكرمة في حال التخطي",
+      "blockedTitle": "إذن الموقع معطل",
+      "blockedMessage": "إذن الوصول للموقع مغلق. يمكنك تفعيله من إعدادات الهاتف."
     }
   }
 }

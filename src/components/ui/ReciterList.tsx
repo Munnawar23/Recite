@@ -1,5 +1,5 @@
 import { MessageModal } from "./MessageModal";
-import { RECITER_OPTIONS } from "@/features/quran-detail/hooks/useQuranAudio";
+import { RECITER_OPTIONS } from "@/constants";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";

@@ -1,6 +1,10 @@
+import {
+  DEFAULT_RECITER_ID,
+  DEFAULT_TRANSLATION_ID_STRING,
+} from "@/constants";
+import { STORAGE_KEYS, zustandStorage } from "@/lib/storage/appStorage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { zustandStorage } from "@/lib/storage/appStorage";
 
 interface QuranSettingsState {
   translationId: string;
@@ -12,13 +16,13 @@ interface QuranSettingsState {
 export const useQuranSettingsStore = create<QuranSettingsState>()(
   persist(
     (set) => ({
-      translationId: "20",
-      reciterId: 7,
+      translationId: DEFAULT_TRANSLATION_ID_STRING,
+      reciterId: DEFAULT_RECITER_ID,
       setTranslationId: (id) => set({ translationId: id }),
       setReciterId: (id) => set({ reciterId: id }),
     }),
     {
-      name: "quran-settings-storage",
+      name: STORAGE_KEYS.QURAN_SETTINGS,
       storage: createJSONStorage(() => zustandStorage),
     }
   )

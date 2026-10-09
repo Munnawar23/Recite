@@ -14,6 +14,7 @@ import { useChapterSearch } from "@/features/quran/hooks/useChapterSearch";
 import { useQuranChapters } from "@/features/quran/hooks/useQuranChapters";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useBottomTabBarSpacing } from "@/hooks/useBottomTabBarSpacing";
 import { useLanguageStore } from "@/store/languageStore";
 import { LastRead, useReadingProgressStore } from "@/store/readingProgressStore";
 import { type ThemeSpacing } from "@/theme";
@@ -52,7 +53,11 @@ export default function QuranScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const listRef = useRef<FlashListRef<Chapter>>(null);
 
-  const styles = useMemo(() => createStyles(spacing), [spacing]);
+  const bottomSpacing = useBottomTabBarSpacing();
+  const styles = useMemo(
+    () => createStyles(spacing, bottomSpacing),
+    [spacing, bottomSpacing],
+  );
 
   // Scroll to top whenever filtered results change
   useEffect(() => {
@@ -178,7 +183,7 @@ export default function QuranScreen() {
   );
 }
 
-const createStyles = (spacing: ThemeSpacing) =>
+const createStyles = (spacing: ThemeSpacing, bottomSpacing: number) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -205,7 +210,7 @@ const createStyles = (spacing: ThemeSpacing) =>
       height: rs.space(200),
     },
     bottomSpacer: {
-      height: spacing.vXxl,
+      height: bottomSpacing,
     },
     topSpacer: {
       height: spacing.vMd,

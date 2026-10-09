@@ -10,6 +10,7 @@ import { getLocalizedSurah } from "@/constants";
 import PrayerTimes from "@/features/home/components/PrayerTimes";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useBottomTabBarSpacing } from "@/hooks/useBottomTabBarSpacing";
 import { useLocation } from "@/hooks/useLocation";
 import { useLanguageStore } from "@/store/languageStore";
 import { useReadingProgressStore } from "@/store/readingProgressStore";
@@ -39,7 +40,8 @@ export default function HomeScreen() {
   const { lastRead } = useReadingProgressStore();
   const [refreshing, setRefreshing] = useState(false);
 
-  const styles = createStyles(spacing);
+  const bottomSpacing = useBottomTabBarSpacing();
+  const styles = createStyles(spacing, bottomSpacing);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -167,7 +169,7 @@ export default function HomeScreen() {
   );
 }
 
-const createStyles = (spacing: ThemeSpacing) =>
+const createStyles = (spacing: ThemeSpacing, bottomSpacing: number) =>
   StyleSheet.create({
     scroll: {
       flex: 1,
@@ -176,6 +178,6 @@ const createStyles = (spacing: ThemeSpacing) =>
       paddingBottom: spacing.vLg,
     },
     bottomSpacer: {
-      height: spacing.vXxl,
+      height: bottomSpacing,
     },
   });

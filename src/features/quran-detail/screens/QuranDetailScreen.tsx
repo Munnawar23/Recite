@@ -8,6 +8,12 @@ import Header from "../components/Header";
 import ScrollTopButton from "../components/ScrollTopButton";
 import VerseListContent from "../components/VerseListContent";
 import { useQuranDetailScreen } from "../hooks/useQuranDetailScreen";
+import { useKeepAwake } from "expo-keep-awake";
+
+function KeepAwakeWhilePlaying() {
+  useKeepAwake();
+  return null;
+}
 
 export default function QuranDetailScreen() {
   const {
@@ -69,6 +75,7 @@ export default function QuranDetailScreen() {
       />
 
       <View style={S.mainContainer}>
+        {status?.playing ? <KeepAwakeWhilePlaying /> : null}
         <Animated.View style={[S.animatedHeaderContainer, animatedHeaderStyle]}>
           <Header
             chapterId={chapterId}

@@ -1,6 +1,8 @@
 import { ALL_TRANSLATION_IDS } from "@/constants";
 import { getChapterAudio, getVersesByChapter } from "@/lib/api";
 import * as FileSystem from "expo-file-system/legacy";
+import { useDownloadsStore } from "@/store/downloadsStore";
+import { Haptics } from "@/lib/haptics";
 
 // ─── Directory Paths ────────────────────────────────────────────────────────
 
@@ -180,3 +182,189 @@ export async function deleteChapterDownload(chapterId: number): Promise<void> {
       : Promise.resolve(),
   ]);
 }
+
+// ─── Active Background Task Manager ──────────────────────────────────────────
+
+interface ActiveDownloadTask {
+  resumable: FileSystem.DownloadResumable;
+  isCancelled: boolean;
+}
+
+const activeTasks = new Map<number, ActiveDownloadTask>();
+
+export function isChapterDownloading(chapterId: number): boolean {
+  return activeTasks.has(chapterId);
+}
+
+export interface ChapterDownloadMetadata {
+  name?: string;
+  englishName?: string;
+  englishTranslation?: string;
+  versesCount?: string | number;
+  chapterType?: string;
+}
+
+export interface StartChapterDownloadParams {
+  chapterId: number;
+  audioUrl: string;
+  initialTotalBytes?: number | null;
+  chapterInfo?: ChapterDownloadMetadata;
+}
+
+/**
+ * Starts downloading audio and text for a chapter in the background.
+ * Survives screen unmounts and updates global Zustand store with progress.
+ */
+export async function startChapterDownload({
+  chapterId,
+  audioUrl,
+  initialTotalBytes,
+  chapterInfo,
+}: StartChapterDownloadParams): Promise<void> {
+  if (activeTasks.has(chapterId)) {
+    return;
+  }
+
+  const { updateActiveProgress, removeActiveDownload, addDownload } =
+    useDownloadsStore.getState();
+
+  const totalBytesExpected = initialTotalBytes ?? 0;
+
+  updateActiveProgress(chapterId, {
+    chapterId,
+    progress: 0,
+    bytesWritten: 0,
+    totalBytes: totalBytesExpected,
+    status: "downloading",
+  });
+
+  const taskEntry: ActiveDownloadTask = {
+    resumable: null as any,
+    isCancelled: false,
+  };
+
+  try {
+    await prepareAudioDir();
+
+    const resumable = createAudioDownload(
+      chapterId,
+      audioUrl,
+      (written, total) => {
+        if (taskEntry.isCancelled) return;
+        const totalToUse = total > 0 ? total : totalBytesExpected;
+        const progress = totalToUse > 0 ? Math.min(written / totalToUse, 1) : 0;
+        updateActiveProgress(chapterId, {
+          chapterId,
+          bytesWritten: written,
+          totalBytes: totalToUse,
+          progress,
+          status: "downloading",
+        });
+      },
+    );
+
+    taskEntry.resumable = resumable;
+    activeTasks.set(chapterId, taskEntry);
+
+    const result = await resumable.downloadAsync();
+
+    // If cancelled during audio download, delete partial file to free user storage
+    if (taskEntry.isCancelled || !result?.uri) {
+      await deleteChapterDownload(chapterId);
+      removeActiveDownload(chapterId);
+      activeTasks.delete(chapterId);
+      return;
+    }
+
+    const audioLocalPath = getLocalAudioPath(chapterId);
+
+    // ── Text download (all translations) ─────────────────────
+    const textBytes = await downloadChapterText(chapterId);
+
+    // If cancelled during text download, delete partial files
+    if (taskEntry.isCancelled) {
+      await deleteChapterDownload(chapterId);
+      removeActiveDownload(chapterId);
+      activeTasks.delete(chapterId);
+      return;
+    }
+
+    const audioInfo = await FileSystem.getInfoAsync(audioLocalPath);
+    const audioBytes =
+      audioInfo.exists && "size" in audioInfo
+        ? audioInfo.size
+        : totalBytesExpected;
+
+    const versesCountNum = chapterInfo?.versesCount
+      ? typeof chapterInfo.versesCount === "string"
+        ? parseInt(chapterInfo.versesCount, 10)
+        : chapterInfo.versesCount
+      : 0;
+
+    addDownload({
+      chapterId,
+      downloadedAt: Date.now(),
+      audioLocalFile: getAudioFilename(chapterId),
+      textLocalFile: getTextFilename(chapterId),
+      totalBytes: audioBytes + textBytes,
+      chapterInfo:
+        chapterInfo?.name || chapterInfo?.englishName
+          ? {
+              name: chapterInfo.name ?? "",
+              englishName: chapterInfo.englishName ?? "",
+              englishTranslation: chapterInfo.englishTranslation ?? "",
+              versesCount: versesCountNum,
+              type: chapterInfo.chapterType ?? "",
+            }
+          : undefined,
+    });
+
+    removeActiveDownload(chapterId);
+    activeTasks.delete(chapterId);
+    Haptics.success();
+  } catch (err: any) {
+    if (taskEntry.isCancelled) {
+      // User cancelled: purge partial files so user memory/storage is free
+      await deleteChapterDownload(chapterId);
+      removeActiveDownload(chapterId);
+      activeTasks.delete(chapterId);
+      return;
+    }
+
+    console.error(`[downloadService] Download failed for chapter ${chapterId}:`, err);
+    // On unexpected error, clean up partial files and inform store
+    await deleteChapterDownload(chapterId);
+    activeTasks.delete(chapterId);
+    updateActiveProgress(chapterId, {
+      chapterId,
+      status: "error",
+      errorMessage: err?.message || "Download failed",
+    });
+    throw err;
+  }
+}
+
+/**
+ * Cancels download and purges any partially downloaded files from disk
+ * to prevent wasting user device memory. Resets progress in the store to 0.
+ */
+export async function cancelChapterDownload(chapterId: number): Promise<void> {
+  const taskEntry = activeTasks.get(chapterId);
+  if (taskEntry) {
+    taskEntry.isCancelled = true;
+    try {
+      await taskEntry.resumable?.cancelAsync();
+    } catch {
+      // ignore
+    }
+    activeTasks.delete(chapterId);
+  }
+
+  // Delete partial files from disk so user memory is never wasted
+  await deleteChapterDownload(chapterId);
+
+  // Remove from store so state and progress reset back to 0
+  const { removeActiveDownload } = useDownloadsStore.getState();
+  removeActiveDownload(chapterId);
+}
+

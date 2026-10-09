@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -11,13 +11,10 @@ import { useTranslation } from "react-i18next";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { rs } from "@/helpers/responsiveHelper";
-import * as FileSystem from "expo-file-system/legacy";
 import {
-  createAudioDownload,
-  prepareAudioDir,
-  downloadChapterText,
+  startChapterDownload,
+  cancelChapterDownload,
   deleteChapterDownload,
-  getLocalAudioPath,
 } from "@/services/downloadService";
 import { useDownloadsStore } from "@/store/downloadsStore";
 import { MessageModal, DeleteConfirmationModal, AppText } from "@/components";
@@ -129,12 +126,24 @@ function DownloadCard({
     (s) => chapterId != null && s.isDownloaded(chapterId),
   );
   const getDownload = useDownloadsStore((s) => s.getDownload);
-  const addDownload = useDownloadsStore((s) => s.addDownload);
   const removeDownload = useDownloadsStore((s) => s.removeDownload);
 
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [bytesWritten, setBytesWritten] = useState(0);
-  const [totalBytes, setTotalBytes] = useState<number>(audioTotalBytes ?? 0);
+  const activeDownload = useDownloadsStore((s) =>
+    chapterId != null ? s.activeDownloads[chapterId] : undefined,
+  );
+  const isDownloading = activeDownload?.status === "downloading";
+  const bytesWritten = activeDownload?.bytesWritten ?? 0;
+  const totalBytes =
+    activeDownload && activeDownload.totalBytes > 0
+      ? activeDownload.totalBytes
+      : (audioTotalBytes ?? 0);
+
+  // Progress 0→1
+  const progress =
+    activeDownload?.progress ??
+    (totalBytes > 0 ? Math.min(bytesWritten / totalBytes, 1) : 0);
+  const writtenMB = formatMB(bytesWritten);
+  const totalMB = totalBytes > 0 ? formatMB(totalBytes) : "?";
 
   // Modal states
   const [messageModalState, setMessageModalState] = useState<{
@@ -147,25 +156,31 @@ function DownloadCard({
 
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
-  const downloadRef = useRef<FileSystem.DownloadResumable | null>(null);
-  const cancelledRef = useRef(false);
-
-  // Sync totalBytes when prop arrives (from API)
+  // Handle errors from background download
   useEffect(() => {
-    if (audioTotalBytes && audioTotalBytes > 0) {
-      setTotalBytes(audioTotalBytes);
+    if (activeDownload?.status === "error") {
+      setMessageModalState({
+        visible: true,
+        title: t("quran.downloadCard.errorTitle", "Download Failed"),
+        message:
+          activeDownload.errorMessage ||
+          t(
+            "quran.downloadCard.errorBody",
+            "Could not complete download. Please check your connection and try again.",
+          ),
+        icon: "alert-circle-outline",
+        iconColor: "#EF4444",
+      });
+      if (chapterId != null) {
+        useDownloadsStore.getState().removeActiveDownload(chapterId);
+      }
     }
-  }, [audioTotalBytes]);
+  }, [activeDownload?.status, activeDownload?.errorMessage, chapterId, t]);
 
   const downloadInfo = chapterId != null ? getDownload(chapterId) : undefined;
   const storedTotalMB = downloadInfo
     ? formatMB(downloadInfo.totalBytes)
     : null;
-
-  // Progress 0→1
-  const progress = totalBytes > 0 ? Math.min(bytesWritten / totalBytes, 1) : 0;
-  const writtenMB = formatMB(bytesWritten);
-  const totalMB = totalBytes > 0 ? formatMB(totalBytes) : "?";
 
   const handleStartDownload = useCallback(async () => {
     if (!chapterId || !audioUrl) {
@@ -183,86 +198,44 @@ function DownloadCard({
     }
 
     Haptics.medium();
-    setIsDownloading(true);
-    setBytesWritten(0);
-    cancelledRef.current = false;
 
     try {
-      await prepareAudioDir();
-
-      // ── Audio download ──────────────────────────────────────────
-      const resumable = createAudioDownload(
+      await startChapterDownload({
         chapterId,
         audioUrl,
-        (written, total) => {
-          if (cancelledRef.current) return;
-          setBytesWritten(written);
-          if (total > 0) setTotalBytes(total);
-        },
-      );
-      downloadRef.current = resumable;
-
-      const result = await resumable.downloadAsync();
-      if (cancelledRef.current || !result?.uri) return;
-
-      const audioLocalPath = getLocalAudioPath(chapterId);
-
-      // ── Text download (all 6 translations) ─────────────────────
-      const textBytes = await downloadChapterText(chapterId);
-      if (cancelledRef.current) return;
-
-      const audioInfo = await FileSystem.getInfoAsync(audioLocalPath);
-      const audioBytes = audioInfo.exists && "size" in audioInfo ? audioInfo.size : totalBytes;
-
-      // ── Persist to store ────────────────────────────────────────
-      addDownload({
-        chapterId,
-        downloadedAt: Date.now(),
-        audioLocalFile: `chapter_${chapterId}.mp3`,
-        textLocalFile: `chapter_${chapterId}_text.json`,
-        totalBytes: audioBytes + textBytes,
-        chapterInfo: arabicName || englishName ? {
-          name: arabicName ?? "",
-          englishName: englishName ?? "",
-          englishTranslation: englishTranslation ?? "",
-          versesCount: versesCount ? parseInt(versesCount, 10) : 0,
-          type: chapterType ?? "",
-        } : undefined,
+        initialTotalBytes: audioTotalBytes ?? 0,
+        chapterInfo:
+          arabicName || englishName
+            ? {
+                name: arabicName ?? "",
+                englishName: englishName ?? "",
+                englishTranslation: englishTranslation ?? "",
+                versesCount: versesCount ? parseInt(versesCount, 10) : 0,
+                chapterType: chapterType ?? "",
+              }
+            : undefined,
       });
-
-      Haptics.success();
-    } catch (err: any) {
-      if (cancelledRef.current) return; // user cancelled — silent
-      console.error("[DownloadCard] Download failed:", err);
-      setMessageModalState({
-        visible: true,
-        title: t("quran.downloadCard.errorTitle", "Download Failed"),
-        message: t(
-          "quran.downloadCard.errorBody",
-          "Could not complete download. Please check your connection and try again.",
-        ),
-        icon: "alert-circle-outline",
-        iconColor: "#EF4444",
-      });
-    } finally {
-      if (!cancelledRef.current) {
-        setIsDownloading(false);
-      }
+    } catch {
+      // Error is caught in startChapterDownload and updated in activeDownloads store
     }
-  }, [chapterId, audioUrl, totalBytes, addDownload, t]);
+  }, [
+    chapterId,
+    audioUrl,
+    audioTotalBytes,
+    arabicName,
+    englishName,
+    englishTranslation,
+    versesCount,
+    chapterType,
+    colors.primary,
+    t,
+  ]);
 
   const handleCancelDownload = useCallback(async () => {
+    if (!chapterId) return;
     Haptics.medium();
-    cancelledRef.current = true;
-    try {
-      await downloadRef.current?.cancelAsync();
-    } catch {
-      // ignore
-    }
-    downloadRef.current = null;
-    setIsDownloading(false);
-    setBytesWritten(0);
-  }, []);
+    await cancelChapterDownload(chapterId);
+  }, [chapterId]);
 
   const handleDeletePress = useCallback(() => {
     if (!chapterId) return;

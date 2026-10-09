@@ -12,6 +12,7 @@ import {
 import { Header, NoConnection, TabSwitcher } from "@/components";
 import QuranCard from "@/features/quran/components/QuranCard";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useBottomTabBarSpacing } from "@/hooks/useBottomTabBarSpacing";
 import { type ThemeSpacing } from "@/theme";
 import { Chapter } from "@/types";
 import { LibraryEmptyState } from "../components/LibraryEmptyState";
@@ -20,12 +21,16 @@ import { TabValue, useLibraryData } from "../hooks/useLibraryData";
 export default function LibraryScreen() {
   const { t } = useTranslation();
   const { colors, spacing } = useAppTheme();
+  const bottomSpacing = useBottomTabBarSpacing();
   const [activeTab, setActiveTab] = useState<TabValue>("favorites");
   const [refreshing, setRefreshing] = useState(false);
 
   const { listData, isError, refetch } = useLibraryData(activeTab);
 
-  const styles = useMemo(() => createStyles(spacing), [spacing]);
+  const styles = useMemo(
+    () => createStyles(spacing, bottomSpacing),
+    [spacing, bottomSpacing],
+  );
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -111,7 +116,7 @@ export default function LibraryScreen() {
   );
 }
 
-const createStyles = (spacing: ThemeSpacing) =>
+const createStyles = (spacing: ThemeSpacing, bottomSpacing: number) =>
   StyleSheet.create({
     flexContainer: {
       flex: 1,
@@ -121,7 +126,7 @@ const createStyles = (spacing: ThemeSpacing) =>
       marginBottom: spacing.vSm,
     },
     listContentContainer: {
-      paddingBottom: spacing.vXxl,
+      paddingBottom: bottomSpacing,
     },
     emptyStateWrapper: {
       flex: 1,

@@ -25,12 +25,14 @@ export default function NotificationSection() {
     if (result === "enabled") {
       Toast.show({
         type: "success",
+        position: "bottom",
         text1: t("settings.notifications.toastEnabledTitle", "Notifications Enabled"),
         text2: t("settings.notifications.toastEnabledDesc", "Daily reminder enabled for 11:00 PM."),
       });
     } else if (result === "disabled") {
       Toast.show({
         type: "info",
+        position: "bottom",
         text1: t("settings.notifications.toastDisabledTitle", "Notifications Disabled"),
         text2: t("settings.notifications.toastDisabledDesc", "Daily reminder disabled."),
       });

@@ -1,4 +1,4 @@
-import { ErrorBoundary, OfflineBanner } from "@/components";
+import { AppToast, ErrorBoundary, OfflineBanner } from "@/components";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import i18n from "@/i18n";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import { I18nextProvider } from "react-i18next";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Toast from "react-native-toast-message";
 import { NotificationService } from "@/services/notificationService";
 import { useNotificationStore } from "@/store/notificationStore";
 import { STORAGE_KEYS } from "@/lib/storage/appStorage";
@@ -90,7 +89,7 @@ export default function RootLayout() {
                 <Stack.Screen name="settings/display" />
                 <Stack.Screen name="settings/languages" />
               </Stack>
-              <Toast />
+              <AppToast />
             </PersistQueryClientProvider>
           </SafeAreaProvider>
         </GestureHandlerRootView>

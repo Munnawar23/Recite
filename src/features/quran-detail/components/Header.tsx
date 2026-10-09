@@ -65,6 +65,7 @@ function DetailHeader({
     toggleFavorite(chapterId);
     Toast.show({
       type: "success",
+      position: "bottom",
       text1: !isFavorite
         ? "Added to Favorites"
         : "Removed from Favorites",

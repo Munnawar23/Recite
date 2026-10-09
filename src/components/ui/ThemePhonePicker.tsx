@@ -36,7 +36,7 @@ export function ThemePhonePicker({ showHorizontalPadding = true }: ThemePhonePic
               isSelected && S.phoneCardSelected,
             ]}
             onPress={() => {
-              Haptics.medium();
+              Haptics.light();
               setThemeMode(opt.key);
             }}
             activeOpacity={0.8}

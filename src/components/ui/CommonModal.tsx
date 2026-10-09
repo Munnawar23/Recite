@@ -55,7 +55,7 @@ export default function CommonModal({
   const modalVisible = isControlled ? propVisible : internalVisible;
 
   const handleClose = () => {
-    Haptics.medium();
+    Haptics.light();
     if (isControlled && propOnClose) {
       propOnClose();
     } else {
@@ -64,12 +64,12 @@ export default function CommonModal({
   };
 
   const handleOpen = () => {
-    Haptics.medium();
+    Haptics.light();
     setInternalVisible(true);
   };
 
   const handleSelect = (item: DropdownItem) => {
-    Haptics.medium();
+    Haptics.light();
     if (onChange) onChange(item);
     setInternalVisible(false);
   };

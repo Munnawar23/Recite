@@ -79,7 +79,7 @@ export function ThemeStep({ onNext, onBack }: ThemeStepProps) {
           activeTab={fontSizeScale}
           containerStyle={{ paddingHorizontal: 0 }}
           onTabChange={(val: FontSizeScale) => {
-            Haptics.medium();
+            Haptics.light();
             setFontSizeScale(val);
           }}
         />
@@ -98,7 +98,7 @@ export function ThemeStep({ onNext, onBack }: ThemeStepProps) {
           activeTab={quranFontSizeScale}
           containerStyle={{ paddingHorizontal: 0 }}
           onTabChange={(val: FontSizeScale) => {
-            Haptics.medium();
+            Haptics.light();
             setQuranFontSizeScale(val);
           }}
         />

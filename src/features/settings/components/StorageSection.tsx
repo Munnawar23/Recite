@@ -55,7 +55,7 @@ export default function StorageSection() {
       });
       return;
     }
-    Haptics.medium();
+    Haptics.light();
     setDeleteDownloadsVisible(true);
   }, [downloadStats.count, t]);
 
@@ -82,7 +82,7 @@ export default function StorageSection() {
       });
       return;
     }
-    Haptics.medium();
+    Haptics.light();
     setDeleteFavoritesVisible(true);
   }, [favCount, t]);
 

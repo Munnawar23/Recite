@@ -197,7 +197,7 @@ function DownloadCard({
       return;
     }
 
-    Haptics.medium();
+    Haptics.light();
 
     try {
       await startChapterDownload({
@@ -233,13 +233,13 @@ function DownloadCard({
 
   const handleCancelDownload = useCallback(async () => {
     if (!chapterId) return;
-    Haptics.medium();
+    Haptics.light();
     await cancelChapterDownload(chapterId);
   }, [chapterId]);
 
   const handleDeletePress = useCallback(() => {
     if (!chapterId) return;
-    Haptics.medium();
+    Haptics.light();
     setDeleteModalVisible(true);
   }, [chapterId]);
 

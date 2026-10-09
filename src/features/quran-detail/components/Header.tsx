@@ -56,7 +56,7 @@ function DetailHeader({
   );
 
   const handleBack = useCallback(() => {
-    Haptics.medium();
+    Haptics.light();
     router.back();
   }, [router]);
 
@@ -127,7 +127,7 @@ function DetailHeader({
             color="text"
             align="center"
           >
-            {`Surah ${chapterId}: ${localizedSurahName || "—"}`}
+            {localizedSurahName || "—"}
           </AppText>
           <AppText
             variant="caption"

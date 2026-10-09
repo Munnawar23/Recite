@@ -19,7 +19,7 @@ export default function DisplayLanguageSection() {
         title={t("settings.display.optionsTitle", "Display Options")}
         subtitle={t("settings.display.optionsSubtitle", "Theme & font sizes")}
         onPress={() => {
-          Haptics.medium();
+          Haptics.light();
           router.push("/settings/display");
         }}
       />
@@ -30,7 +30,7 @@ export default function DisplayLanguageSection() {
         title={t("settings.languages.optionsTitle", "Language & Audio Options")}
         subtitle={t("settings.languages.optionsSubtitle", "Language, translation & reciter")}
         onPress={() => {
-          Haptics.medium();
+          Haptics.light();
           router.push("/settings/languages");
         }}
       />

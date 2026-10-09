@@ -27,7 +27,7 @@ export default function ContinueReadingCard({
   const S = createStyles(colors, spacing, isDark);
 
   const handlePress = () => {
-    Haptics.medium();
+    Haptics.light();
     onPress?.();
   };
 

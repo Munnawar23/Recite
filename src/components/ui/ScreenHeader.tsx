@@ -29,7 +29,7 @@ export default function ScreenHeader({
   const S = createStyles(colors, spacing, isOffline, paddingTop);
 
   const handleBack = () => {
-    Haptics.medium();
+    Haptics.light();
     if (onBackPress) {
       onBackPress();
     } else {

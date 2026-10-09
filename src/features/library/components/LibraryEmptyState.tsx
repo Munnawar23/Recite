@@ -1,8 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshControlProps, ScrollView, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { EmptyState } from "@/components";
-import { DOWNLOAD_ANIM, EMPTY_ANIM } from "@/constants";
 import { type ThemeSpacing } from "@/theme";
 
 type TabValue = "favorites" | "downloads";
@@ -22,7 +22,9 @@ export const LibraryEmptyState: React.FC<LibraryEmptyStateProps> = ({
   const styles = createStyles(spacing);
 
   const isFavorites = activeTab === "favorites";
-  const animationSource = isFavorites ? DOWNLOAD_ANIM : EMPTY_ANIM;
+  const icon: keyof typeof Ionicons.glyphMap = isFavorites
+    ? "heart-outline"
+    : "download-outline";
   const title = isFavorites
     ? t("library.emptyFavorites.title", "No Favorites Yet")
     : t("library.emptyDownloads.title", "No Downloads");
@@ -42,7 +44,7 @@ export const LibraryEmptyState: React.FC<LibraryEmptyStateProps> = ({
       refreshControl={refreshControl}
     >
       <EmptyState
-        animationSource={animationSource}
+        icon={icon}
         title={title}
         subtitle={subtitle}
       />

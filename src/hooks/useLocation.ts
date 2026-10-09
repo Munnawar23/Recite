@@ -9,6 +9,7 @@ export interface LocationData {
   coords: { latitude: number; longitude: number };
   permissionStatus: "undetermined" | "granted" | "denied";
   cityName?: string;
+  isDefaultLocation?: boolean;
 }
 
 export function useLocation() {
@@ -30,9 +31,30 @@ export function useLocation() {
 
         if (status === "granted") {
           let coords = savedLocationData?.coords || MECCA_COORDS;
+          let hasRealCoords =
+            !!savedLocationData?.coords &&
+            !savedLocationData.isDefaultLocation &&
+            !(
+              savedLocationData.coords.latitude === MECCA_COORDS.latitude &&
+              savedLocationData.coords.longitude === MECCA_COORDS.longitude
+            );
 
+          // Fast path: try cached OS position first (< 50ms)
           try {
-            // Get accurate current GPS position
+            const lastLoc = await Location.getLastKnownPositionAsync({});
+            if (lastLoc?.coords) {
+              coords = {
+                latitude: lastLoc.coords.latitude,
+                longitude: lastLoc.coords.longitude,
+              };
+              hasRealCoords = true;
+            }
+          } catch (err) {
+            console.warn("[useLocation] Last known position error:", err);
+          }
+
+          // Balanced fresh GPS fix
+          try {
             const loc = await Location.getCurrentPositionAsync({
               accuracy: Location.Accuracy.Balanced,
             });
@@ -41,20 +63,10 @@ export function useLocation() {
                 latitude: loc.coords.latitude,
                 longitude: loc.coords.longitude,
               };
+              hasRealCoords = true;
             }
           } catch (e) {
-            // Fallback to last known system position if current fix fails (e.g. indoors / airplane mode)
-            try {
-              const lastLoc = await Location.getLastKnownPositionAsync({});
-              if (lastLoc?.coords) {
-                coords = {
-                  latitude: lastLoc.coords.latitude,
-                  longitude: lastLoc.coords.longitude,
-                };
-              }
-            } catch (err) {
-              console.warn("[useLocation] Last known position error:", err);
-            }
+            // Already populated by lastLoc or savedLocationData
           }
 
           let cityName: string | undefined = savedLocationData?.cityName;
@@ -72,6 +84,7 @@ export function useLocation() {
             coords,
             permissionStatus: "granted",
             cityName,
+            isDefaultLocation: !hasRealCoords,
           };
 
           // Save to appStorage whenever permission is granted so it persists forever
@@ -89,6 +102,7 @@ export function useLocation() {
           coords: savedLocationData?.coords || MECCA_COORDS,
           permissionStatus: status === "undetermined" ? "undetermined" : "denied",
           cityName: savedLocationData?.cityName,
+          isDefaultLocation: true,
         };
       } catch (error) {
         console.warn("[useLocation] Could not retrieve user location:", error);
@@ -96,34 +110,61 @@ export function useLocation() {
           coords: savedLocationData?.coords || MECCA_COORDS,
           permissionStatus: savedLocationData ? "granted" : "denied",
           cityName: savedLocationData?.cityName,
+          isDefaultLocation: !savedLocationData?.coords,
         };
       }
     },
-    staleTime: 1000 * 60 * 10, // 10 minutes fresh - checks location when opening app while protecting against rapid app-switching battery spikes
+    staleTime: 1000 * 60 * 10, // 10 minutes fresh
     refetchOnWindowFocus: true,
     initialData: {
       coords: MECCA_COORDS,
       permissionStatus: "undetermined",
       cityName: undefined,
+      isDefaultLocation: true,
     },
   });
 
   const requestMutation = useMutation({
     mutationFn: async (): Promise<"granted" | "denied" | "blocked"> => {
       const currentPerm = await Location.getForegroundPermissionsAsync();
+
+      let finalStatus: "granted" | "denied" | "blocked" = "denied";
       
       if (currentPerm.status === "granted") {
-        return "granted";
-      }
-
-      if (currentPerm.canAskAgain) {
+        finalStatus = "granted";
+      } else if (currentPerm.canAskAgain) {
         const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status === "granted") return "granted";
-        return "denied";
+        if (status === "granted") {
+          finalStatus = "granted";
+        } else {
+          finalStatus = "denied";
+        }
+      } else {
+        finalStatus = "blocked";
       }
 
-      // Permission blocked (permanently denied)
-      return "blocked";
+      // If permission is granted, immediately acquire cached location (< 50ms)
+      // and prime the React Query cache BEFORE the mutation promise resolves!
+      if (finalStatus === "granted") {
+        try {
+          const lastLoc = await Location.getLastKnownPositionAsync({});
+          if (lastLoc?.coords) {
+            queryClient.setQueryData<LocationData>(["user-location"], (old) => ({
+              coords: {
+                latitude: lastLoc.coords.latitude,
+                longitude: lastLoc.coords.longitude,
+              },
+              permissionStatus: "granted",
+              cityName: old?.cityName,
+              isDefaultLocation: false,
+            }));
+          }
+        } catch (e) {
+          console.warn("[useLocation] Error fetching last known position in mutationFn:", e);
+        }
+      }
+
+      return finalStatus;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-location"] });
@@ -131,12 +172,19 @@ export function useLocation() {
     },
   });
 
+  const coords = locationQuery.data?.coords ?? MECCA_COORDS;
+  const isDefaultLocation =
+    locationQuery.data?.isDefaultLocation ??
+    (coords.latitude === MECCA_COORDS.latitude &&
+      coords.longitude === MECCA_COORDS.longitude);
+
   return {
-    coords: locationQuery.data?.coords ?? MECCA_COORDS,
+    coords,
     permissionStatus: locationQuery.data?.permissionStatus ?? "undetermined",
     cityName: locationQuery.data?.cityName,
     requestLocation: requestMutation.mutateAsync,
     isLoading: locationQuery.isLoading || requestMutation.isPending,
+    isDefaultLocation,
     openAppSettings: async () => {
       await Linking.openSettings();
     },

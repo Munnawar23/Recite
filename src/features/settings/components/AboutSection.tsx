@@ -10,7 +10,7 @@ export default function AboutSection() {
   const router = useRouter();
 
   const handleOpenAbout = () => {
-    Haptics.medium();
+    Haptics.light();
     router.push("/settings/about");
   };
 

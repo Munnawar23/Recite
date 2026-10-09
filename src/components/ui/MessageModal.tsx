@@ -37,12 +37,12 @@ export function MessageModal({
   const { t } = useTranslation();
 
   const handleClose = () => {
-    Haptics.medium();
+    Haptics.light();
     onClose();
   };
 
   const handlePrimaryPress = () => {
-    Haptics.medium();
+    Haptics.light();
     if (onPrimaryPress) {
       onPrimaryPress();
     } else {
@@ -51,7 +51,7 @@ export function MessageModal({
   };
 
   const handleSecondaryPress = () => {
-    Haptics.medium();
+    Haptics.light();
     if (onSecondaryPress) {
       onSecondaryPress();
     } else {

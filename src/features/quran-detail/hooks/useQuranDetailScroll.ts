@@ -52,7 +52,7 @@ export function useQuranDetailScroll({
   );
 
   const scrollToTop = useCallback(() => {
-    Haptics.medium();
+    Haptics.light();
     listRef.current?.scrollToOffset({ offset: 0, animated: true });
   }, []);
 

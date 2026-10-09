@@ -32,12 +32,12 @@ export default function DeleteConfirmationModal({
   if (!visible) return null;
 
   const handleConfirm = () => {
-    Haptics.medium();
+    Haptics.light();
     onConfirm();
   };
 
   const handleCancel = () => {
-    Haptics.medium();
+    Haptics.light();
     onCancel();
   };
 

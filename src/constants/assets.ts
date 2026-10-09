@@ -1,7 +1,5 @@
 // Animations
 export const QURAN_ANIM = require("../../assets/animations/quran.json");
-export const EMPTY_ANIM = require("../../assets/animations/empty.json");
-export const DOWNLOAD_ANIM = require("../../assets/animations/download.json");
 export const LOADING_ANIM = require("../../assets/animations/loading.json");
 
 // Images

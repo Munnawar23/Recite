@@ -34,7 +34,7 @@ export default function SettingsItemCard({
 
   const handlePress = useCallback(() => {
     if (!onPress) return;
-    Haptics.medium();
+    Haptics.light();
     onPress();
   }, [onPress]);
 

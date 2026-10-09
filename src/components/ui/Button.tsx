@@ -44,7 +44,7 @@ export function Button({
   const buttonTitle = tx ? t(tx, txOptions) : title;
 
   const handlePress = () => {
-    Haptics.medium();
+    Haptics.light();
     onPress();
   };
 

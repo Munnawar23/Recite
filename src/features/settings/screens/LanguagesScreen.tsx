@@ -69,7 +69,7 @@ export default function LanguagesScreen() {
             data={languageDropdownData}
             value={language}
             onChange={(item) => {
-              Haptics.medium();
+              Haptics.light();
               setLanguage(item.value as SupportedLanguageCode);
             }}
             placeholder={t(

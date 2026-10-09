@@ -4,12 +4,18 @@ import { Haptics } from "@/lib/haptics";
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
-  runOnJS,
+  cancelAnimation,
+  Easing,
+  interpolate,
   useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
   type SharedValue,
 } from "react-native-reanimated";
+import { scheduleOnRN } from "react-native-worklets";
 import Svg, {
   Circle,
   G,
@@ -36,12 +42,19 @@ export default function CompassDial({
 }: CompassDialProps) {
   const { colors, fontFamily } = useAppTheme();
   const isAligned = useSharedValue(false);
+  const glowProgress = useSharedValue(0);
+  const pulseAnim = useSharedValue(1);
 
   useAnimatedReaction(
     () => ({ rot: rotation.value, active }),
     ({ rot, active: isActive }) => {
       if (!isActive) {
-        isAligned.value = false;
+        if (isAligned.value) {
+          isAligned.value = false;
+          glowProgress.value = withTiming(0, { duration: 250 });
+          cancelAnimation(pulseAnim);
+          pulseAnim.value = 1;
+        }
         return;
       }
 
@@ -50,7 +63,28 @@ export default function CompassDial({
 
       if (aligned !== isAligned.value) {
         isAligned.value = aligned;
-        if (aligned) runOnJS(Haptics.success)();
+        if (aligned) {
+          scheduleOnRN(Haptics.success);
+          glowProgress.value = withTiming(1, { duration: 350 });
+          pulseAnim.value = withRepeat(
+            withSequence(
+              withTiming(1.06, {
+                duration: 900,
+                easing: Easing.inOut(Easing.ease),
+              }),
+              withTiming(1.0, {
+                duration: 900,
+                easing: Easing.inOut(Easing.ease),
+              }),
+            ),
+            -1,
+            true,
+          );
+        } else {
+          glowProgress.value = withTiming(0, { duration: 250 });
+          cancelAnimation(pulseAnim);
+          pulseAnim.value = 1;
+        }
       }
     },
   );
@@ -58,6 +92,37 @@ export default function CompassDial({
   // Pure GPU 120 FPS transform rotation
   const dialStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${-rotation.value}deg` }],
+  }));
+
+  // Outer ambient breathing glow aura
+  const glowAuraStyle = useAnimatedStyle(() => ({
+    opacity: glowProgress.value * 0.35,
+    transform: [
+      {
+        scale:
+          interpolate(glowProgress.value, [0, 1], [0.92, 1.0]) *
+          pulseAnim.value,
+      },
+    ],
+  }));
+
+  // Inner radiant neon beam border ring
+  const glowRingStyle = useAnimatedStyle(() => ({
+    opacity: glowProgress.value * 0.9,
+    transform: [
+      {
+        scale: interpolate(glowProgress.value, [0, 1], [0.95, 1.015]),
+      },
+    ],
+  }));
+
+  // Pointer indicator accentuation when aligned
+  const pointerGlowStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        scale: interpolate(glowProgress.value, [0, 1], [1, 1.2]),
+      },
+    ],
   }));
 
   // Memoized vector ticks (every 5° with major/mid highlights)
@@ -168,15 +233,41 @@ export default function CompassDial({
 
   return (
     <View style={styles.container}>
+      {/* 100% UI Thread GPU-Rendered Glow Aura */}
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          styles.glowAura,
+          {
+            backgroundColor: colors.primary,
+            shadowColor: colors.primary,
+          },
+          glowAuraStyle,
+        ]}
+      />
+
+      {/* Inner Radiant Glowing Ring */}
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          styles.glowRing,
+          {
+            borderColor: colors.primary,
+            shadowColor: colors.primary,
+          },
+          glowRingStyle,
+        ]}
+      />
+
       {/* Modern Top Arrow Needle Indicator */}
-      <View style={styles.pointerWrap}>
+      <Animated.View style={[styles.pointerWrap, pointerGlowStyle]}>
         <Svg width={rs.space(24)} height={rs.space(26)}>
           <Polygon
             points="12,2 20,24 12,19 4,24"
             fill={colors.primary}
           />
         </Svg>
-      </View>
+      </Animated.View>
 
       {/* Rotating Dial */}
       <Animated.View style={dialStyle}>
@@ -274,6 +365,27 @@ const styles = StyleSheet.create({
     width: SIZE,
     height: SIZE,
     marginVertical: rs.space(16),
+  },
+  glowAura: {
+    position: "absolute",
+    width: SIZE + rs.space(28),
+    height: SIZE + rs.space(28),
+    borderRadius: (SIZE + rs.space(28)) / 2,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.95,
+    shadowRadius: rs.space(26),
+    elevation: 16,
+  },
+  glowRing: {
+    position: "absolute",
+    width: SIZE + rs.space(10),
+    height: SIZE + rs.space(10),
+    borderRadius: (SIZE + rs.space(10)) / 2,
+    borderWidth: 2.5,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.85,
+    shadowRadius: rs.space(14),
+    elevation: 10,
   },
   pointerWrap: {
     position: "absolute",

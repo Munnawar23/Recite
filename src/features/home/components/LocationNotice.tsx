@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 
 import { AppText, MessageModal } from "@/components";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLocation } from "@/hooks/useLocation";
 import { Haptics } from "@/lib/haptics";
+import { type ThemeSpacing } from "@/theme";
 
 interface LocationNoticeProps {
   permissionStatus: "undetermined" | "granted" | "denied";
-  onPress?: () => void;
+  onPress?: () => Promise<any> | void;
 }
 
 export default function LocationNotice({
@@ -17,19 +23,41 @@ export default function LocationNotice({
   onPress,
 }: LocationNoticeProps) {
   const { t } = useTranslation();
-  const { spacing } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
   const { requestLocation, openAppSettings } = useLocation();
+  const [loading, setLoading] = useState(false);
   const [showBlockedModal, setShowBlockedModal] = useState(false);
   const S = createStyles(spacing);
 
-  const handlePress = async () => {
-    Haptics.medium();
-    if (onPress) {
-      onPress();
+  useEffect(() => {
+    if (permissionStatus === "granted") {
+      setLoading(false);
     }
-    const status = await requestLocation();
-    if (status === "blocked") {
-      setShowBlockedModal(true);
+  }, [permissionStatus]);
+
+  useEffect(() => {
+    if (!loading) return;
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 15000);
+    return () => clearTimeout(timeout);
+  }, [loading]);
+
+  const handlePress = async () => {
+    if (loading) return;
+    Haptics.light();
+    setLoading(true);
+    try {
+      const status = onPress ? await onPress() : await requestLocation();
+      if (status === "blocked") {
+        setShowBlockedModal(true);
+        setLoading(false);
+      } else if (status === "denied") {
+        setLoading(false);
+      }
+      // If status === "granted", keep loading=true until permissionStatus prop updates to "granted"
+    } catch {
+      setLoading(false);
     }
   };
 
@@ -40,27 +68,33 @@ export default function LocationNotice({
   return (
     <>
       <View style={S.container}>
-        <AppText variant="body" color="subtext" align="center">
-          {t("home.locationNotice.showingMecca", "Showing Mecca times.")}{" "}
-        </AppText>
-        <Pressable
-          onPress={handlePress}
-          style={({ pressed }) => [pressed && S.pressed]}
-          accessibilityRole="button"
-          accessibilityLabel={t(
-            "home.locationNotice.enableLocation",
-            "Enable location permission",
-          )}
-        >
-          <AppText
-            variant="body"
-            color="primary"
-            family="title"
-            style={S.settingsLink}
-          >
-            {t("home.locationNotice.enableLocation", "Tap to enable location")}
-          </AppText>
-        </Pressable>
+        {loading ? (
+          <ActivityIndicator size="small" color={colors.primary} />
+        ) : (
+          <>
+            <AppText variant="body" color="subtext" align="center">
+              {t("home.locationNotice.showingMecca", "Showing Mecca times.")}{" "}
+            </AppText>
+            <Pressable
+              onPress={handlePress}
+              style={({ pressed }) => [pressed && S.pressed]}
+              accessibilityRole="button"
+              accessibilityLabel={t(
+                "home.locationNotice.enableLocation",
+                "Enable location permission",
+              )}
+            >
+              <AppText
+                variant="body"
+                color="primary"
+                family="title"
+                style={S.settingsLink}
+              >
+                {t("home.locationNotice.enableLocation", "Tap to enable location")}
+              </AppText>
+            </Pressable>
+          </>
+        )}
       </View>
 
       <MessageModal
@@ -85,7 +119,7 @@ export default function LocationNotice({
   );
 }
 
-const createStyles = (spacing: any) =>
+const createStyles = (spacing: ThemeSpacing) =>
   StyleSheet.create({
     container: {
       marginTop: spacing.vLg,

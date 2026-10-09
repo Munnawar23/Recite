@@ -17,7 +17,7 @@ export default function NotificationSection() {
   const [showBlockedModal, setShowBlockedModal] = useState(false);
 
   const handleToggle = async () => {
-    Haptics.medium();
+    Haptics.light();
     setIsLoading(true);
     const result = await toggleDailyReminder();
     setIsLoading(false);

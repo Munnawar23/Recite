@@ -36,7 +36,7 @@ export function useChapterSearch(chapters: Chapter[]) {
 
   // Handle clear search
   const handleClear = useCallback(() => {
-    Haptics.medium();
+    Haptics.light();
     setInputValue("");
     setSearchQuery("");
     if (debounceTimer.current) {

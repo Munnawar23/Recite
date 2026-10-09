@@ -44,7 +44,7 @@ function VerseListHeader({
           data={TRANSLATION_OPTIONS}
           value={selectedTransId}
           onChange={(item) => {
-            Haptics.medium();
+            Haptics.light();
             setTranslationId(item.value);
           }}
           placeholder="Select Translation"

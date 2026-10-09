@@ -43,7 +43,7 @@ export function AppLanguageStep({ onNext }: AppLanguageStepProps) {
               key={lang.code}
               style={[S.languageItem, isSelected && S.selectedItem]}
               onPress={() => {
-                Haptics.medium();
+                Haptics.light();
                 setLanguage(lang.code as SupportedLanguageCode);
               }}
               activeOpacity={0.7}

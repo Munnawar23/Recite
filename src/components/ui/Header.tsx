@@ -28,7 +28,7 @@ export default function Header({
   const S = createStyles(colors, spacing, isOffline, paddingTop);
 
   const handlePress = () => {
-    Haptics.medium();
+    Haptics.light();
     onRightIconPress?.();
   };
 

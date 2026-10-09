@@ -68,7 +68,7 @@ export default function AudioPlayerComponent({
   }, [status.currentTime, isDragging]);
 
   const cycleSpeed = useCallback(() => {
-    Haptics.medium();
+    Haptics.light();
     const nextSpeed =
       playbackSpeed === 1.0 ? 1.25 :
       playbackSpeed === 1.25 ? 1.5 :
@@ -78,7 +78,7 @@ export default function AudioPlayerComponent({
   }, [playbackSpeed, player]);
 
   const handlePlayPause = useCallback(() => {
-    Haptics.medium();
+    Haptics.light();
     if (status.playing) {
       player.pause();
     } else {

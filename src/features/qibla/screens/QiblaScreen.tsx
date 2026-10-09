@@ -1,7 +1,9 @@
 import { AppText, EmptyState, Header, MessageModal } from "@/components";
+import { LOADING_ANIM } from "@/constants";
 import CompassDial from "@/features/qibla/components/CompassDial";
 import { useCompass } from "@/features/qibla/hooks/useCompass";
 import { useQiblaDirection } from "@/features/qibla/hooks/useQiblaDirection";
+import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useBottomTabBarSpacing } from "@/hooks/useBottomTabBarSpacing";
 import { useLocation } from "@/hooks/useLocation";
@@ -9,6 +11,7 @@ import { usePathname } from "expo-router";
 import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
+import LottieView from "lottie-react-native";
 import Animated, {
   useAnimatedProps,
   type SharedValue,
@@ -36,7 +39,18 @@ function LiveHeadingText({
       underlineColorAndroid="transparent"
       editable={false}
       maxFontSizeMultiplier={1.2}
-      style={style}
+      textAlign="center"
+      style={[
+        {
+          textAlign: "center",
+          alignSelf: "center",
+          textAlignVertical: "center",
+          includeFontPadding: false,
+          padding: 0,
+          margin: 0,
+        },
+        style,
+      ]}
       animatedProps={animatedProps}
     />
   );
@@ -49,8 +63,15 @@ export default function QiblaScreen() {
   const theme = useAppTheme();
   const bottomSpacing = useBottomTabBarSpacing();
   const styles = createStyles(theme, bottomSpacing);
-  const { coords, permissionStatus, cityName, requestLocation, openAppSettings, isLoading } =
-    useLocation();
+  const {
+    coords,
+    permissionStatus,
+    cityName,
+    requestLocation,
+    openAppSettings,
+    isLoading,
+    isDefaultLocation,
+  } = useLocation();
   const [showBlockedModal, setShowBlockedModal] = useState(false);
 
   const handleRequestLocation = async () => {
@@ -98,6 +119,15 @@ export default function QiblaScreen() {
               loading={isLoading}
               onPress={handleRequestLocation}
             />
+          ) : isDefaultLocation ? (
+            <View style={styles.loadingContainer}>
+              <LottieView
+                source={LOADING_ANIM}
+                autoPlay
+                loop
+                style={styles.lottieLoader}
+              />
+            </View>
           ) : (
             <>
               {/* Top Qibla Target Header (Big Font) */}
@@ -135,6 +165,9 @@ export default function QiblaScreen() {
                   variant="body"
                   family="text"
                   color="subtext"
+                  align="center"
+                  style={styles.headingLabel}
+                  numberOfLines={1}
                 >
                   {t("qiblaScreen.currentHeading", "Current Heading")}
                 </AppText>
@@ -189,6 +222,15 @@ const createStyles = (
       alignItems: "center",
       justifyContent: "space-evenly",
     },
+    loadingContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    lottieLoader: {
+      width: rs.space(170),
+      height: rs.space(170),
+    },
     targetContainer: {
       alignItems: "center",
       marginTop: theme.spacing.xs,
@@ -201,7 +243,14 @@ const createStyles = (
     },
     headingContainer: {
       alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
       marginBottom: theme.spacing.md,
+      width: "100%",
+    },
+    headingLabel: {
+      textAlign: "center",
+      alignSelf: "center",
     },
     headingValue: {
       fontFamily: theme.fontFamily.title,
@@ -209,6 +258,8 @@ const createStyles = (
       color: theme.colors.text,
       marginTop: theme.spacing.xs,
       textAlign: "center",
+      alignSelf: "center",
       padding: 0,
+      margin: 0,
     },
   });

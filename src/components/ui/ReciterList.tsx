@@ -88,7 +88,7 @@ export function ReciterList({
   }, [player]);
 
   const togglePlayAudio = useCallback(async (targetReciterId: number) => {
-    Haptics.medium();
+    Haptics.light();
 
     if (isOffline) {
       setOfflineModalVisible(true);
@@ -137,7 +137,7 @@ export function ReciterList({
   }, [isOffline, playingReciterId, status.playing, safePause, player]);
 
   const handleSelectReciter = useCallback((id: number) => {
-    Haptics.medium();
+    Haptics.light();
     setReciterId(id);
     if (onSelectReciter) onSelectReciter(id);
   }, [setReciterId, onSelectReciter]);

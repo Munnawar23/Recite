@@ -43,7 +43,7 @@ function QuranCard({ item, onPress }: QuranCardProps) {
   const router = useRouter();
 
   const handlePress = useCallback(() => {
-    Haptics.medium();
+    Haptics.light();
     if (onPress) {
       onPress(item);
     } else {

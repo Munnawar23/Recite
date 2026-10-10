@@ -209,6 +209,12 @@
       "contactTitle": "Hubungi Tim Dukungan",
       "contactEmail": "munawwarh48@gmail.com"
     },
+    "share": {
+      "title": "Bagikan Aplikasi",
+      "subtitle": "Bagikan ke teman & keluarga",
+      "message": "Yuk baca dan dengarkan Al-Qur'an pakai aplikasi Recite! Download di sini:",
+      "dialogTitle": "Bagikan lewat"
+    },
     "about": {
       "title": "Tentang Kami",
       "subtitle": "Aplikasi Al-Qur'an gratis untuk umat",

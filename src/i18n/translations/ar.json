@@ -209,6 +209,12 @@
       "contactTitle": "تواصل معنا",
       "contactEmail": "munawwarh48@gmail.com"
     },
+    "share": {
+      "title": "مشاركة التطبيق",
+      "subtitle": "شاركه مع الأهل والأصدقاء",
+      "message": "تطبيق «رتّل» لقراءة القرآن الكريم والاستماع إليه، حمله من هنا:",
+      "dialogTitle": "مشاركة عبر"
+    },
     "about": {
       "title": "عن التطبيق",
       "subtitle": "تطبيق قرآني مجاني للجميع",

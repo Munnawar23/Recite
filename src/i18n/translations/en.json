@@ -209,6 +209,12 @@
       "contactTitle": "Contact Support",
       "contactEmail": "munawwarh48@gmail.com"
     },
+    "share": {
+      "title": "Share App",
+      "subtitle": "Share with friends & family",
+      "message": "Check out Recite app to read and listen to the Holy Quran! Download it here:",
+      "dialogTitle": "Share Recite via"
+    },
     "about": {
       "title": "About Us",
       "subtitle": "Free community Quran app",

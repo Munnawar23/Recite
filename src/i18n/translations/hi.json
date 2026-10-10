@@ -209,6 +209,12 @@
       "contactTitle": "सपोर्ट से संपर्क करें",
       "contactEmail": "munawwarh48@gmail.com"
     },
+    "share": {
+      "title": "ऐप शेयर करें",
+      "subtitle": "दोस्तों और परिवार के साथ शेयर करें",
+      "message": "पवित्र क़ुरआन पढ़ने और सुनने के लिए Recite ऐप डाउनलोड करें:",
+      "dialogTitle": "शेयर करें"
+    },
     "about": {
       "title": "हमारे बारे में",
       "subtitle": "मुफ़्त कम्युनिटी क़ुरआन ऐप",

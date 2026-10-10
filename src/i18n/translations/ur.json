@@ -209,6 +209,12 @@
       "contactTitle": "سپورٹ سے رابطہ کریں",
       "contactEmail": "munawwarh48@gmail.com"
     },
+    "share": {
+      "title": "ایپ شیئر کریں",
+      "subtitle": "دوستوں اور گھر والوں کے ساتھ شیئر کریں",
+      "message": "قرآن مجید پڑھنے اور سننے کے لیے Recite ایپ ڈاؤن لوڈ کریں:",
+      "dialogTitle": "شیئر کریں بذریعہ"
+    },
     "about": {
       "title": "ہمارے بارے میں",
       "subtitle": "مفت کمیونٹی قرآن ایپ",

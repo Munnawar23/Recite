@@ -209,6 +209,12 @@
       "contactTitle": "যোগাযোগ করুন",
       "contactEmail": "munawwarh48@gmail.com"
     },
+    "share": {
+      "title": "অ্যাপ শেয়ার করুন",
+      "subtitle": "পরিবার ও বন্ধুদের সাথে শেয়ার করুন",
+      "message": "সহজে কুরআন পড়তে ও শুনতে Recite অ্যাপটি ডাউনলোড করুন:",
+      "dialogTitle": "শেয়ার করুন"
+    },
     "about": {
       "title": "আমাদের সম্পর্কে",
       "subtitle": "সবার জন্য উন্মুক্ত ফ্রি কুরআন অ্যাপ",

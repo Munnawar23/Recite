@@ -38,8 +38,8 @@ function DetailHeader({
   const { paddingTop } = useAppSafeAreaInsets();
   const language = useLanguageStore((state) => state.language);
   const localizedSurahName = useMemo(
-    () => getLocalizedSurah(chapterId, language, englishName).name,
-    [chapterId, language, englishName],
+    () => getLocalizedSurah(chapterId, language, englishName, "", arabicName).name,
+    [chapterId, language, englishName, arabicName],
   );
   const isDark = activeScheme === "dark";
 

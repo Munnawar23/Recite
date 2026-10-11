@@ -52,6 +52,7 @@ export function useChapterSearch(chapters: Chapter[]) {
         language,
         c.englishName,
         c.englishTranslation,
+        c.name,
       );
       return {
         ...c,

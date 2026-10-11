@@ -36,8 +36,9 @@ function QuranCard({ item, onPress }: QuranCardProps) {
         language,
         item.englishName,
         item.englishTranslation,
+        item.name,
       ),
-    [item.id, language, item.englishName, item.englishTranslation],
+    [item.id, language, item.englishName, item.englishTranslation, item.name],
   );
 
   const router = useRouter();

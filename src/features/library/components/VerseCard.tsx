@@ -32,8 +32,10 @@ export function VerseCard({ item }: VerseCardProps) {
       item.chapterId,
       language,
       item.surahName || `Surah ${item.chapterId}`,
+      "",
+      item.surahArabicName,
     ).name;
-  }, [item.chapterId, language, item.surahName]);
+  }, [item.chapterId, language, item.surahName, item.surahArabicName]);
 
   const S = useMemo(() => createStyles(colors), [colors]);
 

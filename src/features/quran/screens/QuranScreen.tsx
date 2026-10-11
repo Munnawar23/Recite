@@ -28,6 +28,8 @@ const formatContinueReadingParams = (lastRead: LastRead, language: string) => ({
       lastRead.surahNumber,
       language,
       lastRead.surahName,
+      "",
+      lastRead.arabicName,
     ).name,
     arabicName: lastRead.arabicName,
     versesCount: lastRead.versesCount,
@@ -77,7 +79,13 @@ export default function QuranScreen() {
 
   const language = useLanguageStore((state) => state.language);
   const localizedLastReadName = lastRead
-    ? getLocalizedSurah(lastRead.surahNumber, language, lastRead.surahName).name
+    ? getLocalizedSurah(
+        lastRead.surahNumber,
+        language,
+        lastRead.surahName,
+        "",
+        lastRead.arabicName,
+      ).name
     : "";
 
   const handleContinueReading = useCallback(() => {

@@ -127,8 +127,8 @@ function VerseListContent({
 
   const language = useLanguageStore((state) => state.language);
   const localizedSurahName = useMemo(() => {
-    return getLocalizedSurah(chapterId || 1, language, englishName).name;
-  }, [chapterId, language, englishName]);
+    return getLocalizedSurah(chapterId || 1, language, englishName, "", arabicName).name;
+  }, [chapterId, language, englishName, arabicName]);
 
   const shareCardRef = useRef<View>(null);
   const [verseToShare, setVerseToShare] = useState<SurahVerse | null>(null);
@@ -227,7 +227,7 @@ function VerseListContent({
         verseNumber: verse.verseNumber,
         chapterId: chapterId,
         arabic: verse.arabic,
-        surahName: localizedSurahName || englishName,
+        surahName: englishName,
         surahArabicName: arabicName,
         versesCount: versesCount ? Number(versesCount) : undefined,
         chapterType: chapterType,

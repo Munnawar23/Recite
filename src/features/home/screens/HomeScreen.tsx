@@ -125,6 +125,8 @@ export default function HomeScreen() {
                 lastRead.surahNumber,
                 language,
                 lastRead.surahName,
+                "",
+                lastRead.arabicName,
               ).name;
               return (
                 <ContinueReadingCard

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 import { AppTextInput } from "@/components";
 import { useAppFonts } from "@/hooks/useAppFonts";
@@ -13,6 +13,7 @@ interface SearchBarInputProps {
   onClear: () => void;
   placeholder?: string;
   testID?: string;
+  containerStyle?: StyleProp<ViewStyle>;
 }
 
 export const SearchBar = React.memo(function SearchBar({
@@ -21,6 +22,7 @@ export const SearchBar = React.memo(function SearchBar({
   onClear,
   placeholder = "Search Surah...",
   testID = "search-bar",
+  containerStyle,
 }: SearchBarInputProps) {
   const { colors, fontFamily, fontSize, spacing } = useAppTheme();
   const styles = useMemo(
@@ -39,7 +41,7 @@ export const SearchBar = React.memo(function SearchBar({
   );
 
   return (
-    <View style={styles.searchContainer}>
+    <View style={[styles.searchContainer, containerStyle]}>
       <View style={styles.searchBar}>
         <Ionicons
           name="search"

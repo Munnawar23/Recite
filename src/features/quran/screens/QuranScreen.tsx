@@ -5,10 +5,17 @@ import { useTranslation } from "react-i18next";
 import { RefreshControl, RefreshControlProps, StyleSheet, View } from "react-native";
 import LottieView from "lottie-react-native";
 
-import { EmptyState, Header, NoConnection } from "@/components";
+import {
+  EmptyState,
+  Header,
+  NoConnection,
+  TabOption,
+  TabSwitcher,
+} from "@/components";
 import { getLocalizedSurah, LOADING_ANIM } from "@/constants";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import QuranCard from "@/features/quran/components/QuranCard";
+import QuranListenCard from "@/features/quran/components/QuranListenCard";
 import SearchBar from "@/features/quran/components/SearchBar";
 import { useChapterSearch } from "@/features/quran/hooks/useChapterSearch";
 import { useQuranChapters } from "@/features/quran/hooks/useQuranChapters";
@@ -37,10 +44,14 @@ const formatContinueReadingParams = (lastRead: LastRead, language: string) => ({
   },
 });
 
+type QuranTab = "read" | "listen";
+
 export default function QuranScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { colors, spacing } = useAppTheme();
+
+  const [activeTab, setActiveTab] = useState<QuranTab>("read");
 
   const lastRead = useReadingProgressStore((state) => state.lastRead);
 
@@ -53,6 +64,19 @@ export default function QuranScreen() {
 
   const [refreshing, setRefreshing] = useState(false);
   const listRef = useRef<FlashListRef<Chapter>>(null);
+  const listenListRef = useRef<FlashListRef<Chapter>>(null);
+
+  const tabsData = useMemo<TabOption[]>(
+    () => [
+      { label: t("common.read", "Read"), value: "read" },
+      { label: t("common.listen", "Listen"), value: "listen" },
+    ],
+    [t],
+  );
+
+  const handleTabChange = useCallback((value: string) => {
+    setActiveTab(value as QuranTab);
+  }, []);
 
   const styles = useMemo(
     () => createStyles(spacing),
@@ -61,8 +85,9 @@ export default function QuranScreen() {
 
   // Scroll to top whenever filtered results change
   useEffect(() => {
-    if (listRef.current && filteredData.length > 0) {
-      listRef.current.scrollToOffset({ offset: 0, animated: false });
+    if (filteredData.length > 0) {
+      listRef.current?.scrollToOffset({ offset: 0, animated: false });
+      listenListRef.current?.scrollToOffset({ offset: 0, animated: false });
     }
   }, [filteredData]);
 
@@ -91,11 +116,29 @@ export default function QuranScreen() {
     router.push(formatContinueReadingParams(lastRead, language));
   }, [lastRead, router, language]);
 
-  const keyExtractor = useCallback((item: Chapter) => String(item.id), []);
+  const keyExtractorRead = useCallback(
+    (item: Chapter) => `read-${item.id}`,
+    [],
+  );
+
+  const keyExtractorListen = useCallback(
+    (item: Chapter) => `listen-${item.id}`,
+    [],
+  );
 
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<Chapter>) => <QuranCard item={item} />,
     [],
+  );
+
+  const renderListenItem = useCallback(
+    ({ item }: ListRenderItemInfo<Chapter>) => <QuranListenCard item={item} />,
+    [],
+  );
+
+  const renderListenHeader = useCallback(
+    () => <View style={styles.listenTopSpacer} />,
+    [styles],
   );
 
   const refreshControl = useMemo(
@@ -165,25 +208,53 @@ export default function QuranScreen() {
           "Read, listen and reflect upon the words of Allah",
         )}
       />
+      <View style={styles.tabSwitcherContainer}>
+        <TabSwitcher
+          tabs={tabsData}
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+        />
+      </View>
       <SearchBar
         value={inputValue}
         onChangeText={setInputValue}
         onClear={handleClear}
         placeholder={t("quran.searchPlaceholder", "Search Surah...")}
+        containerStyle={styles.searchBarContainer}
       />
-      <FlashList<Chapter>
-        ref={listRef}
-        data={filteredData}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
-        contentContainerStyle={styles.listContent}
-        refreshControl={refreshControl}
-        ListHeaderComponent={renderListHeader}
-        ListEmptyComponent={renderListEmpty}
-      />
+      <View style={styles.listWrapper}>
+        {activeTab === "read" ? (
+          <FlashList<Chapter>
+            ref={listRef}
+            data={filteredData}
+            keyExtractor={keyExtractorRead}
+            renderItem={renderItem}
+            drawDistance={rs.space(500)}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
+            contentContainerStyle={styles.listContent}
+            refreshControl={refreshControl}
+            ListHeaderComponent={renderListHeader}
+            ListEmptyComponent={renderListEmpty}
+          />
+        ) : (
+          <FlashList<Chapter>
+            ref={listenListRef}
+            data={filteredData}
+            keyExtractor={keyExtractorListen}
+            renderItem={renderListenItem}
+            drawDistance={rs.space(500)}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
+            contentContainerStyle={styles.listContent}
+            refreshControl={refreshControl}
+            ListHeaderComponent={renderListenHeader}
+            ListEmptyComponent={renderListEmpty}
+          />
+        )}
+      </View>
     </View>
   );
 }
@@ -192,6 +263,15 @@ const createStyles = (spacing: ThemeSpacing) =>
   StyleSheet.create({
     container: {
       flex: 1,
+    },
+    listWrapper: {
+      flex: 1,
+    },
+    tabSwitcherContainer: {
+      marginBottom: rs.space(4),
+    },
+    searchBarContainer: {
+      marginTop: 0,
     },
     listContent: {
       flexGrow: 1,
@@ -216,5 +296,8 @@ const createStyles = (spacing: ThemeSpacing) =>
     },
     topSpacer: {
       height: spacing.vMd,
+    },
+    listenTopSpacer: {
+      height: rs.space(7),
     },
   });

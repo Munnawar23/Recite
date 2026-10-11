@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
@@ -10,7 +10,6 @@ import { getLocalizedSurah } from "@/constants";
 import PrayerTimes from "@/features/home/components/PrayerTimes";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useBottomTabBarSpacing } from "@/hooks/useBottomTabBarSpacing";
 import { useLocation } from "@/hooks/useLocation";
 import { useLanguageStore } from "@/store/languageStore";
 import { useReadingProgressStore } from "@/store/readingProgressStore";
@@ -41,8 +40,7 @@ export default function HomeScreen() {
   const language = useLanguageStore((state) => state.language);
   const [refreshing, setRefreshing] = useState(false);
 
-  const bottomSpacing = useBottomTabBarSpacing();
-  const styles = createStyles(spacing, bottomSpacing);
+  const styles = useMemo(() => createStyles(spacing), [spacing]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -165,22 +163,17 @@ export default function HomeScreen() {
             />
           )}
         </Animated.View>
-
-        <View style={styles.bottomSpacer} />
       </ScrollView>
     </View>
   );
 }
 
-const createStyles = (spacing: ThemeSpacing, bottomSpacing: number) =>
+const createStyles = (spacing: ThemeSpacing) =>
   StyleSheet.create({
     scroll: {
       flex: 1,
     },
     scrollContent: {
       paddingBottom: spacing.vLg,
-    },
-    bottomSpacer: {
-      height: bottomSpacing,
     },
   });

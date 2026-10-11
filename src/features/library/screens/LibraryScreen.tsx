@@ -12,7 +12,6 @@ import {
 import { EmptyState, Header, TabSwitcher } from "@/components";
 import QuranCard from "@/features/quran/components/QuranCard";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useBottomTabBarSpacing } from "@/hooks/useBottomTabBarSpacing";
 import { type ThemeSpacing } from "@/theme";
 import { Chapter, FavoriteVerse } from "@/types";
 import { VerseCard } from "../components/VerseCard";
@@ -21,15 +20,14 @@ import { TabValue, useLibraryData } from "../hooks/useLibraryData";
 export default function LibraryScreen() {
   const { t } = useTranslation();
   const { colors, spacing } = useAppTheme();
-  const bottomSpacing = useBottomTabBarSpacing();
   const [activeTab, setActiveTab] = useState<TabValue>("favorites");
   const [refreshing, setRefreshing] = useState(false);
 
   const { favoriteVerses, downloadedChapters } = useLibraryData();
 
   const styles = useMemo(
-    () => createStyles(spacing, bottomSpacing),
-    [spacing, bottomSpacing],
+    () => createStyles(spacing),
+    [spacing],
   );
 
   const onRefresh = useCallback(async () => {
@@ -159,7 +157,7 @@ export default function LibraryScreen() {
   );
 }
 
-const createStyles = (spacing: ThemeSpacing, bottomSpacing: number) =>
+const createStyles = (spacing: ThemeSpacing) =>
   StyleSheet.create({
     flexContainer: {
       flex: 1,
@@ -169,12 +167,12 @@ const createStyles = (spacing: ThemeSpacing, bottomSpacing: number) =>
       marginBottom: spacing.vSm,
     },
     listContentContainer: {
-      paddingBottom: bottomSpacing,
+      paddingBottom: spacing.vLg,
     },
     emptyStateWrapper: {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      paddingBottom: bottomSpacing + spacing.vXxl,
+      paddingBottom: spacing.vXxl,
     },
   });

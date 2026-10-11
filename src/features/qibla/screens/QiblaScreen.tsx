@@ -5,7 +5,6 @@ import { useCompass } from "@/features/qibla/hooks/useCompass";
 import { useQiblaDirection } from "@/features/qibla/hooks/useQiblaDirection";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useBottomTabBarSpacing } from "@/hooks/useBottomTabBarSpacing";
 import { useLocation } from "@/hooks/useLocation";
 import { usePathname } from "expo-router";
 import { useTranslation } from "react-i18next";
@@ -61,8 +60,7 @@ export default function QiblaScreen() {
   const isFocused = pathname === "/qibla";
   const { t } = useTranslation();
   const theme = useAppTheme();
-  const bottomSpacing = useBottomTabBarSpacing();
-  const styles = createStyles(theme, bottomSpacing);
+  const styles = createStyles(theme);
   const {
     coords,
     permissionStatus,
@@ -206,7 +204,6 @@ export default function QiblaScreen() {
 
 const createStyles = (
   theme: ReturnType<typeof useAppTheme>,
-  bottomSpacing: number,
 ) =>
   StyleSheet.create({
     root: {
@@ -218,7 +215,7 @@ const createStyles = (
     content: {
       flex: 1,
       paddingHorizontal: theme.spacing.screenPadding,
-      paddingBottom: bottomSpacing,
+      paddingBottom: theme.spacing.xl,
       alignItems: "center",
       justifyContent: "space-evenly",
     },

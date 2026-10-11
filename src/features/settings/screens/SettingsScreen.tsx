@@ -12,20 +12,18 @@ import StorageSection from "../components/StorageSection";
 
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useBottomTabBarSpacing } from "@/hooks/useBottomTabBarSpacing";
 import { type ThemeColors, type ThemeSpacing } from "@/theme";
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
   const { spacing } = useAppTheme();
-  const bottomSpacing = useBottomTabBarSpacing();
 
   const appName = Constants.expoConfig?.name || "Recite";
   const appVersion = Constants.expoConfig?.version || "1.0.0";
 
   const styles = useMemo(
-    () => createStyles(spacing, bottomSpacing),
-    [spacing, bottomSpacing],
+    () => createStyles(spacing),
+    [spacing],
   );
 
   return (
@@ -62,17 +60,12 @@ export default function SettingsScreen() {
             {`${appName} v${appVersion}`}
           </AppText>
         </View>
-
-        <View style={styles.bottomSpacer} />
       </ScrollView>
     </View>
   );
 }
 
-const createStyles = (
-  spacing: ThemeSpacing,
-  bottomSpacing: number,
-) =>
+const createStyles = (spacing: ThemeSpacing) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -85,8 +78,5 @@ const createStyles = (
       justifyContent: "center",
       marginTop: rs.space(24),
       marginBottom: rs.space(12),
-    },
-    bottomSpacer: {
-      height: bottomSpacing,
     },
   });

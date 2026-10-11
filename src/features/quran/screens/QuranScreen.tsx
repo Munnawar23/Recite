@@ -14,7 +14,6 @@ import { useChapterSearch } from "@/features/quran/hooks/useChapterSearch";
 import { useQuranChapters } from "@/features/quran/hooks/useQuranChapters";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useBottomTabBarSpacing } from "@/hooks/useBottomTabBarSpacing";
 import { useLanguageStore } from "@/store/languageStore";
 import { LastRead, useReadingProgressStore } from "@/store/readingProgressStore";
 import { type ThemeSpacing } from "@/theme";
@@ -55,10 +54,9 @@ export default function QuranScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const listRef = useRef<FlashListRef<Chapter>>(null);
 
-  const bottomSpacing = useBottomTabBarSpacing();
   const styles = useMemo(
-    () => createStyles(spacing, bottomSpacing),
-    [spacing, bottomSpacing],
+    () => createStyles(spacing),
+    [spacing],
   );
 
   // Scroll to top whenever filtered results change
@@ -185,13 +183,12 @@ export default function QuranScreen() {
         refreshControl={refreshControl}
         ListHeaderComponent={renderListHeader}
         ListEmptyComponent={renderListEmpty}
-        ListFooterComponent={<View style={styles.bottomSpacer} />}
       />
     </View>
   );
 }
 
-const createStyles = (spacing: ThemeSpacing, bottomSpacing: number) =>
+const createStyles = (spacing: ThemeSpacing) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -216,9 +213,6 @@ const createStyles = (spacing: ThemeSpacing, bottomSpacing: number) =>
     lottieLoader: {
       width: rs.space(200),
       height: rs.space(200),
-    },
-    bottomSpacer: {
-      height: bottomSpacing,
     },
     topSpacer: {
       height: spacing.vMd,

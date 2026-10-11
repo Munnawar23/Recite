@@ -1,6 +1,7 @@
 import { AppText } from "@/components";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { Haptics } from "@/lib/haptics";
 import { useFontStore } from "@/store/fontStore";
 import type { SurahVerse } from "@/types";
 import React, { useMemo } from "react";
@@ -12,6 +13,7 @@ interface VerseRowProps {
   isActive?: boolean;
   onLayout?: (y: number) => void;
   onPress?: (verseKey: string) => void;
+  onLongPress?: (item: SurahVerse) => void;
 }
 
 function VerseRow({
@@ -20,6 +22,7 @@ function VerseRow({
   isActive,
   onLayout,
   onPress,
+  onLongPress,
 }: VerseRowProps) {
   const { colors, fontSize } = useAppTheme();
   const fontSizeScale = useFontStore((state) => state.fontSizeScale);
@@ -46,6 +49,11 @@ function VerseRow({
     <TouchableOpacity
       activeOpacity={0.85}
       onPress={() => onPress?.(item.verseKey)}
+      onLongPress={() => {
+        Haptics.heavy();
+        onLongPress?.(item);
+      }}
+      delayLongPress={300}
       style={S.verseRow}
       onLayout={(e) => {
         onLayout?.(e.nativeEvent.layout.y);

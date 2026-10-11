@@ -23,7 +23,13 @@
     "quran": "Al-Quran",
     "qibla": "Kiblat",
     "library": "Perpustakaan",
-    "back": "Kembali"
+    "back": "Kembali",
+    "share": "Kongsi",
+    "sharing": "Berkongsi...",
+    "copy": "Salin",
+    "favourite": "Kegemaran",
+    "favorited": "Disimpan",
+    "copied": "Disalin ke papan keratan"
   },
   "splash": {
     "title": "Recite",
@@ -106,6 +112,12 @@
       "errorTitle": "Gagal Muat Turun",
       "errorBody": "Muat turun tidak berjaya. Sila periksa internet anda dan cuba lagi."
     }
+  },
+  "verse": {
+    "favoritedTitle": "Ditambah ke Kegemaran",
+    "unfavoritedTitle": "Dibuang dari Kegemaran",
+    "favoritedMsg": "Ayat disimpan dalam kegemaran",
+    "unfavoritedMsg": "Ayat dibuang dari kegemaran"
   },
   "errorBoundary": {
     "title": "Ada Masalah Berlaku",
@@ -198,13 +210,13 @@
       "toastClearedDownloadsTitle": "Muat Turun Dipadam",
       "toastClearedDownloadsDesc": "Semua surah yang dimuat turun telah berjaya dipadamkan.",
       "clearFavoritesTitle": "Kosongkan Semua Kegemaran",
-      "clearFavoritesSubtitle": "{{count}} surah disimpan dalam kegemaran",
+      "clearFavoritesSubtitle": "{{count}} ayat disimpan dalam kegemaran",
       "noFavoritesTitle": "Tiada Kegemaran",
-      "noFavoritesMessage": "Belum ada surah yang ditandakan sebagai kegemaran.",
+      "noFavoritesMessage": "Belum ada ayat yang ditandakan sebagai kegemaran.",
       "confirmClearFavoritesTitle": "Kosongkan Semua Kegemaran?",
-      "confirmClearFavoritesDesc": "Adakah anda pasti mahu membuang {{count}} surah kegemaran daripada senarai?",
+      "confirmClearFavoritesDesc": "Adakah anda pasti mahu membuang {{count}} ayat kegemaran daripada senarai?",
       "toastClearedFavoritesTitle": "Kegemaran Dikosongkan",
-      "toastClearedFavoritesDesc": "Semua surah kegemaran telah dibuang."
+      "toastClearedFavoritesDesc": "Semua ayat kegemaran telah dibuang."
     },
     "helpSupport": {
       "title": "Bantuan & Sokongan",
@@ -261,18 +273,18 @@
   },
   "library": {
     "title": "Perpustakaan",
-    "subtitle": "Surah tersimpan dan fail muat turun anda",
+    "subtitle": "Ayat disimpan dan muat turun anda",
     "tabs": {
       "favorites": "Kegemaran",
       "downloads": "Muat Turun"
     },
     "emptyFavorites": {
-      "title": "Belum Ada Kegemaran",
-      "subtitle": "Tandai surah atau ayat pilihan anda supaya mudah dibuka semula di sini."
+      "title": "Tiada Kegemaran",
+      "subtitle": "Simpan ayat untuk melihatnya di sini."
     },
     "emptyDownloads": {
       "title": "Tiada Muat Turun",
-      "subtitle": "Muat turun surah untuk membaca atau mendengarnya pada bila-bila masa tanpa internet."
+      "subtitle": "Muat turun surah untuk didengar luar talian."
     }
   },
   "languages": {

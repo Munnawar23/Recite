@@ -1,23 +1,13 @@
 import { useMemo } from "react";
-import { useQuranChapters } from "@/features/quran/hooks/useQuranChapters";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import { useDownloadsStore } from "@/store/downloadsStore";
-import { Chapter } from "@/types";
+import { Chapter, FavoriteVerse } from "@/types";
 
 export type TabValue = "favorites" | "downloads";
 
-export function useLibraryData(activeTab: TabValue) {
-  const { chapters, isError, refetch } = useQuranChapters();
-
-  const favoriteIds = useFavoritesStore((state) => state.favoriteIds);
+export function useLibraryData() {
+  const favoriteVerses = useFavoritesStore((state) => state.favoriteVerses);
   const downloadedMap = useDownloadsStore((s) => s.downloads);
-
-  const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
-
-  const favoriteChapters = useMemo(
-    () => chapters.filter((ch) => favoriteIdSet.has(ch.id)),
-    [chapters, favoriteIdSet],
-  );
 
   // Build downloads list directly from the store — no API needed, works fully offline.
   // Each DownloadedChapter stores chapterInfo saved at download time.
@@ -35,15 +25,9 @@ export function useLibraryData(activeTab: TabValue) {
       }));
   }, [downloadedMap]);
 
-  const listData = useMemo(
-    () => (activeTab === "favorites" ? favoriteChapters : downloadedChapters),
-    [activeTab, favoriteChapters, downloadedChapters],
-  );
-
-  // isError is only relevant for the favorites tab (which needs the API)
   return {
-    listData,
-    isError: activeTab === "favorites" ? isError : false,
-    refetch,
+    favoriteVerses,
+    downloadedChapters,
   };
 }
+

@@ -23,7 +23,13 @@
     "quran": "Al-Qur'an",
     "qibla": "Kiblat",
     "library": "Pustaka",
-    "back": "Kembali"
+    "back": "Kembali",
+    "share": "Bagikan",
+    "sharing": "Membagikan...",
+    "copy": "Salin",
+    "favourite": "Favorit",
+    "favorited": "Tersimpan",
+    "copied": "Disalin ke papan klip"
   },
   "splash": {
     "title": "Recite",
@@ -106,6 +112,12 @@
       "errorTitle": "Unduhan Gagal",
       "errorBody": "Gagal menyelesaikan unduhan. Periksa koneksi internet Anda dan coba lagi."
     }
+  },
+  "verse": {
+    "favoritedTitle": "Ditambahkan ke Favorit",
+    "unfavoritedTitle": "Dihapus dari Favorit",
+    "favoritedMsg": "Ayat disimpan ke favorit",
+    "unfavoritedMsg": "Ayat dihapus dari favorit"
   },
   "errorBoundary": {
     "title": "Terjadi Kesalahan",
@@ -196,13 +208,13 @@
       "toastClearedDownloadsTitle": "Unduhan Dihapus",
       "toastClearedDownloadsDesc": "Semua surah yang diunduh telah berhasil dihapus.",
       "clearFavoritesTitle": "Hapus Semua Favorit",
-      "clearFavoritesSubtitle": "{{count}} surah tersimpan di favorit",
+      "clearFavoritesSubtitle": "{{count}} ayat tersimpan di favorit",
       "noFavoritesTitle": "Tidak Ada Favorit",
-      "noFavoritesMessage": "Belum ada surah favorit yang disimpan.",
+      "noFavoritesMessage": "Belum ada ayat favorit yang disimpan.",
       "confirmClearFavoritesTitle": "Hapus Semua Favorit?",
-      "confirmClearFavoritesDesc": "Apakah Anda yakin ingin menghapus {{count}} surah favorit dari daftar Anda?",
+      "confirmClearFavoritesDesc": "Apakah Anda yakin ingin menghapus {{count}} ayat favorit dari daftar Anda?",
       "toastClearedFavoritesTitle": "Favorit Dihapus",
-      "toastClearedFavoritesDesc": "Semua surah favorit telah dihapus dari daftar."
+      "toastClearedFavoritesDesc": "Semua ayat favorit telah dihapus dari daftar."
     },
     "helpSupport": {
       "title": "Bantuan & Dukungan",
@@ -259,18 +271,18 @@
   },
   "library": {
     "title": "Pustaka",
-    "subtitle": "Daftar surah tersimpan dan hasil unduhan",
+    "subtitle": "Ayat tersimpan dan unduhan Anda",
     "tabs": {
       "favorites": "Favorit",
       "downloads": "Unduhan"
     },
     "emptyFavorites": {
       "title": "Belum Ada Favorit",
-      "subtitle": "Tandai surah atau ayat favorit Anda agar mudah dibuka kembali di sini."
+      "subtitle": "Simpan ayat untuk melihatnya di sini."
     },
     "emptyDownloads": {
       "title": "Tidak Ada Unduhan",
-      "subtitle": "Unduh surah untuk membaca atau mendengarkannya kapan saja tanpa internet."
+      "subtitle": "Unduh surah untuk didengarkan secara offline."
     }
   },
   "languages": {

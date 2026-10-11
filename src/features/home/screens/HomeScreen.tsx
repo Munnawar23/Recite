@@ -38,6 +38,7 @@ export default function HomeScreen() {
   };
   const queryClient = useQueryClient();
   const { lastRead } = useReadingProgressStore();
+  const language = useLanguageStore((state) => state.language);
   const [refreshing, setRefreshing] = useState(false);
 
   const bottomSpacing = useBottomTabBarSpacing();
@@ -122,7 +123,7 @@ export default function HomeScreen() {
             (() => {
               const localizedName = getLocalizedSurah(
                 lastRead.surahNumber,
-                useLanguageStore.getState().language,
+                language,
                 lastRead.surahName,
               ).name;
               return (

@@ -23,7 +23,13 @@
     "quran": "قرآن",
     "qibla": "قبلہ",
     "library": "لائبریری",
-    "back": "واپس"
+    "back": "واپس",
+    "share": "شیئر کریں",
+    "sharing": "شیئر ہو رہا ہے...",
+    "copy": "کاپی کریں",
+    "favourite": "پسندیدہ",
+    "favorited": "محفوظ شدہ",
+    "copied": "کلپ بورڈ پر کاپی ہو گیا"
   },
   "splash": {
     "title": "Recite",
@@ -106,6 +112,12 @@
       "errorTitle": "ڈاؤن لوڈ نہیں ہو سکا",
       "errorBody": "ڈاؤن لوڈ مکمل نہیں ہو سکا۔ براہ کرم انٹرنیٹ چیک کریں اور دوبارہ کوشش کریں۔"
     }
+  },
+  "verse": {
+    "favoritedTitle": "پسندیدہ میں شامل کر دیا گیا",
+    "unfavoritedTitle": "پسندیدہ سے ہٹا دیا گیا",
+    "favoritedMsg": "آیت پسندیدہ میں محفوظ ہو گئی",
+    "unfavoritedMsg": "آیت پسندیدہ سے ہٹا دی گئی"
   },
   "errorBoundary": {
     "title": "کچھ گڑبڑ ہو گئی",
@@ -196,13 +208,13 @@
       "toastClearedDownloadsTitle": "ڈاؤن لوڈز ہٹا دیے گئے",
       "toastClearedDownloadsDesc": "تمام ڈاؤن لوڈ کی ہوئی سورتیں کامیابی سے ہٹا دی گئی ہیں۔",
       "clearFavoritesTitle": "پسندیدہ لسٹ خالی کریں",
-      "clearFavoritesSubtitle": "{{count}} سورتیں پسندیدہ میں موجود ہیں",
+      "clearFavoritesSubtitle": "{{count}} آیات پسندیدہ میں موجود ہیں",
       "noFavoritesTitle": "کوئی پسندیدہ نہیں",
-      "noFavoritesMessage": "پسندیدہ لسٹ میں کوئی سورت شامل نہیں ہے۔",
+      "noFavoritesMessage": "پسندیدہ لسٹ میں کوئی آیت شامل نہیں ہے۔",
       "confirmClearFavoritesTitle": "پسندیدہ لسٹ خالی کریں؟",
-      "confirmClearFavoritesDesc": "کیا آپ واقعی اپنی لسٹ سے {{count}} پسندیدہ سورتیں ہٹانا چاہتے ہیں؟",
-      "toastClearedFavoritesTitle": "پسندیدہ سورتیں ہٹا دی گئیں",
-      "toastClearedFavoritesDesc": "تمام پسندیدہ سورتیں لسٹ سے ہٹا دی گئی ہیں۔"
+      "confirmClearFavoritesDesc": "کیا آپ واقعی اپنی لسٹ سے {{count}} پسندیدہ آیات ہٹانا چاہتے ہیں؟",
+      "toastClearedFavoritesTitle": "پسندیدہ آیات ہٹا دی گئیں",
+      "toastClearedFavoritesDesc": "تمام پسندیدہ آیات لسٹ سے ہٹا دی گئی ہیں۔"
     },
     "helpSupport": {
       "title": "مدد اور سپورٹ",
@@ -259,18 +271,18 @@
   },
   "library": {
     "title": "لائبریری",
-    "subtitle": "آپ کی محفوظ کردہ سورتیں اور ڈاؤن لوڈز",
+    "subtitle": "آپ کی محفوظ کردہ آیات اور ڈاؤن لوڈز",
     "tabs": {
       "favorites": "پسندیدہ",
       "downloads": "ڈاؤن لوڈز"
     },
     "emptyFavorites": {
-      "title": "ابھی کوئی پسندیدہ نہیں ہے",
-      "subtitle": "اپنی پسندیدہ سورتوں یا آیات کو یہاں جلدی پانے کے لیے نشان زد کریں۔"
+      "title": "کوئی پسندیدہ نہیں",
+      "subtitle": "آیات محفوظ کریں تاکہ وہ یہاں نظر آئیں۔"
     },
     "emptyDownloads": {
-      "title": "کوئی ڈاؤن لوڈ نہیں ہے",
-      "subtitle": "انٹرنیٹ کے بغیر پڑھنے یا سننے کے لیے سورتیں ڈاؤن لوڈ کریں۔"
+      "title": "کوئی ڈاؤن لوڈ نہیں",
+      "subtitle": "سورتیں ڈاؤن لوڈ کر کے آف لائن سنیں۔"
     }
   },
   "languages": {

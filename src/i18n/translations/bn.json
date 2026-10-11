@@ -23,7 +23,13 @@
     "quran": "কুরআন",
     "qibla": "কিবলা",
     "library": "লাইব্রেরি",
-    "back": "ফিরে যান"
+    "back": "ফিরে যান",
+    "share": "শেয়ার করুন",
+    "sharing": "শেয়ার হচ্ছে...",
+    "copy": "কপি করুন",
+    "favourite": "পছন্দ",
+    "favorited": "সংরক্ষিত",
+    "copied": "ক্লিপবোর্ডে অনুলিপি করা হয়েছে"
   },
   "splash": {
     "title": "Recite",
@@ -106,6 +112,12 @@
       "errorTitle": "ডাউনলোড ব্যর্থ হয়েছে",
       "errorBody": "ডাউনলোড সম্পূর্ণ করা যায়নি। ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।"
     }
+  },
+  "verse": {
+    "favoritedTitle": "পছন্দে যোগ করা হয়েছে",
+    "unfavoritedTitle": "পছন্দ থেকে সরানো হয়েছে",
+    "favoritedMsg": "আয়াত পছন্দে সংরক্ষণ করা হয়েছে",
+    "unfavoritedMsg": "আয়াত পছন্দ থেকে সরানো হয়েছে"
   },
   "errorBoundary": {
     "title": "কিছু সমস্যা হয়েছে",
@@ -196,13 +208,13 @@
       "toastClearedDownloadsTitle": "ডাউনলোড মুছে ফেলা হয়েছে",
       "toastClearedDownloadsDesc": "সমস্ত ডাউনলোড করা সূরা মুছে ফেলা হয়েছে।",
       "clearFavoritesTitle": "পছন্দের তালিকা খালি করুন",
-      "clearFavoritesSubtitle": "{{count}} টি সূরা পছন্দের তালিকায় আছে",
+      "clearFavoritesSubtitle": "{{count}} টি আয়াত পছন্দের তালিকায় আছে",
       "noFavoritesTitle": "কোনো পছন্দ নেই",
-      "noFavoritesMessage": "পছন্দের তালিকায় কোনো সূরা যুক্ত করা নেই।",
+      "noFavoritesMessage": "পছন্দের তালিকায় কোনো আয়াত যুক্ত করা নেই।",
       "confirmClearFavoritesTitle": "পছন্দের তালিকা খালি করবেন?",
-      "confirmClearFavoritesDesc": "আপনি কি নিশ্চিত যে পছন্দের তালিকা থেকে {{count}} টি সূরা মুছে ফেলতে চান?",
+      "confirmClearFavoritesDesc": "আপনি কি নিশ্চিত যে পছন্দের তালিকা থেকে {{count}} টি আয়াত মুছে ফেলতে চান?",
       "toastClearedFavoritesTitle": "পছন্দ মুছে ফেলা হয়েছে",
-      "toastClearedFavoritesDesc": "পছন্দের তালিকা থেকে সব সূরা সরানো হয়েছে।"
+      "toastClearedFavoritesDesc": "পছন্দের তালিকা থেকে সব আয়াত সরানো হয়েছে।"
     },
     "helpSupport": {
       "title": "সাহায্য ও সাপোর্ট",
@@ -259,18 +271,18 @@
   },
   "library": {
     "title": "লাইব্রেরি",
-    "subtitle": "আপনার পছন্দের সূরা এবং ডাউনলোডসমূহ",
+    "subtitle": "আপনার সংরক্ষিত আয়াত এবং ডাউনলোড",
     "tabs": {
       "favorites": "পছন্দ",
       "downloads": "ডাউনলোড"
     },
     "emptyFavorites": {
-      "title": "এখনও কোনো পছন্দ নেই",
-      "subtitle": "সহজে ও দ্রুত খুঁজে পেতে আপনার প্রিয় সূরা বা আয়াত মার্ক করে রাখুন।"
+      "title": "কোনো পছন্দ নেই",
+      "subtitle": "এখানে দেখতে আয়াত সংরক্ষণ করুন।"
     },
     "emptyDownloads": {
       "title": "কোনো ডাউনলোড নেই",
-      "subtitle": "ইন্টারনেট ছাড়া শুনতে বা পড়তে সূরা ডাউনলোড করে রাখুন।"
+      "subtitle": "অফলাইনে শুনতে সূরা ডাউনলোড করুন।"
     }
   },
   "languages": {

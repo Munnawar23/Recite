@@ -1,39 +1,62 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { STORAGE_KEYS, zustandStorage } from "@/lib/storage/appStorage";
+import type { FavoriteVerse } from "@/types";
 
 interface FavoritesState {
-  favoriteIds: number[];
-  toggleFavorite: (id: number) => void;
+  favoriteVerses: FavoriteVerse[];
+  favoriteIds?: number[];
+  toggleFavoriteVerse: (verse: Omit<FavoriteVerse, "addedAt">) => boolean;
+  isFavoriteVerse: (verseKey: string) => boolean;
+  removeFavoriteVerse: (verseKey: string) => void;
+  clearFavorites: () => void;
 }
 
 export const useFavoritesStore = create<FavoritesState>()(
   persist(
     (set, get) => ({
+      favoriteVerses: [],
       favoriteIds: [],
-      toggleFavorite: (id) => {
-        const { favoriteIds } = get();
-        if (favoriteIds.includes(id)) {
-          set({ favoriteIds: favoriteIds.filter((favId) => favId !== id) });
+      isFavoriteVerse: (verseKey: string) => {
+        return get().favoriteVerses.some((v) => v.verseKey === verseKey);
+      },
+      toggleFavoriteVerse: (verse) => {
+        const { favoriteVerses } = get();
+        const exists = favoriteVerses.some((v) => v.verseKey === verse.verseKey);
+        if (exists) {
+          set({
+            favoriteVerses: favoriteVerses.filter((v) => v.verseKey !== verse.verseKey),
+          });
+          return false;
         } else {
-          set({ favoriteIds: [...favoriteIds, id] });
+          set({
+            favoriteVerses: [
+              { ...verse, addedAt: Date.now() },
+              ...favoriteVerses,
+            ],
+          });
+          return true;
         }
+      },
+      removeFavoriteVerse: (verseKey: string) => {
+        const { favoriteVerses } = get();
+        set({
+          favoriteVerses: favoriteVerses.filter((v) => v.verseKey !== verseKey),
+        });
+      },
+      clearFavorites: () => {
+        set({ favoriteVerses: [], favoriteIds: [] });
       },
     }),
     {
       name: STORAGE_KEYS.FAVORITES,
       storage: createJSONStorage(() => zustandStorage),
-      // Bump `version` whenever the state shape changes.
-      // Add a case in `migrate` to transform old data safely.
-      version: 1,
+      version: 2,
       migrate: (persisted: any, fromVersion: number) => {
-        if (fromVersion < 1) {
-          // v0 → v1: ensure favoriteIds is always a clean number array
+        if (fromVersion < 2) {
           return {
-            favoriteIds: Array.isArray(persisted?.favoriteIds)
-              ? persisted.favoriteIds.filter(
-                  (id: any) => typeof id === "number",
-                )
+            favoriteVerses: Array.isArray(persisted?.favoriteVerses)
+              ? persisted.favoriteVerses
               : [],
           };
         }

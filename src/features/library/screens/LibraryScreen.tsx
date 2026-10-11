@@ -9,13 +9,13 @@ import {
   View,
 } from "react-native";
 
-import { Header, NoConnection, TabSwitcher } from "@/components";
+import { EmptyState, Header, TabSwitcher } from "@/components";
 import QuranCard from "@/features/quran/components/QuranCard";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useBottomTabBarSpacing } from "@/hooks/useBottomTabBarSpacing";
 import { type ThemeSpacing } from "@/theme";
-import { Chapter } from "@/types";
-import { LibraryEmptyState } from "../components/LibraryEmptyState";
+import { Chapter, FavoriteVerse } from "@/types";
+import { VerseCard } from "../components/VerseCard";
 import { TabValue, useLibraryData } from "../hooks/useLibraryData";
 
 export default function LibraryScreen() {
@@ -25,7 +25,7 @@ export default function LibraryScreen() {
   const [activeTab, setActiveTab] = useState<TabValue>("favorites");
   const [refreshing, setRefreshing] = useState(false);
 
-  const { listData, isError, refetch } = useLibraryData(activeTab);
+  const { favoriteVerses, downloadedChapters } = useLibraryData();
 
   const styles = useMemo(
     () => createStyles(spacing, bottomSpacing),
@@ -34,12 +34,11 @@ export default function LibraryScreen() {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    try {
-      await refetch();
-    } finally {
+    // Refreshing local stores is instantaneous, simulate brief feedback
+    setTimeout(() => {
       setRefreshing(false);
-    }
-  }, [refetch]);
+    }, 400);
+  }, []);
 
   const handleTabChange = useCallback((value: string) => {
     setActiveTab(value as TabValue);
@@ -53,9 +52,24 @@ export default function LibraryScreen() {
     [t],
   );
 
-  const keyExtractor = useCallback((item: Chapter) => String(item.id), []);
+  const keyExtractorVerse = useCallback(
+    (item: FavoriteVerse) => item.verseKey,
+    [],
+  );
 
-  const renderItem = useCallback(
+  const renderVerseItem = useCallback(
+    ({ item }: ListRenderItemInfo<FavoriteVerse>) => (
+      <VerseCard item={item} />
+    ),
+    [],
+  );
+
+  const keyExtractorChapter = useCallback(
+    (item: Chapter) => String(item.id),
+    [],
+  );
+
+  const renderChapterItem = useCallback(
     ({ item }: ListRenderItemInfo<Chapter>) => <QuranCard item={item} />,
     [],
   );
@@ -72,11 +86,16 @@ export default function LibraryScreen() {
     [refreshing, onRefresh, colors.primary],
   );
 
+  const isFavorites = activeTab === "favorites";
+  const hasData = isFavorites
+    ? favoriteVerses.length > 0
+    : downloadedChapters.length > 0;
+
   return (
     <View style={styles.flexContainer}>
       <Header
         title={t("library.title", "Library")}
-        subtitle={t("library.subtitle", "Your saved surahs and downloads")}
+        subtitle={t("library.subtitle", "Your saved verses and downloads")}
       />
 
       <View style={styles.tabSwitcherContainer}>
@@ -88,28 +107,52 @@ export default function LibraryScreen() {
       </View>
 
       <View style={styles.flexContainer}>
-        {isError ? (
+        {hasData ? (
+          isFavorites ? (
+            <FlashList<FavoriteVerse>
+              data={favoriteVerses}
+              keyExtractor={keyExtractorVerse}
+              renderItem={renderVerseItem}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.listContentContainer}
+              refreshControl={refreshControl}
+            />
+          ) : (
+            <FlashList<Chapter>
+              data={downloadedChapters}
+              keyExtractor={keyExtractorChapter}
+              renderItem={renderChapterItem}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.listContentContainer}
+              refreshControl={refreshControl}
+            />
+          )
+        ) : (
           <ScrollView
             contentContainerStyle={styles.emptyStateWrapper}
             refreshControl={refreshControl}
-          >
-            <NoConnection onRetry={refetch} />
-          </ScrollView>
-        ) : listData.length > 0 ? (
-          <FlashList<Chapter>
-            data={listData}
-            keyExtractor={keyExtractor}
-            renderItem={renderItem}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.listContentContainer}
-            refreshControl={refreshControl}
-          />
-        ) : (
-          <LibraryEmptyState
-            activeTab={activeTab}
-            refreshControl={refreshControl}
-            spacing={spacing}
-          />
+          >
+            <EmptyState
+              icon={isFavorites ? "heart-outline" : "download-outline"}
+              title={
+                isFavorites
+                  ? t("library.emptyFavorites.title", "No Favorites Yet")
+                  : t("library.emptyDownloads.title", "No Downloads")
+              }
+              subtitle={
+                isFavorites
+                  ? t(
+                      "library.emptyFavorites.subtitle",
+                      "Save verses to see them here.",
+                    )
+                  : t(
+                      "library.emptyDownloads.subtitle",
+                      "Download Surahs to listen offline.",
+                    )
+              }
+            />
+          </ScrollView>
         )}
       </View>
     </View>
@@ -132,5 +175,6 @@ const createStyles = (spacing: ThemeSpacing, bottomSpacing: number) =>
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
+      paddingBottom: bottomSpacing + spacing.vXxl,
     },
   });

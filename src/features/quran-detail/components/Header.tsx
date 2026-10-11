@@ -4,7 +4,6 @@ import { rs } from "@/helpers/responsiveHelper";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
-import { useFavoritesStore } from "@/store/favoritesStore";
 import { useLanguageStore } from "@/store/languageStore";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
@@ -16,7 +15,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Toast from "react-native-toast-message";
 
 interface DetailHeaderProps {
   chapterId: number;
@@ -45,11 +43,6 @@ function DetailHeader({
   );
   const isDark = activeScheme === "dark";
 
-  const isFavorite = useFavoritesStore(
-    useCallback((state) => state.favoriteIds.includes(chapterId), [chapterId]),
-  );
-  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
-
   const S = useMemo(
     () => createStyles(colors, isDark, paddingTop),
     [colors, isDark, paddingTop],
@@ -59,21 +52,6 @@ function DetailHeader({
     Haptics.light();
     router.back();
   }, [router]);
-
-  const handleToggleFavorite = useCallback(() => {
-    Haptics.light();
-    toggleFavorite(chapterId);
-    Toast.show({
-      type: "success",
-      position: "bottom",
-      text1: !isFavorite
-        ? "Added to Favorites"
-        : "Removed from Favorites",
-      text2: !isFavorite
-        ? `${localizedSurahName || `Surah ${chapterId}`} has been saved to your favorites.`
-        : `${localizedSurahName || `Surah ${chapterId}`} removed from your favorites.`,
-    });
-  }, [toggleFavorite, chapterId, isFavorite, localizedSurahName]);
 
   const androidBgStyle = useMemo(
     () => [
@@ -140,22 +118,7 @@ function DetailHeader({
           </AppText>
         </View>
 
-        <View style={S.rightActions}>
-          <TouchableOpacity
-            onPress={handleToggleFavorite}
-            style={S.actionButton}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            activeOpacity={0.7}
-            accessibilityRole="button"
-            accessibilityLabel={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-          >
-            <Ionicons
-              name={isFavorite ? "heart" : "heart-outline"}
-              size={rs.icon(20)}
-              color={isFavorite ? colors.primary : colors.text}
-            />
-          </TouchableOpacity>
-        </View>
+        <View style={S.rightActions} />
       </View>
     </View>
   );

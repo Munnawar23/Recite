@@ -22,7 +22,7 @@ const RESTORE_SCROLL_DELAY_MS = 100;
 const PLAYER_SHOW_ANIMATION_MS = 250;
 
 export function useQuranDetailScreen() {
-  const { id, arabicName, englishName, versesCount, type, initialVerse } =
+  const { id, arabicName, englishName, versesCount, type, initialVerse, fromFavorite } =
     useLocalSearchParams<{
       id: string;
       arabicName: string;
@@ -30,6 +30,7 @@ export function useQuranDetailScreen() {
       versesCount: string;
       type: string;
       initialVerse?: string;
+      fromFavorite?: string;
     }>();
 
   const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
@@ -54,6 +55,7 @@ export function useQuranDetailScreen() {
   } = useActiveQuranDetail("chapters", chapterId, queryTransId);
 
   const [refreshing, setRefreshing] = useState(false);
+  const [highlightedVerseKey, setHighlightedVerseKey] = useState<string | null>(null);
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
@@ -105,8 +107,9 @@ export function useQuranDetailScreen() {
   const { isOffline } = useNetworkStatus();
   const safeArea = useAppSafeAreaInsets();
 
-  // Record this surah as last read when screen opens
+  // Record this surah as last read when screen opens (skipped if opened from favorites)
   useEffect(() => {
+    if (fromFavorite === "true") return;
     if (englishName && chapterId) {
       setLastRead({
         surahNumber: chapterId,
@@ -118,10 +121,11 @@ export function useQuranDetailScreen() {
         scrollOffset: 0,
       });
     }
-  }, [chapterId, englishName, arabicName, versesCount, type, setLastRead]);
+  }, [chapterId, englishName, arabicName, versesCount, type, fromFavorite, setLastRead]);
 
   const handleVersePress = useCallback(
     (verseKey: string) => {
+      setHighlightedVerseKey(null);
       playerScrollTranslateY.value = withTiming(0, {
         duration: PLAYER_SHOW_ANIMATION_MS,
       });
@@ -153,7 +157,7 @@ export function useQuranDetailScreen() {
     [verses, listRef, timestamps, player, playerScrollTranslateY, isSelectingVerse],
   );
 
-  // Scroll to initial verse when opened from Continue Reading card
+  // Scroll to initial verse when opened from Continue Reading or Favorite Verse card
   useEffect(() => {
     if (initialVerse && verses.length > 0) {
       const targetVerseNum = parseInt(initialVerse, 10);
@@ -161,22 +165,36 @@ export function useQuranDetailScreen() {
         (v) => v.verseNumber === targetVerseNum || v.id === targetVerseNum,
       );
       if (index !== -1) {
-        const timer = setTimeout(() => {
+        const targetVerseKey = verses[index].verseKey;
+        const scrollTimer = setTimeout(() => {
           listRef.current?.scrollToIndex({
             index,
             animated: true,
             viewPosition: 0.2,
           });
+          setHighlightedVerseKey(targetVerseKey);
         }, INITIAL_SCROLL_DELAY_MS);
-        return () => clearTimeout(timer);
+
+        // Keep highlight visible for 3.5s so user spots it easily, then gently clear
+        const highlightTimer = setTimeout(() => {
+          setHighlightedVerseKey((current) =>
+            current === targetVerseKey ? null : current,
+          );
+        }, INITIAL_SCROLL_DELAY_MS + 3500);
+
+        return () => {
+          clearTimeout(scrollTimer);
+          clearTimeout(highlightTimer);
+        };
       }
     }
   }, [initialVerse, verses, listRef]);
 
-  // Track topmost visible verse and update reading progress store
+  // Track topmost visible verse and update reading progress store (skipped if opened from favorites)
   const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 50 });
   const onViewableItemsChanged = useCallback(
     ({ viewableItems }: { viewableItems: Array<{ item: SurahVerse }> }) => {
+      if (fromFavorite === "true") return;
       if (viewableItems.length > 0) {
         const topItem = viewableItems[0].item;
         if (topItem?.verseNumber) {
@@ -184,7 +202,7 @@ export function useQuranDetailScreen() {
         }
       }
     },
-    [chapterId, setVerseNumber],
+    [chapterId, fromFavorite, setVerseNumber],
   );
 
   // Scroll to playing verse (only while actively playing)
@@ -244,7 +262,7 @@ export function useQuranDetailScreen() {
     status,
     isLoadingAudio,
     playerScrollTranslateY,
-    activeVerseKey: activeVerseKey as string | null,
+    activeVerseKey: (activeVerseKey || highlightedVerseKey) as string | null,
     reciterName,
     audioUrl,
     audioTotalBytes,

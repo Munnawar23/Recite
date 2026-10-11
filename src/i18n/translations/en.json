@@ -23,7 +23,13 @@
     "quran": "Quran",
     "qibla": "Qibla",
     "library": "Library",
-    "back": "Back"
+    "back": "Back",
+    "share": "Share",
+    "sharing": "Sharing...",
+    "copy": "Copy",
+    "favourite": "Favorite",
+    "favorited": "Saved",
+    "copied": "Copied to clipboard"
   },
   "splash": {
     "title": "Recite",
@@ -106,6 +112,12 @@
       "errorTitle": "Download Failed",
       "errorBody": "Could not complete download. Please check your connection and try again."
     }
+  },
+  "verse": {
+    "favoritedTitle": "Added to Favorites",
+    "unfavoritedTitle": "Removed from Favorites",
+    "favoritedMsg": "Saved to favorites",
+    "unfavoritedMsg": "Removed from favorites"
   },
   "errorBoundary": {
     "title": "Something Went Wrong",
@@ -196,13 +208,13 @@
       "toastClearedDownloadsTitle": "Cleared Downloads",
       "toastClearedDownloadsDesc": "All downloaded Surahs have been cleared.",
       "clearFavoritesTitle": "Clear All Favorites",
-      "clearFavoritesSubtitle": "{{count}} Surah(s) saved in favorites",
+      "clearFavoritesSubtitle": "{{count}} Verse(s) saved in favorites",
       "noFavoritesTitle": "No Favorites",
-      "noFavoritesMessage": "You don't have any favorite Surahs to clear.",
+      "noFavoritesMessage": "You don't have any favorite verses to clear.",
       "confirmClearFavoritesTitle": "Clear All Favorites?",
-      "confirmClearFavoritesDesc": "Are you sure you want to remove {{count}} favorite Surah(s) from your list?",
+      "confirmClearFavoritesDesc": "Are you sure you want to remove {{count}} favorite verse(s) from your list?",
       "toastClearedFavoritesTitle": "Cleared Favorites",
-      "toastClearedFavoritesDesc": "All favorite Surahs have been removed."
+      "toastClearedFavoritesDesc": "All favorite verses have been removed."
     },
     "helpSupport": {
       "title": "Help & Support",
@@ -259,18 +271,18 @@
   },
   "library": {
     "title": "Library",
-    "subtitle": "Your saved surahs and downloads",
+    "subtitle": "Your saved verses and downloads",
     "tabs": {
       "favorites": "Favorites",
       "downloads": "Downloads"
     },
     "emptyFavorites": {
       "title": "No Favorites Yet",
-      "subtitle": "Mark your favorite Surahs or verses to access them quickly here."
+      "subtitle": "Save verses to see them here."
     },
     "emptyDownloads": {
       "title": "No Downloads",
-      "subtitle": "Download Surahs to read or listen to them offline."
+      "subtitle": "Download Surahs to listen offline."
     }
   },
   "languages": {

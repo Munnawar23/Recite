@@ -23,7 +23,13 @@
     "quran": "क़ुरआन",
     "qibla": "क़िबला",
     "library": "लाइब्रेरी",
-    "back": "पीछे"
+    "back": "पीछे",
+    "share": "शेयर करें",
+    "sharing": "शेयर हो रहा है...",
+    "copy": "कॉपी करें",
+    "favourite": "पसंदीदा",
+    "favorited": "सेव किया",
+    "copied": "क्लिपबोर्ड पर कॉपी किया गया"
   },
   "splash": {
     "title": "Recite",
@@ -106,6 +112,12 @@
       "errorTitle": "डाउनलोड नहीं हो पाया",
       "errorBody": "डाउनलोड पूरा नहीं हो सका। कृपया इंटरनेट चेक करके दोबारा कोशिश करें।"
     }
+  },
+  "verse": {
+    "favoritedTitle": "पसंदीदा में जोड़ा गया",
+    "unfavoritedTitle": "पसंदीदा से हटाया गया",
+    "favoritedMsg": "आयत पसंदीदा में सेव हो गई",
+    "unfavoritedMsg": "आयत पसंदीदा से हटा दी गई"
   },
   "errorBoundary": {
     "title": "कुछ गड़बड़ हो गई",
@@ -196,13 +208,13 @@
       "toastClearedDownloadsTitle": "डाउनलोड हटा दिए गए",
       "toastClearedDownloadsDesc": "सभी डाउनलोड की गई सूरह हटा दी गई हैं।",
       "clearFavoritesTitle": "सभी पसंदीदा हटाएं",
-      "clearFavoritesSubtitle": "{{count}} सूरह पसंदीदा में सेव हैं",
+      "clearFavoritesSubtitle": "{{count}} आयतें पसंदीदा में सेव हैं",
       "noFavoritesTitle": "कोई पसंदीदा नहीं",
-      "noFavoritesMessage": "हटाने के लिए कोई पसंदीदा सूरह नहीं है।",
+      "noFavoritesMessage": "हटाने के लिए कोई पसंदीदा आयत नहीं है।",
       "confirmClearFavoritesTitle": "सभी पसंदीदा हटाएं?",
-      "confirmClearFavoritesDesc": "क्या आप वाकई अपनी लिस्ट से {{count}} पसंदीदा सूरह हटाना चाहते हैं?",
-      "toastClearedFavoritesTitle": "पसंदीदा हटा दिए गए",
-      "toastClearedFavoritesDesc": "सभी पसंदीदा सूरह हटा दी गई हैं।"
+      "confirmClearFavoritesDesc": "क्या आप वाकई अपनी लिस्ट से {{count}} पसंदीदा आयतें हटाना चाहते हैं?",
+      "toastClearedFavoritesTitle": "पसंदीदा आयतें हटा दी गईं",
+      "toastClearedFavoritesDesc": "सभी पसंदीदा आयतें हटा दी गई हैं।"
     },
     "helpSupport": {
       "title": "मदद और सपोर्ट",
@@ -259,18 +271,18 @@
   },
   "library": {
     "title": "लाइब्रेरी",
-    "subtitle": "आपकी पसंदीदा सूरह और डाउनलोड",
+    "subtitle": "आपकी सहेजी गई आयतें और डाउनलोड",
     "tabs": {
       "favorites": "पसंदीदा",
       "downloads": "डाउनलोड"
     },
     "emptyFavorites": {
-      "title": "अभी कोई पसंदीदा नहीं है",
-      "subtitle": "अपनी पसंदीदा सूरह या आयतों को यहां जल्दी पाने के लिए मार्क करें।"
+      "title": "कोई पसंदीदा नहीं",
+      "subtitle": "आयतें सहेजें ताकि वे यहाँ दिखें।"
     },
     "emptyDownloads": {
-      "title": "कोई डाउनलोड नहीं है",
-      "subtitle": "बिना इंटरनेट के पढ़ने या सुनने के लिए सूरह डाउनलोड करें।"
+      "title": "कोई डाउनलोड नहीं",
+      "subtitle": "ऑफलाइन सुनने के लिए सूरह डाउनलोड करें।"
     }
   },
   "languages": {

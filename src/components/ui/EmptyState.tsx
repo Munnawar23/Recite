@@ -65,7 +65,7 @@ export default function EmptyState({
         </View>
       )}
 
-      <AppText variant="title" color="text" align="center">
+      <AppText variant="title" color="text" align="center" numberOfLines={1}>
         {title}
       </AppText>
       <AppText variant="body" color="subtext" align="center">

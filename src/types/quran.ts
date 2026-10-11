@@ -31,3 +31,16 @@ export interface DownloadedChapter {
   };
 }
 
+export interface FavoriteVerse {
+  id: number;
+  verseKey: string;
+  verseNumber: number;
+  chapterId: number;
+  arabic: string;
+  surahName?: string;
+  surahArabicName?: string;
+  versesCount?: number;
+  chapterType?: string;
+  addedAt: number;
+}
+

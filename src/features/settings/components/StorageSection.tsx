@@ -30,8 +30,8 @@ export default function StorageSection() {
   }, [downloads]);
 
   // ─── Favorites store ────────────────────────────────────────────────────────
-  const favoriteIds = useFavoritesStore((s) => s.favoriteIds);
-  const favCount = favoriteIds.length;
+  const favoriteVerses = useFavoritesStore((s) => s.favoriteVerses ?? []);
+  const favCount = favoriteVerses.length;
 
   // ─── Modal states ───────────────────────────────────────────────────────────
   const [deleteDownloadsVisible, setDeleteDownloadsVisible] = useState(false);
@@ -77,7 +77,7 @@ export default function StorageSection() {
         title: t("settings.storage.noFavoritesTitle", "No Favorites"),
         message: t(
           "settings.storage.noFavoritesMessage",
-          "You don't have any favorite Surahs to clear.",
+          "You don't have any favorite verses to clear.",
         ),
       });
       return;
@@ -88,10 +88,9 @@ export default function StorageSection() {
 
   const handleConfirmClearFavorites = useCallback(() => {
     setDeleteFavoritesVisible(false);
-    // Toggle each fav to remove (toggleFavorite removes if exists)
-    favoriteIds.forEach((id) => useFavoritesStore.getState().toggleFavorite(id));
+    useFavoritesStore.getState().clearFavorites();
     Haptics.success();
-  }, [favoriteIds]);
+  }, []);
 
   // ─── Dynamic subtitles ─────────────────────────────────────────────────────
   const downloadsSubtitle =
@@ -107,6 +106,7 @@ export default function StorageSection() {
 
   const favoritesSubtitle = t("settings.storage.clearFavoritesSubtitle", {
     count: favCount,
+    defaultValue: `${favCount} Verse(s) saved in favorites`,
   });
 
   return (
@@ -160,7 +160,10 @@ export default function StorageSection() {
         )}
         description={t(
           "settings.storage.confirmClearFavoritesDesc",
-          { count: favCount },
+          {
+            count: favCount,
+            defaultValue: `Are you sure you want to remove ${favCount} favorite verse(s) from your list?`,
+          },
         )}
         onConfirm={handleConfirmClearFavorites}
         onCancel={() => setDeleteFavoritesVisible(false)}

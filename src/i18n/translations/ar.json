@@ -23,7 +23,13 @@
     "quran": "القرآن الكريم",
     "qibla": "القبلة",
     "library": "المكتبة",
-    "back": "رجوع"
+    "back": "رجوع",
+    "share": "مشاركة",
+    "sharing": "جاري المشاركة...",
+    "copy": "نسخ",
+    "favourite": "المفضلة",
+    "favorited": "محفوظة",
+    "copied": "تم النسخ إلى الحافظة"
   },
   "splash": {
     "title": "رتّل",
@@ -106,6 +112,12 @@
       "errorTitle": "فشل التنزيل",
       "errorBody": "تعذر إكمال التنزيل. تحقق من اتصالك وحاول مرة أخرى."
     }
+  },
+  "verse": {
+    "favoritedTitle": "أضيفت للمفضلة",
+    "unfavoritedTitle": "أزيلت من المفضلة",
+    "favoritedMsg": "تم حفظ الآية في المفضلة",
+    "unfavoritedMsg": "تم حذف الآية من المفضلة"
   },
   "errorBoundary": {
     "title": "حدث خطأ ما",
@@ -196,13 +208,13 @@
       "toastClearedDownloadsTitle": "تم حذف التنزيلات",
       "toastClearedDownloadsDesc": "تم حذف جميع السور المحملة.",
       "clearFavoritesTitle": "مسح قائمة المفضلة",
-      "clearFavoritesSubtitle": "{{count}} سورة في قائمة المفضلة",
+      "clearFavoritesSubtitle": "{{count}} آية في قائمة المفضلة",
       "noFavoritesTitle": "لا توجد عناصر مفضلة",
-      "noFavoritesMessage": "لم تقم بإضافة أي سور إلى المفضلة بعد.",
+      "noFavoritesMessage": "لم تقم بإضافة أي آيات إلى المفضلة بعد.",
       "confirmClearFavoritesTitle": "مسح جميع المفضلة؟",
-      "confirmClearFavoritesDesc": "هل أنت متأكد من إزالة {{count}} سورة من قائمة المفضلة؟",
+      "confirmClearFavoritesDesc": "هل أنت متأكد من إزالة {{count}} آية من قائمة المفضلة؟",
       "toastClearedFavoritesTitle": "تم مسح المفضلة",
-      "toastClearedFavoritesDesc": "تمت إزالة جميع السور من المفضلة."
+      "toastClearedFavoritesDesc": "تمت إزالة جميع الآيات من المفضلة."
     },
     "helpSupport": {
       "title": "المساعدة والدعم",
@@ -259,18 +271,18 @@
   },
   "library": {
     "title": "المكتبة",
-    "subtitle": "السور المحفوظة والتنزيلات",
+    "subtitle": "الآيات المحفوظة والتنزيلات",
     "tabs": {
       "favorites": "المفضلة",
       "downloads": "التنزيلات"
     },
     "emptyFavorites": {
-      "title": "لا توجد سور في المفضلة",
-      "subtitle": "أضف سورك أو آياتك المفضلة لتصل إليها بسهولة وسرعة هنا."
+      "title": "لا توجد مفضلات بعد",
+      "subtitle": "احفظ الآيات لتراها هنا."
     },
     "emptyDownloads": {
-      "title": "لا توجد ملفات محملة",
-      "subtitle": "قم بتنزيل السور لقراءتها أو الاستماع إليها في أي وقت دون إنترنت."
+      "title": "لا توجد تنزيلات",
+      "subtitle": "قم بتنزيل السور للاستماع دون اتصال."
     }
   },
   "languages": {

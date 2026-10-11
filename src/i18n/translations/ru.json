@@ -23,7 +23,13 @@
     "quran": "Коран",
     "qibla": "Кибла",
     "library": "Библиотека",
-    "back": "Назад"
+    "back": "Назад",
+    "share": "Поделиться",
+    "sharing": "Отправка...",
+    "copy": "Копировать",
+    "favourite": "В избранное",
+    "favorited": "В избранном",
+    "copied": "Скопировано в буфер обмена"
   },
   "splash": {
     "title": "Recite",
@@ -106,6 +112,12 @@
       "errorTitle": "Ошибка скачивания",
       "errorBody": "Не удалось завершить скачивание. Проверьте интернет и попробуйте снова."
     }
+  },
+  "verse": {
+    "favoritedTitle": "Добавлено в избранное",
+    "unfavoritedTitle": "Удалено из избранного",
+    "favoritedMsg": "Аят сохранен в избранное",
+    "unfavoritedMsg": "Аят удален из избранного"
   },
   "errorBoundary": {
     "title": "Что-то пошло не так",
@@ -198,13 +210,13 @@
       "toastClearedDownloadsTitle": "Загрузки удалены",
       "toastClearedDownloadsDesc": "Все скачанные суры были успешно удалены.",
       "clearFavoritesTitle": "Очистить избранное",
-      "clearFavoritesSubtitle": "В избранном: {{count}}",
+      "clearFavoritesSubtitle": "В избранном: {{count}} аят(ов)",
       "noFavoritesTitle": "Нет избранного",
-      "noFavoritesMessage": "Вы пока не добавили ни одной суры в избранное.",
+      "noFavoritesMessage": "Вы пока не добавили ни одного аята в избранное.",
       "confirmClearFavoritesTitle": "Очистить список избранного?",
-      "confirmClearFavoritesDesc": "Вы уверены, что хотите удалить {{count}} сур из списка избранного?",
+      "confirmClearFavoritesDesc": "Вы уверены, что хотите удалить {{count}} аят(ов) из списка избранного?",
       "toastClearedFavoritesTitle": "Избранное очищено",
-      "toastClearedFavoritesDesc": "Все суры удалены из избранного."
+      "toastClearedFavoritesDesc": "Все аяты удалены из избранного."
     },
     "helpSupport": {
       "title": "Помощь и поддержка",
@@ -261,18 +273,18 @@
   },
   "library": {
     "title": "Библиотека",
-    "subtitle": "Ваши сохраненные суры и скачанные файлы",
+    "subtitle": "Сохраненные аяты и загрузки",
     "tabs": {
       "favorites": "Избранное",
       "downloads": "Загрузки"
     },
     "emptyFavorites": {
-      "title": "В избранном пока пусто",
-      "subtitle": "Отмечайте понравившиеся суры и аяты, чтобы быстро находить их здесь."
+      "title": "Нет избранного",
+      "subtitle": "Сохраняйте аяты, чтобы видеть их здесь."
     },
     "emptyDownloads": {
-      "title": "Нет скачанных файлов",
-      "subtitle": "Скачивайте суры, чтобы слушать их в любое время без интернета."
+      "title": "Нет загрузок",
+      "subtitle": "Скачивайте суры для прослушивания офлайн."
     }
   },
   "languages": {

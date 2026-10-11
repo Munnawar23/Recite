@@ -114,6 +114,7 @@
     }
   },
   "verse": {
+    "holdForActions": "Удерживайте",
     "favoritedTitle": "Добавлено в избранное",
     "unfavoritedTitle": "Удалено из избранного",
     "favoritedMsg": "Аят сохранен в избранное",

@@ -114,6 +114,7 @@
     }
   },
   "verse": {
+    "holdForActions": "Tekan & tahan",
     "favoritedTitle": "Ditambah ke Kegemaran",
     "unfavoritedTitle": "Dibuang dari Kegemaran",
     "favoritedMsg": "Ayat disimpan dalam kegemaran",

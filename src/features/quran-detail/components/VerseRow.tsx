@@ -4,13 +4,16 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { useFontStore } from "@/store/fontStore";
 import type { SurahVerse } from "@/types";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 interface VerseRowProps {
   item: SurahVerse;
   selectedTransId: string;
   isActive?: boolean;
+  isHintActive?: boolean;
   onLayout?: (y: number) => void;
   onPress?: (verseKey: string) => void;
   onLongPress?: (item: SurahVerse) => void;
@@ -20,10 +23,12 @@ function VerseRow({
   item,
   selectedTransId,
   isActive,
+  isHintActive,
   onLayout,
   onPress,
   onLongPress,
 }: VerseRowProps) {
+  const { t } = useTranslation();
   const { colors, fontSize } = useAppTheme();
   const fontSizeScale = useFontStore((state) => state.fontSizeScale);
   const quranFontSizeScale = useFontStore((state) => state.quranFontSizeScale);
@@ -64,21 +69,41 @@ function VerseRow({
         <AppText
           size={fontSize.title * quranMultiplier}
           family="quran"
-          color={isActive ? "primary" : "subtext"}
+          color={isActive || isHintActive ? "primary" : "subtext"}
         >
           ﴿ {item.verseKey} ﴾
         </AppText>
       </View>
 
-      {/* Arabic text — centered, highlighted when active */}
-      <View style={[S.arabicWrapper, isActive && S.activeArabicWrapper]}>
+      {/* Interactive Hint Focus Badge */}
+      {isHintActive ? (
+        <View style={S.hintBadge}>
+          <Ionicons
+            name="hand-left-outline"
+            size={rs.icon(15)}
+            color={colors.primary}
+          />
+          <AppText variant="body" family="title" color="primary">
+            {t("verse.holdForActions", "Hold for actions")}
+          </AppText>
+        </View>
+      ) : null}
+
+      {/* Arabic text — centered, highlighted when active or hint active */}
+      <View
+        style={[
+          S.arabicWrapper,
+          (isActive || isHintActive) && S.activeArabicWrapper,
+          isHintActive && S.hintArabicWrapper,
+        ]}
+      >
         <AppText
           size={fontSize.arabic * quranMultiplier}
           lineHeight={Math.round(fontSize.arabic * quranMultiplier * 2.2)}
           family="quran"
           letterSpacing={2.5}
           align="center"
-          color={isActive ? "primary" : colors.quranVerse}
+          color={isActive || isHintActive ? "primary" : colors.quranVerse}
           style={S.arabicText}
         >
           {item.arabic}
@@ -130,6 +155,27 @@ const createStyles = (colors: any) =>
       backgroundColor: colors.primary + "18",
       borderWidth: 1,
       borderColor: colors.primary + "30",
+    },
+    hintBadge: {
+      alignSelf: "center",
+      flexDirection: "row",
+      alignItems: "center",
+      gap: rs.space(4),
+      backgroundColor: colors.primary + "18",
+      borderWidth: 1,
+      borderColor: colors.primary + "40",
+      paddingHorizontal: rs.space(10),
+      paddingVertical: rs.space(3),
+      borderRadius: rs.space(16),
+      marginBottom: rs.space(8),
+    },
+    hintArabicWrapper: {
+      borderWidth: 1.5,
+      borderColor: colors.primary,
+      backgroundColor: colors.primary + "16",
+      borderRadius: rs.space(16),
+      paddingHorizontal: rs.space(8),
+      paddingVertical: rs.space(8),
     },
     separatorContainer: {
       flexDirection: "row",

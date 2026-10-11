@@ -114,6 +114,7 @@
     }
   },
   "verse": {
+    "holdForActions": "Hold for actions",
     "favoritedTitle": "Added to Favorites",
     "unfavoritedTitle": "Removed from Favorites",
     "favoritedMsg": "Saved to favorites",

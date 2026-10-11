@@ -114,6 +114,7 @@
     }
   },
   "verse": {
+    "holdForActions": "होल्ड करें",
     "favoritedTitle": "पसंदीदा में जोड़ा गया",
     "unfavoritedTitle": "पसंदीदा से हटाया गया",
     "favoritedMsg": "आयत पसंदीदा में सेव हो गई",

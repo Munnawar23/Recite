@@ -114,6 +114,7 @@
     }
   },
   "verse": {
+    "holdForActions": "চেপে ধরে রাখুন",
     "favoritedTitle": "পছন্দে যোগ করা হয়েছে",
     "unfavoritedTitle": "পছন্দ থেকে সরানো হয়েছে",
     "favoritedMsg": "আয়াত পছন্দে সংরক্ষণ করা হয়েছে",

@@ -7,13 +7,14 @@ import { rs, verticalScale } from "@/helpers/responsiveHelper";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
+import { appStorage, STORAGE_KEYS } from "@/lib/storage/appStorage";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import { useLanguageStore } from "@/store/languageStore";
 import type { SurahVerse } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { FlashList, ListRenderItemInfo } from "@shopify/flash-list";
 import LottieView from "lottie-react-native";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Toast from "react-native-toast-message";
 import {
@@ -137,12 +138,35 @@ function VerseListContent({
   const [selectedVerseForAction, setSelectedVerseForAction] =
     useState<SurahVerse | null>(null);
 
+  const [showHint, setShowHint] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    appStorage
+      .getItem<boolean>(STORAGE_KEYS.VERSE_ACTION_HINT)
+      .then((hasSeen) => {
+        if (isMounted && !hasSeen) {
+          setShowHint(true);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const handleVerseLongPress = useCallback(
     (verse: SurahVerse) => {
+      if (showHint) {
+        setShowHint(false);
+        appStorage
+          .setItem(STORAGE_KEYS.VERSE_ACTION_HINT, true)
+          .catch(() => {});
+      }
       handleVersePress(verse.verseKey);
       setSelectedVerseForAction(verse);
     },
-    [handleVersePress],
+    [handleVersePress, showHint],
   );
 
   const handleCloseActionModal = useCallback(() => {
@@ -259,7 +283,7 @@ function VerseListContent({
   );
 
   const renderItem = useCallback(
-    ({ item }: ListRenderItemInfo<SurahVerse>) => (
+    ({ item, index }: ListRenderItemInfo<SurahVerse>) => (
       <VerseRow
         item={item}
         selectedTransId={selectedTransId}
@@ -267,6 +291,7 @@ function VerseListContent({
           item.verseKey === activeVerseKey ||
           item.verseKey === selectedVerseForAction?.verseKey
         }
+        isHintActive={showHint && index === 0}
         onPress={handleVersePress}
         onLongPress={handleVerseLongPress}
       />
@@ -275,6 +300,7 @@ function VerseListContent({
       selectedTransId,
       activeVerseKey,
       selectedVerseForAction,
+      showHint,
       handleVersePress,
       handleVerseLongPress,
     ],
@@ -358,6 +384,11 @@ function VerseListContent({
         ref={listRef}
         data={verses}
         renderItem={renderItem}
+        extraData={{
+          activeVerseKey,
+          actionKey: selectedVerseForAction?.verseKey,
+          showHint,
+        }}
         ListHeaderComponent={ListHeader}
         keyExtractor={keyExtractor}
         showsVerticalScrollIndicator={false}

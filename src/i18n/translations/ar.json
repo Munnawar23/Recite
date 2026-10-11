@@ -114,6 +114,7 @@
     }
   },
   "verse": {
+    "holdForActions": "اضغط مطولاً",
     "favoritedTitle": "أضيفت للمفضلة",
     "unfavoritedTitle": "أزيلت من المفضلة",
     "favoritedMsg": "تم حفظ الآية في المفضلة",

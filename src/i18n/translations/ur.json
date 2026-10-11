@@ -114,6 +114,7 @@
     }
   },
   "verse": {
+    "holdForActions": "دبا کر رکھیں",
     "favoritedTitle": "پسندیدہ میں شامل کر دیا گیا",
     "unfavoritedTitle": "پسندیدہ سے ہٹا دیا گیا",
     "favoritedMsg": "آیت پسندیدہ میں محفوظ ہو گئی",

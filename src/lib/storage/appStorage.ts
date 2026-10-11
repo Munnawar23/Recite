@@ -14,6 +14,7 @@ export const STORAGE_KEYS = {
   LOCATION: "user-location-storage",
   QUERY_CACHE: "RECITE_QUERY_CACHE_V2",
   QURAN_SETTINGS: "quran-settings-storage",
+  VERSE_ACTION_HINT: "has-seen-verse-action-hint",
 } as const;
 
 export const appStorage = {

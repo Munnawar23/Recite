@@ -50,7 +50,6 @@ export function VerseCard({ item }: VerseCardProps) {
         versesCount: item.versesCount ? String(item.versesCount) : "",
         type: item.chapterType || "",
         initialVerse: String(item.verseNumber),
-        fromFavorite: "true",
       },
     });
   }, [router, item, localizedSurahName]);

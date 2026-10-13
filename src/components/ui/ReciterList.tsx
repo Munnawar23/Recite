@@ -13,11 +13,11 @@ import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   StyleSheet,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Image } from "expo-image";
 import { AppText } from "./AppText";
 
 const PLAY_BTN_HIT_SLOP = { top: 8, bottom: 8, left: 8, right: 8 };
@@ -171,6 +171,7 @@ export function ReciterList({
                     : reciter.avatar
                 }
                 style={S.avatar}
+                contentFit="cover"
                 onError={() =>
                   setImageError((prev) => ({ ...prev, [reciter.id]: true }))
                 }

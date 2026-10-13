@@ -22,7 +22,7 @@ const RESTORE_SCROLL_DELAY_MS = 100;
 const PLAYER_SHOW_ANIMATION_MS = 250;
 
 export function useQuranDetailScreen() {
-  const { id, arabicName, englishName, versesCount, type, initialVerse, fromFavorite } =
+  const { id, arabicName, englishName, versesCount, type, initialVerse } =
     useLocalSearchParams<{
       id: string;
       arabicName: string;
@@ -30,7 +30,6 @@ export function useQuranDetailScreen() {
       versesCount: string;
       type: string;
       initialVerse?: string;
-      fromFavorite?: string;
     }>();
 
   const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
@@ -107,21 +106,40 @@ export function useQuranDetailScreen() {
   const { isOffline } = useNetworkStatus();
   const safeArea = useAppSafeAreaInsets();
 
-  // Record this surah as last read when screen opens (skipped if opened from favorites)
+  // Record this surah as last read when screen opens
   useEffect(() => {
-    if (fromFavorite === "true") return;
     if (englishName && chapterId) {
+      const currentLastRead = useReadingProgressStore.getState().lastRead;
+      const parsedInitial = initialVerse ? parseInt(initialVerse, 10) : NaN;
+      const initialVerseNum =
+        !isNaN(parsedInitial) && parsedInitial > 0
+          ? parsedInitial
+          : currentLastRead?.surahNumber === chapterId
+            ? currentLastRead.verseNumber
+            : 1;
+
       setLastRead({
         surahNumber: chapterId,
         surahName: englishName,
         arabicName: arabicName ?? "",
         versesCount: versesCount ?? "",
         type: type ?? "",
-        verseNumber: 1,
-        scrollOffset: 0,
+        verseNumber: initialVerseNum,
+        scrollOffset:
+          currentLastRead?.surahNumber === chapterId
+            ? currentLastRead.scrollOffset
+            : 0,
       });
     }
-  }, [chapterId, englishName, arabicName, versesCount, type, fromFavorite, setLastRead]);
+  }, [
+    chapterId,
+    englishName,
+    arabicName,
+    versesCount,
+    type,
+    initialVerse,
+    setLastRead,
+  ]);
 
   const handleVersePress = useCallback(
     (verseKey: string) => {
@@ -190,11 +208,10 @@ export function useQuranDetailScreen() {
     }
   }, [initialVerse, verses, listRef]);
 
-  // Track topmost visible verse and update reading progress store (skipped if opened from favorites)
+  // Track topmost visible verse and update reading progress store
   const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 50 });
   const onViewableItemsChanged = useCallback(
     ({ viewableItems }: { viewableItems: Array<{ item: SurahVerse }> }) => {
-      if (fromFavorite === "true") return;
       if (viewableItems.length > 0) {
         const topItem = viewableItems[0].item;
         if (topItem?.verseNumber) {
@@ -202,7 +219,7 @@ export function useQuranDetailScreen() {
         }
       }
     },
-    [chapterId, fromFavorite, setVerseNumber],
+    [chapterId, setVerseNumber],
   );
 
   // Scroll to playing verse (only while actively playing)

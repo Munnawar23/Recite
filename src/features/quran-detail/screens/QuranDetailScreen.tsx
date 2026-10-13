@@ -1,9 +1,10 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 import AudioPlayer from "../components/AudioPlayer";
+import AudioPlayerModal from "../components/AudioPlayerModal";
 import Header from "../components/Header";
 import ScrollTopButton from "../components/ScrollTopButton";
 import VerseListContent from "../components/VerseListContent";
@@ -50,6 +51,8 @@ export default function QuranDetailScreen() {
     onViewableItemsChanged,
     viewabilityConfig,
   } = useQuranDetailScreen();
+
+  const [isAudioModalVisible, setIsAudioModalVisible] = useState(false);
 
   const S = useMemo(
     () => createStyles(colors.background),
@@ -114,8 +117,25 @@ export default function QuranDetailScreen() {
             status={status}
             isLoadingAudio={isLoadingAudio}
             scrollTranslateY={playerScrollTranslateY}
+            onMusicPress={() => setIsAudioModalVisible(true)}
           />
         )}
+
+        <AudioPlayerModal
+          visible={isAudioModalVisible}
+          onClose={() => setIsAudioModalVisible(false)}
+          player={player}
+          status={status}
+          isLoadingAudio={isLoadingAudio}
+          activeVerseKey={activeVerseKey}
+          chapterId={chapterId}
+          arabicName={arabicName}
+          englishName={englishName}
+          versesCount={versesCount}
+          chapterType={type}
+          reciterName={reciterName}
+          isPlayingLocally={isPlayingLocally}
+        />
 
         <ScrollTopButton
           showScrollTop={showScrollTop}

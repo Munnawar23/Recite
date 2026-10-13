@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from "react-native";
-import Animated, { useAnimatedStyle, type SharedValue } from "react-native-reanimated";
-import { Ionicons } from "@expo/vector-icons";
+import Animated, { type SharedValue } from "react-native-reanimated";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import type { AudioPlayer } from "expo-audio";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -9,31 +9,25 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AppText } from "@/components";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { Haptics } from "@/lib/haptics";
+import {
+  formatTime,
+  useAudioPlayer,
+} from "../hooks/useAudioPlayer";
 
 interface AudioPlayerProps {
   player: AudioPlayer;
   status: any;
   isLoadingAudio: boolean;
   scrollTranslateY?: SharedValue<number>;
+  onMusicPress?: () => void;
 }
-
-const formatTime = (seconds: number): string => {
-  if (isNaN(seconds) || seconds == null) return "0:00";
-  const hrs = Math.floor(seconds / 3600);
-  const mins = Math.floor((seconds % 3600) / 60);
-  const secs = Math.floor(seconds % 60);
-  if (hrs > 0) {
-    return `${hrs}:${mins < 10 ? "0" : ""}${mins}:${secs < 10 ? "0" : ""}${secs}`;
-  }
-  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-};
 
 export default function AudioPlayerComponent({
   player,
   status,
   isLoadingAudio,
   scrollTranslateY,
+  onMusicPress,
 }: AudioPlayerProps) {
   const { colors } = useAppTheme();
   const insets = useSafeAreaInsets();
@@ -42,133 +36,112 @@ export default function AudioPlayerComponent({
     [colors, insets.bottom],
   );
 
-  const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
-  const [sliderValue, setSliderValue] = useState<number>(0);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-
-  // Keep loader active until audio duration is known — prevents 0:00 flash
-  const isDurationReady = (status.duration ?? 0) > 0;
-  const isPlayerLoading = isLoadingAudio || !isDurationReady;
-
-  // Reanimated sliding animation logic
-  const animatedStyle = useAnimatedStyle(() => {
-    const scrollOffset = scrollTranslateY ? scrollTranslateY.value : 0;
-    // Keep player locked visible on screen if audio is playing
-    const effectiveOffset = status.playing ? 0 : scrollOffset;
-    return {
-      transform: [{ translateY: effectiveOffset }],
-    };
+  const {
+    sliderValue,
+    isDragging,
+    playbackSpeed,
+    isPlayerLoading,
+    miniPlayerAnimatedStyle,
+    cycleSpeed,
+    handlePlayPause,
+    handleSkipBack,
+    handleSkipForward,
+    handleMusicPress,
+    handleSliderValueChange,
+    handleSlidingComplete,
+  } = useAudioPlayer({
+    player,
+    status,
+    isLoadingAudio,
+    scrollTranslateY,
+    onMusicPress,
   });
 
-  // Sync sliderValue with player's currentTime when not dragging
-  useEffect(() => {
-    if (!isDragging) {
-      setSliderValue(status.currentTime || 0);
-    }
-  }, [status.currentTime, isDragging]);
-
-  const cycleSpeed = useCallback(() => {
-    Haptics.light();
-    const nextSpeed =
-      playbackSpeed === 1.0 ? 1.25 :
-      playbackSpeed === 1.25 ? 1.5 :
-      playbackSpeed === 1.5 ? 2.0 : 1.0;
-    setPlaybackSpeed(nextSpeed);
-    player.setPlaybackRate(nextSpeed);
-  }, [playbackSpeed, player]);
-
-  const handlePlayPause = useCallback(() => {
-    Haptics.light();
-    if (status.playing) {
-      player.pause();
-    } else {
-      player.play();
-    }
-  }, [status.playing, player]);
-
-  const handleSkipBack = useCallback(() => {
-    player.seekTo(Math.max(0, status.currentTime - 10));
-  }, [player, status.currentTime]);
-
-  const handleSkipForward = useCallback(() => {
-    player.seekTo(Math.min(status.duration, status.currentTime + 10));
-  }, [player, status.currentTime, status.duration]);
-
   return (
-    <Animated.View style={[S.container, animatedStyle]}>
+    <Animated.View style={[S.container, miniPlayerAnimatedStyle]}>
       {/* Progress Bar (Slider) */}
       <View style={S.progressSection}>
         <AppText variant="caption" color="subtext" align="center" style={S.timeText}>
-          {formatTime(isDragging ? sliderValue : status.currentTime)}
+          {formatTime(isDragging ? sliderValue : status?.currentTime || 0)}
         </AppText>
 
         <Slider
           style={S.slider}
           minimumValue={0}
-          maximumValue={status.duration || 1}
+          maximumValue={status?.duration || 1}
           value={sliderValue}
           minimumTrackTintColor={colors.primary}
           maximumTrackTintColor={colors.border + "80"}
           thumbTintColor={colors.primary}
-          onValueChange={(val) => {
-            setIsDragging(true);
-            setSliderValue(val);
-          }}
-          onSlidingComplete={(val) => {
-            player.seekTo(val);
-            setIsDragging(false);
-          }}
+          onValueChange={handleSliderValueChange}
+          onSlidingComplete={handleSlidingComplete}
         />
 
         <AppText variant="caption" color="subtext" align="center" style={S.timeText}>
-          {formatTime(status.duration)}
+          {formatTime(status?.duration || 0)}
         </AppText>
       </View>
 
       {/* Control Buttons */}
       <View style={S.controlsRow}>
-        {/* Spacer to balance speed button on left side */}
-        <View style={S.spacerButton} />
+        {/* Music Button */}
+        <TouchableOpacity
+          onPress={handleMusicPress}
+          style={S.musicButton}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel="Music"
+        >
+          <Ionicons name="musical-notes" size={rs.icon(18)} color="#FFFFFF" />
+        </TouchableOpacity>
 
-        {/* Center Playback Controls */}
-        <View style={S.centerControls}>
-          {/* Skip backward 10s */}
-          <TouchableOpacity
-            onPress={handleSkipBack}
-            style={S.skipButton}
-          >
-            <Ionicons name="play-back" size={rs.icon(19)} color={colors.text} />
-          </TouchableOpacity>
+        {/* Skip backward 10s */}
+        <TouchableOpacity
+          onPress={handleSkipBack}
+          style={S.skipButton}
+          accessibilityRole="button"
+          accessibilityLabel="Skip backward 10 seconds"
+        >
+          <MaterialIcons name="replay-10" size={rs.icon(22)} color={colors.text} />
+        </TouchableOpacity>
 
-          {/* Play/Pause Main Button (Exact Center) */}
-          <TouchableOpacity
-            onPress={handlePlayPause}
-            disabled={isPlayerLoading}
-            style={S.playPauseButton}
-          >
-            {isPlayerLoading ? (
-              <ActivityIndicator size="small" color="#fff" />
-            ) : (
-              <Ionicons
-                name={status.playing ? "pause" : "play"}
-                size={rs.icon(26)}
-                color="#fff"
-                style={!status.playing ? { marginLeft: rs.space(2.5) } : undefined}
-              />
-            )}
-          </TouchableOpacity>
+        {/* Play/Pause Main Button (Exact Center) */}
+        <TouchableOpacity
+          onPress={handlePlayPause}
+          disabled={isPlayerLoading}
+          style={S.playPauseButton}
+          accessibilityRole="button"
+          accessibilityLabel={status?.playing ? "Pause" : "Play"}
+        >
+          {isPlayerLoading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Ionicons
+              name={status?.playing ? "pause" : "play"}
+              size={rs.icon(26)}
+              color="#fff"
+              style={!status?.playing ? { marginLeft: rs.space(2.5) } : undefined}
+            />
+          )}
+        </TouchableOpacity>
 
-          {/* Skip forward 10s */}
-          <TouchableOpacity
-            onPress={handleSkipForward}
-            style={S.skipButton}
-          >
-            <Ionicons name="play-forward" size={rs.icon(19)} color={colors.text} />
-          </TouchableOpacity>
-        </View>
+        {/* Skip forward 10s */}
+        <TouchableOpacity
+          onPress={handleSkipForward}
+          style={S.skipButton}
+          accessibilityRole="button"
+          accessibilityLabel="Skip forward 10 seconds"
+        >
+          <MaterialIcons name="forward-10" size={rs.icon(22)} color={colors.text} />
+        </TouchableOpacity>
 
-        {/* Speed Selector (Far Right Badge Button) */}
-        <TouchableOpacity onPress={cycleSpeed} style={S.speedButton}>
+        {/* Speed Selector */}
+        <TouchableOpacity
+          onPress={cycleSpeed}
+          style={S.speedButton}
+          accessibilityRole="button"
+          accessibilityLabel={`Playback speed ${playbackSpeed === 1 ? "1.0" : playbackSpeed}x`}
+        >
           <AppText variant="caption" family="title" color="#FFFFFF">
             {playbackSpeed === 1 ? "1.0" : playbackSpeed}x
           </AppText>
@@ -215,11 +188,7 @@ const createStyles = (colors: any, bottomInset: number) =>
     controlsRow: {
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "space-between",
-    },
-    centerControls: {
-      flexDirection: "row",
-      alignItems: "center",
+      justifyContent: "center",
       gap: rs.space(20),
     },
     skipButton: {
@@ -243,9 +212,18 @@ const createStyles = (colors: any, bottomInset: number) =>
       shadowRadius: 3,
       elevation: 3,
     },
-    spacerButton: {
+    musicButton: {
       width: rs.space(38),
       height: rs.space(38),
+      borderRadius: rs.space(19),
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: colors.primary,
+      shadowColor: colors.primary,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+      elevation: 3,
     },
     playPauseButton: {
       width: rs.space(54),

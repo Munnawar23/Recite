@@ -2,12 +2,12 @@ import { Haptics } from "@/lib/haptics";
 import { useReadingProgressStore } from "@/store/readingProgressStore";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Animated, {
-  runOnJS,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { scheduleOnRN } from "react-native-worklets";
 
 interface UseQuranDetailScrollParams {
   chapterId: number;
@@ -66,7 +66,7 @@ export function useQuranDetailScroll({
         if (isScrollTopVisible.value) {
           isScrollTopVisible.value = false;
           scrollTopOpacity.value = withTiming(0, { duration: 200 });
-          runOnJS(updateScrollTopVisibility)(false);
+          scheduleOnRN(updateScrollTopVisibility, false);
         }
         playerScrollTranslateY.value = withTiming(0, { duration: 200 });
         headerScrollTranslateY.value = withTiming(0, { duration: 200 });
@@ -74,7 +74,7 @@ export function useQuranDetailScroll({
         if (isScrollTopVisible.value) {
           isScrollTopVisible.value = false;
           scrollTopOpacity.value = withTiming(0, { duration: 200 });
-          runOnJS(updateScrollTopVisibility)(false);
+          scheduleOnRN(updateScrollTopVisibility, false);
         }
         headerScrollTranslateY.value = withTiming(-120, { duration: 250 });
         if (!isPlayingAudioShared.value && !isSelectingVerse.value) {
@@ -86,7 +86,7 @@ export function useQuranDetailScroll({
         if (!isScrollTopVisible.value) {
           isScrollTopVisible.value = true;
           scrollTopOpacity.value = withTiming(1, { duration: 200 });
-          runOnJS(updateScrollTopVisibility)(true);
+          scheduleOnRN(updateScrollTopVisibility, true);
         }
         playerScrollTranslateY.value = withTiming(0, { duration: 250 });
         headerScrollTranslateY.value = withTiming(0, { duration: 250 });

@@ -6,9 +6,9 @@ import { useQiblaDirection } from "@/features/qibla/hooks/useQiblaDirection";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLocation } from "@/hooks/useLocation";
-import { usePathname } from "expo-router";
+import { useNavigation, usePathname } from "expo-router";
 import { useTranslation } from "react-i18next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import LottieView from "lottie-react-native";
 import Animated, {
@@ -55,9 +55,97 @@ function LiveHeadingText({
   );
 }
 
+/**
+ * Isolated active compass component:
+ * Mounting this component starts the device Gyroscope and Rotation sensors.
+ * Unmounting it cleanly turns off all hardware sensor polling and Reanimated reactions.
+ */
+function ActiveCompassContent({
+  coords,
+  styles,
+  t,
+}: {
+  coords: { latitude: number; longitude: number };
+  styles: any;
+  t: any;
+}) {
+  const qiblaAngle = useQiblaDirection(coords);
+  const rotation = useCompass();
+  const targetDeg = Math.round(qiblaAngle);
+
+  return (
+    <>
+      {/* Top Qibla Target Header (Big Font) */}
+      <View style={styles.targetContainer}>
+        <AppText
+          variant="caption"
+          family="text"
+          color="subtext"
+          letterSpacing={1.5}
+          style={styles.targetLabel}
+        >
+          {t("qiblaScreen.title", "Qibla")}
+        </AppText>
+
+        <AppText
+          variant="splashTitle"
+          family="title"
+          color="primary"
+          style={styles.targetValue}
+        >
+          {targetDeg}°
+        </AppText>
+      </View>
+
+      {/* Center Compass Dial */}
+      <CompassDial
+        rotation={rotation}
+        qiblaAngle={qiblaAngle}
+        active={true}
+      />
+
+      {/* Bottom Current Heading */}
+      <View style={styles.headingContainer}>
+        <AppText
+          variant="body"
+          family="text"
+          color="subtext"
+          align="center"
+          style={styles.headingLabel}
+          numberOfLines={1}
+        >
+          {t("qiblaScreen.currentHeading", "Current Heading")}
+        </AppText>
+
+        <LiveHeadingText
+          rotation={rotation}
+          style={styles.headingValue}
+        />
+      </View>
+    </>
+  );
+}
+
 export default function QiblaScreen() {
   const pathname = usePathname();
-  const isFocused = pathname === "/qibla";
+  const navigation = useNavigation();
+  const [isScreenFocused, setIsScreenFocused] = useState(true);
+
+  // Track tab focus/blur events to guarantee sensors sleep when on other tabs
+  useEffect(() => {
+    const unsubFocus = navigation.addListener("focus", () => {
+      setIsScreenFocused(true);
+    });
+    const unsubBlur = navigation.addListener("blur", () => {
+      setIsScreenFocused(false);
+    });
+    return () => {
+      unsubFocus();
+      unsubBlur();
+    };
+  }, [navigation]);
+
+  const isFocused = isScreenFocused && pathname === "/qibla";
   const { t } = useTranslation();
   const theme = useAppTheme();
   const styles = createStyles(theme);
@@ -78,11 +166,6 @@ export default function QiblaScreen() {
       setShowBlockedModal(true);
     }
   };
-
-  const qiblaAngle = useQiblaDirection(coords);
-  const rotation = useCompass();
-
-  const targetDeg = Math.round(qiblaAngle);
 
   return (
     <View style={styles.root}>
@@ -126,56 +209,16 @@ export default function QiblaScreen() {
                 style={styles.lottieLoader}
               />
             </View>
+          ) : isFocused ? (
+            /* Only mounts & starts hardware sensors when the user is actively on this tab */
+            <ActiveCompassContent
+              coords={coords}
+              styles={styles}
+              t={t}
+            />
           ) : (
-            <>
-              {/* Top Qibla Target Header (Big Font) */}
-              <View style={styles.targetContainer}>
-                <AppText
-                  variant="caption"
-                  family="text"
-                  color="subtext"
-                  letterSpacing={1.5}
-                  style={styles.targetLabel}
-                >
-                  {t("qiblaScreen.title", "Qibla")}
-                </AppText>
-
-                <AppText
-                  variant="splashTitle"
-                  family="title"
-                  color="primary"
-                  style={styles.targetValue}
-                >
-                  {targetDeg}°
-                </AppText>
-              </View>
-
-              {/* Center Compass Dial */}
-              <CompassDial
-                rotation={rotation}
-                qiblaAngle={qiblaAngle}
-                active={isFocused}
-              />
-
-              {/* Bottom Current Heading */}
-              <View style={styles.headingContainer}>
-                <AppText
-                  variant="body"
-                  family="text"
-                  color="subtext"
-                  align="center"
-                  style={styles.headingLabel}
-                  numberOfLines={1}
-                >
-                  {t("qiblaScreen.currentHeading", "Current Heading")}
-                </AppText>
-
-                <LiveHeadingText
-                  rotation={rotation}
-                  style={styles.headingValue}
-                />
-              </View>
-            </>
+            /* When user switches to another tab, sensors are completely unmounted and turned off */
+            <View style={styles.loadingContainer} />
           )}
         </View>
       </View>

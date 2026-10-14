@@ -1,0 +1,362 @@
+{
+  "common": {
+    "welcome": "Hoş Geldiniz",
+    "settings": "Ayarlar",
+    "language": "Dil",
+    "selectLanguage": "Dil Seçin",
+    "home": "Ana Sayfa",
+    "recite": "Oku",
+    "read": "Oku",
+    "listen": "Dinle",
+    "reflect": "Düşün",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "tryAgain": "Tekrar Dene",
+    "retry": "Yeniden Dene",
+    "errorTitle": "Bir şeyler ters gitti",
+    "errorMessage": "Veriler yüklenemedi. Tekrar denemek için dokunun.",
+    "noConnectionTitle": "Bağlantı Hatası",
+    "noConnectionSubtitle": "Veriler yüklenemedi. İnternet bağlantınızı kontrol edin.",
+    "offlineAudioPreviewTitle": "Çevrimdışı Mod",
+    "offlineAudioPreviewMessage": "Ses önizlemesi için internet bağlantısı gerekir. İndirdiğiniz sureleri dinleyebilirsiniz.",
+    "offlineReciterChangeMessage": "Hafız değiştirmek için internete bağlanmanız gerekir.",
+    "quran": "Kuran",
+    "surah": "Sure",
+    "verse": "Ayet",
+    "qibla": "Kıble",
+    "library": "Kitaplık",
+    "back": "Geri",
+    "share": "Paylaş",
+    "sharing": "Paylaşılıyor...",
+    "copy": "Kopyala",
+    "favourite": "Favori",
+    "favorited": "Kaydedildi",
+    "copied": "Panoya kopyalandı"
+  },
+  "splash": {
+    "title": "Recite",
+    "subtitle": "Oku • Dinle • Anla"
+  },
+  "tabs": {
+    "home": "Ana Sayfa",
+    "quran": "Kuran-ı Kerim",
+    "qibla": "Kıble",
+    "library": "Kitaplık",
+    "settings": "Ayarlar"
+  },
+  "home": {
+    "greeting": {
+      "title": "Selamün Aleyküm",
+      "subtitle": "Gününüz bereket ve huzurla dolsun"
+    },
+    "hijriCard": {
+      "badge": "Hicri Tarih",
+      "yearSuffix": "H"
+    },
+    "sectionTitles": {
+      "prayerTimes": "Namaz Vakitleri",
+      "dailyVerse": "Günün Ayeti",
+      "continueReading": "Okumaya Devam Et"
+    },
+    "prayerNames": {
+      "fajr": "İmsak",
+      "dhuhr": "Öğle",
+      "asr": "İkindi",
+      "maghrib": "Akşam",
+      "isha": "Yatsı"
+    },
+    "locationNotice": {
+      "showingMecca": "Mekke vakitleri gösteriliyor.",
+      "enableLocation": "Konumu açmak için dokunun"
+    },
+    "dailyVerse": {
+      "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      "defaultTranslation": "Şüphesiz her zorlukla beraber bir kolaylık vardır.",
+      "defaultSource": "İnşirah Suresi · 94:6"
+    },
+    "continueReadingEmpty": {
+      "title": "Kuran okumaya başlayın",
+      "subtitle": "Kuran okudukça kaldığınız yer burada görünecek.",
+      "buttonLabel": "Kuran'ı Aç"
+    }
+  },
+  "quran": {
+    "title": "Kuran",
+    "subtitle": "Kuran-ı Kerim'i oku, dinle ve anla",
+    "searchPlaceholder": "Sure ara...",
+    "continueReadingTag": "KALDIĞIN YERDEN DEVAM ET",
+    "verseNumber": "Ayet No. {{number}}",
+    "versesCount": "{{count}} AYET",
+    "meccan": "MEKKİ",
+    "medinan": "MEDENİ",
+    "noResultsTitle": "Sure Bulunamadı",
+    "noResultsSubtitle": "Farklı bir kelime ile aramayı deneyin.",
+    "errorMessage": "Sureler yüklenemedi. Tekrar denemek için dokunun.",
+    "versesError": {
+      "title": "Yüklenemedi",
+      "subtitle": "İnternet bağlantınızı kontrol edip tekrar deneyin.",
+      "retry": "Yeniden Dene"
+    },
+    "downloadCard": {
+      "download": "İndir",
+      "downloading": "İndiriliyor",
+      "downloadingProgress": "İndiriliyor • {{written}} / {{total}} MB (%{{progress}})",
+      "paused": "Duraklatıldı • {{written}} / {{total}} MB (%{{progress}})",
+      "pause": "Duraklat",
+      "resume": "Devam Et",
+      "playingOffline": "Çevrimdışı Çalıyor",
+      "playingOfflineTitle": "Çevrimdışı Çalıyor",
+      "playingOnlineTitle": "Çevrimiçi Çalıyor",
+      "deleteTitle": "İndirmeyi Sil?",
+      "deleteDesc": "Bu surenin ses kaydını çevrimdışı indirmelerinizden silmek istiyor musunuz?",
+      "notReadyTitle": "Ses Hazır Değil",
+      "notReadyBody": "Ses bilgisi yükleniyor. Lütfen biraz bekleyin.",
+      "errorTitle": "İndirme Başarısız",
+      "errorBody": "İndirme tamamlanamadı. Lütfen internet bağlantınızı kontrol edin."
+    }
+  },
+  "verse": {
+    "holdForActions": "Seçenekler için basılı tutun",
+    "favoritedTitle": "Favorilere Eklendi",
+    "unfavoritedTitle": "Favorilerden Çıkarıldı",
+    "favoritedMsg": "Favorilere kaydedildi",
+    "unfavoritedMsg": "Favorilerden kaldırıldı"
+  },
+  "errorBoundary": {
+    "title": "Bir Sorun Oluştu",
+    "subtitle": "Uygulamada beklenmeyen bir hata oluştu. Yeniden başlatmayı deneyebilirsiniz."
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "subtitle": "Uygulama tercihlerinizi ve görünümünüzü düzenleyin",
+    "sections": {
+      "displayLanguage": "Görünüm ve Diller",
+      "notifications": "Bildirimler",
+      "storage": "Depolama",
+      "helpSupport": "Yardım ve Destek",
+      "shareRate": "Paylaş ve Puan Ver",
+      "aboutUs": "Hakkında"
+    },
+    "display": {
+      "title": "Görünüm Ayarları",
+      "subtitle": "Tema ve yazı boyutu",
+      "optionsTitle": "Görünüm Seçenekleri",
+      "optionsSubtitle": "Tema ve yazı boyutları",
+      "appTheme": "Uygulama Teması",
+      "appFontSize": "Uygulama Yazı Boyutu",
+      "quranFontSize": "Kuran Arapça Yazı Boyutu",
+      "livePreview": "Canlı Önizleme",
+      "sampleTranslation": "Rahman ve Rahim olan Allah'ın adıyla",
+      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "theme": {
+        "light": "Açık",
+        "dark": "Koyu",
+        "system": "Sistem"
+      },
+      "fontSize": {
+        "default": "Standart",
+        "large": "Büyük",
+        "extraLarge": "Maksimum"
+      }
+    },
+    "languages": {
+      "title": "Diller ve Ses",
+      "subtitle": "Uygulama dili, meal ve hafız",
+      "optionsTitle": "Dil ve Ses Seçenekleri",
+      "optionsSubtitle": "Uygulama dili, meal ve hafız",
+      "appLanguageSection": "Uygulama Dili",
+      "appLanguageTitle": "Menü ve Arayüz Dili",
+      "appLanguageSubtitle": "Uygulamanın görüntüleneceği dili seçin",
+      "appLanguagePlaceholder": "Uygulama Dili Seçin",
+      "quranTranslationSection": "Kuran Meali",
+      "quranTranslationTitle": "Varsayılan Meal",
+      "quranTranslationSubtitle": "Ayetlerin altında gösterilecek meali seçin",
+      "quranTranslationPlaceholder": "Meal Seçin",
+      "quranReciterSection": "Hafız Seçimi",
+      "quranReciterTitle": "Varsayılan Hafız",
+      "quranReciterSubtitle": "Kuran dinlemek için bir kıraat sesi seçin",
+      "quranReciterPlaceholder": "Hafız Seçin",
+      "translations": {
+        "arabicOnly": "Yalnızca Arapça",
+        "english": "İngilizce (Saheeh)",
+        "urdu": "Urduca (Mevdudi)",
+        "hindi": "Hintçe (Azizul Haque)",
+        "indonesian": "Endonezce (Ministry)",
+        "bengali": "Bengalce (Taisirul)"
+      }
+    },
+    "notifications": {
+      "title": "Bildirimler",
+      "enableTitle": "Bildirimleri Aç",
+      "enabled": "Bildirimler açık",
+      "disabled": "Kapalı",
+      "dailyReminderTitle": "Günlük Hatırlatıcı",
+      "dailyReminderSubtitle": "Kuran okuma hatırlatıcıları",
+      "toastEnabledTitle": "Bildirimler Açıldı",
+      "toastEnabledDesc": "Günlük hatırlatıcılar etkinleştirildi.",
+      "toastDisabledTitle": "Bildirimler Kapatıldı",
+      "toastDisabledDesc": "Günlük hatırlatıcılar kapatıldı.",
+      "blockedTitle": "Bildirim İzni Gerekli",
+      "blockedMessage": "Bildirimler kapalı. Ayarlar'dan izin verebilirsiniz.",
+      "openSettings": "Ayarları Aç"
+    },
+    "storage": {
+      "title": "Depolama",
+      "clearDownloadsTitle": "Tüm İndirmeleri Temizle",
+      "clearDownloadsSubtitleEmpty": "0 Sure çevrimdışı kaydedildi (0 MB)",
+      "clearDownloadsSubtitle": "{{count}} Sure kaydedildi ({{size}})",
+      "noDownloadsTitle": "İndirme Yok",
+      "noDownloadsMessage": "Temizlenecek indirilmiş bir sure bulunmuyor.",
+      "confirmClearDownloadsTitle": "Tüm İndirmeler Silinsin mi?",
+      "confirmClearDownloadsDesc": "İndirilen {{count}} sureyi ({{size}}) telefonunuzdan silmek istiyor musunuz?",
+      "toastClearedDownloadsTitle": "İndirmeler Temizlendi",
+      "toastClearedDownloadsDesc": "İndirilen tüm sureler başarıyla silindi.",
+      "clearFavoritesTitle": "Tüm Favorileri Temizle",
+      "clearFavoritesSubtitle": "{{count}} Ayet favorilerde kayıtlı",
+      "noFavoritesTitle": "Favori Yok",
+      "noFavoritesMessage": "Temizlenecek favori ayetiniz bulunmuyor.",
+      "confirmClearFavoritesTitle": "Tüm Favoriler Silinsin mi?",
+      "confirmClearFavoritesDesc": "Favorilerinizdeki {{count}} ayeti listenizden çıkarmak istiyor musunuz?",
+      "toastClearedFavoritesTitle": "Favoriler Temizlendi",
+      "toastClearedFavoritesDesc": "Tüm favori ayetler çıkarıldı."
+    },
+    "helpSupport": {
+      "title": "Yardım ve Destek",
+      "contactTitle": "Bize Ulaşın",
+      "contactEmail": "munawwarh48@gmail.com"
+    },
+    "rate": {
+      "title": "Uygulamayı Değerlendir",
+      "subtitle": "Bizi Google Play'de destekleyin"
+    },
+    "share": {
+      "title": "Uygulamayı Paylaş",
+      "subtitle": "Aileniz ve arkadaşlarınızla paylaşın",
+      "message": "Kuran-ı Kerim'i okumak ve dinlemek için Recite uygulamasını deneyin! Buradan indirin:",
+      "dialogTitle": "Recite Uygulamasını Paylaş"
+    },
+    "about": {
+      "title": "Hakkında",
+      "subtitle": "Ücretsiz topluluk Kuran uygulaması",
+      "appVersionTitle": "Uygulama Sürümü",
+      "appVersionSubtitle": "Sürüm {{version}}",
+      "aboutUsTitle": "Hakkımızda",
+      "aboutUsSubtitle": "Açık kaynaklı ve reklamsız Kuran uygulaması",
+      "aboutUsContent": "Recite; sıfır reklam, abonelik veya ücret olmadan Kuran-ı Kerim'i tüm dünyaya ulaştırmayı hedefleyen ücretsiz bir topluluk projesidir.",
+      "aboutAppIntro": "Recite; kaliteli ses kayıtları, çok dilli mealler ve hızlı arama özellikleriyle sade ve modern bir Kuran deneyimi sunar.",
+      "keyHighlights": "Öne Çıkan Özellikler",
+      "featureRecitersTitle": "Güvenilir Kıraatler",
+      "featureRecitersDesc": "Dünyaca ünlü hafızlardan yüksek kaliteli ses ve ayet ayet takip.",
+      "featureLanguagesTitle": "Çok Dilli Mealler",
+      "featureLanguagesDesc": "Farklı dillerde ayet meallerini yan yana okuyun.",
+      "featurePrivacyTitle": "Önce Gizlilik",
+      "featurePrivacyDesc": "Takip yok, reklam yok ve kişisel veri toplanmaz.",
+      "tagline": "Kuran'ı Oku, Dinle ve Düşün"
+    },
+    "language": {
+      "title": "Uygulama Dili",
+      "subtitle": "Menüler için istediğiniz dili seçin."
+    },
+    "theme": {
+      "title": "Uygulama Teması",
+      "subtitle": "Açık, koyu veya sistem teması seçin.",
+      "light": "Açık",
+      "dark": "Koyu",
+      "system": "Sistem"
+    },
+    "fontSize": {
+      "title": "Yazı Boyutu",
+      "subtitle": "Okuma kolaylığı için yazı boyutunu ayarlayın.",
+      "small": "Küçük",
+      "default": "Standart",
+      "large": "Büyük"
+    },
+    "errorTest": {
+      "title": "Hata Testi",
+      "subtitle": "Uygulamanın hataları nasıl karşıladığını test edin.",
+      "button": "Hata Oluştur"
+    }
+  },
+  "library": {
+    "title": "Kitaplık",
+    "subtitle": "Kaydettiğiniz ayetler ve indirmeler",
+    "tabs": {
+      "favorites": "Favoriler",
+      "downloads": "İndirilenler"
+    },
+    "emptyFavorites": {
+      "title": "Henüz Favori Yok",
+      "subtitle": "Kaydettiğiniz ayetleri burada görebilirsiniz."
+    },
+    "emptyDownloads": {
+      "title": "İndirme Yok",
+      "subtitle": "İnternetsiz dinlemek için sureleri indirin."
+    }
+  },
+  "languages": {
+    "en": "English",
+    "ar": "العربية",
+    "ur": "اردو",
+    "hi": "हिन्दी",
+    "id": "Bahasa Indonesia",
+    "bn": "বাংলা",
+    "ms": "Bahasa Melayu",
+    "ru": "Русский",
+    "tr": "Türkçe",
+    "fr": "Français",
+    "fa": "فارسی"
+  },
+  "qiblaScreen": {
+    "title": "Kıble",
+    "subtitleWithCity": "{{cityName}} için kıble yönü",
+    "subtitleDefault": "Kabe'nin yönünü bulun",
+    "currentHeading": "Şu Anki Yönünüz",
+    "qiblaTarget": "Kıble Açısı: {{deg}}°",
+    "locationRequiredTitle": "Konum İzni Gerekli",
+    "locationRequiredSubtitle": "Kıble yönünü doğru hesaplayabilmek için konumunuza ihtiyacımız var.",
+    "enableLocation": "Konumu Aç"
+  },
+  "onboarding": {
+    "stepOf": "{{current}} / {{total}}",
+    "next": "İleri",
+    "skip": "Geç",
+    "getStarted": "Başla",
+    "language": {
+      "title": "Dilinizi Seçin",
+      "subtitle": "Uygulama menüleri için tercih ettiğiniz dili belirleyin.",
+      "sectionLabel": "Uygulama Dili"
+    },
+    "preferences": {
+      "title": "Hafız Seçin",
+      "subtitle": "Kuran dinlemek için tercih ettiğiniz hafız sesini seçin.",
+      "translationLabel": "Kuran Meali",
+      "reciterLabel": "Hafız"
+    },
+    "theme": {
+      "title": "Görünüm ve Tema",
+      "subtitle": "Rahat okuma için tema ve yazı boyutunu ayarlayın."
+    },
+    "notifications": {
+      "title": "Bağlantıda Kalın",
+      "subtitle": "Düzenli Kuran okumak için günlük hatırlatıcıları açın.",
+      "benefit1": "Günlük okuma hatırlatıcıları",
+      "benefit2": "Namaz vakti bildirimleri",
+      "benefit3": "Günün ayeti bildirimleri",
+      "enableButton": "Bildirimleri Aç",
+      "enabledStatus": "Bildirimler Açıldı",
+      "skipHint": "Bunu daha sonra Ayarlar'dan da açabilirsiniz"
+    },
+    "location": {
+      "title": "Doğru Namaz Vakitleri",
+      "subtitle": "Doğru namaz vakitleri ve kıble pusulası için konuma izin verin.",
+      "benefit1": "Şehrinize özel namaz vakitleri",
+      "benefit2": "Hassas kıble pusulası",
+      "benefit3": "Yerel hicri takvim",
+      "enableButton": "Konuma İzin Ver",
+      "enabledStatus": "Konum Açıldı",
+      "skipHint": "Geçerseniz Mekke vakitleri kullanılır",
+      "blockedTitle": "Konum Kapalı",
+      "blockedMessage": "Konum izni kapalı. Ayarlar'dan izin verebilirsiniz."
+    }
+  }
+}

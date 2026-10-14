@@ -48,7 +48,7 @@ export default function NotificationSection() {
       <SettingsItemCard
         icon="alarm-outline"
         title={t("settings.notifications.dailyReminderTitle", "Daily Reminder")}
-        subtitle={t("settings.notifications.dailyReminderSubtitle", "Daily reminder at 11:00 PM")}
+        subtitle={t("settings.notifications.dailyReminderSubtitle", "Daily reminders to read the Quran")}
         rightElement={
           isLoading ? (
             <ActivityIndicator size="small" color={colors.primary} />

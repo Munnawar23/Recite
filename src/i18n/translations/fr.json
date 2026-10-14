@@ -1,0 +1,362 @@
+{
+  "common": {
+    "welcome": "Bienvenue",
+    "settings": "Paramètres",
+    "language": "Langue",
+    "selectLanguage": "Choisir la langue",
+    "home": "Accueil",
+    "recite": "Réciter",
+    "read": "Lire",
+    "listen": "Écouter",
+    "reflect": "Méditer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "tryAgain": "Réessayer",
+    "retry": "Réessayer",
+    "errorTitle": "Une erreur est survenue",
+    "errorMessage": "Impossible de charger les données. Touchez pour réessayer.",
+    "noConnectionTitle": "Pas de connexion",
+    "noConnectionSubtitle": "Vérifiez votre connexion internet et réessayez.",
+    "offlineAudioPreviewTitle": "Mode hors-ligne",
+    "offlineAudioPreviewMessage": "L'écoute en direct nécessite internet. Vous pouvez toujours écouter vos sourates téléchargées.",
+    "offlineReciterChangeMessage": "Changer de récitateur nécessite une connexion internet.",
+    "quran": "Coran",
+    "surah": "Sourate",
+    "verse": "Verset",
+    "qibla": "Qibla",
+    "library": "Bibliothèque",
+    "back": "Retour",
+    "share": "Partager",
+    "sharing": "Partage...",
+    "copy": "Copier",
+    "favourite": "Favori",
+    "favorited": "Enregistré",
+    "copied": "Copié dans le presse-papiers"
+  },
+  "splash": {
+    "title": "Recite",
+    "subtitle": "Lire • Écouter • Méditer"
+  },
+  "tabs": {
+    "home": "Accueil",
+    "quran": "Noble Coran",
+    "qibla": "Qibla",
+    "library": "Bibliothèque",
+    "settings": "Paramètres"
+  },
+  "home": {
+    "greeting": {
+      "title": "Assalamou Alaykoum",
+      "subtitle": "Que votre journée soit remplie de paix et de bénédictions"
+    },
+    "hijriCard": {
+      "badge": "Date Hégirienne",
+      "yearSuffix": "H"
+    },
+    "sectionTitles": {
+      "prayerTimes": "Heures de Prière",
+      "dailyVerse": "Verset du Jour",
+      "continueReading": "Reprendre la Lecture"
+    },
+    "prayerNames": {
+      "fajr": "Fajr",
+      "dhuhr": "Dhuhr",
+      "asr": "Asr",
+      "maghrib": "Maghrib",
+      "isha": "Isha"
+    },
+    "locationNotice": {
+      "showingMecca": "Heures de La Mecque affichées.",
+      "enableLocation": "Touchez pour activer la localisation"
+    },
+    "dailyVerse": {
+      "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      "defaultTranslation": "À côté de la difficulté est, certes, une facilité.",
+      "defaultSource": "Sourate Al-Inshirah · 94:6"
+    },
+    "continueReadingEmpty": {
+      "title": "Commencez votre lecture",
+      "subtitle": "Ouvrez le Coran et votre progression s'affichera ici.",
+      "buttonLabel": "Ouvrir le Coran"
+    }
+  },
+  "quran": {
+    "title": "Coran",
+    "subtitle": "Lisez, écoutez et méditez le Saint Coran",
+    "searchPlaceholder": "Rechercher une sourate...",
+    "continueReadingTag": "REPRENDRE LA LECTURE",
+    "verseNumber": "Verset n° {{number}}",
+    "versesCount": "{{count}} VERSETS",
+    "meccan": "MECQUOISE",
+    "medinan": "MÉDINOISE",
+    "noResultsTitle": "Aucune sourate trouvée",
+    "noResultsSubtitle": "Essayez de chercher avec un autre mot-clé.",
+    "errorMessage": "Impossible de charger les sourates. Touchez pour réessayer.",
+    "versesError": {
+      "title": "Erreur de chargement",
+      "subtitle": "Vérifiez votre connexion internet et réessayez.",
+      "retry": "Réessayer"
+    },
+    "downloadCard": {
+      "download": "Télécharger",
+      "downloading": "Téléchargement",
+      "downloadingProgress": "Téléchargement • {{written}} / {{total}} Mo ({{progress}}%)",
+      "paused": "En pause • {{written}} / {{total}} Mo ({{progress}}%)",
+      "pause": "Pause",
+      "resume": "Reprendre",
+      "playingOffline": "Lecture hors-ligne",
+      "playingOfflineTitle": "Lecture hors-ligne",
+      "playingOnlineTitle": "Lecture en ligne",
+      "deleteTitle": "Supprimer le téléchargement ?",
+      "deleteDesc": "Voulez-vous vraiment supprimer cet enregistrement audio de vos téléchargements hors-ligne ?",
+      "notReadyTitle": "Audio pas encore prêt",
+      "notReadyBody": "Le fichier audio est en cours de préparation. Veuillez patienter un instant.",
+      "errorTitle": "Échec du téléchargement",
+      "errorBody": "Le téléchargement n'a pas pu se terminer. Vérifiez votre connexion internet."
+    }
+  },
+  "verse": {
+    "holdForActions": "Maintenez appuyé pour les options",
+    "favoritedTitle": "Ajouté aux favoris",
+    "unfavoritedTitle": "Retiré des favoris",
+    "favoritedMsg": "Enregistré dans vos favoris",
+    "unfavoritedMsg": "Retiré de vos favoris"
+  },
+  "errorBoundary": {
+    "title": "Un problème est survenu",
+    "subtitle": "Une erreur inattendue est survenue dans l'application. Vous pouvez essayer de redémarrer."
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Personnalisez votre application et vos préférences",
+    "sections": {
+      "displayLanguage": "Affichage et Langues",
+      "notifications": "Notifications",
+      "storage": "Stockage",
+      "helpSupport": "Aide et Support",
+      "shareRate": "Partager et Noter",
+      "aboutUs": "À propos"
+    },
+    "display": {
+      "title": "Paramètres d'affichage",
+      "subtitle": "Thème, police et taille du texte",
+      "optionsTitle": "Options d'affichage",
+      "optionsSubtitle": "Thème et tailles de texte",
+      "appTheme": "Thème de l'application",
+      "appFontSize": "Taille du texte de l'application",
+      "quranFontSize": "Taille du texte arabe du Coran",
+      "livePreview": "Aperçu en direct",
+      "sampleTranslation": "Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux",
+      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "theme": {
+        "light": "Clair",
+        "dark": "Sombre",
+        "system": "Système"
+      },
+      "fontSize": {
+        "default": "Normal",
+        "large": "Grand",
+        "extraLarge": "Maximum"
+      }
+    },
+    "languages": {
+      "title": "Langues et Audio",
+      "subtitle": "Langue de l'appli, traduction et récitateur",
+      "optionsTitle": "Options de langue et d'audio",
+      "optionsSubtitle": "Langue, traduction et récitateur",
+      "appLanguageSection": "Langue de l'application",
+      "appLanguageTitle": "Langue des menus et de l'interface",
+      "appLanguageSubtitle": "Choisissez la langue principale de l'application",
+      "appLanguagePlaceholder": "Choisir la langue de l'application",
+      "quranTranslationSection": "Traduction du Coran",
+      "quranTranslationTitle": "Traduction par défaut",
+      "quranTranslationSubtitle": "Choisissez la traduction affichée sous les versets",
+      "quranTranslationPlaceholder": "Choisir la traduction",
+      "quranReciterSection": "Récitateur du Coran",
+      "quranReciterTitle": "Récitateur par défaut",
+      "quranReciterSubtitle": "Choisissez la voix pour l'écoute du Coran",
+      "quranReciterPlaceholder": "Choisir le récitateur",
+      "translations": {
+        "arabicOnly": "Arabe uniquement",
+        "english": "Anglais (Saheeh)",
+        "urdu": "Ourdou (Maududi)",
+        "hindi": "Hindi (Azizul Haque)",
+        "indonesian": "Indonésien (Ministry)",
+        "bengali": "Bengali (Taisirul)"
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "enableTitle": "Activer les notifications",
+      "enabled": "Notifications activées",
+      "disabled": "Désactivé",
+      "dailyReminderTitle": "Rappel quotidien",
+      "dailyReminderSubtitle": "Rappels quotidiens de lecture du Coran",
+      "toastEnabledTitle": "Notifications activées",
+      "toastEnabledDesc": "Rappels quotidiens activés.",
+      "toastDisabledTitle": "Notifications désactivées",
+      "toastDisabledDesc": "Rappels quotidiens désactivés.",
+      "blockedTitle": "Notifications bloquées",
+      "blockedMessage": "Notifications désactivées. Activez-les dans vos Réglages.",
+      "openSettings": "Ouvrir les Réglages"
+    },
+    "storage": {
+      "title": "Stockage",
+      "clearDownloadsTitle": "Supprimer tous les téléchargements",
+      "clearDownloadsSubtitleEmpty": "0 sourate enregistrée hors-ligne (0 Mo)",
+      "clearDownloadsSubtitle": "{{count}} sourate(s) enregistrée(s) ({{size}})",
+      "noDownloadsTitle": "Aucun téléchargement",
+      "noDownloadsMessage": "Vous n'avez aucune sourate téléchargée.",
+      "confirmClearDownloadsTitle": "Supprimer les téléchargements ?",
+      "confirmClearDownloadsDesc": "Voulez-vous vraiment supprimer {{count}} sourate(s) ({{size}}) de la mémoire de votre téléphone ?",
+      "toastClearedDownloadsTitle": "Téléchargements supprimés",
+      "toastClearedDownloadsDesc": "Toutes les sourates téléchargées ont été supprimées.",
+      "clearFavoritesTitle": "Effacer tous les favoris",
+      "clearFavoritesSubtitle": "{{count}} verset(s) enregistré(s) dans vos favoris",
+      "noFavoritesTitle": "Aucun favori",
+      "noFavoritesMessage": "Vous n'avez aucun verset en favoris pour le moment.",
+      "confirmClearFavoritesTitle": "Effacer tous les favoris ?",
+      "confirmClearFavoritesDesc": "Voulez-vous retirer les {{count}} verset(s) de votre liste de favoris ?",
+      "toastClearedFavoritesTitle": "Favoris effacés",
+      "toastClearedFavoritesDesc": "Tous vos versets favoris ont été retirés."
+    },
+    "helpSupport": {
+      "title": "Aide et Support",
+      "contactTitle": "Nous contacter",
+      "contactEmail": "munawwarh48@gmail.com"
+    },
+    "rate": {
+      "title": "Noter l'application",
+      "subtitle": "Soutenez-nous sur Google Play"
+    },
+    "share": {
+      "title": "Partager l'application",
+      "subtitle": "Partagez avec vos proches et amis",
+      "message": "Découvrez l'application Recite pour lire et écouter le Saint Coran ! Téléchargez-la ici :",
+      "dialogTitle": "Partager Recite via"
+    },
+    "about": {
+      "title": "À propos",
+      "subtitle": "Application communautaire et gratuite du Coran",
+      "appVersionTitle": "Version de l'application",
+      "appVersionSubtitle": "Version {{version}}",
+      "aboutUsTitle": "À propos de nous",
+      "aboutUsSubtitle": "Application coranique libre et sans publicités",
+      "aboutUsContent": "Recite est un projet bénévole 100% gratuit destiné à rendre le Saint Coran accessible à tous partout dans le monde, sans publicités ni abonnements.",
+      "aboutAppIntro": "Recite propose une expérience moderne et fluide avec des récitations de haute qualité, des traductions multilingues et une recherche rapide.",
+      "keyHighlights": "Points forts",
+      "featureRecitersTitle": "Récitations authentiques",
+      "featureRecitersDesc": "Audio de haute qualité par des Qaris reconnus avec suivi verset par verset.",
+      "featureLanguagesTitle": "Traductions multilingues",
+      "featureLanguagesDesc": "Lisez côte à côte les traductions des versets en plusieurs langues.",
+      "featurePrivacyTitle": "Respect de la vie privée",
+      "featurePrivacyDesc": "Aucun suivi, pas de publicité et aucune collecte de données personnelles.",
+      "tagline": "Lisez, écoutez et méditez le Coran"
+    },
+    "language": {
+      "title": "Langue de l'application",
+      "subtitle": "Choisissez la langue de l'interface."
+    },
+    "theme": {
+      "title": "Thème de l'application",
+      "subtitle": "Thème clair, sombre ou automatique.",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "fontSize": {
+      "title": "Taille du texte",
+      "subtitle": "Ajustez la taille du texte pour un meilleur confort de lecture.",
+      "small": "Petit",
+      "default": "Normal",
+      "large": "Grand"
+    },
+    "errorTest": {
+      "title": "Test d'erreur",
+      "subtitle": "Tester la réaction de l'application en cas d'erreur.",
+      "button": "Simuler une erreur"
+    }
+  },
+  "library": {
+    "title": "Bibliothèque",
+    "subtitle": "Vos versets enregistrés et téléchargements",
+    "tabs": {
+      "favorites": "Favoris",
+      "downloads": "Téléchargements"
+    },
+    "emptyFavorites": {
+      "title": "Aucun favori pour le moment",
+      "subtitle": "Enregistrez des versets pour les retrouver ici."
+    },
+    "emptyDownloads": {
+      "title": "Aucun téléchargement",
+      "subtitle": "Téléchargez des sourates pour les écouter sans connexion."
+    }
+  },
+  "languages": {
+    "en": "English",
+    "ar": "العربية",
+    "ur": "اردو",
+    "hi": "हिन्दी",
+    "id": "Bahasa Indonesia",
+    "bn": "বাংলা",
+    "ms": "Bahasa Melayu",
+    "ru": "Русский",
+    "tr": "Türkçe",
+    "fr": "Français",
+    "fa": "فارسی"
+  },
+  "qiblaScreen": {
+    "title": "Qibla",
+    "subtitleWithCity": "Direction de la Qibla depuis {{cityName}}",
+    "subtitleDefault": "Trouvez la direction de La Mecque",
+    "currentHeading": "Votre direction actuelle",
+    "qiblaTarget": "Angle de la Qibla : {{deg}}°",
+    "locationRequiredTitle": "Localisation nécessaire",
+    "locationRequiredSubtitle": "Votre position est nécessaire pour calculer précisément la direction de la Qibla.",
+    "enableLocation": "Activer la localisation"
+  },
+  "onboarding": {
+    "stepOf": "{{current}} sur {{total}}",
+    "next": "Suivant",
+    "skip": "Passer",
+    "getStarted": "Commencer",
+    "language": {
+      "title": "Choisissez votre langue",
+      "subtitle": "Sélectionnez votre langue pour les menus et l'interface.",
+      "sectionLabel": "Langue de l'application"
+    },
+    "preferences": {
+      "title": "Choisissez un récitateur",
+      "subtitle": "Choisissez la voix du récitateur que vous préférez pour écouter le Coran.",
+      "translationLabel": "Traduction du Coran",
+      "reciterLabel": "Récitateur"
+    },
+    "theme": {
+      "title": "Affichage et Thème",
+      "subtitle": "Personnalisez l'affichage pour une lecture confortable du Coran."
+    },
+    "notifications": {
+      "title": "Restez connecté",
+      "subtitle": "Activez les rappels quotidiens pour garder l'habitude de lire le Coran.",
+      "benefit1": "Rappels quotidiens de lecture",
+      "benefit2": "Horaires des prières",
+      "benefit3": "Verset inspirant du jour",
+      "enableButton": "Activer les notifications",
+      "enabledStatus": "Notifications activées",
+      "skipHint": "Vous pourrez toujours activer cela plus tard dans les Paramètres"
+    },
+    "location": {
+      "title": "Heures de prière précises",
+      "subtitle": "Activez la localisation pour les horaires exacts de prière et la boussole de la Qibla.",
+      "benefit1": "Heures de prière adaptées à votre ville",
+      "benefit2": "Boussole de la Qibla précise",
+      "benefit3": "Date hégirienne locale",
+      "enableButton": "Activer la localisation",
+      "enabledStatus": "Localisation activée",
+      "skipHint": "Les heures de La Mecque seront utilisées si vous passez",
+      "blockedTitle": "Localisation désactivée",
+      "blockedMessage": "La localisation est désactivée. Activez-la dans les Paramètres."
+    }
+  }
+}

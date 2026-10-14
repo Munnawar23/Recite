@@ -27,7 +27,7 @@ export default function LanguagesScreen() {
   const { colors, fontSize, spacing } = useAppTheme();
 
   const languageDropdownData = SUPPORTED_LANGUAGES.map((lang) => ({
-    label: t(`languages.${lang.code}`, lang.label),
+    label: lang.label,
     value: lang.code,
   }));
 

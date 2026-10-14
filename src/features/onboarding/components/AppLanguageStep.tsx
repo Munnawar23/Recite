@@ -53,7 +53,7 @@ export function AppLanguageStep({ onNext }: AppLanguageStepProps) {
                 family="title"
                 color={isSelected ? "primary" : "text"}
               >
-                {t(`languages.${lang.code}`, lang.label)}
+                {lang.label}
               </AppText>
               {isSelected && (
                 <Ionicons

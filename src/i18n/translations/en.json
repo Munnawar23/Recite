@@ -300,7 +300,10 @@
     "id": "Indonesian",
     "bn": "Bengali",
     "ms": "Malay",
-    "ru": "Russian"
+    "ru": "Russian",
+    "tr": "Türkçe",
+    "fr": "Français",
+    "fa": "فارسی"
   },
   "qiblaScreen": {
     "title": "Qibla",

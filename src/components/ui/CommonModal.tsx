@@ -2,12 +2,15 @@ import React from "react";
 import {
   FlatList,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
@@ -25,6 +28,9 @@ interface CommonModalProps {
   onChange?: (item: DropdownItem) => void;
   placeholder?: string;
 
+  // Presentation mode: "bottom" (half-screen bottom sheet) or "center" (floating dialog)
+  presentation?: "bottom" | "center";
+
   // Direct modal mode props
   visible?: boolean;
   onClose?: () => void;
@@ -41,6 +47,7 @@ export default function CommonModal({
   value,
   onChange,
   placeholder = "Select option",
+  presentation = "bottom",
   visible: propVisible,
   onClose: propOnClose,
   title: propTitle,
@@ -49,6 +56,7 @@ export default function CommonModal({
   children,
 }: CommonModalProps) {
   const { colors } = useAppTheme();
+  const insets = useSafeAreaInsets();
   const [internalVisible, setInternalVisible] = React.useState(false);
 
   const isControlled = propVisible !== undefined;
@@ -71,12 +79,17 @@ export default function CommonModal({
   const handleSelect = (item: DropdownItem) => {
     Haptics.light();
     if (onChange) onChange(item);
-    setInternalVisible(false);
+    if (isControlled && propOnClose) {
+      propOnClose();
+    } else {
+      setInternalVisible(false);
+    }
   };
 
   const selectedItem = data ? data.find((d) => d.value === value) : undefined;
   const modalTitle = propTitle || placeholder;
-  const S = createStyles(colors);
+  const isBottom = presentation === "bottom";
+  const S = createStyles(colors, insets.bottom, isBottom);
 
   return (
     <>
@@ -99,9 +112,27 @@ export default function CommonModal({
         </TouchableOpacity>
       )}
 
-      <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={handleClose}>
-        <TouchableOpacity style={S.overlay} activeOpacity={1} onPress={handleClose}>
-          <View style={S.modalContent} onStartShouldSetResponder={() => true}>
+      <Modal
+        visible={modalVisible}
+        transparent
+        animationType={isBottom ? "slide" : "fade"}
+        onRequestClose={handleClose}
+        statusBarTranslucent
+      >
+        <View style={S.overlay}>
+          {/* Backdrop tap area */}
+          <TouchableWithoutFeedback onPress={handleClose} accessibilityRole="button">
+            <View style={StyleSheet.absoluteFill} />
+          </TouchableWithoutFeedback>
+
+          <View style={S.modalContent}>
+            {/* Drag handle indicator for bottom sheet */}
+            {isBottom && (
+              <View style={S.dragHandleContainer}>
+                <View style={S.dragHandle} />
+              </View>
+            )}
+
             <View style={S.modalHeader}>
               <View style={S.modalHeaderTitleRow}>
                 {icon && (
@@ -130,12 +161,17 @@ export default function CommonModal({
               <FlatList
                 data={data}
                 keyExtractor={(item) => item.value}
+                showsVerticalScrollIndicator={true}
+                persistentScrollbar={Platform.OS === "android"}
+                style={S.list}
+                contentContainerStyle={S.listContentContainer}
                 renderItem={({ item }) => {
                   const isSelected = item.value === value;
                   return (
                     <TouchableOpacity
                       style={[S.itemRow, isSelected && S.selectedItemRow]}
                       onPress={() => handleSelect(item)}
+                      activeOpacity={0.7}
                     >
                       <AppText
                         variant="bodyLg"
@@ -146,20 +182,20 @@ export default function CommonModal({
                       >
                         {item.label}
                       </AppText>
-                      {isSelected && <Ionicons name="checkmark" size={rs.icon(20)} color={colors.primary} />}
+                      {isSelected && <Ionicons name="checkmark-circle" size={rs.icon(20)} color={colors.primary} />}
                     </TouchableOpacity>
                   );
                 }}
               />
             ) : null}
           </View>
-        </TouchableOpacity>
+        </View>
       </Modal>
     </>
   );
 }
 
-const createStyles = (colors: any) =>
+const createStyles = (colors: any, bottomInset: number, isBottom: boolean) =>
   StyleSheet.create({
     dropdownButton: {
       flexDirection: "row",
@@ -179,18 +215,40 @@ const createStyles = (colors: any) =>
     overlay: {
       flex: 1,
       backgroundColor: "rgba(0, 0, 0, 0.55)",
-      justifyContent: "center",
-      alignItems: "center",
-      paddingHorizontal: rs.space(20),
+      justifyContent: isBottom ? "flex-end" : "center",
+      alignItems: isBottom ? "stretch" : "center",
+      paddingHorizontal: isBottom ? 0 : rs.space(20),
     },
     modalContent: {
       width: "100%",
-      maxHeight: "80%",
+      maxHeight: isBottom ? "70%" : "80%",
       backgroundColor: colors.card,
-      borderRadius: rs.space(16),
+      borderTopLeftRadius: rs.space(22),
+      borderTopRightRadius: rs.space(22),
+      borderBottomLeftRadius: isBottom ? 0 : rs.space(16),
+      borderBottomRightRadius: isBottom ? 0 : rs.space(16),
       borderWidth: 1,
       borderColor: colors.border,
-      padding: rs.space(16),
+      borderBottomWidth: isBottom ? 0 : 1,
+      paddingHorizontal: rs.space(18),
+      paddingTop: isBottom ? rs.space(8) : rs.space(16),
+      paddingBottom: isBottom ? Math.max(bottomInset + rs.space(8), rs.space(18)) : rs.space(16),
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: -4 },
+      shadowOpacity: 0.15,
+      shadowRadius: 12,
+      elevation: 20,
+    },
+    dragHandleContainer: {
+      alignItems: "center",
+      paddingVertical: rs.space(6),
+      marginBottom: rs.space(4),
+    },
+    dragHandle: {
+      width: rs.space(38),
+      height: rs.space(4),
+      borderRadius: rs.space(2),
+      backgroundColor: colors.border,
     },
     modalHeader: {
       flexDirection: "row",
@@ -199,12 +257,13 @@ const createStyles = (colors: any) =>
       paddingBottom: rs.space(12),
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
-      marginBottom: rs.space(8),
+      marginBottom: rs.space(6),
     },
     modalHeaderTitleRow: {
       flexDirection: "row",
       alignItems: "center",
       gap: rs.space(10),
+      flex: 1,
     },
     headerIconBadge: {
       width: rs.space(32),
@@ -220,15 +279,22 @@ const createStyles = (colors: any) =>
     customContentContainer: {
       paddingBottom: rs.space(16),
     },
+    list: {
+      flexShrink: 1,
+    },
+    listContentContainer: {
+      paddingVertical: rs.space(4),
+    },
     itemRow: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      paddingVertical: rs.space(12),
-      paddingHorizontal: rs.space(10),
-      borderRadius: rs.space(8),
+      paddingVertical: rs.space(13),
+      paddingHorizontal: rs.space(12),
+      borderRadius: rs.space(10),
+      marginVertical: rs.space(2),
     },
     selectedItemRow: {
-      backgroundColor: colors.primary + "12",
+      backgroundColor: colors.primary + "15",
     },
   });

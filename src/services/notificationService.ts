@@ -15,6 +15,42 @@ if (!isExpoGo) {
   }
 }
 
+export interface ReminderNotificationTemplate {
+  hour: number;
+  minute: number;
+  title: string;
+  body: string;
+  cycleKey: string;
+}
+
+// 3-Slot Rotating Cycle Definitions
+export const REMINDER_CYCLE: ReminderNotificationTemplate[] = [
+  {
+    hour: 23,
+    minute: 0,
+    title: "🌙 Sleep in Peace",
+    body: "Calm your mind before sleeping with a few verses of the Quran ✨",
+    cycleKey: "sleep_in_peace_11pm",
+  },
+  {
+    hour: 22,
+    minute: 0,
+    title: "🕯️ Light in the Night",
+    body: "Step away from the screen for 5 minutes and read some Quran 🤲",
+    cycleKey: "light_in_the_night_10pm",
+  },
+  {
+    hour: 7,
+    minute: 0,
+    title: "☀️ Good Morning",
+    body: "Start your day on a good note. Open the Quran for a few minutes 🌞",
+    cycleKey: "good_morning_7am",
+  },
+];
+
+const SCHEDULE_DAYS_COUNT = 14;
+const CHANNEL_ID = "daily-reminder-v2";
+
 export class NotificationService {
   private static isConfigured = false;
 
@@ -40,7 +76,7 @@ export class NotificationService {
       // Set up the Android notification channel.
       if (Platform.OS === "android") {
         void (async () => {
-          await Notifications!.setNotificationChannelAsync("daily-reminder-v2", {
+          await Notifications!.setNotificationChannelAsync(CHANNEL_ID, {
             name: "Daily Reminder",
             importance: Notifications!.AndroidImportance.HIGH,
             vibrationPattern: [0, 250, 250, 250],
@@ -102,45 +138,92 @@ export class NotificationService {
     await Linking.openSettings();
   }
 
-  static async scheduleDailyNotification(): Promise<string | null> {
+  /**
+   * Schedules a 14-day rolling cycle of rotating notifications:
+   * Day 1: 11:00 PM (Sleep in Peace)
+   * Day 2: 10:00 PM (Light in the Night)
+   * Day 3: 7:00 AM (Good Morning)
+   * Repeating across the 14 days.
+   */
+  static async scheduleDailyNotification(): Promise<boolean> {
     if (!this.isSupported || !Notifications) {
-      return null;
+      return false;
     }
     this.configure();
 
     try {
-      const scheduledNotifications =
-        await Notifications.getAllScheduledNotificationsAsync();
-      const existingNotif = scheduledNotifications.find(
-        (notif) => notif.content.data?.type === "daily_read_reminder",
-      );
+      // 1. Cancel all previously scheduled reminders to prevent stacking
+      await this.cancelDailyNotification();
 
-      if (existingNotif) {
-        await Notifications.cancelScheduledNotificationAsync(
-          existingNotif.identifier,
-        );
+      const now = new Date();
+      let scheduledCount = 0;
+
+      for (let dayOffset = 0; dayOffset < SCHEDULE_DAYS_COUNT; dayOffset++) {
+        const item = REMINDER_CYCLE[dayOffset % REMINDER_CYCLE.length];
+
+        const targetDate = new Date();
+        targetDate.setDate(now.getDate() + dayOffset);
+        targetDate.setHours(item.hour, item.minute, 0, 0);
+
+        // If time already passed for today, push it forward to the next day slot
+        if (targetDate.getTime() <= now.getTime()) {
+          targetDate.setDate(targetDate.getDate() + 1);
+        }
+
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: item.title,
+            body: item.body,
+            data: {
+              type: "daily_read_reminder",
+              cycleKey: item.cycleKey,
+              dayIndex: dayOffset,
+            },
+            sound: "notification.mp3",
+          },
+          trigger:
+            Platform.OS === "android"
+              ? ({
+                  type: "date",
+                  date: targetDate,
+                  channelId: CHANNEL_ID,
+                } as any)
+              : {
+                  type: "date",
+                  date: targetDate,
+                },
+        });
+
+        scheduledCount++;
       }
 
-      const id = await Notifications.scheduleNotificationAsync({
-        content: {
-          title: "🌙 Before You Sleep",
-          body: "Take a peaceful moment before sleep to read and reflect upon the Holy Quran 🤲",
-          data: { type: "daily_read_reminder" },
-          sound: "notification.mp3",
-        },
-        trigger: {
-          type: "daily",
-          hour: 23,
-          minute: 0,
-          channelId: "daily-reminder-v2",
-        } as any,
-      });
-
-      console.log("Daily notification scheduled with ID:", id);
-      return id;
+      console.log(`[NotificationService] Successfully scheduled ${scheduledCount} days of rotating notifications.`);
+      return true;
     } catch (error) {
-      console.error("Error scheduling daily notification:", error);
-      return null;
+      console.error("[NotificationService] Error scheduling 14-day cycle notifications:", error);
+      return false;
+    }
+  }
+
+  /**
+   * Cancels all scheduled reminder notifications
+   */
+  static async cancelDailyNotification(): Promise<void> {
+    if (!this.isSupported || !Notifications) {
+      return;
+    }
+    try {
+      const scheduled = await Notifications.getAllScheduledNotificationsAsync();
+      const reminders = scheduled.filter(
+        (n) => n.content.data?.type === "daily_read_reminder",
+      );
+
+      for (const item of reminders) {
+        await Notifications.cancelScheduledNotificationAsync(item.identifier);
+      }
+      console.log(`[NotificationService] Cancelled ${reminders.length} reminder notifications.`);
+    } catch (error) {
+      console.error("[NotificationService] Error cancelling reminders:", error);
     }
   }
 
@@ -167,32 +250,13 @@ export class NotificationService {
         },
         trigger:
           Platform.OS === "android"
-            ? ({ channelId: "daily-reminder-v2" } as any)
+            ? ({ channelId: CHANNEL_ID } as any)
             : null,
       });
       return true;
     } catch (error) {
       console.error("Error sending instant test notification:", error);
       return false;
-    }
-  }
-
-  static async cancelDailyNotification(): Promise<void> {
-    if (!this.isSupported || !Notifications) {
-      return;
-    }
-    try {
-      const scheduled = await Notifications.getAllScheduledNotificationsAsync();
-      const daily = scheduled.find(
-        (n) => n.content.data?.type === "daily_read_reminder",
-      );
-
-      if (daily) {
-        await Notifications.cancelScheduledNotificationAsync(daily.identifier);
-        console.log("Daily notification cancelled:", daily.identifier);
-      }
-    } catch (error) {
-      console.error("Error cancelling daily notification:", error);
     }
   }
 

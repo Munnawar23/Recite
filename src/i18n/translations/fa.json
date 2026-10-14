@@ -1,0 +1,362 @@
+{
+  "common": {
+    "welcome": "خوش آمدید",
+    "settings": "تنظیمات",
+    "language": "زبان",
+    "selectLanguage": "انتخاب زبان",
+    "home": "خانه",
+    "recite": "تلاوت",
+    "read": "خواندن",
+    "listen": "شنیدن",
+    "reflect": "تدبر",
+    "save": "ذخیره",
+    "cancel": "انصراف",
+    "tryAgain": "تلاش مجدد",
+    "retry": "تلاش دوباره",
+    "errorTitle": "مشکلی پیش آمد",
+    "errorMessage": "بارگذاری اطلاعات ناموفق بود. برای تلاش مجدد لمس کنید.",
+    "noConnectionTitle": "خطای اتصال",
+    "noConnectionSubtitle": "اتصال اینترنت خود را بررسی کرده و دوباره تلاش کنید.",
+    "offlineAudioPreviewTitle": "حالت آفلاین",
+    "offlineAudioPreviewMessage": "پخش آنلاین نیازمند اینترنت است. می‌توانید سوره‌های دانلود شده خود را بشنوید.",
+    "offlineReciterChangeMessage": "تغییر قاری نیازمند اتصال به اینترنت است.",
+    "quran": "قرآن",
+    "surah": "سوره",
+    "verse": "آیه",
+    "qibla": "قبله",
+    "library": "کتابخانه",
+    "back": "بازگشت",
+    "share": "اشتراک‌گذاری",
+    "sharing": "در حال اشتراک‌گذاری...",
+    "copy": "کپی",
+    "favourite": "نشان‌شده",
+    "favorited": "ذخیره شد",
+    "copied": "در کلیپ‌بورد کپی شد"
+  },
+  "splash": {
+    "title": "Recite",
+    "subtitle": "خواندن • شنیدن • تدبر"
+  },
+  "tabs": {
+    "home": "خانه",
+    "quran": "قرآن کریم",
+    "qibla": "قبله",
+    "library": "کتابخانه",
+    "settings": "تنظیمات"
+  },
+  "home": {
+    "greeting": {
+      "title": "سلام علیکم",
+      "subtitle": "روزتان پر از نور و برکت الهی"
+    },
+    "hijriCard": {
+      "badge": "تقویم قمری",
+      "yearSuffix": "ق"
+    },
+    "sectionTitles": {
+      "prayerTimes": "اوقات شرعی",
+      "dailyVerse": "آیه روز",
+      "continueReading": "ادامه خواندن"
+    },
+    "prayerNames": {
+      "fajr": "صبح",
+      "dhuhr": "ظهر",
+      "asr": "عصر",
+      "maghrib": "مغرب",
+      "isha": "عشاء"
+    },
+    "locationNotice": {
+      "showingMecca": "اوقات مکه مکرمه نمایش داده می‌شود.",
+      "enableLocation": "برای فعال‌سازی مکان‌یابی ضربه بزنید"
+    },
+    "dailyVerse": {
+      "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      "defaultTranslation": "مسلماً با هر سختی آسانی است.",
+      "defaultSource": "سوره شرح · ۹۴:۶"
+    },
+    "continueReadingEmpty": {
+      "title": "قرائت قرآن را آغاز کنید",
+      "subtitle": "با خواندن قرآن، آخرین صفحه مطالعه شما در اینجا نمایش داده می‌شود.",
+      "buttonLabel": "باز کردن قرآن"
+    }
+  },
+  "quran": {
+    "title": "قرآن",
+    "subtitle": "خواندن، شنیدن و تدبر در آیات قرآن کریم",
+    "searchPlaceholder": "جستجوی سوره...",
+    "continueReadingTag": "ادامه مطالعه",
+    "verseNumber": "آیه شماره {{number}}",
+    "versesCount": "{{count}} آیه",
+    "meccan": "مکی",
+    "medinan": "مدنی",
+    "noResultsTitle": "سوره‌ای پیدا نشد",
+    "noResultsSubtitle": "با کلمه دیگری جستجو کنید.",
+    "errorMessage": "بارگذاری سوره‌ها ناموفق بود. برای تلاش دوباره ضربه بزنید.",
+    "versesError": {
+      "title": "بارگذاری ناموفق",
+      "subtitle": "اینترنت خود را بررسی کرده و دوباره تلاش کنید.",
+      "retry": "تلاش مجدد"
+    },
+    "downloadCard": {
+      "download": "دانلود",
+      "downloading": "در حال دانلود",
+      "downloadingProgress": "در حال دانلود • {{written}} از {{total}} مگابایت ({{progress}}٪)",
+      "paused": "متوقف شد • {{written}} از {{total}} مگابایت ({{progress}}٪)",
+      "pause": "توقف",
+      "resume": "ادامه",
+      "playingOffline": "پخش آفلاین",
+      "playingOfflineTitle": "پخش آفلاین",
+      "playingOnlineTitle": "پخش آنلاین",
+      "deleteTitle": "حذف فایل دانلود شده؟",
+      "deleteDesc": "آیا می‌خواهید فایل صوتی این سوره را از حافظه گوشی حذف کنید؟",
+      "notReadyTitle": "صدا هنوز آماده نیست",
+      "notReadyBody": "اطلاعات صوتی در حال بارگذاری است. لطفاً چند لحظه صبر کنید.",
+      "errorTitle": "خطا در دانلود",
+      "errorBody": "دانلود کامل نشد. لطفاً اینترنت خود را بررسی کنید."
+    }
+  },
+  "verse": {
+    "holdForActions": "برای گزینه‌ها نگه دارید",
+    "favoritedTitle": "به نشان‌شده‌ها اضافه شد",
+    "unfavoritedTitle": "از نشان‌شده‌ها حذف شد",
+    "favoritedMsg": "در آیات نشان‌شده ذخیره شد",
+    "unfavoritedMsg": "از نشان‌شده‌ها حذف شد"
+  },
+  "errorBoundary": {
+    "title": "مشکلی پیش آمده است",
+    "subtitle": "خطای غیرمنتظره‌ای رخ داد. می‌توانید برنامه را دوباره باز کنید."
+  },
+  "settings": {
+    "title": "تنظیمات",
+    "subtitle": "تنظیم زبان، تم و ویژگی‌های برنامه",
+    "sections": {
+      "displayLanguage": "نمایش و زبان‌ها",
+      "notifications": "اعلان‌ها",
+      "storage": "حافظه",
+      "helpSupport": "پشتیبانی و ارتباط",
+      "shareRate": "اشتراک و امتیاز",
+      "aboutUs": "درباره برنامه"
+    },
+    "display": {
+      "title": "تنظیمات نمایش",
+      "subtitle": "تم و اندازه فونت",
+      "optionsTitle": "گزینه‌های نمایش",
+      "optionsSubtitle": "تم و اندازه متن",
+      "appTheme": "تم برنامه",
+      "appFontSize": "اندازه متن برنامه",
+      "quranFontSize": "اندازه خط عربی قرآن",
+      "livePreview": "پیش‌نمایش",
+      "sampleTranslation": "به نام خداوند بخشنده و مهربان",
+      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "theme": {
+        "light": "روشن",
+        "dark": "تاریک",
+        "system": "سیستم"
+      },
+      "fontSize": {
+        "default": "معمولی",
+        "large": "بزرگ",
+        "extraLarge": "خیلی بزرگ"
+      }
+    },
+    "languages": {
+      "title": "زبان و صوت",
+      "subtitle": "زبان برنامه، ترجمه و قاری",
+      "optionsTitle": "تنظیمات زبان و صوت",
+      "optionsSubtitle": "زبان برنامه، ترجمه و قاری",
+      "appLanguageSection": "زبان برنامه",
+      "appLanguageTitle": "زبان منوها و برنامه",
+      "appLanguageSubtitle": "زبان مورد نظر خود را برای محیط برنامه انتخاب کنید",
+      "appLanguagePlaceholder": "انتخاب زبان برنامه",
+      "quranTranslationSection": "ترجمه قرآن",
+      "quranTranslationTitle": "ترجمه پیش‌فرض",
+      "quranTranslationSubtitle": "ترجمه‌ای که زیر آیات نمایش داده می‌شود را انتخاب کنید",
+      "quranTranslationPlaceholder": "انتخاب ترجمه",
+      "quranReciterSection": "قاری قرآن",
+      "quranReciterTitle": "قاری پیش‌فرض",
+      "quranReciterSubtitle": "صدای دلخواه خود را برای تلاوت آیات انتخاب کنید",
+      "quranReciterPlaceholder": "انتخاب قاری",
+      "translations": {
+        "arabicOnly": "فقط متن عربی",
+        "english": "انگلیسی (صحیح)",
+        "urdu": "اردو (مودودی)",
+        "hindi": "هندی (عزیزالحق)",
+        "indonesian": "اندونزیایی (وزارت)",
+        "bengali": "بنگالی (تیسیر)"
+      }
+    },
+    "notifications": {
+      "title": "اعلان‌ها",
+      "enableTitle": "فعال‌سازی اعلان‌ها",
+      "enabled": "اعلان‌ها فعال است",
+      "disabled": "غیرفعال",
+      "dailyReminderTitle": "یادآور روزانه",
+      "dailyReminderSubtitle": "یادآوری‌های روزانه تلاوت قرآن",
+      "toastEnabledTitle": "اعلان‌ها فعال شد",
+      "toastEnabledDesc": "یادآور روزانه فعال گردید.",
+      "toastDisabledTitle": "اعلان‌ها غیرفعال شد",
+      "toastDisabledDesc": "یادآور روزانه خاموش شد.",
+      "blockedTitle": "دسترسی به اعلان‌ها مسدود است",
+      "blockedMessage": "اعلان‌ها غیرفعال است. لطفاً از تنظیمات گوشی دسترسی بدهید.",
+      "openSettings": "باز کردن تنظیمات"
+    },
+    "storage": {
+      "title": "حافظه",
+      "clearDownloadsTitle": "پاک کردن تمام دانلودها",
+      "clearDownloadsSubtitleEmpty": "۰ سوره ذخیره شده (۰ مگابایت)",
+      "clearDownloadsSubtitle": "{{count}} سوره ذخیره شده ({{size}})",
+      "noDownloadsTitle": "هیچ دانلودی نیست",
+      "noDownloadsMessage": "هیچ سوره دانلود شده‌ای برای پاک کردن وجود ندارد.",
+      "confirmClearDownloadsTitle": "همه دانلودها پاک شوند؟",
+      "confirmClearDownloadsDesc": "آیا از حذف {{count}} سوره دانلود شده ({{size}}) از حافظه گوشی مطمئن هستید؟",
+      "toastClearedDownloadsTitle": "دانلودها پاک شدند",
+      "toastClearedDownloadsDesc": "تمامی سوره‌های ذخیره شده با موفقیت حذف شدند.",
+      "clearFavoritesTitle": "پاک کردن نشان‌شده‌ها",
+      "clearFavoritesSubtitle": "{{count}} آیه نشان شده",
+      "noFavoritesTitle": "هیچ آیه‌ای نشان نشده",
+      "noFavoritesMessage": "در حال حاضر هیچ آیه‌ای در لیست نشان‌شده‌های شما نیست.",
+      "confirmClearFavoritesTitle": "همه نشان‌شده‌ها پاک شوند؟",
+      "confirmClearFavoritesDesc": "آیا از حذف {{count}} آیه نشان‌شده مطمئن هستید؟",
+      "toastClearedFavoritesTitle": "نشان‌شده‌ها پاک شدند",
+      "toastClearedFavoritesDesc": "تمام آیات نشان‌شده حذف شدند."
+    },
+    "helpSupport": {
+      "title": "پشتیبانی",
+      "contactTitle": "ارتباط با ما",
+      "contactEmail": "munawwarh48@gmail.com"
+    },
+    "rate": {
+      "title": "امتیاز به برنامه",
+      "subtitle": "در گوگل پلی از ما حمایت کنید"
+    },
+    "share": {
+      "title": "اشتراک‌گذاری برنامه",
+      "subtitle": "معرفی به دوستان و خانواده",
+      "message": "برنامه Recite را برای خواندن و شنیدن قرآن کریم دانلود کنید! لینک دانلود:",
+      "dialogTitle": "اشتراک‌گذاری Recite"
+    },
+    "about": {
+      "title": "درباره ما",
+      "subtitle": "برنامه رایگان قرآن کریم",
+      "appVersionTitle": "نسخه برنامه",
+      "appVersionSubtitle": "نسخه {{version}}",
+      "aboutUsTitle": "درباره ما",
+      "aboutUsSubtitle": "برنامه قرآنی آزاد و بدون تبلیغات",
+      "aboutUsContent": "برنامه Recite یک پروژه کاملاً رایگان و عام‌المنفعه است تا قرآن کریم بدون تبلیغات، اشتراک و هزینه در دسترس همگان قرار گیرد.",
+      "aboutAppIntro": "Recite با بهره‌گیری از فناوری‌های سریع و کارآمد، تلاوت‌های اصیل، ترجمه‌های چندزبانه و جستجوی آسان را در فضایی دلنشین فراهم کرده است.",
+      "keyHighlights": "ویژگی‌های اصلی",
+      "featureRecitersTitle": "تلاوت‌های دلنشین",
+      "featureRecitersDesc": "تلاوت‌های باکیفیت از مشهورترین قاریان جهان اسلام همراه با دنبال کردن آیه به آیه.",
+      "featureLanguagesTitle": "ترجمه‌های چندزبانه",
+      "featureLanguagesDesc": "مشاهده و مقایسه ترجمه آیات به زبان‌های گوناگون جهان.",
+      "featurePrivacyTitle": "حریم خصوصی کامل",
+      "featurePrivacyDesc": "بدون تبلیغات، بدون ردیابی و بدون جمع‌آوری اطلاعات شخصی شما.",
+      "tagline": "قرآن را بخوانید، بشنوید و در آن تدبر کنید"
+    },
+    "language": {
+      "title": "زبان برنامه",
+      "subtitle": "زبان دلخواه خود را برای منوهای برنامه انتخاب کنید."
+    },
+    "theme": {
+      "title": "تم برنامه",
+      "subtitle": "تم روشن، تاریک یا هماهنگ با سیستم را انتخاب کنید.",
+      "light": "روشن",
+      "dark": "تاریک",
+      "system": "سیستم"
+    },
+    "fontSize": {
+      "title": "اندازه متن",
+      "subtitle": "اندازه خط را برای راحتی چشم خود در هنگام مطالعه تنظیم کنید.",
+      "small": "کوچک",
+      "default": "معمولی",
+      "large": "بزرگ"
+    },
+    "errorTest": {
+      "title": "تست خطا",
+      "subtitle": "بررسی مدیریت خطاهای برنامه.",
+      "button": "ایجاد خطای آزمایشی"
+    }
+  },
+  "library": {
+    "title": "کتابخانه",
+    "subtitle": "آیات نشان‌شده و فایل‌های دانلودی شما",
+    "tabs": {
+      "favorites": "نشان‌شده‌ها",
+      "downloads": "دانلودها"
+    },
+    "emptyFavorites": {
+      "title": "هنوز آیه‌ای نشان نشده",
+      "subtitle": "آیات دلخواه خود را ذخیره کنید تا در اینجا ببینید."
+    },
+    "emptyDownloads": {
+      "title": "هنوز دانلودی ندارید",
+      "subtitle": "سوره‌ها را دانلود کنید تا بدون اینترنت بتوانید بشنوید."
+    }
+  },
+  "languages": {
+    "en": "English",
+    "ar": "العربية",
+    "ur": "اردو",
+    "hi": "हिन्दी",
+    "id": "Bahasa Indonesia",
+    "bn": "বাংলা",
+    "ms": "Bahasa Melayu",
+    "ru": "Русский",
+    "tr": "Türkçe",
+    "fr": "Français",
+    "fa": "فارسی"
+  },
+  "qiblaScreen": {
+    "title": "قبله",
+    "subtitleWithCity": "جهت قبله از {{cityName}}",
+    "subtitleDefault": "پیدا کردن جهت کعبه مشرفه",
+    "currentHeading": "جهت فعلی شما",
+    "qiblaTarget": "زاویه قبله: {{deg}}°",
+    "locationRequiredTitle": "دسترسی به مکان لازم است",
+    "locationRequiredSubtitle": "برای محاسبه دقیق جهت قبله به مکان فعلی شما نیاز داریم.",
+    "enableLocation": "فعال‌سازی مکان‌یابی"
+  },
+  "onboarding": {
+    "stepOf": "{{current}} از {{total}}",
+    "next": "بعدی",
+    "skip": "رد شدن",
+    "getStarted": "شروع کنید",
+    "language": {
+      "title": "زبان خود را انتخاب کنید",
+      "subtitle": "زبان دلخواه خود را برای منوها و متن برنامه انتخاب نمایید.",
+      "sectionLabel": "زبان برنامه"
+    },
+    "preferences": {
+      "title": "انتخاب قاری قرآن",
+      "subtitle": "قاری دلخواه خود را برای شنیدن تلاوت قرآن انتخاب کنید.",
+      "translationLabel": "ترجمه قرآن",
+      "reciterLabel": "قاری"
+    },
+    "theme": {
+      "title": "ظاهر و نمایش",
+      "subtitle": "تم و اندازه قلم را برای خواندن راحت قرآن شخصی‌سازی کنید."
+    },
+    "notifications": {
+      "title": "همراه همیشگی قرآن",
+      "subtitle": "یادآورهای روزانه را فعال کنید تا پیوستگی شما با قرآن حفظ شود.",
+      "benefit1": "یادآوری‌های روزانه تلاوت قرآن",
+      "benefit2": "اعلان هنگام اوقات شرعی",
+      "benefit3": "آیه روزانه برای آرامش دل",
+      "enableButton": "فعال‌سازی اعلان‌ها",
+      "enabledStatus": "اعلان‌ها فعال شد",
+      "skipHint": "می‌توانید بعداً در بخش تنظیمات نیز این را فعال کنید"
+    },
+    "location": {
+      "title": "اوقات شرعی دقیق",
+      "subtitle": "دسترسی به مکان را فعال کنید تا اوقات شرعی و قبله دقیق نمایش داده شوند.",
+      "benefit1": "اوقات شرعی دقیق شهر شما",
+      "benefit2": "قبله‌نمای دقیق به سوی کعبه",
+      "benefit3": "تقویم اسلامی محلی",
+      "enableButton": "فعال‌سازی مکان‌یابی",
+      "enabledStatus": "مکان‌یابی فعال شد",
+      "skipHint": "در صورت رد شدن، اوقات مکه مکرمه در نظر گرفته می‌شود",
+      "blockedTitle": "مکان‌یابی خاموش است",
+      "blockedMessage": "دسترسی به مکان خاموش است. در تنظیمات فعال نمایید."
+    }
+  }
+}

@@ -133,6 +133,7 @@
       "notifications": "الإشعارات",
       "storage": "التخزين والملفات",
       "helpSupport": "المساعدة والدعم",
+      "shareRate": "المشاركة والتقييم",
       "aboutUs": "عن التطبيق"
     },
     "display": {
@@ -222,6 +223,10 @@
       "title": "المساعدة والدعم",
       "contactTitle": "تواصل معنا",
       "contactEmail": "munawwarh48@gmail.com"
+    },
+    "rate": {
+      "title": "تقييم التطبيق",
+      "subtitle": "ادعمنا على متجر Google Play"
     },
     "share": {
       "title": "مشاركة التطبيق",

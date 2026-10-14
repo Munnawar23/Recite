@@ -54,13 +54,13 @@ export default function DeleteConfirmationModal({
 
         <View style={S.buttonRow}>
           <TouchableOpacity style={S.cancelBtn} onPress={handleCancel} activeOpacity={0.8}>
-            <AppText variant="bodyLg" color="text" family="title">
+            <AppText variant="bodyLg" color="text" family="title" numberOfLines={1}>
               {cancelText}
             </AppText>
           </TouchableOpacity>
 
           <TouchableOpacity style={S.deleteBtn} onPress={handleConfirm} activeOpacity={0.8}>
-            <AppText variant="bodyLg" color="#FFFFFF" family="title">
+            <AppText variant="bodyLg" color="#FFFFFF" family="title" numberOfLines={1}>
               {confirmText}
             </AppText>
           </TouchableOpacity>

@@ -8,6 +8,7 @@ import AboutSection from "../components/AboutSection";
 import DisplayLanguageSection from "../components/DisplayLanguageSection";
 import HelpSupportSection from "../components/HelpSupportSection";
 import NotificationSection from "../components/NotificationSection";
+import ShareRateSection from "../components/ShareRateSection";
 import StorageSection from "../components/StorageSection";
 
 import { rs } from "@/helpers/responsiveHelper";
@@ -46,6 +47,7 @@ export default function SettingsScreen() {
         <NotificationSection />
         <StorageSection />
         <HelpSupportSection />
+        <ShareRateSection />
         <AboutSection />
 
         {/* Bottom App Version Indicator */}

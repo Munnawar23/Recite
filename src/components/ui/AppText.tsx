@@ -120,7 +120,7 @@ export const AppText = forwardRef<RNText, AppTextProps>(function AppText(
     typeof customLineHeight === "number"
       ? customLineHeight
       : typeof size === "number"
-        ? Math.round(resolvedSize * 1.35)
+        ? Math.round(resolvedSize * 1.45)
         : size && size in themeLineHeight
           ? themeLineHeight[size as keyof ThemeFontSize]
           : (themeLineHeight[variant] ?? themeLineHeight.body);
@@ -175,9 +175,11 @@ export const AppText = forwardRef<RNText, AppTextProps>(function AppText(
   const baseStyle: TextStyle = {
     color: resolvedColor,
     fontSize: resolvedSize,
-    lineHeight: resolvedLineHeight,
+    ...(resolvedLineHeight ? { lineHeight: resolvedLineHeight } : {}),
     letterSpacing: resolvedLetterSpacing,
     fontFamily: resolvedFontFamily,
+    includeFontPadding: false,
+    textAlignVertical: "center",
     ...(fontStyleWeight ? { fontWeight: fontStyleWeight } : {}),
     ...(align ? { textAlign: align } : {}),
   };

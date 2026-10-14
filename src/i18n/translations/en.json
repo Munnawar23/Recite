@@ -133,6 +133,7 @@
       "notifications": "Notifications",
       "storage": "Storage",
       "helpSupport": "Help & Support",
+      "shareRate": "Share & Rate",
       "aboutUs": "About Us"
     },
     "display": {
@@ -222,6 +223,10 @@
       "title": "Help & Support",
       "contactTitle": "Contact Support",
       "contactEmail": "munawwarh48@gmail.com"
+    },
+    "rate": {
+      "title": "Rate App",
+      "subtitle": "Support us on Google Play"
     },
     "share": {
       "title": "Share App",

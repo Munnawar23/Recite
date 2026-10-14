@@ -141,6 +141,8 @@ export default function CommonModal({
                         variant="bodyLg"
                         family={isSelected ? "title" : "text"}
                         color={isSelected ? "primary" : "text"}
+                        style={{ flex: 1 }}
+                        numberOfLines={1}
                       >
                         {item.label}
                       </AppText>

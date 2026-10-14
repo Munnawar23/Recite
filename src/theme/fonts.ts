@@ -26,13 +26,13 @@ export const fontSize = {
 };
 
 export const lineHeight = {
-  caption: Math.round(rs.font(12) * 1.35),
-  bodySm: Math.round(rs.font(13) * 1.35),
-  body: Math.round(rs.font(14) * 1.35),
+  caption: Math.round(rs.font(12) * 1.4),
+  bodySm: Math.round(rs.font(13) * 1.45),
+  body: Math.round(rs.font(14) * 1.45),
   bodyLg: Math.round(rs.font(15) * 1.55),
-  title: Math.round(rs.font(17) * 1.35),
-  cardTitle: Math.round(rs.font(19) * 1.35),
-  heading: Math.round(rs.font(18) * 1.35),
+  title: Math.round(rs.font(17) * 1.45),
+  cardTitle: Math.round(rs.font(19) * 1.4),
+  heading: Math.round(rs.font(18) * 1.4),
   largeTitle: Math.round(rs.font(28) * 1.35),
   splashTitle: Math.round(rs.font(29) * 1.35),
   arabic: Math.round(rs.font(27) * 2.05),

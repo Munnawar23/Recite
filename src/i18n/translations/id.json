@@ -133,6 +133,7 @@
       "notifications": "Notifikasi",
       "storage": "Penyimpanan",
       "helpSupport": "Bantuan & Dukungan",
+      "shareRate": "Bagi & Nilai",
       "aboutUs": "Tentang Kami"
     },
     "display": {
@@ -222,6 +223,10 @@
       "title": "Bantuan & Dukungan",
       "contactTitle": "Hubungi Tim Dukungan",
       "contactEmail": "munawwarh48@gmail.com"
+    },
+    "rate": {
+      "title": "Beri Nilai Aplikasi",
+      "subtitle": "Dukung kami di Google Play"
     },
     "share": {
       "title": "Bagikan Aplikasi",

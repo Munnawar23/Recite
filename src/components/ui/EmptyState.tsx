@@ -114,7 +114,8 @@ const createStyles = (
       marginTop: spacing.vSm,
       width: "auto",
       alignSelf: "center",
-      paddingHorizontal: spacing.xxl,
+      paddingHorizontal: spacing.lg,
       borderRadius: rs.space(30),
+      minWidth: rs.space(160),
     },
   });

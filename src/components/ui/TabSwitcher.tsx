@@ -68,6 +68,7 @@ export const TabSwitcher = React.memo(function TabSwitcher({
                 variant="body"
                 family={isActive ? "title" : "text"}
                 color={isActive ? "primary" : "subtext"}
+                numberOfLines={1}
               >
                 {tab.label}
               </AppText>

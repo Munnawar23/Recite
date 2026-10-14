@@ -133,6 +133,7 @@
       "notifications": "Уведомления",
       "storage": "Хранилище",
       "helpSupport": "Помощь и поддержка",
+      "shareRate": "Поделиться и оценить",
       "aboutUs": "О приложении"
     },
     "display": {
@@ -224,6 +225,10 @@
       "title": "Помощь и поддержка",
       "contactTitle": "Связаться с поддержкой",
       "contactEmail": "munawwarh48@gmail.com"
+    },
+    "rate": {
+      "title": "Оценить приложение",
+      "subtitle": "Поддержите нас в Google Play"
     },
     "share": {
       "title": "Поделиться приложением",

@@ -133,6 +133,7 @@
       "notifications": "نوٹیفکیشنز",
       "storage": "اسٹوریج",
       "helpSupport": "مدد اور سپورٹ",
+      "shareRate": "شیئر اور ریٹنگ",
       "aboutUs": "ہمارے بارے میں"
     },
     "display": {
@@ -222,6 +223,10 @@
       "title": "مدد اور سپورٹ",
       "contactTitle": "سپورٹ سے رابطہ کریں",
       "contactEmail": "munawwarh48@gmail.com"
+    },
+    "rate": {
+      "title": "ایپ کی درجہ بندی کریں",
+      "subtitle": "گوگل پلے پر ہماری حوصلہ افزائی کریں"
     },
     "share": {
       "title": "ایپ شیئر کریں",

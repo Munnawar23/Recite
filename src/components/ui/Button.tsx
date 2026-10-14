@@ -73,8 +73,6 @@ export function Button({
               family="title"
               style={[styles.text, textStyle]}
               numberOfLines={1}
-              adjustsFontSizeToFit
-              minimumFontScale={0.85}
             >
               {buttonTitle}
             </AppText>

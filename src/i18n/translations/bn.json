@@ -133,6 +133,7 @@
       "notifications": "নোটিফিকেশন",
       "storage": "স্টোরেজ",
       "helpSupport": "সাহায্য ও সাপোর্ট",
+      "shareRate": "শেয়ার ও রেটিং",
       "aboutUs": "আমাদের সম্পর্কে"
     },
     "display": {
@@ -222,6 +223,10 @@
       "title": "সাহায্য ও সাপোর্ট",
       "contactTitle": "যোগাযোগ করুন",
       "contactEmail": "munawwarh48@gmail.com"
+    },
+    "rate": {
+      "title": "অ্যাপ রেট করুন",
+      "subtitle": "গুগল প্লেতে আমাদের সমর্থন করুন"
     },
     "share": {
       "title": "অ্যাপ শেয়ার করুন",

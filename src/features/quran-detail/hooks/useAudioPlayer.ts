@@ -14,7 +14,7 @@ import { scheduleOnRN } from "react-native-worklets";
 import { useRouter } from "expo-router";
 import type { AudioPlayer } from "expo-audio";
 
-import { getLocalizedSurah, RECITER_OPTIONS } from "@/constants";
+import { getChapter, getSurahName, RECITER_OPTIONS } from "@/constants";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { useLanguageStore } from "@/store/languageStore";
@@ -44,7 +44,7 @@ export interface UseAudioPlayerParams {
   onDismissToDetail?: () => void;
   chapterId?: number;
   arabicName?: string;
-  englishName?: string;
+  localizedName?: string;
   reciterName?: string;
   // Mini player specific params
   scrollTranslateY?: SharedValue<number>;
@@ -61,7 +61,7 @@ export function useAudioPlayer({
   onDismissToDetail,
   chapterId = 1,
   arabicName,
-  englishName,
+  localizedName,
   reciterName,
   scrollTranslateY,
   onMusicPress,
@@ -291,15 +291,10 @@ export function useAudioPlayer({
   );
 
   const localizedSurah = useMemo(
-    () =>
-      getLocalizedSurah(
-        chapterId,
-        language,
-        englishName || `Surah ${chapterId}`,
-        "",
-        arabicName || "",
-      ),
-    [chapterId, language, englishName, arabicName],
+    () => ({
+      name: getSurahName(chapterId, language),
+    }),
+    [chapterId, language],
   );
 
   const nextChapterId = useMemo(
@@ -308,31 +303,27 @@ export function useAudioPlayer({
   );
 
   const nextSurah = useMemo(
-    () =>
-      getLocalizedSurah(
-        nextChapterId,
-        language,
-        `Surah ${nextChapterId}`,
-        "",
-        "",
-      ),
+    () => ({
+      name: getSurahName(nextChapterId, language),
+    }),
     [nextChapterId, language],
   );
 
   const handlePlayNext = useCallback(() => {
     Haptics.light();
     closePlayer();
+    const nextChapter = getChapter(nextChapterId, language);
     router.replace({
       pathname: "/quran-detail/[id]" as const,
       params: {
         id: String(nextChapterId),
-        arabicName: "",
-        englishName: nextSurah.name,
-        versesCount: "",
-        type: "",
+        arabicName: nextChapter.name,
+        localizedName: nextChapter.localizedName,
+        versesCount: String(nextChapter.versesCount),
+        type: nextChapter.type === "meccan" ? "Meccan" : "Medinan",
       },
     });
-  }, [closePlayer, nextChapterId, nextSurah.name, router]);
+  }, [closePlayer, nextChapterId, language, router]);
 
   // Linear Gradient Color Palettes
   const primaryGradientColors = useMemo(

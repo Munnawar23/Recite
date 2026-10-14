@@ -2,7 +2,7 @@ import * as Clipboard from "expo-clipboard";
 import * as Sharing from "expo-sharing";
 import { captureRef } from "react-native-view-shot";
 import { AppText } from "@/components";
-import { getLocalizedSurah } from "@/constants";
+import { getSurahName } from "@/constants";
 import { rs, verticalScale } from "@/helpers/responsiveHelper";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
@@ -63,8 +63,8 @@ interface VerseListContentProps {
   isPlayingLocally?: boolean;
   // Chapter info for offline library
   arabicName?: string;
-  englishName?: string;
-  englishTranslation?: string;
+  localizedName?: string;
+  localizedTranslation?: string;
   versesCount?: string;
   chapterType?: string;
 }
@@ -90,8 +90,8 @@ function VerseListContent({
   audioTotalBytes,
   isPlayingLocally,
   arabicName,
-  englishName,
-  englishTranslation,
+  localizedName,
+  localizedTranslation,
   versesCount,
   chapterType,
 }: VerseListContentProps) {
@@ -128,8 +128,8 @@ function VerseListContent({
 
   const language = useLanguageStore((state) => state.language);
   const localizedSurahName = useMemo(() => {
-    return getLocalizedSurah(chapterId || 1, language, englishName, "", arabicName).name;
-  }, [chapterId, language, englishName, arabicName]);
+    return localizedName || getSurahName(chapterId || 1, language);
+  }, [chapterId, language, localizedName]);
 
   const shareCardRef = useRef<View>(null);
   const [verseToShare, setVerseToShare] = useState<SurahVerse | null>(null);
@@ -177,10 +177,10 @@ function VerseListContent({
   const getVerseFormattedText = useCallback(
     (verse: SurahVerse) => {
       return verse.translation
-        ? `${verse.arabic}\n\n"${verse.translation}"\n\n— ${localizedSurahName || englishName || "Surah"} (${verse.verseKey})`
-        : `${verse.arabic}\n\n— ${localizedSurahName || englishName || "Surah"} (${verse.verseKey})`;
+        ? `${verse.arabic}\n\n"${verse.translation}"\n\n— ${localizedSurahName || "Surah"} (${verse.verseKey})`
+        : `${verse.arabic}\n\n— ${localizedSurahName || "Surah"} (${verse.verseKey})`;
     },
-    [localizedSurahName, englishName],
+    [localizedSurahName],
   );
 
   const handleShare = useCallback(
@@ -204,7 +204,7 @@ function VerseListContent({
             if (await Sharing.isAvailableAsync()) {
               await Sharing.shareAsync(uri, {
                 mimeType: "image/png",
-                dialogTitle: `Quran ${englishName || localizedSurahName || "Surah"} ${verse.verseKey}`,
+                dialogTitle: `Quran ${localizedSurahName || "Surah"} ${verse.verseKey}`,
               });
             } else {
               // Fallback if native file sharing is unavailable
@@ -226,7 +226,7 @@ function VerseListContent({
         }
       }, 180);
     },
-    [getVerseFormattedText, localizedSurahName, englishName],
+    [getVerseFormattedText, localizedSurahName],
   );
 
   const handleCopy = useCallback(
@@ -251,7 +251,7 @@ function VerseListContent({
         verseNumber: verse.verseNumber,
         chapterId: chapterId,
         arabic: verse.arabic,
-        surahName: englishName,
+        surahName: localizedSurahName,
         surahArabicName: arabicName,
         versesCount: versesCount ? Number(versesCount) : undefined,
         chapterType: chapterType,
@@ -274,7 +274,6 @@ function VerseListContent({
       toggleFavoriteVerse,
       chapterId,
       localizedSurahName,
-      englishName,
       arabicName,
       versesCount,
       chapterType,
@@ -317,8 +316,8 @@ function VerseListContent({
         audioTotalBytes={audioTotalBytes}
         isPlayingLocally={isPlayingLocally}
         arabicName={arabicName}
-        englishName={englishName}
-        englishTranslation={englishTranslation}
+        localizedName={localizedName}
+        localizedTranslation={localizedTranslation}
         versesCount={versesCount}
         chapterType={chapterType}
       />
@@ -332,8 +331,8 @@ function VerseListContent({
       audioTotalBytes,
       isPlayingLocally,
       arabicName,
-      englishName,
-      englishTranslation,
+      localizedName,
+      localizedTranslation,
       versesCount,
       chapterType,
     ],
@@ -403,7 +402,7 @@ function VerseListContent({
         visible={!!selectedVerseForAction}
         verse={selectedVerseForAction}
         chapterId={chapterId}
-        englishName={englishName}
+        localizedName={localizedSurahName}
         isSharing={isSharing}
         onClose={handleCloseActionModal}
         onShare={handleShare}
@@ -415,7 +414,6 @@ function VerseListContent({
         <VerseShareCard
           ref={shareCardRef}
           verse={verseToShare}
-          englishName={englishName}
           localizedSurahName={localizedSurahName}
           arabicName={arabicName}
         />

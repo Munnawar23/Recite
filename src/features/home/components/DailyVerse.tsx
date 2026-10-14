@@ -5,15 +5,18 @@ import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 import { AppText } from "@/components";
+import { getSurahName } from "@/constants";
 import {
   STATIC_VERSE,
   useDailyVerse,
 } from "@/features/home/hooks/useDailyVerse";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useLanguageStore } from "@/store/languageStore";
 
 export default function DailyVerse() {
   const { t } = useTranslation();
+  const language = useLanguageStore((state) => state.language);
   const { colors, fontSize, spacing, activeScheme } = useAppTheme();
   const { data: verse, isLoading } = useDailyVerse();
   const isDark = activeScheme === "dark";
@@ -28,10 +31,16 @@ export default function DailyVerse() {
     source: t("home.dailyVerse.defaultSource", STATIC_VERSE.source),
   };
 
-  const currentVerse = verse || fallbackVerse;
+  const currentVerse = verse && verse !== STATIC_VERSE ? verse : fallbackVerse;
 
   // Extract verse key e.g. "94:6" — works for both "Surah 94:6" and "Surah Ash-Sharh · 94:6"
   const verseKey = currentVerse.source.match(/(\d+:\d+)/)?.[1] ?? "";
+  const chapterId = verseKey ? parseInt(verseKey.split(":")[0], 10) : undefined;
+  const surahPrefix = t("common.surah", "Surah");
+  const localizedSurahName = chapterId ? getSurahName(chapterId, language) : "";
+  const displaySource = localizedSurahName && verseKey
+    ? `${surahPrefix} ${localizedSurahName} · ${verseKey}`
+    : currentVerse.source;
 
   return (
     <View style={S.card}>
@@ -110,7 +119,7 @@ export default function DailyVerse() {
                 semiBold
                 letterSpacing={0.4}
               >
-                {currentVerse.source}
+                {displaySource}
               </AppText>
             </View>
           </View>

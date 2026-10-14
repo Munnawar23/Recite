@@ -17,8 +17,8 @@ interface VerseListHeaderProps {
   isPlayingLocally?: boolean;
   // Chapter display info — needed so DownloadCard can persist it for offline library
   arabicName?: string;
-  englishName?: string;
-  englishTranslation?: string;
+  localizedName?: string;
+  localizedTranslation?: string;
   versesCount?: string;
   chapterType?: string;
 }
@@ -32,8 +32,8 @@ function VerseListHeader({
   audioTotalBytes,
   isPlayingLocally,
   arabicName,
-  englishName,
-  englishTranslation,
+  localizedName,
+  localizedTranslation,
   versesCount,
   chapterType,
 }: VerseListHeaderProps) {
@@ -58,8 +58,8 @@ function VerseListHeader({
         audioTotalBytes={audioTotalBytes}
         isPlayingLocally={isPlayingLocally}
         arabicName={arabicName}
-        englishName={englishName}
-        englishTranslation={englishTranslation}
+        localizedName={localizedName}
+        localizedTranslation={localizedTranslation}
         versesCount={versesCount}
         chapterType={chapterType}
       />

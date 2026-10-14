@@ -20,7 +20,7 @@ interface VerseActionModalProps {
   visible: boolean;
   verse: SurahVerse | null;
   chapterId?: number;
-  englishName?: string;
+  localizedName?: string;
   isSharing?: boolean;
   onClose: () => void;
   onShare: (verse: SurahVerse) => void;
@@ -32,7 +32,7 @@ export default function VerseActionModal({
   visible,
   verse,
   chapterId: _chapterId,
-  englishName: _englishName,
+  localizedName: _localizedName,
   isSharing = false,
   onClose,
   onShare,

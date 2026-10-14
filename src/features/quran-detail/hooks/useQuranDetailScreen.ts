@@ -1,11 +1,13 @@
 import {
   DEFAULT_TRANSLATION_ID,
   DEFAULT_TRANSLATION_ID_STRING,
+  getChapter,
 } from "@/constants";
 import { useActiveQuranDetail } from "@/features/quran-detail/hooks/useQuranDetail";
 import { useQuranDetailScroll } from "@/features/quran-detail/hooks/useQuranDetailScroll";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
+import { useLanguageStore } from "@/store/languageStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { useReadingProgressStore } from "@/store/readingProgressStore";
 import type { SurahVerse } from "@/types";
@@ -22,11 +24,11 @@ const RESTORE_SCROLL_DELAY_MS = 100;
 const PLAYER_SHOW_ANIMATION_MS = 250;
 
 export function useQuranDetailScreen() {
-  const { id, arabicName, englishName, versesCount, type, initialVerse } =
+  const { id, arabicName, localizedName, versesCount, type, initialVerse } =
     useLocalSearchParams<{
       id: string;
       arabicName: string;
-      englishName: string;
+      localizedName?: string;
       versesCount: string;
       type: string;
       initialVerse?: string;
@@ -35,6 +37,15 @@ export function useQuranDetailScreen() {
   const { colors, fontFamily, fontSize, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
   const chapterId = parseInt(id ?? "1", 10);
+
+  const language = useLanguageStore((state) => state.language);
+  const chapterFallback = useMemo(
+    () => (chapterId ? getChapter(chapterId, language) : null),
+    [chapterId, language],
+  );
+  const resolvedLocalizedName =
+    localizedName || chapterFallback?.localizedName || "";
+  const resolvedArabicName = arabicName || chapterFallback?.name || "";
 
   const translationId = useQuranSettingsStore((state) => state.translationId);
   const setTranslationId = useQuranSettingsStore(
@@ -75,7 +86,10 @@ export function useQuranDetailScreen() {
     audioUrl,
     audioTotalBytes,
     isPlayingLocally,
-  } = useQuranAudio(chapterId, true, { englishName, arabicName });
+  } = useQuranAudio(chapterId, true, {
+    localizedName: resolvedLocalizedName,
+    arabicName: resolvedArabicName,
+  });
 
   const reciterName = useMemo(() => {
     const activeReciter = RECITER_OPTIONS.find((r) => r.id === reciterId);
@@ -108,7 +122,7 @@ export function useQuranDetailScreen() {
 
   // Record this surah as last read when screen opens
   useEffect(() => {
-    if (englishName && chapterId) {
+    if (chapterId) {
       const currentLastRead = useReadingProgressStore.getState().lastRead;
       const parsedInitial = initialVerse ? parseInt(initialVerse, 10) : NaN;
       const initialVerseNum =
@@ -120,10 +134,10 @@ export function useQuranDetailScreen() {
 
       setLastRead({
         surahNumber: chapterId,
-        surahName: englishName,
-        arabicName: arabicName ?? "",
-        versesCount: versesCount ?? "",
-        type: type ?? "",
+        surahName: resolvedLocalizedName,
+        arabicName: resolvedArabicName,
+        versesCount: versesCount ?? String(chapterFallback?.versesCount ?? ""),
+        type: type ?? chapterFallback?.type ?? "",
         verseNumber: initialVerseNum,
         scrollOffset:
           currentLastRead?.surahNumber === chapterId
@@ -133,12 +147,13 @@ export function useQuranDetailScreen() {
     }
   }, [
     chapterId,
-    englishName,
-    arabicName,
+    resolvedLocalizedName,
+    resolvedArabicName,
     versesCount,
     type,
     initialVerse,
     setLastRead,
+    chapterFallback,
   ]);
 
   const handleVersePress = useCallback(
@@ -254,10 +269,11 @@ export function useQuranDetailScreen() {
   return {
     // Route params
     chapterId,
-    arabicName,
-    englishName,
-    versesCount,
-    type,
+    arabicName: resolvedArabicName,
+    localizedName: resolvedLocalizedName,
+    localizedTranslation: chapterFallback?.localizedTranslation ?? "",
+    versesCount: versesCount ?? String(chapterFallback?.versesCount ?? ""),
+    type: type ?? chapterFallback?.type ?? "",
     // Theme
     colors,
     fontFamily,

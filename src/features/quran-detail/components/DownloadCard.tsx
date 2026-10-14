@@ -28,8 +28,8 @@ interface DownloadCardProps {
   isPlayingLocally?: boolean;
   // Chapter display info for offline library
   arabicName?: string;
-  englishName?: string;
-  englishTranslation?: string;
+  localizedName?: string;
+  localizedTranslation?: string;
   versesCount?: string;
   chapterType?: string;
 }
@@ -113,8 +113,8 @@ function DownloadCard({
   audioTotalBytes,
   isPlayingLocally = false,
   arabicName,
-  englishName,
-  englishTranslation,
+  localizedName,
+  localizedTranslation,
   versesCount,
   chapterType,
 }: DownloadCardProps) {
@@ -205,11 +205,11 @@ function DownloadCard({
         audioUrl,
         initialTotalBytes: audioTotalBytes ?? 0,
         chapterInfo:
-          arabicName || englishName
+          arabicName || localizedName
             ? {
                 name: arabicName ?? "",
-                englishName: englishName ?? "",
-                englishTranslation: englishTranslation ?? "",
+                localizedName: localizedName ?? "",
+                localizedTranslation: localizedTranslation ?? "",
                 versesCount: versesCount ? parseInt(versesCount, 10) : 0,
                 chapterType: chapterType ?? "",
               }
@@ -223,8 +223,8 @@ function DownloadCard({
     audioUrl,
     audioTotalBytes,
     arabicName,
-    englishName,
-    englishTranslation,
+    localizedName,
+    localizedTranslation,
     versesCount,
     chapterType,
     colors.primary,

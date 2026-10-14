@@ -1,5 +1,5 @@
 import { AppText } from "@/components";
-import { getLocalizedSurah } from "@/constants";
+import { getSurahName } from "@/constants";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
@@ -19,7 +19,7 @@ import {
 interface DetailHeaderProps {
   chapterId: number;
   arabicName?: string;
-  englishName?: string;
+  localizedName?: string;
   versesCount?: string;
   type?: string;
 }
@@ -29,7 +29,7 @@ type ThemeColors = ReturnType<typeof useAppTheme>["colors"];
 function DetailHeader({
   chapterId,
   arabicName,
-  englishName,
+  localizedName,
   versesCount,
   type,
 }: DetailHeaderProps) {
@@ -38,8 +38,8 @@ function DetailHeader({
   const { paddingTop } = useAppSafeAreaInsets();
   const language = useLanguageStore((state) => state.language);
   const localizedSurahName = useMemo(
-    () => getLocalizedSurah(chapterId, language, englishName, "", arabicName).name,
-    [chapterId, language, englishName, arabicName],
+    () => localizedName || getSurahName(chapterId, language),
+    [chapterId, language, localizedName],
   );
   const isDark = activeScheme === "dark";
 

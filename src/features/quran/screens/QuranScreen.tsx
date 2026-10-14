@@ -3,19 +3,13 @@ import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshControl, RefreshControlProps, StyleSheet, View } from "react-native";
-import LottieView from "lottie-react-native";
 
-import {
-  EmptyState,
-  Header,
-  NoConnection,
-} from "@/components";
-import { getLocalizedSurah, LOADING_ANIM } from "@/constants";
+import { EmptyState, Header } from "@/components";
+import { getChapters, getSurahName } from "@/constants";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import QuranCard from "@/features/quran/components/QuranCard";
 import SearchBar from "@/features/quran/components/SearchBar";
 import { useChapterSearch } from "@/features/quran/hooks/useChapterSearch";
-import { useQuranChapters } from "@/features/quran/hooks/useQuranChapters";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLanguageStore } from "@/store/languageStore";
@@ -27,13 +21,7 @@ const formatContinueReadingParams = (lastRead: LastRead, language: string) => ({
   pathname: "/quran-detail/[id]" as const,
   params: {
     id: String(lastRead.surahNumber),
-    englishName: getLocalizedSurah(
-      lastRead.surahNumber,
-      language,
-      lastRead.surahName,
-      "",
-      lastRead.arabicName,
-    ).name,
+    localizedName: getSurahName(lastRead.surahNumber, language),
     arabicName: lastRead.arabicName,
     versesCount: lastRead.versesCount,
     type: lastRead.type,
@@ -45,11 +33,11 @@ export default function QuranScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { colors, spacing } = useAppTheme();
-
+  const language = useLanguageStore((state) => state.language);
   const lastRead = useReadingProgressStore((state) => state.lastRead);
 
-  // 1. Data-fetching hook
-  const { chapters, isLoading, isError, refetch } = useQuranChapters();
+  // 1. Static instant local chapters data mapped directly to active language
+  const chapters = useMemo(() => getChapters(language), [language]);
 
   // 2. Search & debouncing hook
   const { inputValue, setInputValue, handleClear, filteredData } =
@@ -70,24 +58,15 @@ export default function QuranScreen() {
     }
   }, [filteredData]);
 
-  const onRefresh = useCallback(async () => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
-    try {
-      await refetch();
-    } finally {
+    setTimeout(() => {
       setRefreshing(false);
-    }
-  }, [refetch]);
+    }, 300);
+  }, []);
 
-  const language = useLanguageStore((state) => state.language);
   const localizedLastReadName = lastRead
-    ? getLocalizedSurah(
-        lastRead.surahNumber,
-        language,
-        lastRead.surahName,
-        "",
-        lastRead.arabicName,
-      ).name
+    ? getSurahName(lastRead.surahNumber, language)
     : "";
 
   const handleContinueReading = useCallback(() => {
@@ -135,25 +114,6 @@ export default function QuranScreen() {
   );
 
   const renderListEmpty = useCallback(() => {
-    if (isLoading) {
-      return (
-        <View style={styles.loadingContainer}>
-          <LottieView
-            source={LOADING_ANIM}
-            autoPlay
-            loop
-            style={styles.lottieLoader}
-          />
-        </View>
-      );
-    }
-    if (isError) {
-      return (
-        <View style={styles.emptyContainer}>
-          <NoConnection onRetry={refetch} />
-        </View>
-      );
-    }
     return (
       <EmptyState
         icon="search-outline"
@@ -161,7 +121,7 @@ export default function QuranScreen() {
         subtitle={t("quran.noResultsSubtitle")}
       />
     );
-  }, [isLoading, isError, refetch, styles, t]);
+  }, [t]);
 
   return (
     <View style={styles.container}>
@@ -214,22 +174,6 @@ const createStyles = (spacing: ThemeSpacing) =>
       flexGrow: 1,
       paddingTop: 0,
       paddingBottom: spacing.vLg,
-    },
-    emptyContainer: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      paddingVertical: spacing.vXxl,
-    },
-    loadingContainer: {
-      paddingVertical: spacing.vXl,
-      alignItems: "center",
-      justifyContent: "center",
-      flex: 1,
-    },
-    lottieLoader: {
-      width: rs.space(200),
-      height: rs.space(200),
     },
     topSpacer: {
       height: spacing.vMd,

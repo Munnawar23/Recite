@@ -30,12 +30,9 @@ export const VerseShareCard = forwardRef<View, VerseShareCardProps>(
   ) {
     if (!verse) return null;
 
-    const surahDisplayName =
-      localizedSurahName && localizedSurahName !== englishName
-        ? `${englishName || "Surah"} • ${localizedSurahName}`
-        : englishName || localizedSurahName || "Surah";
+    const surahDisplayName = localizedSurahName || "Surah";
 
-    const surahCitation = englishName || localizedSurahName || "Surah";
+    const surahCitation = localizedSurahName || "Surah";
 
     return (
       <View ref={ref} collapsable={false} style={styles.outerPoster}>

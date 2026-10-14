@@ -1,16 +1,13 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Fuse from "fuse.js";
 import { Keyboard } from "react-native";
-import { getLocalizedSurah } from "@/constants";
 import { Haptics } from "@/lib/haptics";
-import { useLanguageStore } from "@/store/languageStore";
 import { Chapter } from "@/types";
 
 export function useChapterSearch(chapters: Chapter[]) {
   const [inputValue, setInputValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const language = useLanguageStore((state) => state.language);
 
   // Debounce inputValue to update searchQuery
   useEffect(() => {
@@ -45,39 +42,20 @@ export function useChapterSearch(chapters: Chapter[]) {
     Keyboard.dismiss();
   }, []);
 
-  const enrichedChapters = useMemo(() => {
-    return chapters.map((c) => {
-      const loc = getLocalizedSurah(
-        c.id,
-        language,
-        c.englishName,
-        c.englishTranslation,
-        c.name,
-      );
-      return {
-        ...c,
-        localizedName: loc.name,
-        localizedMeaning: loc.meaning,
-      };
-    });
-  }, [chapters, language]);
-
-  // Fuse.js fuzzy search configuration
+  // Fuse.js fuzzy search configuration directly on chapters
   const fuse = useMemo(() => {
-    if (!enrichedChapters.length) return null;
-    return new Fuse(enrichedChapters, {
+    if (!chapters.length) return null;
+    return new Fuse(chapters, {
       keys: [
         "localizedName",
-        "localizedMeaning",
-        "englishName",
-        "englishTranslation",
         "name",
+        "localizedTranslation",
         "id",
       ],
       threshold: 0.3,
       distance: 100,
     });
-  }, [enrichedChapters]);
+  }, [chapters]);
 
   // Filter chapters list based on debounced searchQuery
   const filteredData = useMemo(() => {

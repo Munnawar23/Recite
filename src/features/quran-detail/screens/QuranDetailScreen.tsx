@@ -19,7 +19,8 @@ export default function QuranDetailScreen() {
   const {
     chapterId,
     arabicName,
-    englishName,
+    localizedName,
+    localizedTranslation,
     versesCount,
     type,
     colors,
@@ -112,7 +113,7 @@ export default function QuranDetailScreen() {
           <Header
             chapterId={chapterId}
             arabicName={arabicName}
-            englishName={englishName}
+            localizedName={localizedName}
             versesCount={versesCount}
             type={type}
           />
@@ -139,7 +140,8 @@ export default function QuranDetailScreen() {
           audioTotalBytes={audioTotalBytes}
           isPlayingLocally={isPlayingLocally}
           arabicName={arabicName}
-          englishName={englishName}
+          localizedName={localizedName}
+          localizedTranslation={localizedTranslation}
           versesCount={versesCount}
           chapterType={type}
         />
@@ -165,7 +167,7 @@ export default function QuranDetailScreen() {
           activeVerseKey={activeVerseKey}
           chapterId={chapterId}
           arabicName={arabicName}
-          englishName={englishName}
+          localizedName={localizedName}
           versesCount={versesCount}
           chapterType={type}
           reciterName={reciterName}

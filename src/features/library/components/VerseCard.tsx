@@ -5,7 +5,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { AppText } from "@/components";
-import { getLocalizedSurah } from "@/constants";
+import { getSurahName } from "@/constants";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
@@ -28,14 +28,8 @@ export function VerseCard({ item }: VerseCardProps) {
   );
 
   const localizedSurahName = useMemo(() => {
-    return getLocalizedSurah(
-      item.chapterId,
-      language,
-      item.surahName || `Surah ${item.chapterId}`,
-      "",
-      item.surahArabicName,
-    ).name;
-  }, [item.chapterId, language, item.surahName, item.surahArabicName]);
+    return getSurahName(item.chapterId, language);
+  }, [item.chapterId, language]);
 
   const S = useMemo(() => createStyles(colors), [colors]);
 
@@ -46,7 +40,7 @@ export function VerseCard({ item }: VerseCardProps) {
       params: {
         id: String(item.chapterId),
         arabicName: item.surahArabicName || "",
-        englishName: localizedSurahName,
+        localizedName: localizedSurahName,
         versesCount: item.versesCount ? String(item.versesCount) : "",
         type: item.chapterType || "",
         initialVerse: String(item.verseNumber),

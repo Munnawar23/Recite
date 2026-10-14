@@ -198,8 +198,8 @@ export function isChapterDownloading(chapterId: number): boolean {
 
 export interface ChapterDownloadMetadata {
   name?: string;
-  englishName?: string;
-  englishTranslation?: string;
+  localizedName?: string;
+  localizedTranslation?: string;
   versesCount?: string | number;
   chapterType?: string;
 }
@@ -308,11 +308,11 @@ export async function startChapterDownload({
       textLocalFile: getTextFilename(chapterId),
       totalBytes: audioBytes + textBytes,
       chapterInfo:
-        chapterInfo?.name || chapterInfo?.englishName
+        chapterInfo?.name || chapterInfo?.localizedName
           ? {
               name: chapterInfo.name ?? "",
-              englishName: chapterInfo.englishName ?? "",
-              englishTranslation: chapterInfo.englishTranslation ?? "",
+              localizedName: chapterInfo.localizedName ?? "",
+              localizedTranslation: chapterInfo.localizedTranslation ?? "",
               versesCount: versesCountNum,
               type: chapterInfo.chapterType ?? "",
             }

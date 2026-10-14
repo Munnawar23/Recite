@@ -1,6 +1,8 @@
 import { useMemo } from "react";
-import { useFavoritesStore } from "@/store/favoritesStore";
+import { getChapter } from "@/constants";
 import { useDownloadsStore } from "@/store/downloadsStore";
+import { useFavoritesStore } from "@/store/favoritesStore";
+import { useLanguageStore } from "@/store/languageStore";
 import { Chapter, FavoriteVerse } from "@/types";
 
 export type TabValue = "favorites" | "downloads";
@@ -8,22 +10,25 @@ export type TabValue = "favorites" | "downloads";
 export function useLibraryData() {
   const favoriteVerses = useFavoritesStore((state) => state.favoriteVerses);
   const downloadedMap = useDownloadsStore((s) => s.downloads);
+  const language = useLanguageStore((state) => state.language);
 
-  // Build downloads list directly from the store — no API needed, works fully offline.
-  // Each DownloadedChapter stores chapterInfo saved at download time.
+  // Build downloads list localized directly to the active language
   const downloadedChapters = useMemo((): Chapter[] => {
     return Object.values(downloadedMap)
-      .filter((d) => d.chapterInfo) // only entries that have display metadata
       .sort((a, b) => a.chapterId - b.chapterId)
-      .map((d) => ({
-        id: d.chapterId,
-        name: d.chapterInfo!.name,
-        englishName: d.chapterInfo!.englishName,
-        englishTranslation: d.chapterInfo!.englishTranslation,
-        versesCount: d.chapterInfo!.versesCount,
-        type: d.chapterInfo!.type,
-      }));
-  }, [downloadedMap]);
+      .map((d) => {
+        const localized = getChapter(d.chapterId, language);
+        return {
+          id: d.chapterId,
+          name: d.chapterInfo?.name || localized.name,
+          localizedName: localized.localizedName,
+          localizedTranslation:
+            d.chapterInfo?.localizedTranslation || localized.localizedTranslation,
+          versesCount: d.chapterInfo?.versesCount || localized.versesCount,
+          type: d.chapterInfo?.type || localized.type,
+        };
+      });
+  }, [downloadedMap, language]);
 
   return {
     favoriteVerses,

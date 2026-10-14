@@ -6,7 +6,7 @@ import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { EmptyState, Header, SectionTitle } from "@/components";
-import { getLocalizedSurah } from "@/constants";
+import { getSurahName } from "@/constants";
 import PrayerTimes from "@/features/home/components/PrayerTimes";
 import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard";
 import { useAppTheme } from "@/hooks/useAppTheme";
@@ -119,13 +119,7 @@ export default function HomeScreen() {
 
           {lastRead ? (
             (() => {
-              const localizedName = getLocalizedSurah(
-                lastRead.surahNumber,
-                language,
-                lastRead.surahName,
-                "",
-                lastRead.arabicName,
-              ).name;
+              const localizedName = getSurahName(lastRead.surahNumber, language);
               return (
                 <ContinueReadingCard
                   surahName={localizedName}
@@ -135,7 +129,7 @@ export default function HomeScreen() {
                       pathname: "/quran-detail/[id]" as const,
                       params: {
                         id: String(lastRead.surahNumber),
-                        englishName: localizedName,
+                        localizedName: localizedName,
                         arabicName: lastRead.arabicName,
                         versesCount: lastRead.versesCount,
                         type: lastRead.type,

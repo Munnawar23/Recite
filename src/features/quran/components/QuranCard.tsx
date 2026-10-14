@@ -6,11 +6,9 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
 import { AppText } from "@/components";
-import { getLocalizedSurah } from "@/constants";
 import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
-import { useLanguageStore } from "@/store/languageStore";
 import { type ThemeColors, type ThemeSpacing } from "@/theme";
 import { Chapter as QuranItem } from "@/types";
 
@@ -28,19 +26,6 @@ function QuranCard({ item, onPress }: QuranCardProps) {
     [colors, spacing, isDark],
   );
 
-  const language = useLanguageStore((state) => state.language);
-  const localized = useMemo(
-    () =>
-      getLocalizedSurah(
-        item.id,
-        language,
-        item.englishName,
-        item.englishTranslation,
-        item.name,
-      ),
-    [item.id, language, item.englishName, item.englishTranslation, item.name],
-  );
-
   const router = useRouter();
 
   const handlePress = useCallback(() => {
@@ -53,13 +38,13 @@ function QuranCard({ item, onPress }: QuranCardProps) {
         params: {
           id: String(item.id),
           arabicName: item.name,
-          englishName: localized.name,
+          localizedName: item.localizedName,
           versesCount: String(item.versesCount),
           type: item.type === "meccan" ? "Meccan" : "Medinan",
         },
       });
     }
-  }, [onPress, item, router, localized.name]);
+  }, [onPress, item, router]);
 
   const typeTranslationKey =
     item.type.toLowerCase() === "meccan" ? "quran.meccan" : "quran.medinan";
@@ -116,7 +101,7 @@ function QuranCard({ item, onPress }: QuranCardProps) {
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {localized.name}
+              {item.localizedName}
             </AppText>
             <View style={S.metaRow}>
               <AppText
@@ -162,7 +147,7 @@ function QuranCard({ item, onPress }: QuranCardProps) {
             ellipsizeMode="tail"
             style={S.translationText}
           >
-            {localized.meaning}
+            {item.localizedTranslation}
           </AppText>
         </View>
       </TouchableOpacity>

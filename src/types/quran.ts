@@ -1,9 +1,9 @@
 export interface Chapter {
   id: number;
   name: string;
+  localizedName: string;
   transliteration?: string;
-  englishName: string;
-  englishTranslation: string;
+  localizedTranslation: string;
   versesCount: number;
   type: string;
 }
@@ -24,8 +24,8 @@ export interface DownloadedChapter {
   totalBytes: number;          // combined audio + text size in bytes
   chapterInfo?: {              // full display data — stored so library works offline
     name: string;              // arabic name
-    englishName: string;
-    englishTranslation: string;
+    localizedName: string;
+    localizedTranslation?: string;
     versesCount: number;
     type: string;
   };
@@ -42,5 +42,10 @@ export interface FavoriteVerse {
   versesCount?: number;
   chapterType?: string;
   addedAt: number;
+}
+
+export interface ChapterNameEntry {
+  name: string;
+  meaning: string;
 }
 

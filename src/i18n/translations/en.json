@@ -22,6 +22,7 @@
     "offlineAudioPreviewMessage": "Audio previews require an internet connection. You can still listen to your downloaded surahs.",
     "offlineReciterChangeMessage": "Changing reciters requires an internet connection. Connect to the internet to switch reciters.",
     "quran": "Quran",
+    "surah": "Surah",
     "qibla": "Qibla",
     "library": "Library",
     "back": "Back",

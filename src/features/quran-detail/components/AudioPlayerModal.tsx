@@ -51,7 +51,7 @@ interface AudioPlayerModalProps {
   // Chapter details
   chapterId: number;
   arabicName?: string;
-  englishName?: string;
+  localizedName?: string;
   versesCount?: string;
   chapterType?: string;
   // Reciter metadata
@@ -70,7 +70,7 @@ export default function AudioPlayerModal({
   activeVerseKey,
   chapterId,
   arabicName,
-  englishName,
+  localizedName,
   versesCount,
   chapterType,
   reciterName,
@@ -118,7 +118,7 @@ export default function AudioPlayerModal({
     isLoadingAudio,
     chapterId,
     arabicName,
-    englishName,
+    localizedName,
     reciterName,
   });
 

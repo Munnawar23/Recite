@@ -2,7 +2,7 @@ import {
   DEFAULT_RECITER_ID,
   RECITER_OPTIONS,
   RECITERS_IMAGES,
-  getLocalizedSurah,
+  getSurahName,
 } from "@/constants";
 import { useBackgroundPlay } from "@/hooks/useBackgroundPlay";
 import { getChapterAudio } from "@/lib/api";
@@ -26,7 +26,7 @@ export interface AudioTimestamp {
 }
 
 export interface QuranAudioMetadataOptions {
-  englishName?: string;
+  localizedName?: string;
   arabicName?: string;
 }
 
@@ -195,22 +195,15 @@ export function useQuranAudio(
     };
   }, [reciterId]);
 
-  const localizedSurah = useMemo(
-    () =>
-      getLocalizedSurah(
-        chapterId,
-        language,
-        metadataOptions?.englishName || `Surah ${chapterId}`,
-        "",
-        metadataOptions?.arabicName || "",
-      ),
-    [chapterId, language, metadataOptions?.englishName, metadataOptions?.arabicName],
+  const surahName = useMemo(
+    () => metadataOptions?.localizedName || getSurahName(chapterId, language),
+    [chapterId, language, metadataOptions?.localizedName],
   );
 
   const lockScreenMetadata = useMemo<AudioMetadata>(() => {
     const surahDisplay = metadataOptions?.arabicName
-      ? `${localizedSurah.name} (${metadataOptions.arabicName})`
-      : localizedSurah.name;
+      ? `${surahName} (${metadataOptions.arabicName})`
+      : surahName;
 
     return {
       title: surahDisplay,
@@ -218,7 +211,7 @@ export function useQuranAudio(
       albumTitle: "The Noble Quran",
       artworkUrl: reciterArtworkUri,
     };
-  }, [localizedSurah.name, metadataOptions?.arabicName, activeReciter.label, reciterArtworkUri]);
+  }, [surahName, metadataOptions?.arabicName, activeReciter.label, reciterArtworkUri]);
 
   // Delegate background playback & lock screen media controls to reusable hook
   useBackgroundPlay({

@@ -34,14 +34,14 @@ function VerseRow({
   const quranFontSizeScale = useFontStore((state) => state.quranFontSizeScale);
 
   const textMultiplier = useMemo(() => {
-    if (fontSizeScale === "small") return 0.9;
     if (fontSizeScale === "large") return 1.12;
+    if (fontSizeScale === "extraLarge") return 1.25;
     return 1.0;
   }, [fontSizeScale]);
 
   const quranMultiplier = useMemo(() => {
-    if (quranFontSizeScale === "small") return 0.9;
     if (quranFontSizeScale === "large") return 1.12;
+    if (quranFontSizeScale === "extraLarge") return 1.25;
     return 1.0;
   }, [quranFontSizeScale]);
 

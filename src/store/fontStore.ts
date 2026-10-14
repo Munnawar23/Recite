@@ -2,7 +2,7 @@ import { STORAGE_KEYS, zustandStorage } from "@/lib/storage/appStorage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-export type FontSizeScale = "small" | "default" | "large";
+export type FontSizeScale = "default" | "large" | "extraLarge";
 
 interface FontState {
   fontSizeScale: FontSizeScale;

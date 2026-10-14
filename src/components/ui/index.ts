@@ -11,7 +11,6 @@ export { default as EmptyState } from "./EmptyState";
 export { default as Header } from "./Header";
 export { MessageModal, default as MessageModalComponent } from "./MessageModal";
 export { default as NoConnection } from "./NoConnection";
-export { OfflineBanner } from "./OfflineBanner";
 export { ReciterList, default as ReciterListComponent } from "./ReciterList";
 export { default as ScreenHeader } from "./ScreenHeader";
 export { default as SectionTitle } from "./SectionTitle";

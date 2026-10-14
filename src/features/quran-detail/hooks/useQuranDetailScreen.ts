@@ -6,7 +6,6 @@ import {
 import { useActiveQuranDetail } from "@/features/quran-detail/hooks/useQuranDetail";
 import { useQuranDetailScroll } from "@/features/quran-detail/hooks/useQuranDetailScroll";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { useLanguageStore } from "@/store/languageStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { useReadingProgressStore } from "@/store/readingProgressStore";
@@ -117,7 +116,6 @@ export function useQuranDetailScreen() {
   );
   const lastRead = useReadingProgressStore((state) => state.lastRead);
 
-  const { isOffline } = useNetworkStatus();
   const safeArea = useAppSafeAreaInsets();
 
   // Record this surah as last read when screen opens
@@ -278,7 +276,6 @@ export function useQuranDetailScreen() {
     colors,
     fontFamily,
     isDark,
-    isOffline,
     topInset: safeArea.paddingTop,
     // Data
     verses,

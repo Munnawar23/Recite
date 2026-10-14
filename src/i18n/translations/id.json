@@ -17,7 +17,6 @@
     "errorMessage": "Gagal memuat data. Ketuk untuk mencoba lagi.",
     "noConnectionTitle": "Tidak Ada Koneksi",
     "noConnectionSubtitle": "Gagal memuat data. Periksa koneksi internet Anda.",
-    "offlineBanner": "Anda sedang offline. Anda tetap bisa membaca Al-Qur'an dan mendengarkan audio yang telah diunduh.",
     "offlineAudioPreviewTitle": "Mode Offline",
     "offlineAudioPreviewMessage": "Pratinjau audio memerlukan koneksi internet. Anda tetap bisa mendengarkan surah yang sudah diunduh.",
     "offlineReciterChangeMessage": "Mengganti qari memerlukan koneksi internet. Hubungkan ke internet untuk mengganti qari.",
@@ -153,9 +152,9 @@
         "system": "Ikuti Sistem"
       },
       "fontSize": {
-        "small": "Kecil",
         "default": "Standar",
-        "large": "Besar"
+        "large": "Besar",
+        "extraLarge": "Maks"
       }
     },
     "languages": {

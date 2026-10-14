@@ -26,21 +26,24 @@ export default function DisplayScreen() {
   } = useFontStore();
 
   const fontSizeTabs = [
-    { label: t("settings.display.fontSize.small", "Small"), value: "small" },
     {
       label: t("settings.display.fontSize.default", "Default"),
       value: "default",
     },
     { label: t("settings.display.fontSize.large", "Large"), value: "large" },
+    {
+      label: t("settings.display.fontSize.extraLarge", "Max"),
+      value: "extraLarge",
+    },
   ];
 
   let textMultiplier = 1.0;
-  if (fontSizeScale === "small") textMultiplier = 0.90;
-  else if (fontSizeScale === "large") textMultiplier = 1.12;
+  if (fontSizeScale === "large") textMultiplier = 1.12;
+  else if (fontSizeScale === "extraLarge") textMultiplier = 1.25;
 
   let quranMultiplier = 1.0;
-  if (quranFontSizeScale === "small") quranMultiplier = 0.90;
-  else if (quranFontSizeScale === "large") quranMultiplier = 1.12;
+  if (quranFontSizeScale === "large") quranMultiplier = 1.12;
+  else if (quranFontSizeScale === "extraLarge") quranMultiplier = 1.25;
 
   const S = createStyles(colors, spacing);
 

@@ -1,7 +1,6 @@
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { Haptics } from "@/lib/haptics";
 import { type ThemeColors, type ThemeSpacing } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
@@ -23,9 +22,8 @@ export default function Header({
   onRightIconPress,
 }: HeaderProps) {
   const { colors, fontSize, spacing } = useAppTheme();
-  const { isOffline } = useNetworkStatus();
   const { paddingTop } = useAppSafeAreaInsets();
-  const S = createStyles(colors, spacing, isOffline, paddingTop);
+  const S = createStyles(colors, spacing, paddingTop);
 
   const handlePress = () => {
     Haptics.light();
@@ -74,7 +72,6 @@ export default function Header({
 const createStyles = (
   colors: ThemeColors,
   spacing: ThemeSpacing,
-  isOffline: boolean,
   paddingTop: number,
 ) =>
   StyleSheet.create({

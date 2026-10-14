@@ -1,4 +1,4 @@
-import { AppToast, ErrorBoundary, OfflineBanner } from "@/components";
+import { AppToast, ErrorBoundary } from "@/components";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import i18n from "@/i18n";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -82,7 +82,6 @@ export default function RootLayout() {
               }}
             >
               <StatusBar style={activeScheme === "dark" ? "light" : "dark"} />
-              <OfflineBanner />
               <Stack
                 screenOptions={{
                   headerShown: false,

@@ -1,7 +1,6 @@
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { Haptics } from "@/lib/haptics";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -24,9 +23,8 @@ export default function ScreenHeader({
 }: ScreenHeaderProps) {
   const router = useRouter();
   const { colors, spacing } = useAppTheme();
-  const { isOffline } = useNetworkStatus();
   const { paddingTop } = useAppSafeAreaInsets();
-  const S = createStyles(colors, spacing, isOffline, paddingTop);
+  const S = createStyles(colors, spacing, paddingTop);
 
   const handleBack = () => {
     Haptics.light();
@@ -81,7 +79,6 @@ export default function ScreenHeader({
 const createStyles = (
   colors: any,
   spacing: any,
-  isOffline: boolean,
   paddingTop: number,
 ) =>
   StyleSheet.create({
@@ -92,7 +89,6 @@ const createStyles = (
       paddingHorizontal: spacing.screenPadding,
       paddingTop: paddingTop + rs.space(6),
       paddingBottom: rs.space(8),
-      marginTop: isOffline ? rs.space(2) : 0,
     },
     backButton: {
       width: rs.space(36),

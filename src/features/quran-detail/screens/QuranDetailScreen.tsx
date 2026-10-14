@@ -25,7 +25,6 @@ export default function QuranDetailScreen() {
     type,
     colors,
     isDark,
-    isOffline,
     topInset,
     verses,
     isLoading,

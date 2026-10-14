@@ -17,7 +17,6 @@
     "errorMessage": "Gagal memuatkan data. Ketik untuk cuba lagi.",
     "noConnectionTitle": "Tiada Sambungan",
     "noConnectionSubtitle": "Gagal memuatkan data. Sila semak sambungan internet anda.",
-    "offlineBanner": "Anda berada di luar talian. Anda masih boleh membaca Al-Quran dan mendengar audio yang telah dimuat turun.",
     "offlineAudioPreviewTitle": "Mod Luar Talian",
     "offlineAudioPreviewMessage": "Pratonton audio memerlukan internet. Anda masih boleh mendengar surah yang telah dimuat turun.",
     "offlineReciterChangeMessage": "Menukar qari memerlukan sambungan internet. Sila sambung ke internet untuk tukar qari.",
@@ -153,9 +152,9 @@
         "system": "Ikut Sistem"
       },
       "fontSize": {
-        "small": "Kecil",
         "default": "Biasa",
-        "large": "Besar"
+        "large": "Besar",
+        "extraLarge": "Maks"
       }
     },
     "languages": {

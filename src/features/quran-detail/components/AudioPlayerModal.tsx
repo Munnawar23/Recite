@@ -23,6 +23,7 @@ import { useTranslation } from "react-i18next";
 
 import { AppText } from "@/components";
 import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
+import { Haptics } from "@/lib/haptics";
 import { type ThemeColors } from "@/theme";
 import { useDownloadsStore } from "@/store/downloadsStore";
 import {
@@ -40,6 +41,8 @@ const ARTWORK_SIZE = Math.min(
 interface AudioPlayerModalProps {
   visible: boolean;
   onClose: () => void;
+  onDismissToTabs?: () => void;
+  onDismissToDetail?: () => void;
   // Audio playback controls & status
   player: AudioPlayer | null;
   status: any;
@@ -59,6 +62,8 @@ interface AudioPlayerModalProps {
 export default function AudioPlayerModal({
   visible,
   onClose,
+  onDismissToTabs,
+  onDismissToDetail,
   player,
   status,
   isLoadingAudio,
@@ -79,6 +84,8 @@ export default function AudioPlayerModal({
     colors,
     isDark,
     closePlayer,
+    dismissToTabs,
+    closeToDetail,
     panGesture,
     animatedSheetStyle,
     animatedBackdropStyle,
@@ -104,6 +111,8 @@ export default function AudioPlayerModal({
   } = useAudioPlayer({
     visible,
     onClose,
+    onDismissToTabs,
+    onDismissToDetail,
     player,
     status,
     isLoadingAudio,
@@ -151,28 +160,27 @@ export default function AudioPlayerModal({
             style={StyleSheet.absoluteFill}
           />
 
-          {/* Draggable Zone: From Top Handle through Header down to Artwork Image */}
-          <GestureDetector gesture={panGesture}>
-            <View style={S.draggableHeaderArea}>
               {/* Top Section: Drag Handle & Header Bar */}
               <View style={S.topSection}>
-                {/* Drag Indicator Pill */}
-                <View style={S.dragHandleContainer}>
-                  <View style={S.dragHandle} />
-                </View>
+                {/* Drag Indicator Pill (Draggable) */}
+                <GestureDetector gesture={panGesture}>
+                  <View style={S.dragHandleContainer}>
+                    <View style={S.dragHandle} />
+                  </View>
+                </GestureDetector>
 
-                {/* Top Bar: Close Chevron, Now Playing Status Badge, Balanced Spacer */}
+                {/* Top Bar: Back Arrow (Goes to Tabs), Now Playing Title, Close Cross (Shows Quran Detail) */}
                 <View style={S.headerRow}>
                   <TouchableOpacity
-                    onPress={closePlayer}
+                    onPress={dismissToTabs}
                     hitSlop={rs.space(12)}
                     style={S.headerIconButton}
                     activeOpacity={0.7}
                     accessibilityRole="button"
-                    accessibilityLabel="Close audio player"
+                    accessibilityLabel="Go back to tabs"
                   >
                     <Ionicons
-                      name="chevron-down"
+                      name="chevron-back"
                       size={scale(22)}
                       color={colors.text}
                     />
@@ -219,55 +227,71 @@ export default function AudioPlayerModal({
                     </View>
                   </View>
 
-                  {/* Right Spacer to keep header title perfectly centered */}
-                  <View style={S.headerSpacer} />
-                </View>
-              </View>
-
-              {/* Middle Section: Centered Album Artwork & Active Ayah Highlight */}
-              <View style={S.middleSection}>
-                <View style={S.artworkShadow}>
-                  {selectedReciter.avatar ? (
-                    <Image
-                      source={selectedReciter.avatar}
-                      style={S.artworkImage}
-                      contentFit="cover"
-                      transition={300}
-                    />
-                  ) : (
-                    <LinearGradient
-                      colors={[colors.primary + "35", colors.card]}
-                      style={[S.artworkImage, S.artworkFallback]}
-                    >
-                      <Ionicons
-                        name="musical-notes"
-                        size={scale(64)}
-                        color={colors.primary}
-                      />
-                    </LinearGradient>
-                  )}
-                </View>
-
-                {/* Highlighted Active Ayah Pill directly under Reciter Image (Always visible, defaults to Ayah 1 at start) */}
-                <View style={S.underArtworkAyahBadge}>
-                  <Ionicons
-                    name="sparkles"
-                    size={scale(12)}
-                    color={colors.primary}
-                  />
-                  <AppText
-                    variant="bodySm"
-                    family="title"
-                    color="primary"
-                    numberOfLines={1}
-                    style={S.underArtworkAyahText}
+                  {/* View Quran Verses Button: Closes modal and shows Quran detail screen */}
+                  <TouchableOpacity
+                    onPress={() => {
+                      Haptics.light();
+                      closeToDetail();
+                    }}
+                    hitSlop={rs.space(12)}
+                    style={S.headerBookButton}
+                    activeOpacity={0.8}
+                    accessibilityRole="button"
+                    accessibilityLabel="View Quran verses"
                   >
-                    {`${t("common.verse", "Ayah")} ${activeVerseKey ?? `${chapterId}:1`}`}
-                  </AppText>
+                    <Ionicons
+                      name="book"
+                      size={scale(18)}
+                      color="#FFFFFF"
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
-            </View>
-          </GestureDetector>
+
+              {/* Middle Section: Centered Album Artwork & Active Ayah Highlight (Draggable) */}
+              <GestureDetector gesture={panGesture}>
+                <View style={S.middleSection}>
+                  <View style={S.artworkShadow}>
+                    {selectedReciter.avatar ? (
+                      <Image
+                        source={selectedReciter.avatar}
+                        style={S.artworkImage}
+                        contentFit="cover"
+                        transition={300}
+                      />
+                    ) : (
+                      <LinearGradient
+                        colors={[colors.primary + "35", colors.card]}
+                        style={[S.artworkImage, S.artworkFallback]}
+                      >
+                        <Ionicons
+                          name="musical-notes"
+                          size={scale(64)}
+                          color={colors.primary}
+                        />
+                      </LinearGradient>
+                    )}
+                  </View>
+
+                  {/* Highlighted Active Ayah Pill directly under Reciter Image */}
+                  <View style={S.underArtworkAyahBadge}>
+                    <Ionicons
+                      name="sparkles"
+                      size={scale(12)}
+                      color={colors.primary}
+                    />
+                    <AppText
+                      variant="bodySm"
+                      family="title"
+                      color="primary"
+                      numberOfLines={1}
+                      style={S.underArtworkAyahText}
+                    >
+                      {`${t("common.verse", "Ayah")} ${activeVerseKey ?? `${chapterId}:1`}`}
+                    </AppText>
+                  </View>
+                </View>
+              </GestureDetector>
 
             {/* Bottom Section: Track Info, Progress, Controls & Up Next Queue */}
             <View style={S.bottomSection}>
@@ -564,10 +588,6 @@ const createStyles = (
       paddingHorizontal: scale(22),
       overflow: "hidden",
     },
-    draggableHeaderArea: {
-      flex: 1,
-      width: "100%",
-    },
     topSection: {
       width: "100%",
     },
@@ -604,9 +624,18 @@ const createStyles = (
         ? "rgba(255, 255, 255, 0.1)"
         : "rgba(0, 0, 0, 0.05)",
     },
-    headerSpacer: {
+    headerBookButton: {
       width: scale(38),
       height: scale(38),
+      borderRadius: scale(19),
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: colors.primary,
+      shadowColor: colors.primary,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.35,
+      shadowRadius: 5,
+      elevation: 4,
     },
     headerTitleContainer: {
       alignItems: "center",

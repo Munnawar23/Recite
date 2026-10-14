@@ -40,6 +40,8 @@ export interface UseAudioPlayerParams {
   // Modal-specific params
   visible?: boolean;
   onClose?: () => void;
+  onDismissToTabs?: () => void;
+  onDismissToDetail?: () => void;
   chapterId?: number;
   arabicName?: string;
   englishName?: string;
@@ -55,6 +57,8 @@ export function useAudioPlayer({
   isLoadingAudio,
   visible,
   onClose,
+  onDismissToTabs,
+  onDismissToDetail,
   chapterId = 1,
   arabicName,
   englishName,
@@ -187,13 +191,29 @@ export function useAudioPlayer({
   // --- Modal Specific Logic ---
   const translateY = useSharedValue(SCREEN_HEIGHT);
 
-  const closePlayer = useCallback(() => {
+  // Action when user wants to navigate back to bottom tabs (chevron-back, Android back)
+  // Directly navigate to tabs without closing animation to prevent seeing QuranDetailScreen glitch
+  const dismissToTabs = useCallback(() => {
+    if (onDismissToTabs) {
+      onDismissToTabs();
+    } else if (onClose) {
+      onClose();
+    }
+  }, [onDismissToTabs, onClose]);
+
+  // Action when user taps the top-right cross icon (close modal, show Quran detail)
+  const closeToDetail = useCallback(() => {
     translateY.value = withTiming(SCREEN_HEIGHT, { duration: 250 }, () => {
-      if (onClose) {
+      if (onDismissToDetail) {
+        scheduleOnRN(onDismissToDetail);
+      } else if (onClose) {
         scheduleOnRN(onClose);
       }
     });
-  }, [onClose, translateY]);
+  }, [onDismissToDetail, onClose, translateY]);
+
+  // Default closePlayer for backwards compatibility
+  const closePlayer = dismissToTabs;
 
   // Enter / Exit spring animation for modal
   useEffect(() => {
@@ -210,11 +230,11 @@ export function useAudioPlayer({
     }
   }, [visible, translateY]);
 
-  // Android hardware back button handler
+  // Android hardware back button handler: goes directly to bottom tabs
   useEffect(() => {
     if (!visible) return;
     const backAction = () => {
-      closePlayer();
+      dismissToTabs();
       return true;
     };
     const backHandler = BackHandler.addEventListener(
@@ -222,9 +242,9 @@ export function useAudioPlayer({
       backAction,
     );
     return () => backHandler.remove();
-  }, [visible, closePlayer]);
+  }, [visible, dismissToTabs]);
 
-  // Pan gesture to drag down and dismiss modal
+  // Pan gesture to drag down and close modal (reveals Quran detail screen, just like cross button)
   const panGesture = Gesture.Pan()
     .activeOffsetY([10, 1000])
     .failOffsetX([-15, 15])
@@ -235,7 +255,7 @@ export function useAudioPlayer({
     })
     .onEnd((event) => {
       if (event.translationY > 140 || event.velocityY > 500) {
-        scheduleOnRN(closePlayer);
+        scheduleOnRN(closeToDetail);
       } else {
         translateY.value = withSpring(0, {
           damping: 24,
@@ -363,6 +383,8 @@ export function useAudioPlayer({
     miniPlayerAnimatedStyle,
     // Modal specific
     closePlayer,
+    dismissToTabs,
+    closeToDetail,
     panGesture,
     animatedSheetStyle,
     animatedBackdropStyle,

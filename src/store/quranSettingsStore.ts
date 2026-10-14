@@ -9,8 +9,10 @@ import { createJSONStorage, persist } from "zustand/middleware";
 interface QuranSettingsState {
   translationId: string;
   reciterId: number;
+  autoOpenAudioModal: boolean;
   setTranslationId: (id: string) => void;
   setReciterId: (id: number) => void;
+  setAutoOpenAudioModal: (open: boolean) => void;
 }
 
 export const useQuranSettingsStore = create<QuranSettingsState>()(
@@ -18,8 +20,10 @@ export const useQuranSettingsStore = create<QuranSettingsState>()(
     (set) => ({
       translationId: DEFAULT_TRANSLATION_ID_STRING,
       reciterId: DEFAULT_RECITER_ID,
+      autoOpenAudioModal: false,
       setTranslationId: (id) => set({ translationId: id }),
       setReciterId: (id) => set({ reciterId: id }),
+      setAutoOpenAudioModal: (open) => set({ autoOpenAudioModal: open }),
     }),
     {
       name: STORAGE_KEYS.QURAN_SETTINGS,

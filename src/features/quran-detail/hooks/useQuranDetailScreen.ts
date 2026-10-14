@@ -75,7 +75,7 @@ export function useQuranDetailScreen() {
     audioUrl,
     audioTotalBytes,
     isPlayingLocally,
-  } = useQuranAudio(chapterId, true);
+  } = useQuranAudio(chapterId, true, { englishName, arabicName });
 
   const reciterName = useMemo(() => {
     const activeReciter = RECITER_OPTIONS.find((r) => r.id === reciterId);

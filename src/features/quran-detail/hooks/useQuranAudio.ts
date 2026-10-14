@@ -1,10 +1,22 @@
-import { DEFAULT_RECITER_ID, RECITER_OPTIONS } from "@/constants";
+import {
+  DEFAULT_RECITER_ID,
+  RECITER_OPTIONS,
+  RECITERS_IMAGES,
+  getLocalizedSurah,
+} from "@/constants";
+import { useBackgroundPlay } from "@/hooks/useBackgroundPlay";
 import { getChapterAudio } from "@/lib/api";
 import { getLocalAudioPath, getLocalTextData } from "@/services/downloadService";
 import { useDownloadsStore } from "@/store/downloadsStore";
+import { useLanguageStore } from "@/store/languageStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { useQuery } from "@tanstack/react-query";
-import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
+import { Asset } from "expo-asset";
+import {
+  useAudioPlayer,
+  useAudioPlayerStatus,
+  type AudioMetadata,
+} from "expo-audio";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 export interface AudioTimestamp {
@@ -13,12 +25,22 @@ export interface AudioTimestamp {
   timestamp_to: number; // in ms
 }
 
+export interface QuranAudioMetadataOptions {
+  englishName?: string;
+  arabicName?: string;
+}
+
 export { RECITER_OPTIONS };
 
-export function useQuranAudio(chapterId: number, enabled: boolean = true) {
+export function useQuranAudio(
+  chapterId: number,
+  enabled: boolean = true,
+  metadataOptions?: QuranAudioMetadataOptions,
+) {
   const { reciterId: globalReciterId, setReciterId: setReciterIdInStore } =
     useQuranSettingsStore();
   const reciterId = globalReciterId || DEFAULT_RECITER_ID;
+  const language = useLanguageStore((s) => s.language);
 
   // Check if this chapter has a locally downloaded audio file
   const isDownloaded = useDownloadsStore(
@@ -128,6 +150,83 @@ export function useQuranAudio(chapterId: number, enabled: boolean = true) {
     // instead of returning null and causing a flicker
     return lastActiveVerseKeyRef.current;
   }, [status.currentTime, timestamps]);
+
+  // Reciter & Surah metadata for lock screen & system notification
+  const activeReciter = useMemo(
+    () => RECITER_OPTIONS.find((r) => r.id === reciterId) ?? RECITER_OPTIONS[0],
+    [reciterId],
+  );
+
+  // Resolve reciter artwork local/remote URI for lock screen & notification controls
+  const [reciterArtworkUri, setReciterArtworkUri] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    let isMounted = true;
+    const avatarModule = RECITERS_IMAGES[reciterId] || RECITERS_IMAGES[DEFAULT_RECITER_ID];
+    if (!avatarModule) {
+      setReciterArtworkUri(undefined);
+      return;
+    }
+
+    try {
+      const asset = Asset.fromModule(avatarModule);
+      if (asset.localUri) {
+        setReciterArtworkUri(asset.localUri);
+      } else {
+        asset
+          .downloadAsync()
+          .then(() => {
+            if (isMounted) {
+              setReciterArtworkUri(asset.localUri || asset.uri);
+            }
+          })
+          .catch(() => {
+            if (isMounted) {
+              setReciterArtworkUri(asset.uri);
+            }
+          });
+      }
+    } catch {
+      if (isMounted) setReciterArtworkUri(undefined);
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [reciterId]);
+
+  const localizedSurah = useMemo(
+    () =>
+      getLocalizedSurah(
+        chapterId,
+        language,
+        metadataOptions?.englishName || `Surah ${chapterId}`,
+        "",
+        metadataOptions?.arabicName || "",
+      ),
+    [chapterId, language, metadataOptions?.englishName, metadataOptions?.arabicName],
+  );
+
+  const lockScreenMetadata = useMemo<AudioMetadata>(() => {
+    const surahDisplay = metadataOptions?.arabicName
+      ? `${localizedSurah.name} (${metadataOptions.arabicName})`
+      : localizedSurah.name;
+
+    return {
+      title: surahDisplay,
+      artist: activeReciter.label,
+      albumTitle: "The Noble Quran",
+      artworkUrl: reciterArtworkUri,
+    };
+  }, [localizedSurah.name, metadataOptions?.arabicName, activeReciter.label, reciterArtworkUri]);
+
+  // Delegate background playback & lock screen media controls to reusable hook
+  useBackgroundPlay({
+    player: enabled ? player : null,
+    isPlaying: status?.playing,
+    metadata: lockScreenMetadata,
+    enabled,
+  });
 
   return {
     player: enabled ? player : null,

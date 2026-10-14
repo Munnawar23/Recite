@@ -16,6 +16,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NotificationService } from "@/services/notificationService";
 import { useNotificationStore } from "@/store/notificationStore";
 import { STORAGE_KEYS } from "@/lib/storage/appStorage";
+import { setAudioModeAsync } from "expo-audio";
 
 // Keep the splash screen visible while we fetch resources
 void SplashScreen.preventAutoHideAsync();
@@ -44,6 +45,11 @@ export default function RootLayout() {
   useEffect(() => {
     NotificationService.configure();
     void useNotificationStore.getState().syncOnStartup();
+    void setAudioModeAsync({
+      playsInSilentMode: true,
+      shouldPlayInBackground: true,
+      interruptionMode: "doNotMix",
+    }).catch(() => {});
   }, []);
 
   if (!isReady) {

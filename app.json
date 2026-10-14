@@ -8,7 +8,10 @@
     "scheme": "recite",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/images/icons/icon.png"
+      "icon": "./assets/images/icons/icon.png",
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"]
+      }
     },
     "android": {
       "versionCode": 1,
@@ -27,7 +30,9 @@
         "android.permission.SCHEDULE_EXACT_ALARM",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
-        "android.permission.HIGH_SAMPLING_RATE_SENSORS"
+        "android.permission.HIGH_SAMPLING_RATE_SENSORS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
       ],
       "package": "com.munnawar.Recite"
     },
@@ -46,15 +51,17 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#121415",
-          "image": "./assets/images/icons/icon.png",
-          "imageWidth": 185
+          "backgroundColor": "#1F4831",
+          "image": "./assets/images/icons/adaptive-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain"
         }
       ],
       [
         "expo-audio",
         {
-          "enableAudioRecording": false
+          "enableAudioRecording": false,
+          "enableBackgroundPlayback": true
         }
       ],
       "expo-file-system",

@@ -14,6 +14,8 @@ import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { FontSizeScale, useFontStore } from "@/store/fontStore";
 
+import { FONT_SCALE_MULTIPLIER, getFontSizeTabs } from "@/theme";
+
 export default function DisplayScreen() {
   const { t } = useTranslation();
   const { colors, fontSize, spacing } = useAppTheme();
@@ -25,25 +27,9 @@ export default function DisplayScreen() {
     setQuranFontSizeScale,
   } = useFontStore();
 
-  const fontSizeTabs = [
-    {
-      label: t("settings.display.fontSize.default", "Default"),
-      value: "default",
-    },
-    { label: t("settings.display.fontSize.large", "Large"), value: "large" },
-    {
-      label: t("settings.display.fontSize.extraLarge", "Max"),
-      value: "extraLarge",
-    },
-  ];
-
-  let textMultiplier = 1.0;
-  if (fontSizeScale === "large") textMultiplier = 1.12;
-  else if (fontSizeScale === "extraLarge") textMultiplier = 1.25;
-
-  let quranMultiplier = 1.0;
-  if (quranFontSizeScale === "large") quranMultiplier = 1.12;
-  else if (quranFontSizeScale === "extraLarge") quranMultiplier = 1.25;
+  const fontSizeTabs = getFontSizeTabs(t);
+  const textMultiplier = FONT_SCALE_MULTIPLIER[fontSizeScale] ?? 1.0;
+  const quranMultiplier = FONT_SCALE_MULTIPLIER[quranFontSizeScale] ?? 1.0;
 
   const S = createStyles(colors, spacing);
 

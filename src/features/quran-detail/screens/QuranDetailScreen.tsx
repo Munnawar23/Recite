@@ -1,17 +1,14 @@
-import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
+import { useKeepAwake } from "expo-keep-awake";
 
-import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import AudioPlayer from "../components/AudioPlayer";
-import AudioPlayerModal from "../components/AudioPlayerModal";
 import Header from "../components/Header";
 import ScrollTopButton from "../components/ScrollTopButton";
 import VerseListContent from "../components/VerseListContent";
 import { useQuranDetailScreen } from "../hooks/useQuranDetailScreen";
-import { useKeepAwake } from "expo-keep-awake";
 
 export default function QuranDetailScreen() {
   useKeepAwake();
@@ -25,7 +22,6 @@ export default function QuranDetailScreen() {
     type,
     colors,
     isDark,
-    topInset,
     verses,
     isLoading,
     isError,
@@ -53,39 +49,6 @@ export default function QuranDetailScreen() {
     onViewableItemsChanged,
     viewabilityConfig,
   } = useQuranDetailScreen();
-
-  const router = useRouter();
-  const autoOpenAudioModal = useQuranSettingsStore(
-    (state) => state.autoOpenAudioModal,
-  );
-  const setAutoOpenAudioModal = useQuranSettingsStore(
-    (state) => state.setAutoOpenAudioModal,
-  );
-
-  const [isAudioModalVisible, setIsAudioModalVisible] = useState(
-    () => autoOpenAudioModal,
-  );
-
-  const handleOpenAudioModal = useCallback(() => {
-    setAutoOpenAudioModal(true);
-    setIsAudioModalVisible(true);
-  }, [setAutoOpenAudioModal]);
-
-  // When user dismisses via back arrow or hardware back: goes directly to bottom tabs
-  const handleDismissToTabs = useCallback(() => {
-    // Navigate back directly to tabs without hiding modal first to avoid detail screen flash
-    if (router.canGoBack()) {
-      router.back();
-    } else {
-      router.replace("/(tabs)/quran" as any);
-    }
-  }, [router]);
-
-  // When user taps the top-right cross icon: closes modal and reveals Quran detail screen
-  const handleDismissToDetail = useCallback(() => {
-    setAutoOpenAudioModal(false);
-    setIsAudioModalVisible(false);
-  }, [setAutoOpenAudioModal]);
 
   const S = useMemo(
     () => createStyles(colors.background),
@@ -151,27 +114,8 @@ export default function QuranDetailScreen() {
             status={status}
             isLoadingAudio={isLoadingAudio}
             scrollTranslateY={playerScrollTranslateY}
-            onMusicPress={handleOpenAudioModal}
           />
         )}
-
-        <AudioPlayerModal
-          visible={isAudioModalVisible}
-          onClose={() => setIsAudioModalVisible(false)}
-          onDismissToTabs={handleDismissToTabs}
-          onDismissToDetail={handleDismissToDetail}
-          player={player}
-          status={status}
-          isLoadingAudio={isLoadingAudio}
-          activeVerseKey={activeVerseKey}
-          chapterId={chapterId}
-          arabicName={arabicName}
-          localizedName={localizedName}
-          versesCount={versesCount}
-          chapterType={type}
-          reciterName={reciterName}
-          isPlayingLocally={isPlayingLocally}
-        />
 
         <ScrollTopButton
           showScrollTop={showScrollTop}

@@ -19,7 +19,6 @@ interface AudioPlayerProps {
   status: any;
   isLoadingAudio: boolean;
   scrollTranslateY?: SharedValue<number>;
-  onMusicPress?: () => void;
 }
 
 export default function AudioPlayerComponent({
@@ -27,7 +26,6 @@ export default function AudioPlayerComponent({
   status,
   isLoadingAudio,
   scrollTranslateY,
-  onMusicPress,
 }: AudioPlayerProps) {
   const { colors } = useAppTheme();
   const insets = useSafeAreaInsets();
@@ -40,13 +38,14 @@ export default function AudioPlayerComponent({
     sliderValue,
     isDragging,
     playbackSpeed,
+    isRepeating,
     isPlayerLoading,
     miniPlayerAnimatedStyle,
     cycleSpeed,
+    toggleRepeat,
     handlePlayPause,
     handleSkipBack,
     handleSkipForward,
-    handleMusicPress,
     handleSliderValueChange,
     handleSlidingComplete,
   } = useAudioPlayer({
@@ -54,7 +53,6 @@ export default function AudioPlayerComponent({
     status,
     isLoadingAudio,
     scrollTranslateY,
-    onMusicPress,
   });
 
   return (
@@ -82,20 +80,25 @@ export default function AudioPlayerComponent({
         </AppText>
       </View>
 
-      {/* Control Buttons */}
+      {/* Control Buttons: 5 symmetric items with Play/Pause exactly centered */}
       <View style={S.controlsRow}>
-        {/* Music Button */}
+        {/* 1. Repeat / Loop Toggle */}
         <TouchableOpacity
-          onPress={handleMusicPress}
-          style={S.musicButton}
+          onPress={toggleRepeat}
+          style={[S.sideButton, isRepeating && S.repeatButtonActive]}
           activeOpacity={0.7}
           accessibilityRole="button"
-          accessibilityLabel="Music"
+          accessibilityLabel="Toggle repeat"
         >
-          <Ionicons name="musical-notes" size={rs.icon(18)} color="#FFFFFF" />
+          <Ionicons
+            name="repeat"
+            size={rs.icon(20)}
+            color={isRepeating ? colors.primary : colors.text}
+          />
+          {isRepeating && <View style={[S.repeatDot, { backgroundColor: colors.primary }]} />}
         </TouchableOpacity>
 
-        {/* Skip backward 10s */}
+        {/* 2. Skip backward 10s */}
         <TouchableOpacity
           onPress={handleSkipBack}
           style={S.skipButton}
@@ -105,7 +108,7 @@ export default function AudioPlayerComponent({
           <MaterialIcons name="replay-10" size={rs.icon(22)} color={colors.text} />
         </TouchableOpacity>
 
-        {/* Play/Pause Main Button (Exact Center) */}
+        {/* 3. Play/Pause Main Button (Exact Center) */}
         <TouchableOpacity
           onPress={handlePlayPause}
           disabled={isPlayerLoading}
@@ -125,7 +128,7 @@ export default function AudioPlayerComponent({
           )}
         </TouchableOpacity>
 
-        {/* Skip forward 10s */}
+        {/* 4. Skip forward 10s */}
         <TouchableOpacity
           onPress={handleSkipForward}
           style={S.skipButton}
@@ -135,7 +138,7 @@ export default function AudioPlayerComponent({
           <MaterialIcons name="forward-10" size={rs.icon(22)} color={colors.text} />
         </TouchableOpacity>
 
-        {/* Speed Selector */}
+        {/* 5. Speed Selector */}
         <TouchableOpacity
           onPress={cycleSpeed}
           style={S.speedButton}
@@ -188,8 +191,27 @@ const createStyles = (colors: any, bottomInset: number) =>
     controlsRow: {
       flexDirection: "row",
       alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: rs.space(12),
+    },
+    sideButton: {
+      width: rs.space(38),
+      height: rs.space(38),
+      borderRadius: rs.space(19),
+      alignItems: "center",
       justifyContent: "center",
-      gap: rs.space(20),
+      backgroundColor: colors.background,
+      position: "relative",
+    },
+    repeatButtonActive: {
+      backgroundColor: colors.primary + "18",
+    },
+    repeatDot: {
+      position: "absolute",
+      bottom: rs.space(4),
+      width: rs.space(4),
+      height: rs.space(4),
+      borderRadius: rs.space(2),
     },
     skipButton: {
       width: rs.space(42),
@@ -200,19 +222,6 @@ const createStyles = (colors: any, bottomInset: number) =>
       backgroundColor: colors.background,
     },
     speedButton: {
-      width: rs.space(38),
-      height: rs.space(38),
-      borderRadius: rs.space(19),
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: colors.primary,
-      shadowColor: colors.primary,
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.2,
-      shadowRadius: 3,
-      elevation: 3,
-    },
-    musicButton: {
       width: rs.space(38),
       height: rs.space(38),
       borderRadius: rs.space(19),

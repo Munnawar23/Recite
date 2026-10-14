@@ -8,6 +8,8 @@ import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { OnboardingStepWrapper } from "./OnboardingStepWrapper";
 
+import { FONT_SCALE_MULTIPLIER, getFontSizeTabs } from "@/theme";
+
 interface ThemeStepProps {
   onNext: () => void;
   onBack: () => void;
@@ -23,22 +25,9 @@ export function ThemeStep({ onNext, onBack }: ThemeStepProps) {
   } = useFontStore();
   const { colors, fontSize, spacing } = useAppTheme();
 
-  const fontSizeTabs = [
-    { label: t("settings.display.fontSize.small", "Small"), value: "small" },
-    {
-      label: t("settings.display.fontSize.default", "Default"),
-      value: "default",
-    },
-    { label: t("settings.display.fontSize.large", "Large"), value: "large" },
-  ];
-
-  let textMultiplier = 1.0;
-  if (fontSizeScale === "small") textMultiplier = 0.90;
-  else if (fontSizeScale === "large") textMultiplier = 1.12;
-
-  let quranMultiplier = 1.0;
-  if (quranFontSizeScale === "small") quranMultiplier = 0.90;
-  else if (quranFontSizeScale === "large") quranMultiplier = 1.12;
+  const fontSizeTabs = getFontSizeTabs(t);
+  const textMultiplier = FONT_SCALE_MULTIPLIER[fontSizeScale] ?? 1.0;
+  const quranMultiplier = FONT_SCALE_MULTIPLIER[quranFontSizeScale] ?? 1.0;
 
   const S = createStyles(colors, spacing);
 

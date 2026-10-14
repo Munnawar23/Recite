@@ -3,6 +3,7 @@ import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { useFontStore } from "@/store/fontStore";
+import { FONT_SCALE_MULTIPLIER } from "@/theme";
 import type { SurahVerse } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useMemo } from "react";
@@ -33,17 +34,8 @@ function VerseRow({
   const fontSizeScale = useFontStore((state) => state.fontSizeScale);
   const quranFontSizeScale = useFontStore((state) => state.quranFontSizeScale);
 
-  const textMultiplier = useMemo(() => {
-    if (fontSizeScale === "large") return 1.12;
-    if (fontSizeScale === "extraLarge") return 1.25;
-    return 1.0;
-  }, [fontSizeScale]);
-
-  const quranMultiplier = useMemo(() => {
-    if (quranFontSizeScale === "large") return 1.12;
-    if (quranFontSizeScale === "extraLarge") return 1.25;
-    return 1.0;
-  }, [quranFontSizeScale]);
+  const textMultiplier = FONT_SCALE_MULTIPLIER[fontSizeScale] ?? 1.0;
+  const quranMultiplier = FONT_SCALE_MULTIPLIER[quranFontSizeScale] ?? 1.0;
 
   const S = useMemo(
     () => createStyles(colors),

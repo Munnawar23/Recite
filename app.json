@@ -53,7 +53,7 @@
         {
           "backgroundColor": "#F5F1EA",
           "image": "./assets/images/icons/icon.png",
-          "imageWidth": 120,
+          "imageWidth": 200,
           "resizeMode": "contain",
           "dark": {
             "backgroundColor": "#121415",

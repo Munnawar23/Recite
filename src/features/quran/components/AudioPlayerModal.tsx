@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   Dimensions,
   Modal,
@@ -16,44 +16,119 @@ import Animated from "react-native-reanimated";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 
 import { AppText } from "@/components";
+import {
+  AR_CHAPTER_NAMES,
+  CHAPTERS_METADATA,
+  getChapter,
+  getSurahName,
+} from "@/constants";
 import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
 import { Haptics } from "@/lib/haptics";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useLanguageStore } from "@/store/languageStore";
 import { type ThemeColors } from "@/theme";
+import { Chapter } from "@/types";
 import ChapterNumberBadge from "./ChapterNumberBadge";
 import { usePlayerModal } from "../hooks/usePlayerModal";
+import DownloadCard from "@/features/quran-detail/components/DownloadCard";
+import {
+  RECITER_OPTIONS,
+  useQuranAudio,
+} from "@/features/quran-detail/hooks/useQuranAudio";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 const ARTWORK_SIZE = Math.min(
   SCREEN_WIDTH - scale(80),
-  scale(240),
-  SCREEN_HEIGHT * 0.28,
+  scale(190),
+  SCREEN_HEIGHT * 0.22,
 );
 
 interface AudioPlayerModalProps {
   visible: boolean;
   onClose: () => void;
+  chapter?: Chapter | null;
+  onChapterChange?: (chapter: Chapter) => void;
 }
 
 export default function AudioPlayerModal({
   visible,
   onClose,
+  chapter,
+  onChapterChange,
 }: AudioPlayerModalProps) {
   const insets = useSafeAreaInsets();
   const { colors, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
+  const { t } = useTranslation();
+  const language = useLanguageStore((state) => state.language);
+
+  const currentChapterId = chapter?.id ?? 1;
+
+  const chapterMetadata = useMemo(() => {
+    return (
+      CHAPTERS_METADATA.find((m) => m.id === currentChapterId) ??
+      CHAPTERS_METADATA[0]
+    );
+  }, [currentChapterId]);
+
+  const localizedName = useMemo(() => {
+    return chapter?.localizedName || getSurahName(currentChapterId, language);
+  }, [chapter?.localizedName, currentChapterId, language]);
+
+  const arabicName = useMemo(() => {
+    return (
+      chapter?.name ||
+      AR_CHAPTER_NAMES[currentChapterId]?.name ||
+      "الفاتحة"
+    );
+  }, [chapter?.name, currentChapterId]);
+
+  const versesCount = chapter?.versesCount ?? chapterMetadata.versesCount;
+  const chapterType = chapter?.type ?? chapterMetadata.type;
+  const typeTranslationKey =
+    chapterType.toLowerCase() === "medinan" ? "quran.medinan" : "quran.meccan";
+
+  // Up Next Queue Calculation
+  const nextChapterId = currentChapterId < 114 ? currentChapterId + 1 : 1;
+  const nextSurahName = useMemo(() => {
+    return getSurahName(nextChapterId, language);
+  }, [nextChapterId, language]);
+
+  // Audio & Download integration
+  const { audioUrl, audioTotalBytes, isPlayingLocally, reciterId } =
+    useQuranAudio(currentChapterId, visible, {
+      localizedName,
+      arabicName,
+    });
+
+  const reciterName = useMemo(() => {
+    const activeReciter = RECITER_OPTIONS.find((r) => r.id === reciterId);
+    return activeReciter ? activeReciter.label : "Mishary Rashid Alafasy";
+  }, [reciterId]);
 
   const {
     closePlayer,
     panGesture,
     animatedSheetStyle,
     animatedBackdropStyle,
+    headerTitleAnimatedStyle,
+    trackContentAnimatedStyle,
+    animateTrackChange,
   } = usePlayerModal({
     visible,
     onClose,
   });
+
+  const handlePlayNext = useCallback(() => {
+    if (!onChapterChange) return;
+    animateTrackChange(() => {
+      const nextChapter = getChapter(nextChapterId, language);
+      onChapterChange(nextChapter);
+    });
+  }, [animateTrackChange, nextChapterId, language, onChapterChange]);
 
   const S = useMemo(
     () => createStyles(colors, insets.top, insets.bottom, isDark),
@@ -137,8 +212,8 @@ export default function AudioPlayerModal({
                 />
               </TouchableOpacity>
 
-              <View style={S.headerTitleContainer}>
-                <ChapterNumberBadge chapterNumber={1} size={scale(30)} />
+              <Animated.View style={[S.headerTitleContainer, headerTitleAnimatedStyle]}>
+                <ChapterNumberBadge chapterNumber={currentChapterId} size={scale(30)} />
                 <AppText
                   variant="bodyLg"
                   family="title"
@@ -146,18 +221,34 @@ export default function AudioPlayerModal({
                   numberOfLines={1}
                   style={S.headerSurahTitle}
                 >
-                  Al-Fatihah
+                  {localizedName}
                 </AppText>
-              </View>
+              </Animated.View>
 
               <View style={S.headerPlaceholder} />
             </View>
           </View>
 
+          {/* Download Card above Music Icon */}
+          <Animated.View style={[S.downloadCardContainer, trackContentAnimatedStyle]}>
+            <DownloadCard
+              chapterId={currentChapterId}
+              reciterName={reciterName}
+              audioUrl={audioUrl}
+              audioTotalBytes={audioTotalBytes}
+              isPlayingLocally={isPlayingLocally}
+              arabicName={arabicName}
+              localizedName={localizedName}
+              versesCount={String(versesCount)}
+              chapterType={chapterType}
+              containerStyle={S.downloadCard}
+            />
+          </Animated.View>
+
           {/* Middle Section: Music Artwork */}
           <GestureDetector gesture={panGesture}>
             <View style={S.middleSection}>
-              <View style={S.artworkShadow}>
+              <Animated.View style={[S.artworkShadow, trackContentAnimatedStyle]}>
                 <LinearGradient
                   colors={[colors.primary + "35", colors.card]}
                   style={S.artworkGradient}
@@ -168,14 +259,14 @@ export default function AudioPlayerModal({
                     color={colors.primary}
                   />
                 </LinearGradient>
-              </View>
+              </Animated.View>
             </View>
           </GestureDetector>
 
           {/* Bottom Section: Track Info, Slider & Controls */}
           <View style={S.bottomSection}>
             {/* Title & Metadata */}
-            <View style={S.trackInfoRow}>
+            <Animated.View style={[S.trackInfoRow, trackContentAnimatedStyle]}>
               <View style={S.trackTextGroup}>
                 <View style={S.surahTitleLine}>
                   <AppText
@@ -185,7 +276,7 @@ export default function AudioPlayerModal({
                     numberOfLines={1}
                     style={S.surahTitleText}
                   >
-                    Al-Fatihah
+                    {localizedName}
                   </AppText>
                   <View style={S.arabicBadge}>
                     <AppText
@@ -194,7 +285,7 @@ export default function AudioPlayerModal({
                       color="primary"
                       numberOfLines={1}
                     >
-                      الفاتحة
+                      {arabicName}
                     </AppText>
                   </View>
                 </View>
@@ -207,11 +298,11 @@ export default function AudioPlayerModal({
                       color={colors.subtext}
                     />
                     <AppText
-                      variant="caption"
+                      variant="body"
                       family="title"
                       color="subtext"
                     >
-                      7 Verses
+                      {t("quran.versesCount", { count: versesCount })}
                     </AppText>
                   </View>
 
@@ -222,17 +313,17 @@ export default function AudioPlayerModal({
                       color={colors.subtext}
                     />
                     <AppText
-                      variant="caption"
+                      variant="bodySm"
                       family="title"
                       color="subtext"
                       numberOfLines={1}
                     >
-                      Meccan
+                      {t(typeTranslationKey)}
                     </AppText>
                   </View>
                 </View>
               </View>
-            </View>
+            </Animated.View>
 
             {/* Slider & Time */}
             <View style={S.progressSection}>
@@ -355,10 +446,7 @@ export default function AudioPlayerModal({
             <TouchableOpacity
               style={S.upNextContainer}
               activeOpacity={0.8}
-              onPress={() => {
-                Haptics.light();
-                console.log("Play Next Chapter pressed");
-              }}
+              onPress={handlePlayNext}
             >
               <View style={S.upNextLeft}>
                 <View style={S.upNextBadge}>
@@ -375,7 +463,7 @@ export default function AudioPlayerModal({
                     color="subtext"
                     style={S.upNextLabel}
                   >
-                    UP NEXT IN QUEUE
+                    {t("quran.upNextInQueue", "UP NEXT IN QUEUE")}
                   </AppText>
                   <AppText
                     variant="body"
@@ -383,7 +471,7 @@ export default function AudioPlayerModal({
                     color="text"
                     numberOfLines={1}
                   >
-                    2. Al-Baqarah
+                    {`${nextChapterId}. ${nextSurahName}`}
                   </AppText>
                 </View>
               </View>
@@ -394,7 +482,7 @@ export default function AudioPlayerModal({
                   family="title"
                   style={S.upNextActionText}
                 >
-                  Play Next
+                  {t("quran.playNext", "Play Next")}
                 </AppText>
                 <Ionicons
                   name="chevron-forward"
@@ -499,6 +587,21 @@ const createStyles = (
     },
     headerSurahTitle: {
       textAlign: "center",
+    },
+    downloadCardContainer: {
+      width: "100%",
+      marginTop: verticalScale(10),
+      marginBottom: verticalScale(4),
+    },
+    downloadCard: {
+      marginTop: 0,
+      marginBottom: 0,
+      backgroundColor: isDark
+        ? "rgba(255, 255, 255, 0.05)"
+        : "rgba(255, 255, 255, 0.75)",
+      borderColor: isDark
+        ? "rgba(255, 255, 255, 0.08)"
+        : colors.border,
     },
     middleSection: {
       flex: 1,

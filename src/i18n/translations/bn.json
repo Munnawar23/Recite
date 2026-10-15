@@ -88,6 +88,8 @@
     "versesCount": "{{count}} টি আয়াত",
     "meccan": "মাক্কী",
     "medinan": "মাদানী",
+    "upNextInQueue": "পরবর্তী সূরা তালিকায়",
+    "playNext": "পরবর্তী চালান",
     "noResultsTitle": "কোনো সূরা পাওয়া যায়নি",
     "noResultsSubtitle": "অন্য কোনো নাম দিয়ে খোঁজার চেষ্টা করুন।",
     "errorMessage": "সূরার তালিকা লোড করা যায়নি। আবার চেষ্টা করুন।",

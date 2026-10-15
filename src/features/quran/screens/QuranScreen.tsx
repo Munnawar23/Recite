@@ -124,22 +124,18 @@ export default function QuranScreen() {
     [refreshing, onRefresh, colors.primary],
   );
 
-  const renderListHeader = useCallback(
-    () => (
-      <>
-        {activeTab === "read" && lastRead ? (
-          <ContinueReadingCard
-            surahName={localizedLastReadName}
-            verseNumber={lastRead.verseNumber}
-            onPress={handleContinueReading}
-          />
-        ) : (
-          <View style={styles.topSpacer} />
-        )}
-      </>
-    ),
-    [activeTab, lastRead, localizedLastReadName, handleContinueReading, styles],
-  );
+  const renderListHeader = useCallback(() => {
+    if (activeTab === "read" && lastRead) {
+      return (
+        <ContinueReadingCard
+          surahName={localizedLastReadName}
+          verseNumber={lastRead.verseNumber}
+          onPress={handleContinueReading}
+        />
+      );
+    }
+    return null;
+  }, [activeTab, lastRead, localizedLastReadName, handleContinueReading]);
 
   const renderListEmpty = useCallback(() => {
     return (
@@ -193,6 +189,8 @@ export default function QuranScreen() {
       <AudioPlayerModal
         visible={isPlayerModalVisible}
         onClose={handleClosePlayerModal}
+        chapter={selectedChapter}
+        onChapterChange={setSelectedChapter}
       />
     </View>
   );
@@ -211,13 +209,11 @@ const createStyles = (spacing: ThemeSpacing) =>
     },
     searchBarContainer: {
       marginTop: 0,
+      marginBottom: spacing.vMd,
     },
     listContent: {
       flexGrow: 1,
       paddingTop: 0,
       paddingBottom: spacing.vLg,
-    },
-    topSpacer: {
-      height: spacing.vMd,
     },
   });

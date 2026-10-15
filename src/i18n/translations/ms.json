@@ -88,6 +88,8 @@
     "versesCount": "{{count}} AYAT",
     "meccan": "MAKKIYYAH",
     "medinan": "MADANIYYAH",
+    "upNextInQueue": "SETERUSNYA DALAM GILIRAN",
+    "playNext": "Mainkan Seterusnya",
     "noResultsTitle": "Surah Tidak Ditemui",
     "noResultsSubtitle": "Cuba cari menggunakan perkataan lain.",
     "errorMessage": "Gagal memuatkan senarai surah. Ketik untuk cuba lagi.",

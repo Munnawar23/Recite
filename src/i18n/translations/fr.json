@@ -89,6 +89,8 @@
     "versesCount": "{{count}} VERSETS",
     "meccan": "MECQUOISE",
     "medinan": "MÉDINOISE",
+    "upNextInQueue": "SUIVANT DANS LA FILE",
+    "playNext": "Écouter la suite",
     "noResultsTitle": "Aucune sourate trouvée",
     "noResultsSubtitle": "Essayez de chercher avec un autre mot-clé.",
     "errorMessage": "Impossible de charger les sourates. Touchez pour réessayer.",

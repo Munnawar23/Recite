@@ -89,6 +89,8 @@
     "versesCount": "{{count}} AYET",
     "meccan": "MEKKİ",
     "medinan": "MEDENİ",
+    "upNextInQueue": "SIRADAKİ SURE",
+    "playNext": "Sıradakini Çal",
     "noResultsTitle": "Sure Bulunamadı",
     "noResultsSubtitle": "Farklı bir kelime ile aramayı deneyin.",
     "errorMessage": "Sureler yüklenemedi. Tekrar denemek için dokunun.",

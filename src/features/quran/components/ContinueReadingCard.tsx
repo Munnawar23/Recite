@@ -98,7 +98,6 @@ const createStyles = (
   StyleSheet.create({
     cardWrapper: {
       paddingHorizontal: spacing.screenPadding,
-      marginTop: spacing.cardMarginTop,
       marginBottom: spacing.vMd,
     },
     card: {

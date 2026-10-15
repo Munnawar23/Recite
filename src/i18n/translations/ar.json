@@ -88,6 +88,8 @@
     "versesCount": "{{count}} آية",
     "meccan": "مكية",
     "medinan": "مدنية",
+    "upNextInQueue": "التالي في قائمة التشغيل",
+    "playNext": "تشغيل التالي",
     "noResultsTitle": "لم يتم العثور على نتائج",
     "noResultsSubtitle": "جرب البحث باسم سورة آخر.",
     "errorMessage": "تعذر تحميل السور. اضغط للمحاولة مرة أخرى.",

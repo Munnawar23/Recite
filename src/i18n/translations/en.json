@@ -88,6 +88,8 @@
     "versesCount": "{{count}} VERSES",
     "meccan": "MECCAN",
     "medinan": "MEDINAN",
+    "upNextInQueue": "UP NEXT IN QUEUE",
+    "playNext": "Play Next",
     "noResultsTitle": "No Surahs Found",
     "noResultsSubtitle": "Try searching with a different keyword.",
     "errorMessage": "Failed to load Quran chapters. Tap to try again.",

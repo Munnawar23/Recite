@@ -88,6 +88,8 @@
     "versesCount": "{{count}} आयतें",
     "meccan": "मक्की",
     "medinan": "मदनी",
+    "upNextInQueue": "कतार में अगली सूरह",
+    "playNext": "अगली चलाएं",
     "noResultsTitle": "कोई सूरह नहीं मिली",
     "noResultsSubtitle": "किसी दूसरे नाम से खोज कर देखें।",
     "errorMessage": "सूरह की लिस्ट लोड नहीं हो सकी। दोबारा कोशिश करें।",

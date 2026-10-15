@@ -89,6 +89,8 @@
     "versesCount": "{{count}} آیه",
     "meccan": "مکی",
     "medinan": "مدنی",
+    "upNextInQueue": "سوره بعدی در صف",
+    "playNext": "پخش بعدی",
     "noResultsTitle": "سوره‌ای پیدا نشد",
     "noResultsSubtitle": "با کلمه دیگری جستجو کنید.",
     "errorMessage": "بارگذاری سوره‌ها ناموفق بود. برای تلاش دوباره ضربه بزنید.",

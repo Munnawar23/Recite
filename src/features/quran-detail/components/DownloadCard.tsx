@@ -1,9 +1,12 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
+  ActivityIndicator,
   Pressable,
+  StyleProp,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Svg, { Circle } from "react-native-svg";
@@ -32,6 +35,7 @@ interface DownloadCardProps {
   localizedTranslation?: string;
   versesCount?: string;
   chapterType?: string;
+  containerStyle?: StyleProp<ViewStyle>;
 }
 
 type ThemeColors = ReturnType<typeof useAppTheme>["colors"];
@@ -117,6 +121,7 @@ function DownloadCard({
   localizedTranslation,
   versesCount,
   chapterType,
+  containerStyle,
 }: DownloadCardProps) {
   const { t } = useTranslation();
   const { colors, activeScheme } = useAppTheme();
@@ -281,7 +286,7 @@ function DownloadCard({
     if (totalBytes > 0) {
       return `${totalMB} MB`;
     }
-    return t("quran.downloadCard.ready", "Audio & Text");
+    return null;
   }, [
     isDownloaded,
     storedTotalMB,
@@ -293,7 +298,7 @@ function DownloadCard({
   ]);
 
   return (
-    <View style={S.container}>
+    <View style={[S.container, containerStyle]}>
       <View style={S.cardContent}>
         {/* Left Icon */}
         <View style={[S.squircle, { backgroundColor: colors.primary + "20" }]}>
@@ -329,9 +334,15 @@ function DownloadCard({
               {titleText}
             </AppText>
           )}
-          <AppText variant="body" color="subtext" numberOfLines={1} style={S.subtitle}>
-            {subtitleText}
-          </AppText>
+          {subtitleText ? (
+            <AppText variant="body" color="subtext" numberOfLines={1} style={S.subtitle}>
+              {subtitleText}
+            </AppText>
+          ) : (
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: rs.space(4) }}>
+              <ActivityIndicator size="small" color={colors.primary} />
+            </View>
+          )}
         </View>
 
         {/* Right Action */}

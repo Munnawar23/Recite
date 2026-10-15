@@ -3,7 +3,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import Svg, { Path } from "react-native-svg";
 
 import { AppText } from "@/components";
 import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
@@ -11,6 +10,7 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { type ThemeColors, type ThemeSpacing } from "@/theme";
 import { Chapter as QuranItem } from "@/types";
+import ChapterNumberBadge from "./ChapterNumberBadge";
 
 interface QuranCardProps {
   item: QuranItem;
@@ -65,31 +65,7 @@ function QuranCard({ item, onPress }: QuranCardProps) {
 
         <View style={S.leftSection}>
           {/* 8-Pointed Islamic Star Number Badge */}
-          <View style={S.numberBadge}>
-            <Svg
-              width={scale(36)}
-              height={scale(36)}
-              viewBox="0 0 36 36"
-              style={StyleSheet.absoluteFill}
-            >
-              <Path
-                d="M 18 3 L 22.02 8.30 L 28.61 7.39 L 27.70 13.98 L 33 18 L 27.70 22.02 L 28.61 28.61 L 22.02 27.70 L 18 33 L 13.98 27.70 L 7.39 28.61 L 8.30 22.02 L 3 18 L 8.30 13.98 L 7.39 7.39 L 13.98 8.30 Z"
-                fill={colors.primary + "15"}
-                stroke={colors.primary + "90"}
-                strokeWidth="1"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-              />
-            </Svg>
-            <AppText
-              variant="caption"
-              family="title"
-              fontWeight="700"
-              color="primary"
-            >
-              {item.id}
-            </AppText>
-          </View>
+          <ChapterNumberBadge chapterNumber={item.id} />
 
           {/* Names & Translation */}
           <View style={S.infoContainer}>
@@ -191,14 +167,6 @@ const createStyles = (
       gap: scale(12),
       zIndex: 1,
       marginRight: scale(6),
-    },
-    numberBadge: {
-      width: scale(36),
-      height: scale(36),
-      alignItems: "center",
-      justifyContent: "center",
-      flexShrink: 0,
-      position: "relative",
     },
     infoContainer: {
       flex: 1,

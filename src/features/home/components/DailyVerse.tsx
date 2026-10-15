@@ -36,10 +36,9 @@ export default function DailyVerse() {
   // Extract verse key e.g. "94:6" — works for both "Surah 94:6" and "Surah Ash-Sharh · 94:6"
   const verseKey = currentVerse.source.match(/(\d+:\d+)/)?.[1] ?? "";
   const chapterId = verseKey ? parseInt(verseKey.split(":")[0], 10) : undefined;
-  const surahPrefix = t("common.surah", "Surah");
   const localizedSurahName = chapterId ? getSurahName(chapterId, language) : "";
   const displaySource = localizedSurahName && verseKey
-    ? `${surahPrefix} ${localizedSurahName} · ${verseKey}`
+    ? `${localizedSurahName} · ${verseKey}`
     : currentVerse.source;
 
   return (
@@ -114,7 +113,7 @@ export default function DailyVerse() {
             <View style={S.sourceBadge}>
               <Ionicons name="book" size={rs.icon(10)} color={colors.accent} />
               <AppText
-                variant="caption"
+                variant="bodySm"
                 color="accent"
                 semiBold
                 letterSpacing={0.4}

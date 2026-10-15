@@ -1,10 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getRandomVerse } from "@/lib/api";
+import {
+  getRandomVerseWithAllTranslations,
+  type DailyVerseMultiLang,
+} from "@/lib/api";
 import { appStorage } from "@/lib/storage/appStorage";
 import { useLanguageStore } from "@/store/languageStore";
 
-const STORAGE_KEY_PREFIX = "daily_verse_data_";
+const STORAGE_KEY = "daily_verse_today";
 
 export const STATIC_VERSE = {
   arabic: "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
@@ -18,42 +21,65 @@ interface DailyVerse {
   source: string;
 }
 
-interface DailyVerseData {
-  verse: DailyVerse;
+interface StoredDailyVerseData extends DailyVerseMultiLang {
   date: string; // YYYY-MM-DD
 }
 
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
+function getLocalDateString(): string {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export function useDailyVerse() {
   const language = useLanguageStore((state) => state.language);
-  const storageKey = `${STORAGE_KEY_PREFIX}${language}`;
+  const today = getLocalDateString();
 
   return useQuery({
-    queryKey: ["dailyVerse", language],
+    queryKey: ["dailyVerse", language, today],
 
-    queryFn: async (): Promise<DailyVerse | null> => {
-      const today = new Date().toISOString().split("T")[0];
-
+    queryFn: async (): Promise<DailyVerse> => {
       try {
-        const cached = await appStorage.getItem<DailyVerseData>(storageKey);
+        const cached = await appStorage.getItem<StoredDailyVerseData>(STORAGE_KEY);
 
-        if (cached?.date === today) {
-          return cached.verse;
+        if (cached?.date === today && cached.translations) {
+          const translation =
+            cached.translations[language] ||
+            cached.translations.en ||
+            STATIC_VERSE.translation;
+
+          return {
+            arabic: cached.arabic,
+            translation,
+            source: cached.source,
+          };
         }
       } catch (error) {
         console.error("Failed to read daily verse from storage:", error);
       }
 
       try {
-        const verse = await getRandomVerse(language);
+        const multiLangVerse = await getRandomVerseWithAllTranslations();
 
-        await appStorage.setItem(storageKey, {
-          verse,
+        await appStorage.setItem(STORAGE_KEY, {
+          ...multiLangVerse,
           date: today,
         });
 
-        return verse;
+        const translation =
+          multiLangVerse.translations[language] ||
+          multiLangVerse.translations.en ||
+          STATIC_VERSE.translation;
+
+        return {
+          arabic: multiLangVerse.arabic,
+          translation,
+          source: multiLangVerse.source,
+        };
       } catch (error) {
         console.error(
           "Failed to fetch daily verse, falling back to cached or static verse:",
@@ -63,9 +89,18 @@ export function useDailyVerse() {
         // Fallback to last cached verse if offline on a new day
         try {
           const lastCached =
-            await appStorage.getItem<DailyVerseData>(storageKey);
-          if (lastCached?.verse) {
-            return lastCached.verse;
+            await appStorage.getItem<StoredDailyVerseData>(STORAGE_KEY);
+          if (lastCached?.arabic) {
+            const translation =
+              lastCached.translations?.[language] ||
+              lastCached.translations?.en ||
+              STATIC_VERSE.translation;
+
+            return {
+              arabic: lastCached.arabic,
+              translation,
+              source: lastCached.source,
+            };
           }
         } catch (e) {
           // Ignore cache read error

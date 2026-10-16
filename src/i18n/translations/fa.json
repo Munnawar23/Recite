@@ -56,7 +56,8 @@
     "sectionTitles": {
       "prayerTimes": "اوقات شرعی",
       "dailyVerse": "آیه روز",
-      "continueReading": "ادامه خواندن"
+      "continueReading": "ادامه خواندن",
+      "explore": "کاوش"
     },
     "prayerNames": {
       "fajr": "صبح",
@@ -78,6 +79,16 @@
       "title": "قرائت قرآن را آغاز کنید",
       "subtitle": "با خواندن قرآن، آخرین صفحه مطالعه شما در اینجا نمایش داده می‌شود.",
       "buttonLabel": "باز کردن قرآن"
+    },
+    "explore": {
+      "qibla": {
+        "title": "قبله",
+        "subtitle": "جهت قبله و کعبه را پیدا کنید"
+      },
+      "quranAudio": {
+        "title": "صوت قرآن",
+        "subtitle": "به قرآن کریم گوش فرا دهید"
+      }
     }
   },
   "quran": {

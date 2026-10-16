@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
-import { AppText } from "@/components";
+import { AppText } from "../ui/AppText";
 import { scale } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 

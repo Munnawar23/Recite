@@ -55,7 +55,8 @@
     "sectionTitles": {
       "prayerTimes": "مواقيت الصلاة",
       "dailyVerse": "آية اليوم",
-      "continueReading": "متابعة القراءة"
+      "continueReading": "متابعة القراءة",
+      "explore": "استكشف"
     },
     "prayerNames": {
       "fajr": "الفجر",
@@ -77,6 +78,16 @@
       "title": "ابدأ رحلتك",
       "subtitle": "افتح المصحف وسيظهر تقدمك في القراءة هنا.",
       "buttonLabel": "فتح المصحف"
+    },
+    "explore": {
+      "qibla": {
+        "title": "القبلة",
+        "subtitle": "حدد اتجاه الكعبة المشرفة"
+      },
+      "quranAudio": {
+        "title": "تلاوات القرآن",
+        "subtitle": "استمع إلى القرآن الكريم"
+      }
     }
   },
   "quran": {

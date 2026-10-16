@@ -56,7 +56,8 @@
     "sectionTitles": {
       "prayerTimes": "Namaz Vakitleri",
       "dailyVerse": "Günün Ayeti",
-      "continueReading": "Okumaya Devam Et"
+      "continueReading": "Okumaya Devam Et",
+      "explore": "Keşfet"
     },
     "prayerNames": {
       "fajr": "İmsak",
@@ -78,6 +79,16 @@
       "title": "Kuran okumaya başlayın",
       "subtitle": "Kuran okudukça kaldığınız yer burada görünecek.",
       "buttonLabel": "Kuran'ı Aç"
+    },
+    "explore": {
+      "qibla": {
+        "title": "Kıble",
+        "subtitle": "Kâbe yönünü bulun"
+      },
+      "quranAudio": {
+        "title": "Kur'an Sesi",
+        "subtitle": "Yüce Kur'an-ı Kerim'i dinleyin"
+      }
     }
   },
   "quran": {

@@ -33,10 +33,8 @@ import { Haptics } from "@/lib/haptics";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLanguageStore } from "@/store/languageStore";
 import { type ThemeColors } from "@/theme";
-import { Chapter } from "@/types";
-import ChapterNumberBadge from "./ChapterNumberBadge";
+import ChapterNumberBadge from "@/components/common/ChapterNumberBadge";
 import { usePlayerModal } from "../hooks/usePlayerModal";
-import DownloadCard from "@/features/quran-detail/components/DownloadCard";
 import { useSurahCdnAudio } from "../hooks/useSurahCdnAudio";
 import { formatTime } from "@/features/quran-detail/hooks/useAudioPlayer";
 
@@ -126,9 +124,6 @@ export default function AudioPlayerModal({
 
   // Islamic Network CDN Audio integration
   const {
-    audioUrl,
-    remoteAudioUrl,
-    isPlayingLocally,
     isLoading,
     isPlaying,
     currentTime,
@@ -250,22 +245,6 @@ export default function AudioPlayerModal({
               <View style={S.headerPlaceholder} />
             </View>
           </View>
-
-          {/* Download Card above Music Icon */}
-          <Animated.View style={[S.downloadCardContainer, trackContentAnimatedStyle]}>
-            <DownloadCard
-              chapterId={currentChapterId}
-              reciterName="Mishary Rashid Alafasy"
-              audioUrl={remoteAudioUrl}
-              duration={duration}
-              isPlayingLocally={isPlayingLocally}
-              arabicName={arabicName}
-              localizedName={localizedName}
-              versesCount={String(versesCount)}
-              chapterType={chapterType}
-              containerStyle={S.downloadCard}
-            />
-          </Animated.View>
 
           {/* Middle Section: Music Artwork */}
           <GestureDetector gesture={panGesture}>
@@ -621,21 +600,6 @@ const createStyles = (
     },
     headerSurahTitle: {
       textAlign: "center",
-    },
-    downloadCardContainer: {
-      width: "100%",
-      marginTop: verticalScale(10),
-      marginBottom: verticalScale(4),
-    },
-    downloadCard: {
-      marginTop: 0,
-      marginBottom: 0,
-      backgroundColor: isDark
-        ? "rgba(255, 255, 255, 0.05)"
-        : "rgba(255, 255, 255, 0.75)",
-      borderColor: isDark
-        ? "rgba(255, 255, 255, 0.08)"
-        : colors.border,
     },
     middleSection: {
       flex: 1,

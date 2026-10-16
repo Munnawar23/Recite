@@ -8,9 +8,6 @@ import {
 import { getSurahCdnAudioUrl } from "@/lib/api/surah-cdn-audio";
 import { useBackgroundPlay } from "@/hooks/useBackgroundPlay";
 import { Haptics } from "@/lib/haptics";
-import { getLocalAudioPath } from "@/services/downloadService";
-import { useDownloadsStore } from "@/store/downloadsStore";
-import { useAudioProgressStore } from "@/store/audioProgressStore";
 
 export interface UseSurahCdnAudioOptions {
   chapterId: number;
@@ -27,27 +24,11 @@ export function useSurahCdnAudio({
   arabicName,
   onPlayNext,
 }: UseSurahCdnAudioOptions) {
-  const { saveProgress, getProgress, clearProgress } = useAudioProgressStore();
-
-  // Check if downloaded locally
-  const isDownloaded = useDownloadsStore(
-    (s) => chapterId != null && s.isDownloaded(chapterId),
-  );
-
-  // 1. Audio source URLs
-  const remoteAudioUrl = useMemo(() => {
+  // 1. Audio source URL
+  const audioUrl = useMemo(() => {
     if (!chapterId || chapterId < 1 || chapterId > 114) return null;
     return getSurahCdnAudioUrl(chapterId);
   }, [chapterId]);
-
-  const localUri = useMemo(() => {
-    if (enabled && isDownloaded && chapterId) {
-      return getLocalAudioPath(chapterId);
-    }
-    return null;
-  }, [enabled, isDownloaded, chapterId]);
-
-  const audioUrl = localUri ?? remoteAudioUrl;
 
   // 2. Initialize expo-audio player
   const player = useAudioPlayer(
@@ -55,7 +36,7 @@ export function useSurahCdnAudio({
   );
   const status = useAudioPlayerStatus(player);
 
-  // Minimal UI state (no slider sync re-render spam)
+  // Minimal UI state
   const [sliderValue, setSliderValue] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
@@ -65,29 +46,6 @@ export function useSurahCdnAudio({
   // Tracking refs
   const loadedAudioUrlRef = useRef<string | null>(null);
   const wasEnabledRef = useRef<boolean>(false);
-  const hasRestoredProgressRef = useRef<boolean>(false);
-  const lastKnownPosRef = useRef<number>(0);
-
-  // Synchronously capture highest non-zero playback time on every render
-  const currentPos = player?.currentTime || status?.currentTime || 0;
-  if (currentPos > 0) {
-    lastKnownPosRef.current = currentPos;
-  }
-
-  // Reliable instant save helper
-  const saveCurrentProgress = useCallback(() => {
-    const pos =
-      (player?.currentTime && player.currentTime > 0
-        ? player.currentTime
-        : 0) ||
-      lastKnownPosRef.current ||
-      status?.currentTime ||
-      0;
-    const dur = player?.duration || status?.duration || 0;
-    if (chapterId && pos > 0) {
-      saveProgress(chapterId, pos, dur);
-    }
-  }, [chapterId, player, status?.currentTime, status?.duration, saveProgress]);
 
   // Effect 1: Track switching and auto-play on modal open
   useEffect(() => {
@@ -108,62 +66,29 @@ export function useSurahCdnAudio({
 
     // New track selected
     loadedAudioUrlRef.current = audioUrl;
-    hasRestoredProgressRef.current = false;
-    lastKnownPosRef.current = 0;
     setIsChangingTrack(true);
     player.replace({ uri: audioUrl });
     player.play();
   }, [enabled, audioUrl, player]);
 
-  // Effect 2: Restore progress once duration becomes available
+  // Effect 2: Clear track loading once duration becomes available
   useEffect(() => {
     const dur = status?.duration ?? 0;
     if (dur > 0 && !status?.isBuffering) {
       setIsChangingTrack(false);
-
-      if (!hasRestoredProgressRef.current && player) {
-        hasRestoredProgressRef.current = true;
-        const saved = getProgress(chapterId);
-        if (saved > 2 && saved < dur - 3) {
-          player.seekTo(saved);
-          lastKnownPosRef.current = saved;
-        }
-      }
     }
-  }, [status?.duration, status?.isBuffering, player, chapterId, getProgress]);
+  }, [status?.duration, status?.isBuffering]);
 
-  // Effect 3: Throttled periodic save (runs once every 3s ONLY while playing, ZERO re-renders)
-  useEffect(() => {
-    if (!enabled || !status?.playing) return;
-
-    const interval = setInterval(() => {
-      const pos = player?.currentTime || lastKnownPosRef.current || 0;
-      const dur = player?.duration || 0;
-      if (pos > 0) {
-        saveProgress(chapterId, pos, dur);
-      }
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [enabled, status?.playing, chapterId, player, saveProgress]);
-
-  // Effect 4: Immediate save when modal closes or unmounts
+  // Effect 3: Stop when modal closes
   useEffect(() => {
     if (!enabled) {
-      saveCurrentProgress();
       if (player && status?.playing) {
         player.pause();
       }
     }
-  }, [enabled, saveCurrentProgress, player, status?.playing]);
+  }, [enabled, player, status?.playing]);
 
-  useEffect(() => {
-    return () => {
-      saveCurrentProgress();
-    };
-  }, [saveCurrentProgress]);
-
-  // Effect 5: Reset progress on track finish and play next
+  // Effect 4: Play next on track completion
   useEffect(() => {
     if (
       status?.duration &&
@@ -171,8 +96,6 @@ export function useSurahCdnAudio({
       (status.playbackState === "completed" ||
         (status.currentTime >= status.duration - 0.5 && status.duration > 5))
     ) {
-      clearProgress(chapterId);
-      lastKnownPosRef.current = 0;
       if (!isRepeating && onPlayNext) {
         onPlayNext();
       }
@@ -183,8 +106,6 @@ export function useSurahCdnAudio({
     status?.duration,
     isRepeating,
     onPlayNext,
-    chapterId,
-    clearProgress,
   ]);
 
   // Combined loading state
@@ -201,23 +122,19 @@ export function useSurahCdnAudio({
     Haptics.light();
     if (!player) return;
     if (status?.playing) {
-      saveCurrentProgress();
       player.pause();
     } else {
       player.play();
     }
-  }, [player, status?.playing, saveCurrentProgress]);
+  }, [player, status?.playing]);
 
   const handleSkipBack = useCallback(() => {
     Haptics.light();
     if (!player) return;
     const current = player.currentTime || status?.currentTime || 0;
-    const dur = player.duration || status?.duration || 0;
     const target = Math.max(0, current - 10);
     player.seekTo(target);
-    lastKnownPosRef.current = target;
-    saveProgress(chapterId, target, dur);
-  }, [player, status?.currentTime, status?.duration, chapterId, saveProgress]);
+  }, [player, status?.currentTime]);
 
   const handleSkipForward = useCallback(() => {
     Haptics.light();
@@ -226,9 +143,7 @@ export function useSurahCdnAudio({
     const dur = player.duration || status?.duration || 0;
     const target = Math.min(dur, current + 10);
     player.seekTo(target);
-    lastKnownPosRef.current = target;
-    saveProgress(chapterId, target, dur);
-  }, [player, status?.currentTime, status?.duration, chapterId, saveProgress]);
+  }, [player, status?.currentTime, status?.duration]);
 
   const cycleSpeed = useCallback(() => {
     Haptics.light();
@@ -263,11 +178,9 @@ export function useSurahCdnAudio({
   const handleSlidingComplete = useCallback(
     (val: number) => {
       player?.seekTo(val);
-      lastKnownPosRef.current = val;
       setIsDragging(false);
-      saveProgress(chapterId, val, player?.duration || status?.duration || 0);
     },
-    [player, status?.duration, chapterId, saveProgress],
+    [player],
   );
 
   // Background Lock Screen Audio
@@ -292,23 +205,14 @@ export function useSurahCdnAudio({
     enabled,
   });
 
-  // Display initial saved position before player status loads
-  const savedPos = getProgress(chapterId);
-  const displayCurrentTime =
-    !hasRestoredProgressRef.current && savedPos > 2
-      ? savedPos
-      : status?.currentTime || 0;
-
   return {
     player,
     status,
     audioUrl,
-    remoteAudioUrl,
-    isDownloaded,
-    isPlayingLocally: !!localUri,
+    remoteAudioUrl: audioUrl,
     isLoading,
     isPlaying: !!status?.playing,
-    currentTime: displayCurrentTime,
+    currentTime: status?.currentTime || 0,
     duration: status?.duration || 0,
     sliderValue,
     isDragging,

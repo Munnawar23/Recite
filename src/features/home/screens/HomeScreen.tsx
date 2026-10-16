@@ -16,6 +16,7 @@ import { useReadingProgressStore } from "@/store/readingProgressStore";
 import { type ThemeSpacing } from "@/theme";
 import DailyVerse from "../components/DailyVerse";
 import HijriCard from "../components/HijriCard";
+import ExploreCard from "../components/ExploreCard";
 
 const animation = (delay: number) =>
   FadeInDown.duration(350).delay(Math.min(delay * 0.3, 120));
@@ -101,6 +102,42 @@ export default function HomeScreen() {
           <PrayerTimes />
         </Animated.View>
 
+        {/* Explore */}
+        <Animated.View entering={animation(350)}>
+          <SectionTitle
+            label={t("home.sectionTitles.explore", "Explore")}
+            icon="star-outline"
+          />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.exploreScrollContent}
+          >
+                <ExploreCard
+              title={t("home.explore.quranAudio.title", "Quran Audio")}
+              subtitle={t(
+                "home.explore.quranAudio.subtitle",
+                "Listen to the Holy Quran",
+              )}
+              icon="headset-outline"
+              watermarkIcon="quran"
+              watermarkFamily="FontAwesome5"
+              onPress={() => router.push("/quran-audio")}
+            />
+            <ExploreCard
+              title={t("home.explore.qibla.title", "Qibla")}
+              subtitle={t(
+                "home.explore.qibla.subtitle",
+                "Find the direction of the Kaaba",
+              )}
+              icon="compass-outline"
+              watermarkIcon="kaaba"
+              watermarkFamily="FontAwesome5"
+              onPress={() => router.push("/(tabs)/qibla")}
+            />
+          </ScrollView>
+        </Animated.View>
+
         {/* Daily Verse */}
         <Animated.View entering={animation(400)}>
           <SectionTitle
@@ -169,5 +206,9 @@ const createStyles = (spacing: ThemeSpacing) =>
     },
     scrollContent: {
       paddingBottom: spacing.vLg,
+    },
+    exploreScrollContent: {
+      paddingHorizontal: spacing.screenPadding,
+      gap: spacing.sm,
     },
   });

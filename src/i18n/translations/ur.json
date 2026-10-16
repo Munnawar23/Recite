@@ -55,7 +55,8 @@
     "sectionTitles": {
       "prayerTimes": "نماز کے اوقات",
       "dailyVerse": "آج کی آیت",
-      "continueReading": "تلاوت جاری رکھیں"
+      "continueReading": "تلاوت جاری رکھیں",
+      "explore": "دریافت کریں"
     },
     "prayerNames": {
       "fajr": "فجر",
@@ -77,6 +78,16 @@
       "title": "پڑھنا شروع کریں",
       "subtitle": "قرآن کھولیں، آپ جہاں تک پڑھیں گے وہ پیش رفت یہاں محفوظ رہے گی۔",
       "buttonLabel": "قرآن کھولیں"
+    },
+    "explore": {
+      "qibla": {
+        "title": "قبلہ",
+        "subtitle": "قبلہ رخ اور کعبہ کی سمت معلوم کریں"
+      },
+      "quranAudio": {
+        "title": "قرآن آڈیو",
+        "subtitle": "قرآن پاک کی تلاوت سنیں"
+      }
     }
   },
   "quran": {

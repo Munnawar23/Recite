@@ -92,6 +92,7 @@ export default function RootLayout() {
                 <Stack.Screen name="(tabs)" />
                 <Stack.Screen name="onboarding" />
                 <Stack.Screen name="quran-detail/[id]" />
+                <Stack.Screen name="quran-audio" />
                 <Stack.Screen name="settings/display" />
                 <Stack.Screen name="settings/languages" />
               </Stack>

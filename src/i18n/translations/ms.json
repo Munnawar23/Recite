@@ -55,7 +55,8 @@
     "sectionTitles": {
       "prayerTimes": "Waktu Solat",
       "dailyVerse": "Ayat Hari Ini",
-      "continueReading": "Sambung Membaca"
+      "continueReading": "Sambung Membaca",
+      "explore": "Terokai"
     },
     "prayerNames": {
       "fajr": "Subuh",
@@ -77,6 +78,16 @@
       "title": "Mulakan Sekarang",
       "subtitle": "Buka Al-Quran dan kemajuan bacaan anda akan tersimpan di sini.",
       "buttonLabel": "Buka Al-Quran"
+    },
+    "explore": {
+      "qibla": {
+        "title": "Kiblat",
+        "subtitle": "Cari arah kiblat Kaabah"
+      },
+      "quranAudio": {
+        "title": "Audio Al-Quran",
+        "subtitle": "Dengar bacaan Al-Quran"
+      }
     }
   },
   "quran": {

@@ -55,7 +55,8 @@
     "sectionTitles": {
       "prayerTimes": "Prayer Times",
       "dailyVerse": "Daily Verse",
-      "continueReading": "Continue Reading"
+      "continueReading": "Continue Reading",
+      "explore": "Explore"
     },
     "prayerNames": {
       "fajr": "Fajr",
@@ -77,6 +78,16 @@
       "title": "Start your journey",
       "subtitle": "Open the Quran and your reading progress will appear here.",
       "buttonLabel": "Open Quran"
+    },
+    "explore": {
+      "qibla": {
+        "title": "Qibla",
+        "subtitle": "Find the direction of the Kaaba"
+      },
+      "quranAudio": {
+        "title": "Quran Audio",
+        "subtitle": "Listen to the Holy Quran"
+      }
     }
   },
   "quran": {

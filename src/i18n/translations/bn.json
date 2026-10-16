@@ -55,7 +55,8 @@
     "sectionTitles": {
       "prayerTimes": "নামাজের সময়",
       "dailyVerse": "আজকের আয়াত",
-      "continueReading": "পড়া চালিয়ে যান"
+      "continueReading": "পড়া চালিয়ে যান",
+      "explore": "অন্বেষণ"
     },
     "prayerNames": {
       "fajr": "ফজর",
@@ -77,6 +78,16 @@
       "title": "পড়া শুরু করুন",
       "subtitle": "কুরআন খুলুন, আপনার পড়ার অগ্রগতি এখানে জমা থাকবে।",
       "buttonLabel": "কুরআন খুলুন"
+    },
+    "explore": {
+      "qibla": {
+        "title": "কিবলা",
+        "subtitle": "কাবার দিক খুঁজুন"
+      },
+      "quranAudio": {
+        "title": "কুরআন অডিও",
+        "subtitle": "পবিত্র কুরআন তেলাওয়াত শুনুন"
+      }
     }
   },
   "quran": {

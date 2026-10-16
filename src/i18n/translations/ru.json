@@ -55,7 +55,8 @@
     "sectionTitles": {
       "prayerTimes": "Время намаза",
       "dailyVerse": "Аят дня",
-      "continueReading": "Продолжить чтение"
+      "continueReading": "Продолжить чтение",
+      "explore": "Обзор"
     },
     "prayerNames": {
       "fajr": "Фаджр",
@@ -77,6 +78,16 @@
       "title": "Начните чтение",
       "subtitle": "Откройте Коран, и ваш прогресс чтения сохранится здесь.",
       "buttonLabel": "Открыть Коран"
+    },
+    "explore": {
+      "qibla": {
+        "title": "Кибла",
+        "subtitle": "Определите направление на Каабу"
+      },
+      "quranAudio": {
+        "title": "Аудио Корана",
+        "subtitle": "Слушайте Священный Коран"
+      }
     }
   },
   "quran": {

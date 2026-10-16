@@ -1,14 +1,17 @@
-import { AppText } from "@/components";
-import { getSurahName } from "@/constants";
+import { AppText, CommonModal } from "@/components";
+import { DEFAULT_RECITER_ID, RECITER_OPTIONS, getSurahName } from "@/constants";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppSafeAreaInsets } from "@/hooks/useAppSafeAreaInsets";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { useLanguageStore } from "@/store/languageStore";
+import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Platform,
   StyleSheet,
@@ -34,9 +37,34 @@ function DetailHeader({
   type,
 }: DetailHeaderProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const { colors, activeScheme } = useAppTheme();
   const { paddingTop } = useAppSafeAreaInsets();
   const language = useLanguageStore((state) => state.language);
+  const [isReciterModalVisible, setIsReciterModalVisible] = useState(false);
+
+  // Reciter settings
+  const reciterId = useQuranSettingsStore((state) => state.reciterId);
+  const setReciterId = useQuranSettingsStore((state) => state.setReciterId);
+  const activeReciterId = reciterId || DEFAULT_RECITER_ID;
+
+  const currentReciter = useMemo(
+    () =>
+      RECITER_OPTIONS.find((r) => r.id === activeReciterId) ||
+      RECITER_OPTIONS[0],
+    [activeReciterId],
+  );
+
+  const reciterDropdownItems = useMemo(
+    () =>
+      RECITER_OPTIONS.map((r) => ({
+        label: r.label,
+        value: String(r.id),
+        avatar: r.avatar,
+      })),
+    [],
+  );
+
   const localizedSurahName = useMemo(
     () => localizedName || getSurahName(chapterId, language),
     [chapterId, language, localizedName],
@@ -118,8 +146,47 @@ function DetailHeader({
           </AppText>
         </View>
 
-        <View style={S.rightActions} />
+        <View style={S.rightActions}>
+          <TouchableOpacity
+            onPress={() => {
+              Haptics.light();
+              setIsReciterModalVisible(true);
+            }}
+            style={S.reciterButton}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            activeOpacity={0.75}
+            accessibilityRole="button"
+            accessibilityLabel={t("onboarding.preferences.title", "Choose Quran Reciter")}
+          >
+            {currentReciter?.avatar ? (
+              <Image
+                source={currentReciter.avatar}
+                style={S.reciterAvatar}
+                contentFit="cover"
+              />
+            ) : (
+              <Ionicons
+                name="mic-outline"
+                size={rs.icon(18)}
+                color={colors.primary}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
+
+      <CommonModal
+        visible={isReciterModalVisible}
+        onClose={() => setIsReciterModalVisible(false)}
+        title={t("onboarding.preferences.title", "Choose Quran Reciter")}
+        icon="mic-outline"
+        data={reciterDropdownItems}
+        value={String(activeReciterId)}
+        onChange={(item) => {
+          Haptics.light();
+          setReciterId(Number(item.value));
+        }}
+      />
     </View>
   );
 }
@@ -167,6 +234,23 @@ const createStyles = (
       backgroundColor: colors.primary + "15",
       alignItems: "center",
       justifyContent: "center",
+    },
+    reciterButton: {
+      width: rs.space(34),
+      height: rs.space(34),
+      borderRadius: rs.space(17),
+      borderWidth: 1.5,
+      borderColor: colors.primary,
+      overflow: "hidden",
+      backgroundColor: colors.primary + "15",
+      alignItems: "center",
+      justifyContent: "center",
+      marginRight: rs.space(6),
+    },
+    reciterAvatar: {
+      width: "100%",
+      height: "100%",
+      borderRadius: rs.space(17),
     },
     headerCenter: {
       flex: 1,

@@ -14,11 +14,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
+import { Image } from "expo-image";
 import { AppText } from "./AppText";
 
 export interface DropdownItem {
   label: string;
   value: string;
+  avatar?: any;
 }
 
 interface CommonModalProps {
@@ -173,6 +175,13 @@ export default function CommonModal({
                       onPress={() => handleSelect(item)}
                       activeOpacity={0.7}
                     >
+                      {item.avatar && (
+                        <Image
+                          source={item.avatar}
+                          style={S.itemAvatar}
+                          contentFit="cover"
+                        />
+                      )}
                       <AppText
                         variant="bodyLg"
                         family={isSelected ? "title" : "text"}
@@ -296,5 +305,12 @@ const createStyles = (colors: any, bottomInset: number, isBottom: boolean) =>
     },
     selectedItemRow: {
       backgroundColor: colors.primary + "15",
+    },
+    itemAvatar: {
+      width: rs.space(36),
+      height: rs.space(36),
+      borderRadius: rs.space(18),
+      marginRight: rs.space(12),
+      backgroundColor: colors.border,
     },
   });

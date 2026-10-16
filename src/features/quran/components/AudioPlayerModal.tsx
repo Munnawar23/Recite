@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   Modal,
   StyleSheet,
@@ -7,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   GestureDetector,
@@ -22,6 +24,7 @@ import { AppText } from "@/components";
 import {
   AR_CHAPTER_NAMES,
   CHAPTERS_METADATA,
+  RECITERS_IMAGES,
   getChapter,
   getSurahName,
 } from "@/constants";
@@ -34,10 +37,8 @@ import { Chapter } from "@/types";
 import ChapterNumberBadge from "./ChapterNumberBadge";
 import { usePlayerModal } from "../hooks/usePlayerModal";
 import DownloadCard from "@/features/quran-detail/components/DownloadCard";
-import {
-  RECITER_OPTIONS,
-  useQuranAudio,
-} from "@/features/quran-detail/hooks/useQuranAudio";
+import { useSurahCdnAudio } from "../hooks/useSurahCdnAudio";
+import { formatTime } from "@/features/quran-detail/hooks/useAudioPlayer";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 const ARTWORK_SIZE = Math.min(
@@ -66,6 +67,11 @@ export default function AudioPlayerModal({
   const language = useLanguageStore((state) => state.language);
 
   const currentChapterId = chapter?.id ?? 1;
+
+  const [imageError, setImageError] = useState(false);
+  useEffect(() => {
+    setImageError(false);
+  }, [currentChapterId]);
 
   const chapterMetadata = useMemo(() => {
     return (
@@ -97,18 +103,6 @@ export default function AudioPlayerModal({
     return getSurahName(nextChapterId, language);
   }, [nextChapterId, language]);
 
-  // Audio & Download integration
-  const { audioUrl, audioTotalBytes, isPlayingLocally, reciterId } =
-    useQuranAudio(currentChapterId, visible, {
-      localizedName,
-      arabicName,
-    });
-
-  const reciterName = useMemo(() => {
-    const activeReciter = RECITER_OPTIONS.find((r) => r.id === reciterId);
-    return activeReciter ? activeReciter.label : "Mishary Rashid Alafasy";
-  }, [reciterId]);
-
   const {
     closePlayer,
     panGesture,
@@ -129,6 +123,34 @@ export default function AudioPlayerModal({
       onChapterChange(nextChapter);
     });
   }, [animateTrackChange, nextChapterId, language, onChapterChange]);
+
+  // Islamic Network CDN Audio integration
+  const {
+    audioUrl,
+    remoteAudioUrl,
+    isPlayingLocally,
+    isLoading,
+    isPlaying,
+    currentTime,
+    duration,
+    sliderValue,
+    isDragging,
+    playbackSpeed,
+    isRepeating,
+    handlePlayPause,
+    handleSkipBack,
+    handleSkipForward,
+    cycleSpeed,
+    toggleRepeat,
+    handleSliderValueChange,
+    handleSlidingComplete,
+  } = useSurahCdnAudio({
+    chapterId: currentChapterId,
+    enabled: visible,
+    localizedName,
+    arabicName,
+    onPlayNext: handlePlayNext,
+  });
 
   const S = useMemo(
     () => createStyles(colors, insets.top, insets.bottom, isDark),
@@ -233,9 +255,9 @@ export default function AudioPlayerModal({
           <Animated.View style={[S.downloadCardContainer, trackContentAnimatedStyle]}>
             <DownloadCard
               chapterId={currentChapterId}
-              reciterName={reciterName}
-              audioUrl={audioUrl}
-              audioTotalBytes={audioTotalBytes}
+              reciterName="Mishary Rashid Alafasy"
+              audioUrl={remoteAudioUrl}
+              duration={duration}
               isPlayingLocally={isPlayingLocally}
               arabicName={arabicName}
               localizedName={localizedName}
@@ -249,16 +271,26 @@ export default function AudioPlayerModal({
           <GestureDetector gesture={panGesture}>
             <View style={S.middleSection}>
               <Animated.View style={[S.artworkShadow, trackContentAnimatedStyle]}>
-                <LinearGradient
-                  colors={[colors.primary + "35", colors.card]}
-                  style={S.artworkGradient}
-                >
-                  <Ionicons
-                    name="musical-notes"
-                    size={scale(64)}
-                    color={colors.primary}
+                {!imageError && RECITERS_IMAGES[7] ? (
+                  <Image
+                    source={RECITERS_IMAGES[7]}
+                    style={S.artworkImage}
+                    contentFit="cover"
+                    transition={300}
+                    onError={() => setImageError(true)}
                   />
-                </LinearGradient>
+                ) : (
+                  <LinearGradient
+                    colors={[colors.primary + "35", colors.card]}
+                    style={S.artworkGradient}
+                  >
+                    <Ionicons
+                      name="musical-notes"
+                      size={scale(64)}
+                      color={colors.primary}
+                    />
+                  </LinearGradient>
+                )}
               </Animated.View>
             </View>
           </GestureDetector>
@@ -330,8 +362,8 @@ export default function AudioPlayerModal({
               <Slider
                 style={S.slider}
                 minimumValue={0}
-                maximumValue={182}
-                value={42}
+                maximumValue={duration > 0 ? duration : 1}
+                value={isDragging ? sliderValue : currentTime}
                 minimumTrackTintColor={colors.primary}
                 maximumTrackTintColor={
                   isDark
@@ -339,16 +371,16 @@ export default function AudioPlayerModal({
                     : "rgba(0, 0, 0, 0.12)"
                 }
                 thumbTintColor={colors.primary}
-                onValueChange={(val) => console.log("Slider dragging:", val)}
-                onSlidingComplete={(val) => console.log("Slider complete:", val)}
+                onValueChange={handleSliderValueChange}
+                onSlidingComplete={handleSlidingComplete}
               />
 
               <View style={S.timeRow}>
                 <AppText variant="caption" color="subtext" style={S.timeText}>
-                  0:42
+                  {formatTime(isDragging ? sliderValue : currentTime)}
                 </AppText>
                 <AppText variant="caption" color="subtext" style={S.timeText}>
-                  3:02
+                  {formatTime(duration)}
                 </AppText>
               </View>
             </View>
@@ -357,27 +389,25 @@ export default function AudioPlayerModal({
             <View style={S.controlsRow}>
               {/* Speed Button */}
               <TouchableOpacity
-                onPress={() => {
-                  Haptics.light();
-                  console.log("Speed button pressed");
-                }}
+                onPress={cycleSpeed}
                 style={S.speedPill}
                 activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel={`Speed ${playbackSpeed}x`}
               >
                 <AppText variant="caption" family="title" style={S.speedText}>
-                  1.0x
+                  {`${playbackSpeed}x`}
                 </AppText>
               </TouchableOpacity>
 
               {/* Skip Back 10s */}
               <TouchableOpacity
-                onPress={() => {
-                  Haptics.light();
-                  console.log("Skip back 10s pressed");
-                }}
+                onPress={handleSkipBack}
                 hitSlop={rs.space(10)}
                 style={S.skipButton}
                 activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel="Skip backward 10 seconds"
               >
                 <MaterialIcons
                   name="replay-10"
@@ -388,34 +418,39 @@ export default function AudioPlayerModal({
 
               {/* Play / Pause Button */}
               <TouchableOpacity
-                onPress={() => {
-                  Haptics.light();
-                  console.log("Play/Pause pressed");
-                }}
+                onPress={handlePlayPause}
                 style={S.heroPlayContainer}
                 activeOpacity={0.88}
+                disabled={isLoading}
+                accessibilityRole="button"
+                accessibilityLabel={
+                  isLoading ? "Loading" : isPlaying ? "Pause" : "Play"
+                }
               >
                 <View style={S.heroPlayHalo}>
                   <View style={S.heroPlayButton}>
-                    <Ionicons
-                      name="play"
-                      size={scale(30)}
-                      color="#FFFFFF"
-                      style={{ marginLeft: scale(3) }}
-                    />
+                    {isLoading ? (
+                      <ActivityIndicator size="small" color="#FFFFFF" />
+                    ) : (
+                      <Ionicons
+                        name={isPlaying ? "pause" : "play"}
+                        size={scale(30)}
+                        color="#FFFFFF"
+                        style={!isPlaying ? { marginLeft: scale(3) } : undefined}
+                      />
+                    )}
                   </View>
                 </View>
               </TouchableOpacity>
 
               {/* Skip Forward 10s */}
               <TouchableOpacity
-                onPress={() => {
-                  Haptics.light();
-                  console.log("Skip forward 10s pressed");
-                }}
+                onPress={handleSkipForward}
                 hitSlop={rs.space(10)}
                 style={S.skipButton}
                 activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel="Skip forward 10 seconds"
               >
                 <MaterialIcons
                   name="forward-10"
@@ -426,18 +461,17 @@ export default function AudioPlayerModal({
 
               {/* Repeat Toggle */}
               <TouchableOpacity
-                onPress={() => {
-                  Haptics.light();
-                  console.log("Repeat toggle pressed");
-                }}
+                onPress={toggleRepeat}
                 hitSlop={rs.space(10)}
                 style={S.repeatButton}
                 activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel="Toggle repeat"
               >
                 <Ionicons
                   name="repeat"
                   size={scale(22)}
-                  color={colors.subtext}
+                  color={isRepeating ? colors.primary : colors.subtext}
                 />
               </TouchableOpacity>
             </View>
@@ -618,11 +652,23 @@ const createStyles = (
       backgroundColor: colors.card,
       position: "relative",
       overflow: "hidden",
+      borderWidth: scale(3),
+      borderColor: isDark
+        ? "rgba(255, 255, 255, 0.12)"
+        : colors.primary + "30",
+      elevation: 10,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 6 },
+      shadowOpacity: 0.25,
+      shadowRadius: 12,
+    },
+    artworkImage: {
+      width: "100%",
+      height: "100%",
     },
     artworkGradient: {
       width: "100%",
       height: "100%",
-      borderRadius: ARTWORK_SIZE / 2,
       alignItems: "center",
       justifyContent: "center",
     },

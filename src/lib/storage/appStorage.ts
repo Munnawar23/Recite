@@ -11,8 +11,9 @@ export const STORAGE_KEYS = {
   FAVORITES: "favorites-storage",
   ONBOARDING: "onboarding-storage",
   READING_PROGRESS: "reading-progress-storage",
+  AUDIO_PROGRESS: "audio-progress-storage",
   LOCATION: "user-location-storage",
-  QUERY_CACHE: "RECITE_QUERY_CACHE_V2",
+  QUERY_CACHE: "RECITE_QUERY_CACHE_V3",
   QURAN_SETTINGS: "quran-settings-storage",
   VERSE_ACTION_HINT: "has-seen-verse-action-hint",
 } as const;

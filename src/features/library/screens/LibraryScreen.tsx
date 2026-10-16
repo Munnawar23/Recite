@@ -10,7 +10,8 @@ import {
 } from "react-native";
 
 import { EmptyState, Header, TabSwitcher } from "@/components";
-import QuranCard from "@/features/quran/components/QuranCard";
+import QuranListenCard from "@/features/quran/components/QuranListenCard";
+import AudioPlayerModal from "@/features/quran/components/AudioPlayerModal";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { type ThemeSpacing } from "@/theme";
 import { Chapter, FavoriteVerse } from "@/types";
@@ -22,6 +23,8 @@ export default function LibraryScreen() {
   const { colors, spacing } = useAppTheme();
   const [activeTab, setActiveTab] = useState<TabValue>("favorites");
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
+  const [isPlayerModalVisible, setIsPlayerModalVisible] = useState(false);
 
   const { favoriteVerses, downloadedChapters } = useLibraryData();
 
@@ -67,9 +70,20 @@ export default function LibraryScreen() {
     [],
   );
 
+  const handleListenChapterPress = useCallback((item: Chapter) => {
+    setSelectedChapter(item);
+    setIsPlayerModalVisible(true);
+  }, []);
+
+  const handleClosePlayerModal = useCallback(() => {
+    setIsPlayerModalVisible(false);
+  }, []);
+
   const renderChapterItem = useCallback(
-    ({ item }: ListRenderItemInfo<Chapter>) => <QuranCard item={item} />,
-    [],
+    ({ item }: ListRenderItemInfo<Chapter>) => (
+      <QuranListenCard item={item} onPress={handleListenChapterPress} />
+    ),
+    [handleListenChapterPress],
   );
 
   const refreshControl = useMemo(
@@ -153,6 +167,13 @@ export default function LibraryScreen() {
           </ScrollView>
         )}
       </View>
+
+      <AudioPlayerModal
+        visible={isPlayerModalVisible}
+        onClose={handleClosePlayerModal}
+        chapter={selectedChapter}
+        onChapterChange={setSelectedChapter}
+      />
     </View>
   );
 }

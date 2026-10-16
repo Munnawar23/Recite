@@ -28,6 +28,7 @@ interface DownloadCardProps {
   selectedTransId?: string;
   audioUrl?: string | null;
   audioTotalBytes?: number | null; // from API audio_file.file_size
+  duration?: number;
   isPlayingLocally?: boolean;
   // Chapter display info for offline library
   arabicName?: string;
@@ -36,13 +37,18 @@ interface DownloadCardProps {
   versesCount?: string;
   chapterType?: string;
   containerStyle?: StyleProp<ViewStyle>;
+  onPress?: () => void;
+  onDownloadPress?: () => void;
 }
 
 type ThemeColors = ReturnType<typeof useAppTheme>["colors"];
 
+// Module-level in-memory cache for fetched HEAD content lengths to avoid refetching and re-renders
+const headSizeCache = new Map<string, number>();
+
 // ─── Circular Progress ────────────────────────────────────────────────────────
 
-function CircularProgressControl({
+const CircularProgressControl = React.memo(function CircularProgressControl({
   progress,
   onCancel,
   primaryColor,
@@ -100,7 +106,7 @@ function CircularProgressControl({
       <Ionicons name="close" size={rs.icon(14)} color={primaryColor} />
     </Pressable>
   );
-}
+});
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -115,6 +121,7 @@ function DownloadCard({
   reciterName = "Mishary Rashid Alafasy",
   audioUrl,
   audioTotalBytes,
+  duration,
   isPlayingLocally = false,
   arabicName,
   localizedName,
@@ -122,15 +129,18 @@ function DownloadCard({
   versesCount,
   chapterType,
   containerStyle,
+  onPress,
+  onDownloadPress,
 }: DownloadCardProps) {
   const { t } = useTranslation();
   const { colors, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
 
-  const isDownloaded = useDownloadsStore(
-    (s) => chapterId != null && s.isDownloaded(chapterId),
+  // 1. Download store selectors — direct subscribed slice to avoid redundant re-renders
+  const downloadInfo = useDownloadsStore((s) =>
+    chapterId != null ? s.downloads[chapterId] : undefined,
   );
-  const getDownload = useDownloadsStore((s) => s.getDownload);
+  const isDownloaded = !!downloadInfo;
   const removeDownload = useDownloadsStore((s) => s.removeDownload);
 
   const activeDownload = useDownloadsStore((s) =>
@@ -138,10 +148,64 @@ function DownloadCard({
   );
   const isDownloading = activeDownload?.status === "downloading";
   const bytesWritten = activeDownload?.bytesWritten ?? 0;
+
+  // Initialize fetchedSize from props or in-memory HEAD cache to prevent mounting re-renders
+  const [fetchedSize, setFetchedSize] = useState<number | null>(() => {
+    if (audioTotalBytes) return audioTotalBytes;
+    if (audioUrl && headSizeCache.has(audioUrl)) {
+      return headSizeCache.get(audioUrl)!;
+    }
+    return null;
+  });
+
+  // Only fetch via HEAD if size is completely unknown and audio is not downloaded yet
+  useEffect(() => {
+    if (audioTotalBytes) {
+      if (fetchedSize !== audioTotalBytes) {
+        setFetchedSize(audioTotalBytes);
+      }
+      return;
+    }
+    if (!audioUrl || isDownloaded) return;
+    if (headSizeCache.has(audioUrl)) {
+      const cached = headSizeCache.get(audioUrl)!;
+      if (fetchedSize !== cached) {
+        setFetchedSize(cached);
+      }
+      return;
+    }
+
+    let isMounted = true;
+    fetch(audioUrl, { method: "HEAD" })
+      .then((res) => {
+        const cl = res.headers.get("content-length");
+        if (cl && isMounted) {
+          const bytes = parseInt(cl, 10);
+          if (!isNaN(bytes) && bytes > 0) {
+            headSizeCache.set(audioUrl, bytes);
+            setFetchedSize(bytes);
+          }
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      isMounted = false;
+    };
+  }, [audioUrl, audioTotalBytes, isDownloaded, fetchedSize]);
+
+  // If audio is 128 kbps, 1 second is ~16,000 bytes (pure computation without useMemo overhead)
+  const durationEstimatedBytes =
+    duration && duration > 0 ? Math.round(duration * 16000) : 0;
+
   const totalBytes =
     activeDownload && activeDownload.totalBytes > 0
       ? activeDownload.totalBytes
-      : (audioTotalBytes ?? 0);
+      : (downloadInfo?.totalBytes ??
+        audioTotalBytes ??
+        fetchedSize ??
+        durationEstimatedBytes ??
+        0);
 
   // Progress 0→1
   const progress =
@@ -182,12 +246,19 @@ function DownloadCard({
     }
   }, [activeDownload?.status, activeDownload?.errorMessage, chapterId, t]);
 
-  const downloadInfo = chapterId != null ? getDownload(chapterId) : undefined;
   const storedTotalMB = downloadInfo
     ? formatMB(downloadInfo.totalBytes)
     : null;
 
   const handleStartDownload = useCallback(async () => {
+    if (onDownloadPress) {
+      onDownloadPress();
+      return;
+    }
+    if (onPress) {
+      onPress();
+      return;
+    }
     if (!chapterId || !audioUrl) {
       setMessageModalState({
         visible: true,
@@ -208,7 +279,7 @@ function DownloadCard({
       await startChapterDownload({
         chapterId,
         audioUrl,
-        initialTotalBytes: audioTotalBytes ?? 0,
+        initialTotalBytes: totalBytes > 0 ? totalBytes : (audioTotalBytes ?? 0),
         chapterInfo:
           arabicName || localizedName
             ? {
@@ -224,8 +295,11 @@ function DownloadCard({
       // Error is caught in startChapterDownload and updated in activeDownloads store
     }
   }, [
+    onDownloadPress,
+    onPress,
     chapterId,
     audioUrl,
+    totalBytes,
     audioTotalBytes,
     arabicName,
     localizedName,
@@ -243,10 +317,14 @@ function DownloadCard({
   }, [chapterId]);
 
   const handleDeletePress = useCallback(() => {
+    if (onPress) {
+      onPress();
+      return;
+    }
     if (!chapterId) return;
     Haptics.light();
     setDeleteModalVisible(true);
-  }, [chapterId]);
+  }, [chapterId, onPress]);
 
   const handleConfirmDelete = useCallback(async () => {
     setDeleteModalVisible(false);
@@ -297,8 +375,13 @@ function DownloadCard({
     t,
   ]);
 
+  const CardContainer = onPress ? TouchableOpacity : View;
+
   return (
-    <View style={[S.container, containerStyle]}>
+    <CardContainer
+      {...(onPress ? { activeOpacity: 0.85, onPress } : {})}
+      style={[S.container, containerStyle]}
+    >
       <View style={S.cardContent}>
         {/* Left Icon */}
         <View style={[S.squircle, { backgroundColor: colors.primary + "20" }]}>
@@ -415,7 +498,7 @@ function DownloadCard({
         confirmText={t("common.remove", "Remove")}
         cancelText={t("common.cancel", "Cancel")}
       />
-    </View>
+    </CardContainer>
   );
 }
 

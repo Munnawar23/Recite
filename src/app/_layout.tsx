@@ -45,6 +45,7 @@ export default function RootLayout() {
   useEffect(() => {
     NotificationService.configure();
     void useNotificationStore.getState().syncOnStartup();
+    void AsyncStorage.removeItem("RECITE_QUERY_CACHE_V2").catch(() => {});
     void setAudioModeAsync({
       playsInSilentMode: true,
       shouldPlayInBackground: true,
@@ -66,7 +67,7 @@ export default function RootLayout() {
               persistOptions={{
                 persister: asyncStoragePersister,
                 maxAge: 1000 * 60 * 60 * 24, // 24 hours max cache age
-                buster: "v2",
+                buster: "v3",
                 dehydrateOptions: {
                   shouldDehydrateQuery: (query) => {
                     const keyStr = JSON.stringify(query.queryKey);

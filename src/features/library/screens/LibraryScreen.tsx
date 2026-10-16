@@ -4,14 +4,12 @@ import { useTranslation } from "react-i18next";
 import {
   RefreshControl,
   RefreshControlProps,
-  ScrollView,
   StyleSheet,
   View,
 } from "react-native";
 
-import { EmptyState, Header, TabSwitcher } from "@/components";
-import QuranListenCard from "@/features/quran/components/QuranListenCard";
-import AudioPlayerModal from "@/features/quran/components/AudioPlayerModal";
+import { EmptyState, Header, StorageCard, TabSwitcher } from "@/components";
+import QuranCard from "@/features/quran/components/QuranCard";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { type ThemeSpacing } from "@/theme";
 import { Chapter, FavoriteVerse } from "@/types";
@@ -23,8 +21,6 @@ export default function LibraryScreen() {
   const { colors, spacing } = useAppTheme();
   const [activeTab, setActiveTab] = useState<TabValue>("favorites");
   const [refreshing, setRefreshing] = useState(false);
-  const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
-  const [isPlayerModalVisible, setIsPlayerModalVisible] = useState(false);
 
   const { favoriteVerses, downloadedChapters } = useLibraryData();
 
@@ -70,20 +66,9 @@ export default function LibraryScreen() {
     [],
   );
 
-  const handleListenChapterPress = useCallback((item: Chapter) => {
-    setSelectedChapter(item);
-    setIsPlayerModalVisible(true);
-  }, []);
-
-  const handleClosePlayerModal = useCallback(() => {
-    setIsPlayerModalVisible(false);
-  }, []);
-
   const renderChapterItem = useCallback(
-    ({ item }: ListRenderItemInfo<Chapter>) => (
-      <QuranListenCard item={item} onPress={handleListenChapterPress} />
-    ),
-    [handleListenChapterPress],
+    ({ item }: ListRenderItemInfo<Chapter>) => <QuranCard item={item} />,
+    [],
   );
 
   const refreshControl = useMemo(
@@ -99,9 +84,6 @@ export default function LibraryScreen() {
   );
 
   const isFavorites = activeTab === "favorites";
-  const hasData = isFavorites
-    ? favoriteVerses.length > 0
-    : downloadedChapters.length > 0;
 
   return (
     <View style={styles.flexContainer}>
@@ -119,61 +101,52 @@ export default function LibraryScreen() {
       </View>
 
       <View style={styles.flexContainer}>
-        {hasData ? (
-          isFavorites ? (
-            <FlashList<FavoriteVerse>
-              data={favoriteVerses}
-              keyExtractor={keyExtractorVerse}
-              renderItem={renderVerseItem}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.listContentContainer}
-              refreshControl={refreshControl}
-            />
-          ) : (
-            <FlashList<Chapter>
-              data={downloadedChapters}
-              keyExtractor={keyExtractorChapter}
-              renderItem={renderChapterItem}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.listContentContainer}
-              refreshControl={refreshControl}
-            />
-          )
-        ) : (
-          <ScrollView
-            contentContainerStyle={styles.emptyStateWrapper}
-            refreshControl={refreshControl}
+        {isFavorites ? (
+          <FlashList<FavoriteVerse>
+            data={favoriteVerses}
+            keyExtractor={keyExtractorVerse}
+            renderItem={renderVerseItem}
             showsVerticalScrollIndicator={false}
-          >
-            <EmptyState
-              icon={isFavorites ? "heart-outline" : "download-outline"}
-              title={
-                isFavorites
-                  ? t("library.emptyFavorites.title", "No Favorites Yet")
-                  : t("library.emptyDownloads.title", "No Downloads")
-              }
-              subtitle={
-                isFavorites
-                  ? t(
-                      "library.emptyFavorites.subtitle",
-                      "Save verses to see them here.",
-                    )
-                  : t(
-                      "library.emptyDownloads.subtitle",
-                      "Download Surahs to listen offline.",
-                    )
-              }
-            />
-          </ScrollView>
+            contentContainerStyle={styles.listContentContainer}
+            refreshControl={refreshControl}
+            ListEmptyComponent={
+              <View style={styles.emptyStateWrapper}>
+                <EmptyState
+                  icon="heart-outline"
+                  title={t("library.emptyFavorites.title", "No Favorites Yet")}
+                  subtitle={t(
+                    "library.emptyFavorites.subtitle",
+                    "Save verses to see them here.",
+                  )}
+                />
+              </View>
+            }
+          />
+        ) : (
+          <FlashList<Chapter>
+            data={downloadedChapters}
+            keyExtractor={keyExtractorChapter}
+            renderItem={renderChapterItem}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.listContentContainer}
+            refreshControl={refreshControl}
+            ListHeaderComponent={<StorageCard />}
+            ListEmptyComponent={
+              <View style={styles.emptyStateInner}>
+                <EmptyState
+                  icon="download-outline"
+                  title={t("library.emptyDownloads.title", "No Downloads")}
+                  subtitle={t(
+                    "library.emptyDownloads.subtitle",
+                    "Download Surahs to listen offline.",
+                  )}
+                />
+              </View>
+            }
+          />
         )}
       </View>
 
-      <AudioPlayerModal
-        visible={isPlayerModalVisible}
-        onClose={handleClosePlayerModal}
-        chapter={selectedChapter}
-        onChapterChange={setSelectedChapter}
-      />
     </View>
   );
 }
@@ -185,9 +158,10 @@ const createStyles = (spacing: ThemeSpacing) =>
     },
     tabSwitcherContainer: {
       marginTop: spacing.vXs,
-      marginBottom: spacing.vSm,
+      marginBottom: spacing.vXs,
     },
     listContentContainer: {
+      flexGrow: 1,
       paddingBottom: spacing.vLg,
     },
     emptyStateWrapper: {
@@ -195,5 +169,14 @@ const createStyles = (spacing: ThemeSpacing) =>
       justifyContent: "center",
       alignItems: "center",
       paddingBottom: spacing.vXxl,
+      minHeight: 350,
+    },
+    emptyStateInner: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      paddingTop: spacing.vXl,
+      paddingBottom: spacing.vXxl,
+      minHeight: 280,
     },
   });

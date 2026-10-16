@@ -293,6 +293,11 @@
     "emptyDownloads": {
       "title": "İndirme Yok",
       "subtitle": "İnternetsiz dinlemek için sureleri indirin."
+    },
+    "storageCard": {
+      "badge": "Çevrimdışı Kullanılabilir",
+      "used": "Kullanılan",
+      "downloaded": "İndirildi"
     }
   },
   "languages": {

@@ -294,6 +294,11 @@
     "emptyDownloads": {
       "title": "Tiada Muat Turun",
       "subtitle": "Muat turun surah untuk didengar luar talian."
+    },
+    "storageCard": {
+      "badge": "Tersedia Luar Talian",
+      "used": "Digunakan",
+      "downloaded": "Dimuat Turun"
     }
   },
   "languages": {

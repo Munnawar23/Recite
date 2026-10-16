@@ -292,6 +292,11 @@
     "emptyDownloads": {
       "title": "কোনো ডাউনলোড নেই",
       "subtitle": "অফলাইনে শুনতে সূরা ডাউনলোড করুন।"
+    },
+    "storageCard": {
+      "badge": "অফলাইনে উপলব্ধ",
+      "used": "ব্যবহৃত",
+      "downloaded": "ডাউনলোড করা"
     }
   },
   "languages": {

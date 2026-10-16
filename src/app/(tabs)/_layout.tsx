@@ -112,8 +112,8 @@ export default function TabLayout() {
       name: "library",
       title: t("tabs.library", "Library"),
       label: t("common.library", "Library"),
-      filled: "library",
-      outline: "library-outline",
+      filled: "heart",
+      outline: "heart-outline",
     },
     {
       name: "settings",

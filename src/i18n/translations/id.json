@@ -292,6 +292,11 @@
     "emptyDownloads": {
       "title": "Tidak Ada Unduhan",
       "subtitle": "Unduh surah untuk didengarkan secara offline."
+    },
+    "storageCard": {
+      "badge": "Tersedia Offline",
+      "used": "Digunakan",
+      "downloaded": "Diunduh"
     }
   },
   "languages": {

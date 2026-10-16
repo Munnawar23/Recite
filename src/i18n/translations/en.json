@@ -292,6 +292,11 @@
     "emptyDownloads": {
       "title": "No Downloads",
       "subtitle": "Download Surahs to listen offline."
+    },
+    "storageCard": {
+      "badge": "Available Offline",
+      "used": "Used",
+      "downloaded": "Downloaded"
     }
   },
   "languages": {

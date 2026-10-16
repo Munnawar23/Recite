@@ -292,6 +292,11 @@
     "emptyDownloads": {
       "title": "کوئی ڈاؤن لوڈ نہیں",
       "subtitle": "سورتیں ڈاؤن لوڈ کر کے آف لائن سنیں۔"
+    },
+    "storageCard": {
+      "badge": "آف لائن دستیاب",
+      "used": "استعمال شدہ",
+      "downloaded": "ڈاؤن لوڈ شدہ"
     }
   },
   "languages": {

@@ -292,6 +292,11 @@
     "emptyDownloads": {
       "title": "لا توجد تنزيلات",
       "subtitle": "قم بتنزيل السور للاستماع دون اتصال."
+    },
+    "storageCard": {
+      "badge": "متاح دون اتصال",
+      "used": "مستخدم",
+      "downloaded": "تم تنزيلها"
     }
   },
   "languages": {

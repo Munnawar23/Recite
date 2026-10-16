@@ -292,6 +292,11 @@
     "emptyDownloads": {
       "title": "कोई डाउनलोड नहीं",
       "subtitle": "ऑफलाइन सुनने के लिए सूरह डाउनलोड करें।"
+    },
+    "storageCard": {
+      "badge": "ऑफ़लाइन उपलब्ध",
+      "used": "उपयोग में",
+      "downloaded": "डाउनलोड किए गए"
     }
   },
   "languages": {

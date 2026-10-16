@@ -294,6 +294,11 @@
     "emptyDownloads": {
       "title": "Нет загрузок",
       "subtitle": "Скачивайте суры для прослушивания офлайн."
+    },
+    "storageCard": {
+      "badge": "Доступно офлайн",
+      "used": "Использовано",
+      "downloaded": "Скачано"
     }
   },
   "languages": {

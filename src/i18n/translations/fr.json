@@ -293,6 +293,11 @@
     "emptyDownloads": {
       "title": "Aucun téléchargement",
       "subtitle": "Téléchargez des sourates pour les écouter sans connexion."
+    },
+    "storageCard": {
+      "badge": "Disponible hors-ligne",
+      "used": "Utilisé",
+      "downloaded": "Téléchargé(s)"
     }
   },
   "languages": {

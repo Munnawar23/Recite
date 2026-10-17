@@ -10,6 +10,7 @@ import QuranListenCard from "@/features/quran-audio/components/QuranListenCard";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLanguageStore } from "@/store/languageStore";
+import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { type ThemeSpacing } from "@/theme";
 import { Chapter } from "@/types";
 
@@ -22,9 +23,8 @@ export default function QuranAudioScreen() {
   const { t } = useTranslation();
   const { colors, spacing } = useAppTheme();
   const language = useLanguageStore((state) => state.language);
-  const [selectedLanguage, setSelectedLanguage] = useState(() =>
-    language === "ar" ? "ar" : "en",
-  );
+  const selectedLanguage = useQuranSettingsStore((state) => state.audioLanguage);
+  const setSelectedLanguage = useQuranSettingsStore((state) => state.setAudioLanguage);
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
   const [isPlayerModalVisible, setIsPlayerModalVisible] = useState(false);
 

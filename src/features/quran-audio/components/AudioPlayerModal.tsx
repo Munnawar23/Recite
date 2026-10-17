@@ -70,7 +70,8 @@ export default function AudioPlayerModal({
   const isDark = activeScheme === "dark";
   const { t } = useTranslation();
   const language = useLanguageStore((state) => state.language);
-  const resolvedAudioLanguage = audioLanguage || (language === "ar" ? "ar" : "en");
+  const storeAudioLanguage = useQuranSettingsStore((state) => state.audioLanguage);
+  const resolvedAudioLanguage = audioLanguage || storeAudioLanguage || (language === "ar" ? "ar" : "en");
   const isEnglish = resolvedAudioLanguage === "en";
 
   const [isReciterModalVisible, setIsReciterModalVisible] = useState(false);

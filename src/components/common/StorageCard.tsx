@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
 
-import { AppText } from "@/components";
+import { AppText } from "../ui/AppText";
 import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useDownloadsStore } from "@/store/downloadsStore";

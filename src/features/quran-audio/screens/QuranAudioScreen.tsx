@@ -22,7 +22,9 @@ export default function QuranAudioScreen() {
   const { t } = useTranslation();
   const { colors, spacing } = useAppTheme();
   const language = useLanguageStore((state) => state.language);
-  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [selectedLanguage, setSelectedLanguage] = useState(() =>
+    language === "ar" ? "ar" : "en",
+  );
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
   const [isPlayerModalVisible, setIsPlayerModalVisible] = useState(false);
 
@@ -109,6 +111,7 @@ export default function QuranAudioScreen() {
         onClose={handleClosePlayerModal}
         chapter={selectedChapter}
         onChapterChange={setSelectedChapter}
+        audioLanguage={selectedLanguage}
       />
     </View>
   );

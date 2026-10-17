@@ -34,7 +34,6 @@ function QuranListenCard({ item, onPress }: QuranListenCardProps) {
 
   const handlePress = useCallback(() => {
     Haptics.light();
-    console.log("QuranListenCard pressed:", item);
     if (onPress) {
       onPress(item);
     }

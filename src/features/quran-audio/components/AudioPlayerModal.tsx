@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -15,14 +15,19 @@ import {
 } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import Slider from "@react-native-community/slider";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 
-import { AppText } from "@/components";
+import { AppText, CommonModal } from "@/components";
 import {
   AR_CHAPTER_NAMES,
   CHAPTERS_METADATA,
+  DEFAULT_RECITER_ID,
+  RECITER_OPTIONS,
+  AUDIO_RECITERS,
+  DEFAULT_ENGLISH_RECITER_NAME,
   getChapter,
   getSurahName,
 } from "@/constants";
@@ -30,10 +35,11 @@ import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
 import { Haptics } from "@/lib/haptics";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLanguageStore } from "@/store/languageStore";
+import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { type ThemeColors } from "@/theme";
 import ChapterNumberBadge from "@/components/common/ChapterNumberBadge";
 import { usePlayerModal } from "../hooks/usePlayerModal";
-import { useSurahCdnAudio } from "../hooks/useSurahCdnAudio";
+import { useChapterAudio } from "../hooks/useChapterAudio";
 import { formatTime } from "@/features/quran-detail/hooks/useAudioPlayer";
 import type { Chapter } from "@/types";
 
@@ -49,6 +55,7 @@ interface AudioPlayerModalProps {
   onClose: () => void;
   chapter?: Chapter | null;
   onChapterChange?: (chapter: Chapter) => void;
+  audioLanguage?: "en" | "ar" | string;
 }
 
 export default function AudioPlayerModal({
@@ -56,12 +63,63 @@ export default function AudioPlayerModal({
   onClose,
   chapter,
   onChapterChange,
+  audioLanguage,
 }: AudioPlayerModalProps) {
   const insets = useSafeAreaInsets();
   const { colors, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
   const { t } = useTranslation();
   const language = useLanguageStore((state) => state.language);
+  const resolvedAudioLanguage = audioLanguage || (language === "ar" ? "ar" : "en");
+  const isEnglish = resolvedAudioLanguage === "en";
+
+  const [isReciterModalVisible, setIsReciterModalVisible] = useState(false);
+  const [avatarError, setAvatarError] = useState(false);
+  const [selectedEditionName, setSelectedEditionName] = useState<string>(
+    DEFAULT_ENGLISH_RECITER_NAME,
+  );
+
+  // Reciter settings
+  const reciterId = useQuranSettingsStore((state) => state.reciterId);
+  const setReciterId = useQuranSettingsStore((state) => state.setReciterId);
+  const activeReciterId = isEnglish ? DEFAULT_RECITER_ID : (reciterId || DEFAULT_RECITER_ID);
+
+  useEffect(() => {
+    setAvatarError(false);
+  }, [activeReciterId, selectedEditionName]);
+
+  const currentReciter = useMemo(() => {
+    if (isEnglish) {
+      const audioReciter =
+        AUDIO_RECITERS.find((r) => r.name === selectedEditionName) ||
+        AUDIO_RECITERS[0];
+      return {
+        id: audioReciter.id ?? DEFAULT_RECITER_ID,
+        label: audioReciter.label,
+        avatar: audioReciter.avatar,
+      };
+    }
+    return (
+      RECITER_OPTIONS.find((r) => r.id === activeReciterId) ||
+      RECITER_OPTIONS[0]
+    );
+  }, [isEnglish, selectedEditionName, activeReciterId]);
+
+  const reciterDropdownItems = useMemo(() => {
+    if (isEnglish) {
+      // In English, use AUDIO_RECITERS identified by name
+      return AUDIO_RECITERS.filter((r) => r.language === "en").map((r) => ({
+        label: r.label,
+        value: r.name,
+        avatar: r.avatar,
+      }));
+    }
+    return RECITER_OPTIONS.map((r) => ({
+      label: r.label,
+      value: String(r.id),
+      avatar: r.avatar,
+    }));
+  }, [isEnglish]);
 
   const currentChapterId = chapter?.id ?? 1;
 
@@ -116,7 +174,7 @@ export default function AudioPlayerModal({
     });
   }, [animateTrackChange, nextChapterId, language, onChapterChange]);
 
-  // Islamic Network CDN Audio integration
+  // Audio integration (Arabic recitations from Quran.com API or English CDN audio)
   const {
     isLoading,
     isPlaying,
@@ -126,6 +184,7 @@ export default function AudioPlayerModal({
     isDragging,
     playbackSpeed,
     isRepeating,
+    reciterName,
     handlePlayPause,
     handleSkipBack,
     handleSkipForward,
@@ -133,12 +192,14 @@ export default function AudioPlayerModal({
     toggleRepeat,
     handleSliderValueChange,
     handleSlidingComplete,
-  } = useSurahCdnAudio({
+  } = useChapterAudio({
     chapterId: currentChapterId,
     enabled: visible,
     localizedName,
     arabicName,
     onPlayNext: handlePlayNext,
+    audioLanguage: resolvedAudioLanguage,
+    editionName: isEnglish ? selectedEditionName : undefined,
   });
 
   const S = useMemo(
@@ -238,7 +299,31 @@ export default function AudioPlayerModal({
                 </AppText>
               </Animated.View>
 
-              <View style={S.headerPlaceholder} />
+              <TouchableOpacity
+                onPress={() => {
+                  Haptics.light();
+                  setIsReciterModalVisible(true);
+                }}
+                style={S.reciterButton}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                activeOpacity={0.75}
+                accessibilityRole="button"
+                accessibilityLabel={t("onboarding.preferences.title", "Choose Quran Reciter")}
+              >
+                {currentReciter?.avatar ? (
+                  <Image
+                    source={currentReciter.avatar}
+                    style={S.reciterAvatar}
+                    contentFit="cover"
+                  />
+                ) : (
+                  <Ionicons
+                    name="mic-outline"
+                    size={scale(18)}
+                    color={colors.primary}
+                  />
+                )}
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -246,16 +331,25 @@ export default function AudioPlayerModal({
           <GestureDetector gesture={panGesture}>
             <View style={S.middleSection}>
               <Animated.View style={[S.artworkShadow, trackContentAnimatedStyle]}>
-                <LinearGradient
-                  colors={[colors.primary + "35", colors.card]}
-                  style={S.artworkGradient}
-                >
-                  <Ionicons
-                    name="musical-notes"
-                    size={scale(64)}
-                    color={colors.primary}
+                {currentReciter?.avatar && !avatarError ? (
+                  <Image
+                    source={currentReciter.avatar}
+                    style={S.artworkImage}
+                    contentFit="cover"
+                    onError={() => setAvatarError(true)}
                   />
-                </LinearGradient>
+                ) : (
+                  <LinearGradient
+                    colors={[colors.primary + "35", colors.card]}
+                    style={S.artworkGradient}
+                  >
+                    <Ionicons
+                      name="musical-notes"
+                      size={scale(64)}
+                      color={colors.primary}
+                    />
+                  </LinearGradient>
+                )}
               </Animated.View>
             </View>
           </GestureDetector>
@@ -318,6 +412,24 @@ export default function AudioPlayerModal({
                       {t(typeTranslationKey)}
                     </AppText>
                   </View>
+
+                  {reciterName ? (
+                    <View style={S.metadataChip}>
+                      <Ionicons
+                        name="mic-outline"
+                        size={scale(10)}
+                        color={colors.subtext}
+                      />
+                      <AppText
+                        variant="bodySm"
+                        family="title"
+                        color="subtext"
+                        numberOfLines={1}
+                      >
+                        {reciterName}
+                      </AppText>
+                    </View>
+                  ) : null}
                 </View>
               </View>
             </Animated.View>
@@ -497,6 +609,23 @@ export default function AudioPlayerModal({
             </TouchableOpacity>
           </View>
         </Animated.View>
+
+        <CommonModal
+          visible={isReciterModalVisible}
+          onClose={() => setIsReciterModalVisible(false)}
+          title={t("onboarding.preferences.title", "Choose Quran Reciter")}
+          icon="mic-outline"
+          data={reciterDropdownItems}
+          value={isEnglish ? selectedEditionName : String(activeReciterId)}
+          onChange={(item) => {
+            Haptics.light();
+            if (isEnglish) {
+              setSelectedEditionName(item.value);
+            } else {
+              setReciterId(Number(item.value));
+            }
+          }}
+        />
       </GestureHandlerRootView>
     </Modal>
   );
@@ -577,9 +706,21 @@ const createStyles = (
         ? "rgba(255, 255, 255, 0.1)"
         : "rgba(0, 0, 0, 0.05)",
     },
-    headerPlaceholder: {
+    reciterButton: {
       width: scale(38),
       height: scale(38),
+      borderRadius: scale(19),
+      borderWidth: 1.5,
+      borderColor: colors.primary,
+      overflow: "hidden",
+      backgroundColor: colors.primary + "18",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    reciterAvatar: {
+      width: "100%",
+      height: "100%",
+      borderRadius: scale(19),
     },
     headerTitleContainer: {
       flexDirection: "row",
@@ -616,6 +757,10 @@ const createStyles = (
       shadowOffset: { width: 0, height: 6 },
       shadowOpacity: 0.25,
       shadowRadius: 12,
+    },
+    artworkImage: {
+      width: "100%",
+      height: "100%",
     },
     artworkGradient: {
       width: "100%",

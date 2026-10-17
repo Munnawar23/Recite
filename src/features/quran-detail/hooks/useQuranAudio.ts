@@ -1,7 +1,6 @@
 import {
   DEFAULT_RECITER_ID,
   RECITER_OPTIONS,
-  RECITERS_IMAGES,
   getSurahName,
 } from "@/constants";
 import { useBackgroundPlay } from "@/hooks/useBackgroundPlay";
@@ -11,7 +10,7 @@ import { useDownloadsStore } from "@/store/downloadsStore";
 import { useLanguageStore } from "@/store/languageStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { useQuery } from "@tanstack/react-query";
-import { Asset } from "expo-asset";
+
 import {
   useAudioPlayer,
   useAudioPlayerStatus,
@@ -157,44 +156,6 @@ export function useQuranAudio(
     [reciterId],
   );
 
-  // Resolve reciter artwork local/remote URI for lock screen & notification controls
-  const [reciterArtworkUri, setReciterArtworkUri] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    let isMounted = true;
-    const avatarModule = RECITERS_IMAGES[reciterId] || RECITERS_IMAGES[DEFAULT_RECITER_ID];
-    if (!avatarModule) {
-      setReciterArtworkUri(undefined);
-      return;
-    }
-
-    try {
-      const asset = Asset.fromModule(avatarModule);
-      if (asset.localUri) {
-        setReciterArtworkUri(asset.localUri);
-      } else {
-        asset
-          .downloadAsync()
-          .then(() => {
-            if (isMounted) {
-              setReciterArtworkUri(asset.localUri || asset.uri);
-            }
-          })
-          .catch(() => {
-            if (isMounted) {
-              setReciterArtworkUri(asset.uri);
-            }
-          });
-      }
-    } catch {
-      if (isMounted) setReciterArtworkUri(undefined);
-    }
-
-    return () => {
-      isMounted = false;
-    };
-  }, [reciterId]);
-
   const surahName = useMemo(
     () => metadataOptions?.localizedName || getSurahName(chapterId, language),
     [chapterId, language, metadataOptions?.localizedName],
@@ -209,15 +170,15 @@ export function useQuranAudio(
       title: surahDisplay,
       artist: activeReciter.label,
       albumTitle: "The Noble Quran",
-      artworkUrl: reciterArtworkUri,
     };
-  }, [surahName, metadataOptions?.arabicName, activeReciter.label, reciterArtworkUri]);
+  }, [surahName, metadataOptions?.arabicName, activeReciter.label]);
 
   // Delegate background playback & lock screen media controls to reusable hook
   useBackgroundPlay({
     player: enabled ? player : null,
     isPlaying: status?.playing,
     metadata: lockScreenMetadata,
+    reciterId,
     enabled,
   });
 

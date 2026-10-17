@@ -49,3 +49,33 @@ export const RECITER_OPTIONS: ReciterOption[] = [
     avatar: RECITERS_IMAGES[10],
   },
 ];
+
+export interface AudioReciterOption {
+  name: string; // Identifier name (e.g. edition for CDN or streaming sources)
+  label: string;
+  sublabel?: string;
+  avatar: any;
+  language: "en" | "ar" | string;
+  id?: number;
+}
+
+export const DEFAULT_ENGLISH_RECITER_NAME =
+  "en.misharyrashidalafasyenglishtranslationsaheehibrahimwalk";
+
+/**
+ * List of available chapter audio reciters (such as Islamic Network CDN editions).
+ * Uses 'name' as identifier instead of numeric ID.
+ */
+export const AUDIO_RECITERS: AudioReciterOption[] = [
+  {
+    name: "en.misharyrashidalafasyenglishtranslationsaheehibrahimwalk",
+    label: "Mishary Rashid Alafasy & Ibrahim Walk",
+    sublabel: "English Translation (Saheeh International)",
+    avatar: RECITERS_IMAGES[7],
+    language: "en",
+    id: 7,
+  },
+];
+
+export const AudioReciters = AUDIO_RECITERS;
+export const DEFAULT_ENGLISH_AUDIO_RECITER = AUDIO_RECITERS[0];

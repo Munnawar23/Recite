@@ -4,33 +4,104 @@ import {
   useAudioPlayerStatus,
   type AudioMetadata,
 } from "expo-audio";
+import { useQuery } from "@tanstack/react-query";
 
+import { getChapterAudio } from "@/lib/api";
 import { getSurahCdnAudioUrl } from "@/lib/api/surah-cdn-audio";
+import { useQuranSettingsStore } from "@/store/quranSettingsStore";
+import {
+  DEFAULT_RECITER_ID,
+  RECITER_OPTIONS,
+  AUDIO_RECITERS,
+  DEFAULT_ENGLISH_RECITER_NAME,
+} from "@/constants";
 import { useBackgroundPlay } from "@/hooks/useBackgroundPlay";
 import { Haptics } from "@/lib/haptics";
 
-export interface UseSurahCdnAudioOptions {
+export interface UseChapterAudioOptions {
   chapterId: number;
   enabled?: boolean;
   localizedName?: string;
   arabicName?: string;
   onPlayNext?: () => void;
+  audioLanguage?: "en" | "ar" | string;
+  editionName?: string;
 }
 
-export function useSurahCdnAudio({
+export function useChapterAudio({
   chapterId,
   enabled = true,
   localizedName,
   arabicName,
   onPlayNext,
-}: UseSurahCdnAudioOptions) {
-  // 1. Audio source URL
-  const audioUrl = useMemo(() => {
-    if (!chapterId || chapterId < 1 || chapterId > 114) return null;
-    return getSurahCdnAudioUrl(chapterId);
-  }, [chapterId]);
+  audioLanguage = "en",
+  editionName,
+}: UseChapterAudioOptions) {
+  const isArabicAudio = audioLanguage === "ar";
+  const isEnglishAudio = audioLanguage === "en";
+  const { reciterId: globalReciterId } = useQuranSettingsStore();
+  const reciterId = globalReciterId || DEFAULT_RECITER_ID;
 
-  // 2. Initialize expo-audio player
+  // Always fetch Arabic recitation audio online (same API as Quran Detail AudioPlayer)
+  const { data: arabicAudioData, isLoading: isLoadingArabicAudio } = useQuery({
+    queryKey: ["chapter-audio", chapterId, reciterId],
+    queryFn: () => getChapterAudio(chapterId, reciterId),
+    enabled: enabled && isArabicAudio && !!chapterId && chapterId > 0,
+    staleTime: 1000 * 60 * 60 * 24, // 24 hours fresh
+    gcTime: Infinity,
+  });
+
+  const remoteArabicUrl = useMemo(() => {
+    if (!arabicAudioData?.audio_url) return null;
+    let url = arabicAudioData.audio_url;
+    if (url.startsWith("//")) {
+      url = `https:${url}`;
+    }
+    return url;
+  }, [arabicAudioData]);
+
+  const englishCdnUrl = useMemo(() => {
+    if (!chapterId || chapterId < 1 || chapterId > 114) return null;
+    return getSurahCdnAudioUrl(chapterId, {
+      edition: editionName || DEFAULT_ENGLISH_RECITER_NAME,
+    });
+  }, [chapterId, editionName]);
+
+  const activeAudioReciter = useMemo(() => {
+    if (isEnglishAudio) {
+      return (
+        AUDIO_RECITERS.find(
+          (r) => r.name === (editionName || DEFAULT_ENGLISH_RECITER_NAME),
+        ) || AUDIO_RECITERS[0]
+      );
+    }
+    return null;
+  }, [isEnglishAudio, editionName]);
+
+  // Always stream audio online depending on selected language
+  const audioUrl = useMemo(() => {
+    if (isArabicAudio) {
+      return remoteArabicUrl; // Quran.com recitation API
+    }
+    if (isEnglishAudio) {
+      return englishCdnUrl; // Islamic Network CDN English translation
+    }
+    return englishCdnUrl; // Default fallback
+  }, [isArabicAudio, isEnglishAudio, remoteArabicUrl, englishCdnUrl]);
+
+  // Active Reciter Name
+  const reciterName = useMemo(() => {
+    if (isArabicAudio) {
+      const activeReciter = RECITER_OPTIONS.find((r) => r.id === reciterId);
+      return activeReciter ? activeReciter.label : "Mishary Rashid Alafasy";
+    }
+    if (isEnglishAudio) {
+      return activeAudioReciter?.label || "Mishary Rashid Alafasy & Ibrahim Walk";
+    }
+    return "Mishary Rashid Alafasy & Ibrahim Walk";
+  }, [isArabicAudio, isEnglishAudio, reciterId, activeAudioReciter]);
+
+  // Initialize expo-audio player
   const player = useAudioPlayer(
     enabled && audioUrl ? { uri: audioUrl } : undefined,
   );
@@ -94,7 +165,7 @@ export function useSurahCdnAudio({
     setIsChangingTrack(true);
     player.replace({ uri: audioUrl });
     player.play();
-  }, [enabled, audioUrl, player]);
+  }, [enabled, audioUrl, player, status?.playing]);
 
   // Effect 2: Clear track loading once duration becomes available
   useEffect(() => {
@@ -136,9 +207,11 @@ export function useSurahCdnAudio({
   ]);
 
   // Combined loading state
+  const isFetchingAudio = isArabicAudio && isLoadingArabicAudio && !audioUrl;
   const isLoading =
     enabled &&
     (isChangingTrack ||
+      isFetchingAudio ||
       Boolean(status?.isBuffering) ||
       status?.playbackState === "loading" ||
       status?.playbackState === "buffering" ||
@@ -224,15 +297,19 @@ export function useSurahCdnAudio({
 
     return {
       title,
-      artist: "Mishary Rashid Alafasy & Ibrahim Walk",
-      albumTitle: "The Noble Quran (Saheeh International)",
+      artist: reciterName,
+      albumTitle: isArabicAudio
+        ? "The Noble Quran"
+        : "The Noble Quran (Saheeh International)",
     };
-  }, [localizedName, arabicName, chapterId]);
+  }, [localizedName, arabicName, chapterId, reciterName, isArabicAudio]);
 
   useBackgroundPlay({
     player: enabled ? player : null,
     isPlaying: status?.playing,
     metadata: lockScreenMetadata,
+    reciterId: isArabicAudio ? reciterId : (activeAudioReciter?.id ?? DEFAULT_RECITER_ID),
+    artworkModule: isArabicAudio ? undefined : activeAudioReciter?.avatar,
     enabled,
   });
 
@@ -241,6 +318,9 @@ export function useSurahCdnAudio({
     status,
     audioUrl,
     remoteAudioUrl: audioUrl,
+    reciterName,
+    isArabicAudio,
+    isEnglishAudio,
     isLoading,
     isPlaying: !!status?.playing,
     currentTime: status?.currentTime || 0,
@@ -258,3 +338,7 @@ export function useSurahCdnAudio({
     handleSlidingComplete,
   };
 }
+
+// Backward-compatible alias
+export const useSurahCdnAudio = useChapterAudio;
+export type UseSurahCdnAudioOptions = UseChapterAudioOptions;

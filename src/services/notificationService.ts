@@ -1,17 +1,19 @@
 import Constants, { ExecutionEnvironment } from "expo-constants";
+import { SchedulableTriggerInputTypes } from "expo-notifications";
 import { Linking, Platform } from "react-native";
 
 export const isExpoGo =
-  Constants.appOwnership === "expo" ||
   Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
 
 let Notifications: typeof import("expo-notifications") | null = null;
+let moduleLoadError: Error | null = null;
 
 if (!isExpoGo) {
   try {
     Notifications = require("expo-notifications");
-  } catch (error) {
-    console.warn("[NotificationService] expo-notifications could not be loaded:", error);
+  } catch (error: unknown) {
+    moduleLoadError =
+      error instanceof Error ? error : new Error(String(error));
   }
 }
 
@@ -52,50 +54,71 @@ const SCHEDULE_DAYS_COUNT = 14;
 const CHANNEL_ID = "daily-reminder-v2";
 
 export class NotificationService {
-  private static isConfigured = false;
+  private static configurePromise: Promise<void> | null = null;
 
   static get isSupported(): boolean {
     return !isExpoGo && Notifications !== null;
   }
 
-  static configure() {
+  static isHealthy(): boolean {
+    return this.isSupported && moduleLoadError === null;
+  }
+
+  static getModuleLoadError(): Error | null {
+    return moduleLoadError;
+  }
+
+  static async configure(): Promise<void> {
     if (!this.isSupported || !Notifications) return;
-    if (this.isConfigured) return;
-    this.isConfigured = true;
+    if (this.configurePromise) return this.configurePromise;
 
-    try {
-      Notifications.setNotificationHandler({
-        handleNotification: async () => ({
-          shouldShowBanner: true,
-          shouldShowList: true,
-          shouldPlaySound: true,
-          shouldSetBadge: false,
-        }),
-      });
+    this.configurePromise = (async () => {
+      try {
+        Notifications!.setNotificationHandler({
+          handleNotification: async () => ({
+            shouldShowBanner: true,
+            shouldShowList: true,
+            shouldPlaySound: true,
+            shouldSetBadge: false,
+          }),
+        });
 
-      // Set up the Android notification channel.
-      if (Platform.OS === "android") {
-        void (async () => {
+        // Set up the Android notification channel.
+        if (Platform.OS === "android") {
           await Notifications!.setNotificationChannelAsync(CHANNEL_ID, {
             name: "Daily Reminder",
             importance: Notifications!.AndroidImportance.HIGH,
             vibrationPattern: [0, 250, 250, 250],
             lightColor: "#FF231F7C",
+            // Must be bundled on both platforms: assets/ + expo-notifications plugin on iOS, res/raw/ on Android
             sound: "notification.mp3",
           });
-        })();
+        }
+      } catch (error) {
+        this.configurePromise = null;
+        console.warn("[NotificationService] configure error:", error);
       }
-    } catch (error) {
-      console.warn("[NotificationService] configure error:", error);
-    }
+    })();
+
+    return this.configurePromise;
   }
 
-  static async getPermissionsAsync(): Promise<{ status: string; canAskAgain: boolean }> {
+  static async getPermissionsAsync(): Promise<{
+    status: "granted" | "denied" | "undetermined";
+    canAskAgain: boolean;
+  }> {
     if (!this.isSupported || !Notifications) {
       return { status: "denied", canAskAgain: false };
     }
     try {
-      return await Notifications.getPermissionsAsync();
+      const res = await Notifications.getPermissionsAsync();
+      const status: "granted" | "denied" | "undetermined" =
+        res.status === "granted"
+          ? "granted"
+          : res.status === "undetermined"
+            ? "undetermined"
+            : "denied";
+      return { status, canAskAgain: res.canAskAgain };
     } catch {
       return { status: "denied", canAskAgain: false };
     }
@@ -107,7 +130,7 @@ export class NotificationService {
     if (!this.isSupported || !Notifications) {
       return "denied";
     }
-    this.configure();
+    await this.configure();
 
     try {
       const { status: existingStatus } =
@@ -149,7 +172,10 @@ export class NotificationService {
     if (!this.isSupported || !Notifications) {
       return false;
     }
-    this.configure();
+    if (!(await this.isPermissionGranted())) {
+      return false;
+    }
+    await this.configure();
 
     try {
       // 1. Cancel all previously scheduled reminders to prevent stacking
@@ -157,17 +183,18 @@ export class NotificationService {
 
       const now = new Date();
       let scheduledCount = 0;
+      let slotIndex = 0;
 
-      for (let dayOffset = 0; dayOffset < SCHEDULE_DAYS_COUNT; dayOffset++) {
-        const item = REMINDER_CYCLE[dayOffset % REMINDER_CYCLE.length];
+      for (let dayOffset = 0; slotIndex < SCHEDULE_DAYS_COUNT; dayOffset++) {
+        const item = REMINDER_CYCLE[slotIndex % REMINDER_CYCLE.length];
 
         const targetDate = new Date();
         targetDate.setDate(now.getDate() + dayOffset);
         targetDate.setHours(item.hour, item.minute, 0, 0);
 
-        // If time already passed for today, push it forward to the next day slot
+        // If time already passed for today, skip past slot instead of shifting
         if (targetDate.getTime() <= now.getTime()) {
-          targetDate.setDate(targetDate.getDate() + 1);
+          continue;
         }
 
         await Notifications.scheduleNotificationAsync({
@@ -177,23 +204,25 @@ export class NotificationService {
             data: {
               type: "daily_read_reminder",
               cycleKey: item.cycleKey,
-              dayIndex: dayOffset,
+              dayIndex: slotIndex,
             },
+            // Must be bundled on both platforms: assets/ + expo-notifications plugin on iOS, res/raw/ on Android
             sound: "notification.mp3",
           },
           trigger:
             Platform.OS === "android"
-              ? ({
-                  type: "date",
+              ? {
+                  type: SchedulableTriggerInputTypes.DATE,
                   date: targetDate,
                   channelId: CHANNEL_ID,
-                } as any)
+                }
               : {
-                  type: "date",
+                  type: SchedulableTriggerInputTypes.DATE,
                   date: targetDate,
                 },
         });
 
+        slotIndex++;
         scheduledCount++;
       }
 
@@ -224,39 +253,6 @@ export class NotificationService {
       console.log(`[NotificationService] Cancelled ${reminders.length} reminder notifications.`);
     } catch (error) {
       console.error("[NotificationService] Error cancelling reminders:", error);
-    }
-  }
-
-  /**
-   * Triggers an instant notification (for Developer testing)
-   */
-  static async sendTestNotification(): Promise<boolean> {
-    if (!this.isSupported || !Notifications) {
-      return false;
-    }
-    this.configure();
-    try {
-      const permission = await this.requestPermissionsAsync();
-      if (permission !== "granted") {
-        return false;
-      }
-
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: "🧪 Test Notification Delivered! 🎉",
-          body: "Your daily Quran reminder notifications are configured and working perfectly 📖✨",
-          data: { type: "test_notification" },
-          sound: "notification.mp3",
-        },
-        trigger:
-          Platform.OS === "android"
-            ? ({ channelId: CHANNEL_ID } as any)
-            : null,
-      });
-      return true;
-    } catch (error) {
-      console.error("Error sending instant test notification:", error);
-      return false;
     }
   }
 

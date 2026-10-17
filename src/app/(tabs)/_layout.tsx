@@ -14,7 +14,7 @@ export default function TabLayout() {
   const { colors, fontFamily } = useAppTheme();
   const { bottom: bottomInset } = useAppSafeAreaInsets();
 
-  const iconSize = scale(20);
+  const iconSize = scale(21);
 
   // Use safe area if available, otherwise give a comfortable padding
   const bottomPadding =
@@ -80,7 +80,7 @@ export default function TabLayout() {
 
       tabBarLabelStyle: {
         fontFamily: fontFamily.text,
-        fontSize: moderateScale(11),
+        fontSize: moderateScale(12),
       },
     }),
     [colors, fontFamily, bottomPadding, tabBarHeight],

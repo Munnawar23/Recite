@@ -44,8 +44,12 @@ export default function ExploreCard({
   };
 
   const gradientColors = isDark
-    ? (["#152824", "#0D1B18"] as const)
-    : (["#FFFFFF", "#F4F8F5"] as const);
+    ? (["#162320", "#0E1816"] as const)
+    : (["#FFFFFF", "#F6FAF7"] as const);
+
+  const watermarkColor = isDark
+    ? "rgba(212, 168, 106, 0.20)"
+    : "rgba(75, 133, 102, 0.18)";
 
   return (
     <TouchableOpacity
@@ -60,55 +64,43 @@ export default function ExploreCard({
         style={StyleSheet.absoluteFill}
       />
 
-      {/* Decorative Watermark */}
+      {/* Decorative Subtle Watermark */}
       {watermarkIcon && (
         <View style={S.watermarkContainer} pointerEvents="none">
           {watermarkFamily === "FontAwesome5" && (
             <FontAwesome5
               name={watermarkIcon}
-              size={scale(56)}
-              color={
-                isDark
-                  ? "rgba(212, 168, 106, 0.24)"
-                  : "rgba(75, 133, 102, 0.22)"
-              }
+              size={scale(52)}
+              color={watermarkColor}
             />
           )}
           {watermarkFamily === "Ionicons" && (
             <Ionicons
               name={watermarkIcon as any}
-              size={scale(56)}
-              color={
-                isDark
-                  ? "rgba(212, 168, 106, 0.24)"
-                  : "rgba(75, 133, 102, 0.22)"
-              }
+              size={scale(52)}
+              color={watermarkColor}
             />
           )}
           {watermarkFamily === "MaterialCommunityIcons" && (
             <MaterialCommunityIcons
               name={watermarkIcon as any}
-              size={scale(56)}
-              color={
-                isDark
-                  ? "rgba(212, 168, 106, 0.24)"
-                  : "rgba(75, 133, 102, 0.22)"
-              }
+              size={scale(52)}
+              color={watermarkColor}
             />
           )}
         </View>
       )}
 
-      {/* Top Section: Icon Badge */}
+      {/* Top: Icon Badge (Filled with Primary Color) */}
       <View style={S.iconBadge}>
         <Ionicons
           name={icon}
           size={scale(19)}
-          color={colors.accent}
+          color="#FFFFFF"
         />
       </View>
 
-      {/* Bottom Content: Title & Subtitle */}
+      {/* Bottom: Title & Subtitle */}
       <View style={S.contentContainer}>
         <AppText
           variant="body"
@@ -120,7 +112,7 @@ export default function ExploreCard({
           {title}
         </AppText>
         <AppText
-          variant="bodySm"
+          variant="caption"
           color="subtext"
           numberOfLines={2}
           style={S.subtitleText}
@@ -138,31 +130,38 @@ const createStyles = (colors: ThemeColors, isDark: boolean) =>
       width: scale(146),
       minHeight: scale(124),
       borderRadius: rs.space(16),
-      padding: scale(12),
+      padding: scale(13),
       justifyContent: "space-between",
       overflow: "hidden",
       borderWidth: 1,
-      borderColor: isDark ? "rgba(212, 168, 106, 0.12)" : colors.border,
+      borderColor: isDark
+        ? "rgba(212, 168, 106, 0.16)"
+        : "rgba(75, 133, 102, 0.16)",
+      backgroundColor: isDark ? "#141F1D" : "#FFFFFF",
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: isDark ? 0.25 : 0.05,
+      shadowRadius: 5,
+      elevation: 2,
       position: "relative",
     },
     watermarkContainer: {
       position: "absolute",
-      right: scale(-2),
-      top: scale(4),
+      right: scale(7),
+      top: scale(10),
     },
     iconBadge: {
       width: scale(38),
       height: scale(38),
-      borderRadius: scale(19),
-      backgroundColor: isDark
-        ? "rgba(212, 168, 106, 0.12)"
-        : "rgba(184, 130, 61, 0.12)",
-      borderWidth: 1,
-      borderColor: isDark
-        ? "rgba(212, 168, 106, 0.28)"
-        : "rgba(184, 130, 61, 0.25)",
+      borderRadius: scale(12),
+      backgroundColor: colors.primary,
       alignItems: "center",
       justifyContent: "center",
+      shadowColor: colors.primary,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 3,
     },
     contentContainer: {
       marginTop: verticalScale(10),
@@ -170,10 +169,10 @@ const createStyles = (colors: ThemeColors, isDark: boolean) =>
     titleText: {
       fontWeight: "700",
       letterSpacing: 0.2,
+      marginBottom: verticalScale(2),
     },
     subtitleText: {
-      marginTop: verticalScale(2),
-      lineHeight: scale(14),
+      lineHeight: scale(14.5),
       opacity: 0.85,
     },
   });

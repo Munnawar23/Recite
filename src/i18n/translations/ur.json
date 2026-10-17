@@ -3,25 +3,25 @@
     "welcome": "خوش آمدید",
     "settings": "سیٹنگز",
     "language": "زبان",
-    "selectLanguage": "زبان منتخب کریں",
+    "selectLanguage": "زبان چنیں",
     "home": "ہوم",
     "recite": "تلاوت",
     "read": "پڑھیں",
     "listen": "سنیں",
-    "reflect": "تدبر",
+    "reflect": "سوچیں",
     "save": "سیو کریں",
-    "cancel": "منسوخ کریں",
+    "cancel": "کینسل کریں",
     "tryAgain": "دوبارہ کوشش کریں",
     "retry": "دوبارہ کوشش کریں",
-    "errorTitle": "کچھ گڑبڑ ہو گئی",
+    "errorTitle": "کچھ مسئلہ ہو گیا",
     "errorMessage": "ڈیٹا لوڈ نہیں ہو سکا۔ دوبارہ کوشش کرنے کے لیے ٹیپ کریں۔",
-    "noConnectionTitle": "انٹرنیٹ نہیں چل رہا",
-    "noConnectionSubtitle": "ڈیٹا لوڈ نہیں ہو سکا۔ اپنا انٹرنیٹ کنکشن چیک کریں۔",
+    "noConnectionTitle": "انٹرنیٹ نہیں ہے",
+    "noConnectionSubtitle": "ڈیٹا لوڈ نہیں ہو سکا۔ اپنا انٹرنیٹ چیک کریں۔",
     "offlineAudioPreviewTitle": "آف لائن موڈ",
-    "offlineAudioPreviewMessage": "آڈیو سننے کے لیے انٹرنیٹ ضروری ہے۔ ڈاؤن لوڈ کی ہوئی سورتیں آپ کسی بھی وقت سن سکتے ہیں۔",
-    "offlineReciterChangeMessage": "قاری تبدیل کرنے کے لیے انٹرنیٹ درکار ہے۔ قاری تبدیل کرنے کے لیے انٹرنیٹ سے منسلک ہوں۔",
+    "offlineAudioPreviewMessage": "آڈیو سننے کے لیے انٹرنیٹ چاہیے۔ ڈاؤن لوڈ کی ہوئی سورتیں آپ پھر بھی سن سکتے ہیں۔",
+    "offlineReciterChangeMessage": "قاری بدلنے کے لیے انٹرنیٹ چاہیے۔ انٹرنیٹ سے جڑیں، پھر قاری بدلیں۔",
     "quran": "قرآن",
-    "surah": "سورۃ",
+    "surah": "سورت",
     "qibla": "قبلہ",
     "library": "لائبریری",
     "back": "واپس",
@@ -29,12 +29,12 @@
     "sharing": "شیئر ہو رہا ہے...",
     "copy": "کاپی کریں",
     "favourite": "پسندیدہ",
-    "favorited": "محفوظ شدہ",
-    "copied": "کلپ بورڈ پر کاپی ہو گیا"
+    "favorited": "سیو ہو گیا",
+    "copied": "کاپی ہو گیا"
   },
   "splash": {
     "title": "Recite",
-    "subtitle": "پڑھیں • سنیں • غور کریں"
+    "subtitle": "پڑھیں • سنیں • سوچیں"
   },
   "tabs": {
     "home": "ہوم",
@@ -55,8 +55,8 @@
     "sectionTitles": {
       "prayerTimes": "نماز کے اوقات",
       "dailyVerse": "آج کی آیت",
-      "continueReading": "تلاوت جاری رکھیں",
-      "explore": "دریافت کریں"
+      "continueReading": "پڑھنا جاری رکھیں",
+      "explore": "مزید دیکھیں"
     },
     "prayerNames": {
       "fajr": "فجر",
@@ -66,43 +66,47 @@
       "isha": "عشاء"
     },
     "locationNotice": {
-      "showingMecca": "مکہ مکرمہ کے اوقات دکھائے جا رہے ہیں۔",
+      "showingMecca": "مکہ کے اوقات دکھائے جا رہے ہیں۔",
       "enableLocation": "لوکیشن آن کرنے کے لیے ٹیپ کریں"
     },
     "dailyVerse": {
       "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
-      "defaultTranslation": "پس یقیناً تنگی کے ساتھ آسانی ہے۔",
-      "defaultSource": "سورۃ الشرح · ۹۴:۶"
+      "defaultTranslation": "بے شک مشکل کے ساتھ آسانی ہے۔",
+      "defaultSource": "سورت الشرح · 94:6"
     },
     "continueReadingEmpty": {
       "title": "پڑھنا شروع کریں",
-      "subtitle": "قرآن کھولیں، آپ جہاں تک پڑھیں گے وہ پیش رفت یہاں محفوظ رہے گی۔",
+      "subtitle": "قرآن کھولیں۔ آپ جہاں تک پڑھیں گے، وہ یہاں دکھے گا۔",
       "buttonLabel": "قرآن کھولیں"
     },
     "explore": {
       "qibla": {
         "title": "قبلہ",
-        "subtitle": "قبلہ رخ اور کعبہ کی سمت معلوم کریں"
+        "subtitle": "کعبہ کی سمت پتہ کریں"
       },
       "quranAudio": {
         "title": "قرآن آڈیو",
-        "subtitle": "قرآن پاک کی تلاوت سنیں"
+        "subtitle": "قرآن مجید سنیں"
+      },
+      "downloads": {
+        "title": "ڈاؤن لوڈز",
+        "subtitle": "کسی بھی وقت آف لائن سنیں"
       }
     }
   },
   "quran": {
-    "title": "قرآن مجید",
+    "title": "قرآن",
     "subtitle": "قرآن مجید پڑھیں، سمجھیں اور سنیں",
     "searchPlaceholder": "سورت تلاش کریں...",
-    "continueReadingTag": "تلاوت جاری رکھیں",
+    "continueReadingTag": "پڑھنا جاری رکھیں",
     "verseNumber": "آیت نمبر {{number}}",
     "versesCount": "{{count}} آیات",
     "meccan": "مکی",
     "medinan": "مدنی",
-    "upNextInQueue": "اگلی سورت قطار میں",
+    "upNextInQueue": "اگلی سورت",
     "playNext": "اگلی چلائیں",
     "noResultsTitle": "کوئی سورت نہیں ملی",
-    "noResultsSubtitle": "کسی دوسرے نام سے تلاش کرنے کی کوشش کریں۔",
+    "noResultsSubtitle": "کسی دوسرے لفظ سے تلاش کریں۔",
     "errorMessage": "سورتوں کی فہرست لوڈ نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
     "versesError": {
       "title": "لوڈ نہیں ہو سکا",
@@ -113,37 +117,37 @@
       "download": "ڈاؤن لوڈ",
       "downloading": "ڈاؤن لوڈ ہو رہا ہے",
       "downloadingProgress": "ڈاؤن لوڈ ہو رہا ہے • {{written}} / {{total}} MB ({{progress}}%)",
-      "paused": "روک دیا گیا • {{written}} / {{total}} MB ({{progress}}%)",
+      "paused": "رکا ہوا • {{written}} / {{total}} MB ({{progress}}%)",
       "pause": "روکیں",
-      "resume": "دوبارہ شروع کریں",
+      "resume": "پھر شروع کریں",
       "playingOffline": "آف لائن چل رہا ہے",
       "playingOfflineTitle": "آف لائن چل رہا ہے",
       "playingOnlineTitle": "آن لائن چل رہا ہے",
-      "deleteTitle": "ڈاؤن لوڈ ڈیلیٹ کریں؟",
-      "deleteDesc": "کیا آپ واقعی اس سورت کی تلاوت کو ڈاؤن لوڈز سے ہٹانا چاہتے ہیں؟",
+      "deleteTitle": "ڈاؤن لوڈ ہٹائیں؟",
+      "deleteDesc": "کیا آپ اس سورت کی تلاوت ڈاؤن لوڈز سے ہٹانا چاہتے ہیں؟",
       "notReadyTitle": "آڈیو تیار نہیں ہے",
-      "notReadyBody": "آڈیو لوڈ ہو رہی ہے۔ براہ کرم تھوڑی دیر بعد دوبارہ کوشش کریں۔",
+      "notReadyBody": "آڈیو لوڈ ہو رہی ہے۔ تھوڑی دیر بعد دوبارہ کوشش کریں۔",
       "errorTitle": "ڈاؤن لوڈ نہیں ہو سکا",
-      "errorBody": "ڈاؤن لوڈ مکمل نہیں ہو سکا۔ براہ کرم انٹرنیٹ چیک کریں اور دوبارہ کوشش کریں۔"
+      "errorBody": "ڈاؤن لوڈ پورا نہیں ہو سکا۔ انٹرنیٹ چیک کریں اور دوبارہ کوشش کریں۔"
     }
   },
   "verse": {
     "holdForActions": "دبا کر رکھیں",
-    "favoritedTitle": "پسندیدہ میں شامل کر دیا گیا",
-    "unfavoritedTitle": "پسندیدہ سے ہٹا دیا گیا",
-    "favoritedMsg": "آیت پسندیدہ میں محفوظ ہو گئی",
+    "favoritedTitle": "پسندیدہ میں شامل ہو گیا",
+    "unfavoritedTitle": "پسندیدہ سے ہٹ گیا",
+    "favoritedMsg": "آیت پسندیدہ میں سیو ہو گئی",
     "unfavoritedMsg": "آیت پسندیدہ سے ہٹا دی گئی"
   },
   "errorBoundary": {
-    "title": "کچھ گڑبڑ ہو گئی",
-    "subtitle": "ایپ میں کوئی غیر متوقع خرابی پیش آئی ہے۔ آپ ایپ دوبارہ شروع کر سکتے ہیں یا اس اسکرین کو ریفریش کر سکتے ہیں۔"
+    "title": "کچھ مسئلہ ہو گیا",
+    "subtitle": "ایپ میں کوئی غیر متوقع خرابی آ گئی ہے۔ آپ ایپ دوبارہ کھول سکتے ہیں یا اسکرین ریفریش کر سکتے ہیں۔"
   },
   "settings": {
     "title": "سیٹنگز",
-    "subtitle": "ایپ کی پسند اور تھیم تبدیل کریں",
+    "subtitle": "ایپ کی سیٹنگز اور تھیم بدلیں",
     "sections": {
-      "displayLanguage": "ڈسپلے اور زبانیں",
-      "notifications": "نوٹیفکیشنز",
+      "displayLanguage": "ڈسپلے اور زبان",
+      "notifications": "نوٹیفیکیشنز",
       "storage": "اسٹوریج",
       "helpSupport": "مدد اور سپورٹ",
       "shareRate": "شیئر اور ریٹنگ",
@@ -151,46 +155,46 @@
     },
     "display": {
       "title": "ڈسپلے سیٹنگز",
-      "subtitle": "تھیم، فونٹس اور ٹیکسٹ کا سائز",
-      "optionsTitle": "ڈسپلے کے اختیارات",
+      "subtitle": "تھیم، فونٹ اور سائز",
+      "optionsTitle": "ڈسپلے آپشنز",
       "optionsSubtitle": "تھیم اور فونٹ سائز",
       "appTheme": "ایپ تھیم",
       "appFontSize": "ایپ فونٹ سائز",
-      "quranFontSize": "قرآنی عربی فونٹ سائز",
+      "quranFontSize": "قرآن عربی فونٹ سائز",
       "livePreview": "لائیو پریویو",
-      "sampleTranslation": "اللہ کے نام سے جو بے حد مہربان، نہایت رحم کرنے والا ہے",
+      "sampleTranslation": "اللہ کے نام سے جو بہت مہربان، نہایت رحم والا ہے",
       "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
       "theme": {
         "light": "لائٹ",
         "dark": "ڈارک",
-        "system": "سسٹم کے مطابق"
+        "system": "سسٹم"
       },
       "fontSize": {
         "default": "عام",
         "large": "بڑا",
-        "extraLarge": "زیادہ سے زیادہ"
+        "extraLarge": "سب سے بڑا"
       }
     },
     "languages": {
       "title": "زبان اور آڈیو",
-      "subtitle": "ایپ کی زبان، ترجمہ اور قاری",
+      "subtitle": "ایپ زبان، ترجمہ اور قاری",
       "optionsTitle": "زبان اور آڈیو سیٹنگز",
       "optionsSubtitle": "زبان، ترجمہ اور قاری",
-      "appLanguageSection": "ایپ کی زبان",
-      "appLanguageTitle": "ایپ انٹرفیس کی زبان",
-      "appLanguageSubtitle": "مینو اور اسکرین کے لیے بنیادی زبان منتخب کریں",
-      "appLanguagePlaceholder": "زبان منتخب کریں",
+      "appLanguageSection": "ایپ زبان",
+      "appLanguageTitle": "ایپ کی زبان",
+      "appLanguageSubtitle": "مینو اور اسکرین کے لیے زبان چنیں",
+      "appLanguagePlaceholder": "ایپ زبان چنیں",
       "quranTranslationSection": "قرآن ترجمہ",
       "quranTranslationTitle": "ڈیفالٹ قرآن ترجمہ",
-      "quranTranslationSubtitle": "آیات کے ساتھ دکھایا جانے والا ترجمہ منتخب کریں",
-      "quranTranslationPlaceholder": "ترجمہ منتخب کریں",
-      "quranReciterSection": "قرآن کے قاری",
+      "quranTranslationSubtitle": "آیات کے ساتھ دکھنے والا ترجمہ چنیں",
+      "quranTranslationPlaceholder": "ترجمہ چنیں",
+      "quranReciterSection": "قاری",
       "quranReciterTitle": "ڈیفالٹ قاری",
-      "quranReciterSubtitle": "تلاوت سننے کے لیے اپنی پسند کے قاری کا انتخاب کریں",
-      "quranReciterPlaceholder": "قاری منتخب کریں",
+      "quranReciterSubtitle": "تلاوت سننے کے لیے قاری چنیں",
+      "quranReciterPlaceholder": "قاری چنیں",
       "translations": {
-        "arabicOnly": "صرف عربی متن",
-        "english": "انگریزی (صحیح انٹرنیشنل)",
+        "arabicOnly": "صرف عربی",
+        "english": "انگریزی (صحیح)",
         "urdu": "اردو (مودودی)",
         "hindi": "ہندی (عزیز الحق)",
         "indonesian": "انڈونیشیائی (وزارت)",
@@ -198,39 +202,39 @@
       }
     },
     "notifications": {
-      "title": "نوٹیفکیشنز",
-      "enableTitle": "نوٹیفکیشنز آن کریں",
-      "enabled": "نوٹیفکیشنز آن ہیں",
+      "title": "نوٹیفیکیشنز",
+      "enableTitle": "نوٹیفیکیشنز آن کریں",
+      "enabled": "نوٹیفیکیشنز آن ہیں",
       "disabled": "بند ہے",
-      "dailyReminderTitle": "روزانہ کا ریمائنڈر",
-      "dailyReminderSubtitle": "روزانہ نوٹیفکیشنز حاصل کریں",
-      "toastEnabledTitle": "نوٹیفکیشنز آن ہو گئیں",
-      "toastEnabledDesc": "روزانہ کا ریمائنڈر سیٹ کر دیا گیا ہے۔",
-      "toastDisabledTitle": "نوٹیفکیشنز بند ہو گئیں",
-      "toastDisabledDesc": "روزانہ کا ریمائنڈر بند کر دیا گیا ہے۔",
-      "blockedTitle": "نوٹیفکیشنز بند ہیں",
-      "blockedMessage": "نوٹیفکیشنز کی اجازت بند ہے۔ فون کی سیٹنگز میں جا کر آن کریں۔",
+      "dailyReminderTitle": "روزانہ یاد دہانی",
+      "dailyReminderSubtitle": "روزانہ نوٹیفیکیشن پائیں",
+      "toastEnabledTitle": "نوٹیفیکیشنز آن ہو گئیں",
+      "toastEnabledDesc": "روزانہ یاد دہانی سیٹ ہو گئی ہے۔",
+      "toastDisabledTitle": "نوٹیفیکیشنز بند ہو گئیں",
+      "toastDisabledDesc": "روزانہ یاد دہانی بند کر دی گئی ہے۔",
+      "blockedTitle": "نوٹیفیکیشنز بند ہیں",
+      "blockedMessage": "نوٹیفیکیشنز کی اجازت نہیں ہے۔ فون کی سیٹنگز میں جا کر آن کریں۔",
       "openSettings": "سیٹنگز کھولیں"
     },
     "storage": {
       "title": "اسٹوریج",
-      "clearDownloadsTitle": "تمام ڈاؤن لوڈز ڈیلیٹ کریں",
-      "clearDownloadsSubtitleEmpty": "کوئی سورت محفوظ نہیں ہے (0 MB)",
-      "clearDownloadsSubtitle": "{{count}} سورتیں محفوظ ہیں ({{size}})",
-      "noDownloadsTitle": "کوئی ڈاؤن لوڈ نہیں ہے",
-      "noDownloadsMessage": "ڈیلیٹ کرنے کے لیے کوئی ڈاؤن لوڈ کی ہوئی سورت موجود نہیں ہے۔",
-      "confirmClearDownloadsTitle": "تمام ڈاؤن لوڈز ڈیلیٹ کریں؟",
-      "confirmClearDownloadsDesc": "کیا آپ واقعی فون سے {{count}} ڈاؤن لوڈ کی ہوئی سورتیں ({{size}}) ہٹانا چاہتے ہیں؟",
+      "clearDownloadsTitle": "تمام ڈاؤن لوڈز ہٹائیں",
+      "clearDownloadsSubtitleEmpty": "0 سورت سیو ہے (0 MB)",
+      "clearDownloadsSubtitle": "{{count}} سورت سیو ہیں ({{size}})",
+      "noDownloadsTitle": "کوئی ڈاؤن لوڈ نہیں",
+      "noDownloadsMessage": "ہٹانے کے لیے کوئی ڈاؤن لوڈ کی ہوئی سورت نہیں ہے۔",
+      "confirmClearDownloadsTitle": "تمام ڈاؤن لوڈز ہٹائیں؟",
+      "confirmClearDownloadsDesc": "کیا آپ {{count}} ڈاؤن لوڈ کی ہوئی سورتیں ({{size}}) فون سے ہٹانا چاہتے ہیں؟",
       "toastClearedDownloadsTitle": "ڈاؤن لوڈز ہٹا دیے گئے",
-      "toastClearedDownloadsDesc": "تمام ڈاؤن لوڈ کی ہوئی سورتیں کامیابی سے ہٹا دی گئی ہیں۔",
-      "clearFavoritesTitle": "پسندیدہ لسٹ خالی کریں",
-      "clearFavoritesSubtitle": "{{count}} آیات پسندیدہ میں موجود ہیں",
+      "toastClearedDownloadsDesc": "تمام ڈاؤن لوڈ کی ہوئی سورتیں ہٹا دی گئی ہیں۔",
+      "clearFavoritesTitle": "تمام پسندیدہ ہٹائیں",
+      "clearFavoritesSubtitle": "{{count}} آیات پسندیدہ میں ہیں",
       "noFavoritesTitle": "کوئی پسندیدہ نہیں",
-      "noFavoritesMessage": "پسندیدہ لسٹ میں کوئی آیت شامل نہیں ہے۔",
-      "confirmClearFavoritesTitle": "پسندیدہ لسٹ خالی کریں؟",
-      "confirmClearFavoritesDesc": "کیا آپ واقعی اپنی لسٹ سے {{count}} پسندیدہ آیات ہٹانا چاہتے ہیں؟",
-      "toastClearedFavoritesTitle": "پسندیدہ آیات ہٹا دی گئیں",
-      "toastClearedFavoritesDesc": "تمام پسندیدہ آیات لسٹ سے ہٹا دی گئی ہیں۔"
+      "noFavoritesMessage": "ہٹانے کے لیے کوئی پسندیدہ آیت نہیں ہے۔",
+      "confirmClearFavoritesTitle": "تمام پسندیدہ ہٹائیں؟",
+      "confirmClearFavoritesDesc": "کیا آپ لسٹ سے {{count}} پسندیدہ آیات ہٹانا چاہتے ہیں؟",
+      "toastClearedFavoritesTitle": "پسندیدہ ہٹا دیے گئے",
+      "toastClearedFavoritesDesc": "تمام پسندیدہ آیات ہٹا دی گئی ہیں۔"
     },
     "helpSupport": {
       "title": "مدد اور سپورٹ",
@@ -238,75 +242,75 @@
       "contactEmail": "munawwarh48@gmail.com"
     },
     "rate": {
-      "title": "ایپ کی درجہ بندی کریں",
-      "subtitle": "گوگل پلے پر ہماری حوصلہ افزائی کریں"
+      "title": "ایپ کو ریٹ کریں",
+      "subtitle": "Google Play پر ہمیں سپورٹ کریں"
     },
     "share": {
       "title": "ایپ شیئر کریں",
       "subtitle": "دوستوں اور گھر والوں کے ساتھ شیئر کریں",
       "message": "قرآن مجید پڑھنے اور سننے کے لیے Recite ایپ ڈاؤن لوڈ کریں:",
-      "dialogTitle": "شیئر کریں بذریعہ"
+      "dialogTitle": "Recite شیئر کریں"
     },
     "about": {
       "title": "ہمارے بارے میں",
-      "subtitle": "مفت کمیونٹی قرآن ایپ",
+      "subtitle": "سب کے لیے مفت قرآن ایپ",
       "appVersionTitle": "ایپ ورژن",
       "appVersionSubtitle": "ورژن {{version}}",
       "aboutUsTitle": "ہمارے بارے میں",
       "aboutUsSubtitle": "اوپن سورس اور مفت قرآن ایپ",
-      "aboutUsContent": "Recite ایک غیر منافع بخش، 100% مفت پراجیکٹ ہے جس کا مقصد دنیا بھر میں سب کے لیے بغیر کسی اشتہار یا فیس کے قرآن مجید کی رسائی آسان بنانا ہے۔",
-      "aboutAppIntro": "جدید اور تیز رفتار اوپن سورس ٹیکنالوجی پر بنا Recite آپ کو بہترین تلاوت، آسان تراجم اور فوری تلاش کی سہولت فراہم کرتا ہے۔",
-      "keyHighlights": "اہم خصوصیات",
-      "featureRecitersTitle": "خوبصورت تلاوت",
-      "featureRecitersDesc": "آیت بہ آیت پلے بیک کے ساتھ دنیا کے معروف قراء کی صاف اور اعلیٰ معیار کی تلاوت۔",
-      "featureLanguagesTitle": "متعدد زبانوں میں ترجمہ",
-      "featureLanguagesDesc": "دنیا کی اہم زبانوں میں ساتھ ساتھ آیات کے تراجم پڑھیں۔",
+      "aboutUsContent": "Recite ایک 100% مفت اور بغیر منافع والا کمیونٹی پروجیکٹ ہے۔ اس کا مقصد قرآن مجید کو بغیر اشتہار یا سبسکرپشن کے سب تک پہنچانا ہے۔",
+      "aboutAppIntro": "Recite تیز اور نئی اوپن سورس ٹیکنالوجی پر بنی ہے۔ اس میں صاف تلاوت، کئی زبانوں میں ترجمہ اور آسان تلاش ہے۔",
+      "keyHighlights": "اہم چیزیں",
+      "featureRecitersTitle": "صاف تلاوت",
+      "featureRecitersDesc": "دنیا کے مشہور قاریوں کی اچھی آواز میں تلاوت، آیت بہ آیت سن سکتے ہیں۔",
+      "featureLanguagesTitle": "کئی زبانوں میں ترجمہ",
+      "featureLanguagesDesc": "کئی زبانوں میں آیات کا ترجمہ ساتھ ساتھ پڑھیں۔",
       "featurePrivacyTitle": "پرائیویسی پہلے",
-      "featurePrivacyDesc": "نہ کوئی ٹریکنگ، نہ کوئی اشتہار اور نہ ہی آپ کے ذاتی ڈیٹا کی ضرورت۔",
-      "tagline": "قرآن مجید پڑھیں، سنیں اور غور کریں"
+      "featurePrivacyDesc": "نہ ٹریکنگ، نہ اشتہار، اور نہ آپ کی ذاتی معلومات کی ضرورت۔",
+      "tagline": "قرآن پڑھیں، سنیں اور سوچیں"
     },
     "language": {
       "title": "ایپ کی زبان",
-      "subtitle": "ایپ انٹرفیس کے لیے اپنی پسندیدہ زبان منتخب کریں۔"
+      "subtitle": "ایپ کے لیے اپنی پسندیدہ زبان چنیں۔"
     },
     "theme": {
       "title": "ایپ تھیم",
-      "subtitle": "لائٹ یا ڈارک تھیم منتخب کریں، یا سسٹم کے مطابق رکھیں۔",
+      "subtitle": "لائٹ یا ڈارک تھیم چنیں، یا فون کی سیٹنگ کے مطابق رکھیں۔",
       "light": "لائٹ",
       "dark": "ڈارک",
-      "system": "سسٹم کے مطابق"
+      "system": "سسٹم"
     },
     "fontSize": {
       "title": "فونٹ سائز",
-      "subtitle": "پوری ایپ میں پڑھنے کے لیے فونٹ کا سائز تبدیل کریں۔",
+      "subtitle": "پوری ایپ میں پڑھنے کا فونٹ سائز بدلیں۔",
       "small": "چھوٹا",
       "default": "عام",
       "large": "بڑا"
     },
     "errorTest": {
-      "title": "ایرر باؤنڈری ٹیسٹ",
-      "subtitle": "ٹیسٹ کریں کہ ایپ کسی غیر متوقع خرابی کو کس طرح سنبھالتی ہے۔",
-      "button": "ایپ کریش ٹیسٹ کریں"
+      "title": "ایرر ٹیسٹ",
+      "subtitle": "دیکھیں کہ ایپ اچانک آنے والے مسئلے کو کیسے سنبھالتی ہے۔",
+      "button": "ایپ کریش کریں"
     }
   },
   "library": {
     "title": "لائبریری",
-    "subtitle": "آپ کی محفوظ کردہ آیات اور ڈاؤن لوڈز",
+    "subtitle": "آپ کی سیو کی ہوئی آیات اور ڈاؤن لوڈز",
     "tabs": {
       "favorites": "پسندیدہ",
       "downloads": "ڈاؤن لوڈز"
     },
     "emptyFavorites": {
-      "title": "کوئی پسندیدہ نہیں",
-      "subtitle": "آیات محفوظ کریں تاکہ وہ یہاں نظر آئیں۔"
+      "title": "ابھی کوئی پسندیدہ نہیں",
+      "subtitle": "آیات سیو کریں، پھر وہ یہاں دکھیں گی۔"
     },
     "emptyDownloads": {
       "title": "کوئی ڈاؤن لوڈ نہیں",
-      "subtitle": "سورتیں ڈاؤن لوڈ کر کے آف لائن سنیں۔"
+      "subtitle": "آف لائن سننے کے لیے سورتیں ڈاؤن لوڈ کریں۔"
     },
     "storageCard": {
       "badge": "آف لائن دستیاب",
-      "used": "استعمال شدہ",
+      "used": "استعمال ہوا",
       "downloaded": "ڈاؤن لوڈ شدہ"
     }
   },
@@ -318,59 +322,62 @@
     "id": "انڈونیشیائی",
     "bn": "بنگالی",
     "ms": "ملائی",
-    "ru": "روسی"
+    "ru": "روسی",
+    "tr": "ترکی",
+    "fr": "فرانسیسی",
+    "fa": "فارسی"
   },
   "qiblaScreen": {
     "title": "قبلہ",
     "subtitleWithCity": "{{cityName}} سے قبلہ کی سمت",
-    "subtitleDefault": "کعبہ شریف کی درست سمت معلوم کریں",
-    "currentHeading": "موجودہ سمت",
-    "qiblaTarget": "قبلہ کی سمت: {{deg}}°",
-    "locationRequiredTitle": "لوکیشن کی ضرورت ہے",
-    "locationRequiredSubtitle": "قبلہ کی درست سمت معلوم کرنے کے لیے ہمیں آپ کی لوکیشن درکار ہے۔",
+    "subtitleDefault": "کعبہ کی سمت پتہ کریں",
+    "currentHeading": "ابھی کی سمت",
+    "qiblaTarget": "قبلہ سمت: {{deg}}°",
+    "locationRequiredTitle": "لوکیشن چاہیے",
+    "locationRequiredSubtitle": "قبلہ کی درست سمت بتانے کے لیے ہمیں آپ کی لوکیشن چاہیے۔",
     "enableLocation": "لوکیشن آن کریں"
   },
   "onboarding": {
-    "stepOf": "{{current}} از {{total}}",
-    "next": "آگے بڑھیں",
+    "stepOf": "{{current}} / {{total}}",
+    "next": "آگے",
     "skip": "چھوڑیں",
     "getStarted": "شروع کریں",
     "language": {
-      "title": "اپنی زبان منتخب کریں",
-      "subtitle": "مینو اور ایپ انٹرفیس کے لیے اپنی پسندیدہ زبان منتخب کریں۔",
-      "sectionLabel": "ایپ کی زبان"
+      "title": "اپنی زبان چنیں",
+      "subtitle": "مینو اور ایپ کے لیے اپنی پسندیدہ زبان چنیں۔",
+      "sectionLabel": "ایپ زبان"
     },
     "preferences": {
-      "title": "قاری کا انتخاب کریں",
-      "subtitle": "تلاوت سننے کے لیے اپنے پسندیدہ قاری کی آواز منتخب کریں۔",
-      "translationLabel": "قرآن کا ترجمہ",
+      "title": "قرآن کا قاری چنیں",
+      "subtitle": "تلاوت سننے کے لیے اپنی پسند کا قاری چنیں۔",
+      "translationLabel": "قرآن ترجمہ",
       "reciterLabel": "قاری"
     },
     "theme": {
       "title": "ڈسپلے اور تھیم",
-      "subtitle": "آسانی سے قرآن پڑھنے کے لیے تھیم اور فونٹ کا سائز اپنی پسند کے مطابق ایڈجسٹ کریں۔"
+      "subtitle": "آرام سے قرآن پڑھنے کے لیے تھیم اور فونٹ سائز چنیں۔"
     },
     "notifications": {
       "title": "جڑے رہیں",
-      "subtitle": "روزانہ تلاوت کی عادت برقرار رکھنے کے لیے ریمائنڈر آن کریں۔",
-      "benefit1": "روزانہ تلاوت کا ریمائنڈر",
-      "benefit2": "نماز کے اوقات کا الرٹ",
-      "benefit3": "قرآنی نصیحتیں اور مشورے",
-      "enableButton": "نوٹیفکیشنز آن کریں",
-      "enabledStatus": "نوٹیفکیشنز آن ہیں",
+      "subtitle": "روز قرآن پڑھنے کی عادت رکھنے کے لیے یاد دہانی آن کریں۔",
+      "benefit1": "روزانہ تلاوت کی یاد دہانی",
+      "benefit2": "نماز کے وقت کا الرٹ",
+      "benefit3": "روزانہ قرآنی باتیں",
+      "enableButton": "نوٹیفیکیشنز آن کریں",
+      "enabledStatus": "نوٹیفیکیشنز آن ہیں",
       "skipHint": "آپ اسے بعد میں سیٹنگز سے بھی آن کر سکتے ہیں"
     },
     "location": {
       "title": "نماز کے درست اوقات",
-      "subtitle": "نماز کے صحیح وقت اور قبلہ رخ کے لیے لوکیشن کی اجازت دیں۔",
-      "benefit1": "آپ کے شہر کے مطابق نماز کے صحیح اوقات",
+      "subtitle": "نماز کے صحیح وقت اور قبلہ کی سمت کے لیے لوکیشن کی اجازت دیں۔",
+      "benefit1": "آپ کے شہر کے نماز کے درست اوقات",
       "benefit2": "قبلہ کا درست کمپاس",
       "benefit3": "مقامی اسلامی کیلنڈر کی تاریخیں",
       "enableButton": "لوکیشن آن کریں",
       "enabledStatus": "لوکیشن آن ہو گئی",
-      "skipHint": "چھوڑ دینے پر مکہ مکرمہ کا وقت استعمال کیا جائے گا",
+      "skipHint": "چھوڑنے پر مکہ کے اوقات استعمال ہوں گے",
       "blockedTitle": "لوکیشن بند ہے",
-      "blockedMessage": "لوکیشن کی اجازت بند ہے۔ فون کی سیٹنگز میں جا کر آن کریں۔"
+      "blockedMessage": "لوکیشن کی اجازت نہیں ہے۔ فون کی سیٹنگز میں جا کر آن کریں۔"
     }
   }
 }

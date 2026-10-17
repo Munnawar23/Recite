@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
@@ -14,8 +14,14 @@ export default function HijriCard() {
   const { colors, spacing, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
 
-  const S = createStyles(colors, spacing, isDark);
-  const hijriDate = getHijriDate(i18n.language);
+  const S = useMemo(
+    () => createStyles(colors, spacing, isDark),
+    [colors, spacing, isDark],
+  );
+  const hijriDate = useMemo(
+    () => getHijriDate(i18n.language),
+    [i18n.language],
+  );
 
   // Gradient colors from theme
   const cardGradientColors = colors.hijriCardGradient;

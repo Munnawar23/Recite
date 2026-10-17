@@ -2,7 +2,7 @@ import { DEFAULT_TRANSLATION_ID_STRING, TRANSLATION_OPTIONS } from "./translatio
 
 /**
  * Localized translations of Bismillah (بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ)
- * Keyed by translation ID and language code.
+ * Keyed by translation ID and language code for all 11 supported languages.
  */
 export const BISMILLAH_TRANSLATIONS: Record<string, string> = {
   // By Translation ID
@@ -16,15 +16,22 @@ export const BISMILLAH_TRANSLATIONS: Record<string, string> = {
   "161": "আল্লাহর নামে, যিনি পরম করুণাময়, অতি দয়ালু",
   "45": "С именем Аллаха, Милостивого, Милосердного",
   "79": "С именем Аллаха, Милостивого, Милосердного",
+  "77": "Rahmân ve Rahîm olan Allah'ın adıyla",
+  "31": "Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux",
+  "32": "به نام خداوند بخشنده مهربان",
 
-  // By Language Code
+  // By Language Code (All 11 Supported Languages)
   en: "In the name of Allah, the Most Gracious, the Most Merciful",
+  ar: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
   ur: "اللہ کے نام سے جو رحمان اور رحیم ہے",
   hi: "अल्लाह के नाम से, जो बड़ा कृपाशील, अत्यंत दयावान है",
   id: "Dengan nama Allah Yang Maha Pengasih, Maha Penyayang",
-  ms: "Dengan nama Allah, Yang Maha Pemurah, lagi Maha Mengasihani",
   bn: "আল্লাহর নামে, যিনি পরম করুণাময়, অতি দয়ালু",
+  ms: "Dengan nama Allah, Yang Maha Pemurah, lagi Maha Mengasihani",
   ru: "С именем Аллаха, Милостивого, Милосердного",
+  tr: "Rahmân ve Rahîm olan Allah'ın adıyla",
+  fr: "Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux",
+  fa: "به نام خداوند بخشنده مهربان",
 };
 
 /**

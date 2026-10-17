@@ -87,6 +87,10 @@
       "quranAudio": {
         "title": "Quran Audio",
         "subtitle": "Listen to the Holy Quran"
+      },
+      "downloads": {
+        "title": "Downloads",
+        "subtitle": "Listen offline anytime"
       }
     }
   },

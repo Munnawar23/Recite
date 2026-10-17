@@ -1,41 +1,41 @@
 {
   "common": {
-    "welcome": "خوش آمدید",
+    "welcome": "خوش اومدی",
     "settings": "تنظیمات",
     "language": "زبان",
     "selectLanguage": "انتخاب زبان",
     "home": "خانه",
     "recite": "تلاوت",
-    "read": "خواندن",
+    "read": "خوندن",
     "listen": "شنیدن",
-    "reflect": "تدبر",
+    "reflect": "فکر کردن",
     "save": "ذخیره",
     "cancel": "انصراف",
-    "tryAgain": "تلاش مجدد",
-    "retry": "تلاش دوباره",
-    "errorTitle": "مشکلی پیش آمد",
-    "errorMessage": "بارگذاری اطلاعات ناموفق بود. برای تلاش مجدد لمس کنید.",
-    "noConnectionTitle": "خطای اتصال",
-    "noConnectionSubtitle": "اتصال اینترنت خود را بررسی کرده و دوباره تلاش کنید.",
+    "tryAgain": "دوباره امتحان کن",
+    "retry": "دوباره تلاش کن",
+    "errorTitle": "یه مشکلی پیش اومد",
+    "errorMessage": "اطلاعات لود نشد. برای دوباره امتحان کردن ضربه بزن.",
+    "noConnectionTitle": "اینترنت وصل نیست",
+    "noConnectionSubtitle": "اطلاعات لود نشد. اینترنتت رو چک کن.",
     "offlineAudioPreviewTitle": "حالت آفلاین",
-    "offlineAudioPreviewMessage": "پخش آنلاین نیازمند اینترنت است. می‌توانید سوره‌های دانلود شده خود را بشنوید.",
-    "offlineReciterChangeMessage": "تغییر قاری نیازمند اتصال به اینترنت است.",
+    "offlineAudioPreviewMessage": "برای شنیدن صدا اینترنت لازمه. سوره‌های دانلود شده رو می‌تونی گوش بدی.",
+    "offlineReciterChangeMessage": "برای عوض کردن قاری اینترنت لازمه. به اینترنت وصل شو.",
     "quran": "قرآن",
     "surah": "سوره",
     "verse": "آیه",
     "qibla": "قبله",
     "library": "کتابخانه",
-    "back": "بازگشت",
+    "back": "برگشت",
     "share": "اشتراک‌گذاری",
     "sharing": "در حال اشتراک‌گذاری...",
     "copy": "کپی",
-    "favourite": "نشان‌شده",
+    "favourite": "مورد علاقه",
     "favorited": "ذخیره شد",
-    "copied": "در کلیپ‌بورد کپی شد"
+    "copied": "توی کلیپ‌بورد کپی شد"
   },
   "splash": {
     "title": "Recite",
-    "subtitle": "خواندن • شنیدن • تدبر"
+    "subtitle": "بخون • گوش کن • فکر کن"
   },
   "tabs": {
     "home": "خانه",
@@ -47,17 +47,17 @@
   "home": {
     "greeting": {
       "title": "سلام علیکم",
-      "subtitle": "روزتان پر از نور و برکت الهی"
+      "subtitle": "روزت پر از خیر و برکت باشه"
     },
     "hijriCard": {
-      "badge": "تقویم قمری",
+      "badge": "تاریخ اسلامی",
       "yearSuffix": "ق"
     },
     "sectionTitles": {
-      "prayerTimes": "اوقات شرعی",
-      "dailyVerse": "آیه روز",
-      "continueReading": "ادامه خواندن",
-      "explore": "کاوش"
+      "prayerTimes": "اوقات نماز",
+      "dailyVerse": "آیه امروز",
+      "continueReading": "ادامه خوندن",
+      "explore": "بیشتر بدانید"
     },
     "prayerNames": {
       "fajr": "صبح",
@@ -67,48 +67,52 @@
       "isha": "عشاء"
     },
     "locationNotice": {
-      "showingMecca": "اوقات مکه مکرمه نمایش داده می‌شود.",
-      "enableLocation": "برای فعال‌سازی مکان‌یابی ضربه بزنید"
+      "showingMecca": "اوقات مکه نشون داده می‌شه.",
+      "enableLocation": "برای روشن کردن مکان ضربه بزن"
     },
     "dailyVerse": {
       "defaultArabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
-      "defaultTranslation": "مسلماً با هر سختی آسانی است.",
+      "defaultTranslation": "قطعاً با سختی آسانی هست.",
       "defaultSource": "سوره شرح · ۹۴:۶"
     },
     "continueReadingEmpty": {
-      "title": "قرائت قرآن را آغاز کنید",
-      "subtitle": "با خواندن قرآن، آخرین صفحه مطالعه شما در اینجا نمایش داده می‌شود.",
+      "title": "شروع کن",
+      "subtitle": "قرآن رو باز کن، هر جا که رسیدی اینجا نشون داده می‌شه.",
       "buttonLabel": "باز کردن قرآن"
     },
     "explore": {
       "qibla": {
         "title": "قبله",
-        "subtitle": "جهت قبله و کعبه را پیدا کنید"
+        "subtitle": "جهت کعبه رو پیدا کن"
       },
       "quranAudio": {
-        "title": "صوت قرآن",
-        "subtitle": "به قرآن کریم گوش فرا دهید"
+        "title": "صدای قرآن",
+        "subtitle": "قرآن کریم رو گوش کن"
+      },
+      "downloads": {
+        "title": "دانلودها",
+        "subtitle": "هر وقت خواستی آفلاین گوش کن"
       }
     }
   },
   "quran": {
     "title": "قرآن",
-    "subtitle": "خواندن، شنیدن و تدبر در آیات قرآن کریم",
+    "subtitle": "قرآن کریم رو بخون، بفهم و گوش کن",
     "searchPlaceholder": "جستجوی سوره...",
-    "continueReadingTag": "ادامه مطالعه",
+    "continueReadingTag": "ادامه خوندن",
     "verseNumber": "آیه شماره {{number}}",
     "versesCount": "{{count}} آیه",
     "meccan": "مکی",
     "medinan": "مدنی",
-    "upNextInQueue": "سوره بعدی در صف",
-    "playNext": "پخش بعدی",
+    "upNextInQueue": "سوره بعدی توی صف",
+    "playNext": "بعدی رو پخش کن",
     "noResultsTitle": "سوره‌ای پیدا نشد",
-    "noResultsSubtitle": "با کلمه دیگری جستجو کنید.",
-    "errorMessage": "بارگذاری سوره‌ها ناموفق بود. برای تلاش دوباره ضربه بزنید.",
+    "noResultsSubtitle": "با یه کلمه دیگه جستجو کن.",
+    "errorMessage": "لیست سوره‌ها لود نشد. دوباره امتحان کن.",
     "versesError": {
-      "title": "بارگذاری ناموفق",
-      "subtitle": "اینترنت خود را بررسی کرده و دوباره تلاش کنید.",
-      "retry": "تلاش مجدد"
+      "title": "لود نشد",
+      "subtitle": "اینترنتت رو چک کن و دوباره امتحان کن.",
+      "retry": "دوباره امتحان کن"
     },
     "downloadCard": {
       "download": "دانلود",
@@ -117,50 +121,50 @@
       "paused": "متوقف شد • {{written}} از {{total}} مگابایت ({{progress}}٪)",
       "pause": "توقف",
       "resume": "ادامه",
-      "playingOffline": "پخش آفلاین",
-      "playingOfflineTitle": "پخش آفلاین",
-      "playingOnlineTitle": "پخش آنلاین",
-      "deleteTitle": "حذف فایل دانلود شده؟",
-      "deleteDesc": "آیا می‌خواهید فایل صوتی این سوره را از حافظه گوشی حذف کنید؟",
+      "playingOffline": "آفلاین پخش می‌شه",
+      "playingOfflineTitle": "آفلاین پخش می‌شه",
+      "playingOnlineTitle": "آنلاین پخش می‌شه",
+      "deleteTitle": "دانلود حذف بشه؟",
+      "deleteDesc": "مطمئنی می‌خوای تلاوت این سوره رو از دانلودها حذف کنی؟",
       "notReadyTitle": "صدا هنوز آماده نیست",
-      "notReadyBody": "اطلاعات صوتی در حال بارگذاری است. لطفاً چند لحظه صبر کنید.",
-      "errorTitle": "خطا در دانلود",
-      "errorBody": "دانلود کامل نشد. لطفاً اینترنت خود را بررسی کنید."
+      "notReadyBody": "اطلاعات صدا داره لود می‌شه. یه کم بعد دوباره امتحان کن.",
+      "errorTitle": "دانلود نشد",
+      "errorBody": "دانلود کامل نشد. اینترنتت رو چک کن و دوباره امتحان کن."
     }
   },
   "verse": {
-    "holdForActions": "برای گزینه‌ها نگه دارید",
-    "favoritedTitle": "به نشان‌شده‌ها اضافه شد",
-    "unfavoritedTitle": "از نشان‌شده‌ها حذف شد",
-    "favoritedMsg": "در آیات نشان‌شده ذخیره شد",
-    "unfavoritedMsg": "از نشان‌شده‌ها حذف شد"
+    "holdForActions": "نگه دار",
+    "favoritedTitle": "به علاقه‌مندی‌ها اضافه شد",
+    "unfavoritedTitle": "از علاقه‌مندی‌ها حذف شد",
+    "favoritedMsg": "آیه توی علاقه‌مندی‌ها ذخیره شد",
+    "unfavoritedMsg": "آیه از علاقه‌مندی‌ها حذف شد"
   },
   "errorBoundary": {
-    "title": "مشکلی پیش آمده است",
-    "subtitle": "خطای غیرمنتظره‌ای رخ داد. می‌توانید برنامه را دوباره باز کنید."
+    "title": "یه مشکلی پیش اومد",
+    "subtitle": "یه خطای غیرمنتظره پیش اومد. می‌تونی برنامه رو دوباره باز کنی یا صفحه رو رفرش کنی."
   },
   "settings": {
     "title": "تنظیمات",
-    "subtitle": "تنظیم زبان، تم و ویژگی‌های برنامه",
+    "subtitle": "تنظیمات و ظاهر برنامه رو تغییر بده",
     "sections": {
-      "displayLanguage": "نمایش و زبان‌ها",
+      "displayLanguage": "نمایش و زبان",
       "notifications": "اعلان‌ها",
-      "storage": "حافظه",
-      "helpSupport": "پشتیبانی و ارتباط",
-      "shareRate": "اشتراک و امتیاز",
-      "aboutUs": "درباره برنامه"
+      "storage": "فضای ذخیره‌سازی",
+      "helpSupport": "کمک و پشتیبانی",
+      "shareRate": "اشتراک‌گذاری و امتیاز",
+      "aboutUs": "درباره ما"
     },
     "display": {
       "title": "تنظیمات نمایش",
-      "subtitle": "تم و اندازه فونت",
+      "subtitle": "تم، فونت و اندازه متن",
       "optionsTitle": "گزینه‌های نمایش",
-      "optionsSubtitle": "تم و اندازه متن",
+      "optionsSubtitle": "تم و اندازه فونت",
       "appTheme": "تم برنامه",
-      "appFontSize": "اندازه متن برنامه",
+      "appFontSize": "اندازه فونت برنامه",
       "quranFontSize": "اندازه خط عربی قرآن",
       "livePreview": "پیش‌نمایش",
       "sampleTranslation": "به نام خداوند بخشنده و مهربان",
-      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+      "sampleArabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
       "theme": {
         "light": "روشن",
         "dark": "تاریک",
@@ -173,24 +177,24 @@
       }
     },
     "languages": {
-      "title": "زبان و صوت",
+      "title": "زبان و صدا",
       "subtitle": "زبان برنامه، ترجمه و قاری",
-      "optionsTitle": "تنظیمات زبان و صوت",
-      "optionsSubtitle": "زبان برنامه، ترجمه و قاری",
+      "optionsTitle": "تنظیمات زبان و صدا",
+      "optionsSubtitle": "زبان، ترجمه و قاری",
       "appLanguageSection": "زبان برنامه",
       "appLanguageTitle": "زبان منوها و برنامه",
-      "appLanguageSubtitle": "زبان مورد نظر خود را برای محیط برنامه انتخاب کنید",
+      "appLanguageSubtitle": "زبان منوها و برنامه رو انتخاب کن",
       "appLanguagePlaceholder": "انتخاب زبان برنامه",
       "quranTranslationSection": "ترجمه قرآن",
       "quranTranslationTitle": "ترجمه پیش‌فرض",
-      "quranTranslationSubtitle": "ترجمه‌ای که زیر آیات نمایش داده می‌شود را انتخاب کنید",
+      "quranTranslationSubtitle": "ترجمه‌ای که زیر آیه‌ها نشون داده می‌شه رو انتخاب کن",
       "quranTranslationPlaceholder": "انتخاب ترجمه",
       "quranReciterSection": "قاری قرآن",
       "quranReciterTitle": "قاری پیش‌فرض",
-      "quranReciterSubtitle": "صدای دلخواه خود را برای تلاوت آیات انتخاب کنید",
+      "quranReciterSubtitle": "صدای قاری مورد علاقه‌ت رو برای تلاوت انتخاب کن",
       "quranReciterPlaceholder": "انتخاب قاری",
       "translations": {
-        "arabicOnly": "فقط متن عربی",
+        "arabicOnly": "فقط عربی",
         "english": "انگلیسی (صحیح)",
         "urdu": "اردو (مودودی)",
         "hindi": "هندی (عزیزالحق)",
@@ -200,113 +204,113 @@
     },
     "notifications": {
       "title": "اعلان‌ها",
-      "enableTitle": "فعال‌سازی اعلان‌ها",
-      "enabled": "اعلان‌ها فعال است",
-      "disabled": "غیرفعال",
+      "enableTitle": "اعلان‌ها رو روشن کن",
+      "enabled": "اعلان‌ها روشنه",
+      "disabled": "خاموشه",
       "dailyReminderTitle": "یادآور روزانه",
-      "dailyReminderSubtitle": "یادآوری‌های روزانه تلاوت قرآن",
-      "toastEnabledTitle": "اعلان‌ها فعال شد",
-      "toastEnabledDesc": "یادآور روزانه فعال گردید.",
-      "toastDisabledTitle": "اعلان‌ها غیرفعال شد",
+      "dailyReminderSubtitle": "هر روز یادآوری بگیر",
+      "toastEnabledTitle": "اعلان‌ها روشن شد",
+      "toastEnabledDesc": "یادآور روزانه فعال شد.",
+      "toastDisabledTitle": "اعلان‌ها خاموش شد",
       "toastDisabledDesc": "یادآور روزانه خاموش شد.",
-      "blockedTitle": "دسترسی به اعلان‌ها مسدود است",
-      "blockedMessage": "اعلان‌ها غیرفعال است. لطفاً از تنظیمات گوشی دسترسی بدهید.",
+      "blockedTitle": "اعلان‌ها بسته‌ست",
+      "blockedMessage": "اعلان‌ها غیرفعاله. از تنظیمات گوشی فعالش کن.",
       "openSettings": "باز کردن تنظیمات"
     },
     "storage": {
-      "title": "حافظه",
-      "clearDownloadsTitle": "پاک کردن تمام دانلودها",
+      "title": "فضای ذخیره‌سازی",
+      "clearDownloadsTitle": "همه دانلودها رو پاک کن",
       "clearDownloadsSubtitleEmpty": "۰ سوره ذخیره شده (۰ مگابایت)",
       "clearDownloadsSubtitle": "{{count}} سوره ذخیره شده ({{size}})",
       "noDownloadsTitle": "هیچ دانلودی نیست",
-      "noDownloadsMessage": "هیچ سوره دانلود شده‌ای برای پاک کردن وجود ندارد.",
-      "confirmClearDownloadsTitle": "همه دانلودها پاک شوند؟",
-      "confirmClearDownloadsDesc": "آیا از حذف {{count}} سوره دانلود شده ({{size}}) از حافظه گوشی مطمئن هستید؟",
-      "toastClearedDownloadsTitle": "دانلودها پاک شدند",
-      "toastClearedDownloadsDesc": "تمامی سوره‌های ذخیره شده با موفقیت حذف شدند.",
-      "clearFavoritesTitle": "پاک کردن نشان‌شده‌ها",
-      "clearFavoritesSubtitle": "{{count}} آیه نشان شده",
-      "noFavoritesTitle": "هیچ آیه‌ای نشان نشده",
-      "noFavoritesMessage": "در حال حاضر هیچ آیه‌ای در لیست نشان‌شده‌های شما نیست.",
-      "confirmClearFavoritesTitle": "همه نشان‌شده‌ها پاک شوند؟",
-      "confirmClearFavoritesDesc": "آیا از حذف {{count}} آیه نشان‌شده مطمئن هستید؟",
-      "toastClearedFavoritesTitle": "نشان‌شده‌ها پاک شدند",
-      "toastClearedFavoritesDesc": "تمام آیات نشان‌شده حذف شدند."
+      "noDownloadsMessage": "هیچ سوره دانلود شده‌ای برای پاک کردن نیست.",
+      "confirmClearDownloadsTitle": "همه دانلودها پاک بشن؟",
+      "confirmClearDownloadsDesc": "مطمئنی می‌خوای {{count}} سوره دانلود شده ({{size}}) رو از گوشی حذف کنی؟",
+      "toastClearedDownloadsTitle": "دانلودها پاک شد",
+      "toastClearedDownloadsDesc": "همه سوره‌های دانلود شده حذف شد.",
+      "clearFavoritesTitle": "همه علاقه‌مندی‌ها رو پاک کن",
+      "clearFavoritesSubtitle": "{{count}} آیه توی علاقه‌مندی‌هاست",
+      "noFavoritesTitle": "هیچ علاقه‌مندی‌ای نیست",
+      "noFavoritesMessage": "هیچ آیه‌ای توی علاقه‌مندی‌ها برای پاک کردن نیست.",
+      "confirmClearFavoritesTitle": "همه علاقه‌مندی‌ها پاک بشن؟",
+      "confirmClearFavoritesDesc": "مطمئنی می‌خوای {{count}} آیه رو از علاقه‌مندی‌ها حذف کنی؟",
+      "toastClearedFavoritesTitle": "علاقه‌مندی‌ها پاک شد",
+      "toastClearedFavoritesDesc": "همه آیه‌ها از علاقه‌مندی‌ها حذف شد."
     },
     "helpSupport": {
-      "title": "پشتیبانی",
-      "contactTitle": "ارتباط با ما",
+      "title": "کمک و پشتیبانی",
+      "contactTitle": "با پشتیبانی تماس بگیر",
       "contactEmail": "munawwarh48@gmail.com"
     },
     "rate": {
-      "title": "امتیاز به برنامه",
-      "subtitle": "در گوگل پلی از ما حمایت کنید"
+      "title": "به برنامه امتیاز بده",
+      "subtitle": "توی گوگل پلی از ما حمایت کن"
     },
     "share": {
-      "title": "اشتراک‌گذاری برنامه",
-      "subtitle": "معرفی به دوستان و خانواده",
-      "message": "برنامه Recite را برای خواندن و شنیدن قرآن کریم دانلود کنید! لینک دانلود:",
+      "title": "برنامه رو share کن",
+      "subtitle": "با دوستان و خانواده به اشتراک بذار",
+      "message": "برنامه Recite رو برای خوندن و شنیدن قرآن کریم دانلود کن:",
       "dialogTitle": "اشتراک‌گذاری Recite"
     },
     "about": {
       "title": "درباره ما",
-      "subtitle": "برنامه رایگان قرآن کریم",
+      "subtitle": "برنامه قرآن رایگان برای همه",
       "appVersionTitle": "نسخه برنامه",
       "appVersionSubtitle": "نسخه {{version}}",
       "aboutUsTitle": "درباره ما",
-      "aboutUsSubtitle": "برنامه قرآنی آزاد و بدون تبلیغات",
-      "aboutUsContent": "برنامه Recite یک پروژه کاملاً رایگان و عام‌المنفعه است تا قرآن کریم بدون تبلیغات، اشتراک و هزینه در دسترس همگان قرار گیرد.",
-      "aboutAppIntro": "Recite با بهره‌گیری از فناوری‌های سریع و کارآمد، تلاوت‌های اصیل، ترجمه‌های چندزبانه و جستجوی آسان را در فضایی دلنشین فراهم کرده است.",
+      "aboutUsSubtitle": "برنامه قرآن اوپن‌سورس و رایگان",
+      "aboutUsContent": "Recite یه پروژه ۱۰۰٪ رایگان و غیرانتفاعی هست. هدفش اینه که قرآن کریم بدون تبلیغات و اشتراک به دست همه برسه.",
+      "aboutAppIntro": "Recite با تکنولوژی‌های سریع و جدید ساخته شده. تلاوت واضح، ترجمه به چند زبان و جستجوی آسون داره.",
       "keyHighlights": "ویژگی‌های اصلی",
-      "featureRecitersTitle": "تلاوت‌های دلنشین",
-      "featureRecitersDesc": "تلاوت‌های باکیفیت از مشهورترین قاریان جهان اسلام همراه با دنبال کردن آیه به آیه.",
-      "featureLanguagesTitle": "ترجمه‌های چندزبانه",
-      "featureLanguagesDesc": "مشاهده و مقایسه ترجمه آیات به زبان‌های گوناگون جهان.",
-      "featurePrivacyTitle": "حریم خصوصی کامل",
-      "featurePrivacyDesc": "بدون تبلیغات، بدون ردیابی و بدون جمع‌آوری اطلاعات شخصی شما.",
-      "tagline": "قرآن را بخوانید، بشنوید و در آن تدبر کنید"
+      "featureRecitersTitle": "تلاوت واضح",
+      "featureRecitersDesc": "صدای واضح و باکیفیت از قاری‌های معروف دنیا، با پخش آیه به آیه.",
+      "featureLanguagesTitle": "ترجمه به چند زبان",
+      "featureLanguagesDesc": "ترجمه آیه‌ها رو به چند زبان کنار هم بخون.",
+      "featurePrivacyTitle": "حریم خصوصی اول",
+      "featurePrivacyDesc": "بدون ردیابی، بدون تبلیغ و بدون نیاز به اطلاعات شخصی.",
+      "tagline": "قرآن رو بخون، گوش کن و فکر کن"
     },
     "language": {
       "title": "زبان برنامه",
-      "subtitle": "زبان دلخواه خود را برای منوهای برنامه انتخاب کنید."
+      "subtitle": "زبان مورد علاقه‌ت رو برای برنامه انتخاب کن."
     },
     "theme": {
       "title": "تم برنامه",
-      "subtitle": "تم روشن، تاریک یا هماهنگ با سیستم را انتخاب کنید.",
+      "subtitle": "تم روشن یا تاریک رو انتخاب کن، یا با تنظیمات گوشی هماهنگ کن.",
       "light": "روشن",
       "dark": "تاریک",
       "system": "سیستم"
     },
     "fontSize": {
       "title": "اندازه متن",
-      "subtitle": "اندازه خط را برای راحتی چشم خود در هنگام مطالعه تنظیم کنید.",
+      "subtitle": "اندازه فونت خوندن رو توی کل برنامه تغییر بده.",
       "small": "کوچک",
       "default": "معمولی",
       "large": "بزرگ"
     },
     "errorTest": {
       "title": "تست خطا",
-      "subtitle": "بررسی مدیریت خطاهای برنامه.",
-      "button": "ایجاد خطای آزمایشی"
+      "subtitle": "ببین برنامه چطور با خطای غیرمنتظره کنار میاد.",
+      "button": "خطای آزمایشی ایجاد کن"
     }
   },
   "library": {
     "title": "کتابخانه",
-    "subtitle": "آیات نشان‌شده و فایل‌های دانلودی شما",
+    "subtitle": "آیه‌های ذخیره شده و دانلودهای تو",
     "tabs": {
-      "favorites": "نشان‌شده‌ها",
+      "favorites": "علاقه‌مندی‌ها",
       "downloads": "دانلودها"
     },
     "emptyFavorites": {
-      "title": "هنوز آیه‌ای نشان نشده",
-      "subtitle": "آیات دلخواه خود را ذخیره کنید تا در اینجا ببینید."
+      "title": "هنوز چیزی ذخیره نکردی",
+      "subtitle": "آیه‌ها رو ذخیره کن تا اینجا ببینی."
     },
     "emptyDownloads": {
-      "title": "هنوز دانلودی ندارید",
-      "subtitle": "سوره‌ها را دانلود کنید تا بدون اینترنت بتوانید بشنوید."
+      "title": "هیچ دانلودی نداری",
+      "subtitle": "سوره‌ها رو دانلود کن تا بدون اینترنت گوش بدی."
     },
     "storageCard": {
-      "badge": "در دسترس آفلاین",
+      "badge": "آفلاین در دسترس",
       "used": "استفاده شده",
       "downloaded": "دانلود شده"
     }
@@ -327,54 +331,54 @@
   "qiblaScreen": {
     "title": "قبله",
     "subtitleWithCity": "جهت قبله از {{cityName}}",
-    "subtitleDefault": "پیدا کردن جهت کعبه مشرفه",
-    "currentHeading": "جهت فعلی شما",
+    "subtitleDefault": "جهت کعبه رو پیدا کن",
+    "currentHeading": "جهت فعلی",
     "qiblaTarget": "زاویه قبله: {{deg}}°",
-    "locationRequiredTitle": "دسترسی به مکان لازم است",
-    "locationRequiredSubtitle": "برای محاسبه دقیق جهت قبله به مکان فعلی شما نیاز داریم.",
-    "enableLocation": "فعال‌سازی مکان‌یابی"
+    "locationRequiredTitle": "به مکان نیاز داریم",
+    "locationRequiredSubtitle": "برای پیدا کردن جهت دقیق قبله به مکانت نیاز داریم.",
+    "enableLocation": "روشن کردن مکان"
   },
   "onboarding": {
     "stepOf": "{{current}} از {{total}}",
     "next": "بعدی",
-    "skip": "رد شدن",
-    "getStarted": "شروع کنید",
+    "skip": "رد کن",
+    "getStarted": "شروع کن",
     "language": {
-      "title": "زبان خود را انتخاب کنید",
-      "subtitle": "زبان دلخواه خود را برای منوها و متن برنامه انتخاب نمایید.",
+      "title": "زبانت رو انتخاب کن",
+      "subtitle": "زبان مورد علاقه‌ت رو برای منوها و برنامه انتخاب کن.",
       "sectionLabel": "زبان برنامه"
     },
     "preferences": {
-      "title": "انتخاب قاری قرآن",
-      "subtitle": "قاری دلخواه خود را برای شنیدن تلاوت قرآن انتخاب کنید.",
+      "title": "قاری قرآن رو انتخاب کن",
+      "subtitle": "قاری مورد علاقه‌ت رو برای شنیدن تلاوت انتخاب کن.",
       "translationLabel": "ترجمه قرآن",
       "reciterLabel": "قاری"
     },
     "theme": {
       "title": "ظاهر و نمایش",
-      "subtitle": "تم و اندازه قلم را برای خواندن راحت قرآن شخصی‌سازی کنید."
+      "subtitle": "تم و اندازه فونت رو برای خوندن راحت قرآن تنظیم کن."
     },
     "notifications": {
-      "title": "همراه همیشگی قرآن",
-      "subtitle": "یادآورهای روزانه را فعال کنید تا پیوستگی شما با قرآن حفظ شود.",
-      "benefit1": "یادآوری‌های روزانه تلاوت قرآن",
-      "benefit2": "اعلان هنگام اوقات شرعی",
-      "benefit3": "آیه روزانه برای آرامش دل",
-      "enableButton": "فعال‌سازی اعلان‌ها",
-      "enabledStatus": "اعلان‌ها فعال شد",
-      "skipHint": "می‌توانید بعداً در بخش تنظیمات نیز این را فعال کنید"
+      "title": "در ارتباط باش",
+      "subtitle": "برای اینکه هر روز قرآن بخونی، یادآور رو روشن کن.",
+      "benefit1": "یادآوری روزانه تلاوت",
+      "benefit2": "اعلان اوقات نماز",
+      "benefit3": "نکته‌های قرآنی روزانه",
+      "enableButton": "روشن کردن اعلان‌ها",
+      "enabledStatus": "اعلان‌ها روشنه",
+      "skipHint": "بعداً هم می‌تونی از تنظیمات روشنش کنی"
     },
     "location": {
-      "title": "اوقات شرعی دقیق",
-      "subtitle": "دسترسی به مکان را فعال کنید تا اوقات شرعی و قبله دقیق نمایش داده شوند.",
-      "benefit1": "اوقات شرعی دقیق شهر شما",
-      "benefit2": "قبله‌نمای دقیق به سوی کعبه",
-      "benefit3": "تقویم اسلامی محلی",
-      "enableButton": "فعال‌سازی مکان‌یابی",
-      "enabledStatus": "مکان‌یابی فعال شد",
-      "skipHint": "در صورت رد شدن، اوقات مکه مکرمه در نظر گرفته می‌شود",
-      "blockedTitle": "مکان‌یابی خاموش است",
-      "blockedMessage": "دسترسی به مکان خاموش است. در تنظیمات فعال نمایید."
+      "title": "اوقات نماز دقیق",
+      "subtitle": "به مکانت اجازه بده تا اوقات نماز و جهت قبله دقیق باشه.",
+      "benefit1": "اوقات نماز دقیق برای شهرت",
+      "benefit2": "قطب‌نمای دقیق قبله",
+      "benefit3": "مناسبت‌های تقویم اسلامی محلی",
+      "enableButton": "روشن کردن مکان",
+      "enabledStatus": "مکان روشن شد",
+      "skipHint": "اگه رد کنی، اوقات مکه استفاده می‌شه",
+      "blockedTitle": "مکان خاموشه",
+      "blockedMessage": "اجازه دسترسی به مکان داده نشده. از تنظیمات روشنش کن."
     }
   }
 }

@@ -74,7 +74,7 @@ export const MS_CHAPTER_NAMES: Record<number, ChapterNameEntry> = {
   71: { name: "Nuh", meaning: "Nabi Nuh" },
   72: { name: "Al-Jinn", meaning: "Jin" },
   73: { name: "Al-Muzzammil", meaning: "Orang yang Berselimut" },
-  74: { name: "Al-Muddatsir", meaning: "Orang yang Berselimut" },
+  74: { name: "Al-Muddassir", meaning: "Orang yang Berselubung" },
   75: { name: "Al-Qiyamah", meaning: "Hari Kiamat" },
   76: { name: "Al-Insan", meaning: "Manusia" },
   77: { name: "Al-Mursalat", meaning: "Malaikat yang Diutus" },

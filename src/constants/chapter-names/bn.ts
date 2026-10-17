@@ -81,7 +81,7 @@ export const BN_CHAPTER_NAMES: Record<number, ChapterNameEntry> = {
   78: { name: "আন-নাবা", meaning: "মহাসংবাদ" },
   79: { name: "আন-নাযি'আত", meaning: "প্রবল টাননকারী" },
   80: { name: "আবাসা", meaning: "তিনি ভ্রূকুটি করলেন" },
-  81: { name: "আত-তাকওয়ীর", meaning: "অন্ধকারাচ্ছন্ন" },
+  81: { name: "আত-তাকওয়ীর", meaning: "গুটিয়ে নেওয়া" },
   82: { name: "আল-ইনফিতার", meaning: "বিদীর্ণ হওয়া" },
   83: { name: "আল-মুতাফফিফীন", meaning: "প্রতারকগণ" },
   84: { name: "আল-ইনশিক্বাক্ব", meaning: "খণ্ড-বিখণ্ড হওয়া" },

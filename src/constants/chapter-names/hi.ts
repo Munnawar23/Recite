@@ -84,7 +84,7 @@ export const HI_CHAPTER_NAMES: Record<number, ChapterNameEntry> = {
   81: { name: "अत-तकवीर", meaning: "लपेटा जाना" },
   82: { name: "अल-इन्फ़ितार", meaning: "फटना" },
   83: { name: "अल-मुतफ़्फ़िफ़ीन", meaning: "नाप-तोल में कमी करने वाले" },
-  84: { name: "अल-इन्शिकाक़", meaning: "टुकड़े-टुकड़े होना" },
+  84: { name: "अल-इन्शिक़ाक़", meaning: "टुकड़े-टुकड़े होना" },
   85: { name: "अल-बुरुज", meaning: "नक्षत्र / बुर्ज" },
   86: { name: "अत-तारिक़", meaning: "रात में आने वाला तारा" },
   87: { name: "अल-आला", meaning: "सर्वोच्च" },

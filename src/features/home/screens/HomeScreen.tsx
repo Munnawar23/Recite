@@ -113,14 +113,14 @@ export default function HomeScreen() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.exploreScrollContent}
           >
-                <ExploreCard
+            <ExploreCard
               title={t("home.explore.quranAudio.title", "Quran Audio")}
               subtitle={t(
                 "home.explore.quranAudio.subtitle",
                 "Listen to the Holy Quran",
               )}
               icon="headset-outline"
-              watermarkIcon="quran"
+              watermarkIcon="headphones-alt"
               watermarkFamily="FontAwesome5"
               onPress={() => router.push("/quran-audio")}
             />
@@ -134,6 +134,17 @@ export default function HomeScreen() {
               watermarkIcon="kaaba"
               watermarkFamily="FontAwesome5"
               onPress={() => router.push("/(tabs)/qibla")}
+            />
+            <ExploreCard
+              title={t("home.explore.downloads.title", "Downloads")}
+              subtitle={t(
+                "home.explore.downloads.subtitle",
+                "Listen offline anytime",
+              )}
+              icon="cloud-download-outline"
+              watermarkIcon="cloud-download-alt"
+              watermarkFamily="FontAwesome5"
+              onPress={() => router.push("/(tabs)/library")}
             />
           </ScrollView>
         </Animated.View>

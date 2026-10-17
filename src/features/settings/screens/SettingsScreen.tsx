@@ -15,12 +15,14 @@ import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { type ThemeColors, type ThemeSpacing } from "@/theme";
 
+import packageJson from "../../../../package.json";
+
 export default function SettingsScreen() {
   const { t } = useTranslation();
   const { spacing } = useAppTheme();
 
   const appName = Constants.expoConfig?.name || "Recite";
-  const appVersion = Constants.expoConfig?.version || "1.0.0";
+  const appVersion = packageJson.version || Constants.expoConfig?.version || "1.0.1";
 
   const styles = useMemo(
     () => createStyles(spacing),

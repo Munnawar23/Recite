@@ -10,7 +10,7 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
 import { type ThemeColors, type ThemeSpacing } from "@/theme";
 import { Chapter as QuranItem } from "@/types";
-import ChapterNumberBadge from "@/components/common/ChapterNumberBadge";
+import ChapterNumberBadge from "@/components/ui/ChapterNumberBadge";
 
 interface QuranCardProps {
   item: QuranItem;

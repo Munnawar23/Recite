@@ -11,7 +11,7 @@ import { Haptics } from "@/lib/haptics";
 import { useLanguageStore } from "@/store/languageStore";
 import { type ThemeColors, type ThemeSpacing } from "@/theme";
 import { Chapter as QuranItem } from "@/types";
-import ChapterNumberBadge from "@/components/common/ChapterNumberBadge";
+import ChapterNumberBadge from "@/components/ui/ChapterNumberBadge";
 
 interface QuranListenCardProps {
   item: QuranItem;

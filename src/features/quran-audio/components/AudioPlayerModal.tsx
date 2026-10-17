@@ -37,7 +37,7 @@ import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLanguageStore } from "@/store/languageStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { type ThemeColors } from "@/theme";
-import ChapterNumberBadge from "@/components/common/ChapterNumberBadge";
+import ChapterNumberBadge from "@/components/ui/ChapterNumberBadge";
 import { usePlayerModal } from "../hooks/usePlayerModal";
 import { useChapterAudio } from "../hooks/useChapterAudio";
 import { formatTime } from "@/features/quran-detail/hooks/useAudioPlayer";

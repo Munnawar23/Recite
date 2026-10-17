@@ -157,6 +157,18 @@ export function useQuranDetailScreen() {
     chapterFallback,
   ]);
 
+  const selectionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clean up selection timer on unmount
+  useEffect(() => {
+    return () => {
+      if (selectionTimerRef.current) {
+        clearTimeout(selectionTimerRef.current);
+        selectionTimerRef.current = null;
+      }
+    };
+  }, []);
+
   const handleVersePress = useCallback(
     (verseKey: string) => {
       setHighlightedVerseKey(null);
@@ -183,10 +195,13 @@ export function useQuranDetailScreen() {
         );
       }
 
-      const timer = setTimeout(() => {
+      if (selectionTimerRef.current) {
+        clearTimeout(selectionTimerRef.current);
+      }
+      selectionTimerRef.current = setTimeout(() => {
         isSelectingVerse.value = false;
+        selectionTimerRef.current = null;
       }, RESET_SELECTION_DELAY_MS);
-      return () => clearTimeout(timer);
     },
     [verses, listRef, timestamps, player, playerScrollTranslateY, isSelectingVerse],
   );

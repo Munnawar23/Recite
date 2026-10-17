@@ -1,5 +1,5 @@
 import { FlashList, FlashListRef, ListRenderItemInfo } from "@shopify/flash-list";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshControl, RefreshControlProps, StyleSheet, View } from "react-native";
 
@@ -33,16 +33,30 @@ export default function QuranAudioScreen() {
 
   const [refreshing, setRefreshing] = useState(false);
   const listRef = useRef<FlashListRef<Chapter>>(null);
+  const refreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const styles = useMemo(
     () => createStyles(spacing),
     [spacing],
   );
 
+  useEffect(() => {
+    return () => {
+      if (refreshTimerRef.current) {
+        clearTimeout(refreshTimerRef.current);
+        refreshTimerRef.current = null;
+      }
+    };
+  }, []);
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    setTimeout(() => {
+    if (refreshTimerRef.current) {
+      clearTimeout(refreshTimerRef.current);
+    }
+    refreshTimerRef.current = setTimeout(() => {
       setRefreshing(false);
+      refreshTimerRef.current = null;
     }, 300);
   }, []);
 

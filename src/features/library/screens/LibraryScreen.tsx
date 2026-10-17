@@ -1,5 +1,5 @@
 import { FlashList, ListRenderItemInfo } from "@shopify/flash-list";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   RefreshControl,
@@ -21,6 +21,7 @@ export default function LibraryScreen() {
   const { colors, spacing } = useAppTheme();
   const [activeTab, setActiveTab] = useState<TabValue>("favorites");
   const [refreshing, setRefreshing] = useState(false);
+  const refreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { favoriteVerses, downloadedChapters } = useLibraryData();
 
@@ -29,11 +30,24 @@ export default function LibraryScreen() {
     [spacing],
   );
 
+  useEffect(() => {
+    return () => {
+      if (refreshTimerRef.current) {
+        clearTimeout(refreshTimerRef.current);
+        refreshTimerRef.current = null;
+      }
+    };
+  }, []);
+
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
+    if (refreshTimerRef.current) {
+      clearTimeout(refreshTimerRef.current);
+    }
     // Refreshing local stores is instantaneous, simulate brief feedback
-    setTimeout(() => {
+    refreshTimerRef.current = setTimeout(() => {
       setRefreshing(false);
+      refreshTimerRef.current = null;
     }, 400);
   }, []);
 

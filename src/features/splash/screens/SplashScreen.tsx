@@ -6,7 +6,7 @@ import { useOnboardingStore } from "@/store/onboardingStore";
 import { LinearGradient } from "expo-linear-gradient";
 import { Href, useRouter } from "expo-router";
 import LottieView from "lottie-react-native";
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
@@ -19,14 +19,26 @@ export default function SplashScreen() {
   const styles = createStyles(spacing);
 
   const { hasCompletedOnboarding } = useOnboardingStore();
+  const hasRedirectedRef = useRef(false);
 
   const handleRedirect = useCallback(() => {
+    if (hasRedirectedRef.current) return;
+    hasRedirectedRef.current = true;
     if (hasCompletedOnboarding) {
       router.replace("/(tabs)/home" as Href);
     } else {
       router.replace("/onboarding" as Href);
     }
   }, [router, hasCompletedOnboarding]);
+
+  // Safety fallback: ensure redirect fires even if Lottie animation stalls or errors
+  useEffect(() => {
+    const fallbackTimer = setTimeout(() => {
+      handleRedirect();
+    }, 3500);
+
+    return () => clearTimeout(fallbackTimer);
+  }, [handleRedirect]);
 
   return (
     <View style={styles.container}>

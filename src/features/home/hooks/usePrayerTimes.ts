@@ -4,7 +4,8 @@ import {
   CalculationMethod,
   Coordinates,
 } from "adhan";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { AppState, type AppStateStatus } from "react-native";
 
 import { useLocation } from "@/hooks/useLocation";
 import { formatPrayerTime } from "@/utils";
@@ -46,12 +47,36 @@ export function usePrayerTimes() {
   const { coords, permissionStatus, cityName, isLoading, requestLocation } =
     useLocation();
 
+  const [currentDate, setCurrentDate] = useState(() => new Date());
+
+  useEffect(() => {
+    // 1. Tick every 60s to ensure active prayer updates dynamically
+    const interval = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 60000);
+
+    // 2. Immediately update when app comes back to foreground
+    const subscription = AppState.addEventListener(
+      "change",
+      (nextState: AppStateStatus) => {
+        if (nextState === "active") {
+          setCurrentDate(new Date());
+        }
+      },
+    );
+
+    return () => {
+      clearInterval(interval);
+      subscription.remove();
+    };
+  }, []);
+
   const prayerData = useMemo(() => {
     const coordinates = new Coordinates(coords.latitude, coords.longitude);
 
     const params = CalculationMethod.UmmAlQura();
 
-    const adhanTimes = new AdhanPrayerTimes(coordinates, new Date(), params);
+    const adhanTimes = new AdhanPrayerTimes(coordinates, currentDate, params);
 
     const activePrayer = getActivePrayer(adhanTimes.nextPrayer());
 
@@ -89,7 +114,7 @@ export function usePrayerTimes() {
     ];
 
     return prayers;
-  }, [coords]);
+  }, [coords, currentDate]);
 
   return {
     prayerData,

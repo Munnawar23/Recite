@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
@@ -42,6 +42,25 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   const styles = useMemo(() => createStyles(spacing), [spacing]);
+
+  const lastReadLocalizedName = useMemo(() => {
+    return lastRead ? getSurahName(lastRead.surahNumber, language) : "";
+  }, [lastRead, language]);
+
+  const handleContinueReading = useCallback(() => {
+    if (!lastRead) return;
+    router.push({
+      pathname: "/quran-detail/[id]" as const,
+      params: {
+        id: String(lastRead.surahNumber),
+        localizedName: lastReadLocalizedName,
+        arabicName: lastRead.arabicName,
+        versesCount: lastRead.versesCount,
+        type: lastRead.type,
+        initialVerse: String(lastRead.verseNumber),
+      },
+    });
+  }, [lastRead, lastReadLocalizedName, router]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -166,28 +185,11 @@ export default function HomeScreen() {
           />
 
           {lastRead ? (
-            (() => {
-              const localizedName = getSurahName(lastRead.surahNumber, language);
-              return (
-                <ContinueReadingCard
-                  surahName={localizedName}
-                  verseNumber={lastRead.verseNumber}
-                  onPress={() =>
-                    router.push({
-                      pathname: "/quran-detail/[id]" as const,
-                      params: {
-                        id: String(lastRead.surahNumber),
-                        localizedName: localizedName,
-                        arabicName: lastRead.arabicName,
-                        versesCount: lastRead.versesCount,
-                        type: lastRead.type,
-                        initialVerse: String(lastRead.verseNumber),
-                      },
-                    })
-                  }
-                />
-              );
-            })()
+            <ContinueReadingCard
+              surahName={lastReadLocalizedName}
+              verseNumber={lastRead.verseNumber}
+              onPress={handleContinueReading}
+            />
           ) : (
             <EmptyState
               icon="book-outline"

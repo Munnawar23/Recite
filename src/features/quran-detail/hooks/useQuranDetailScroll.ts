@@ -1,13 +1,35 @@
 import { Haptics } from "@/lib/haptics";
 import { useReadingProgressStore } from "@/store/readingProgressStore";
+import type { SurahVerse } from "@/types";
+import type { FlashListRef } from "@shopify/flash-list";
 import { useCallback, useEffect, useRef, useState } from "react";
-import Animated, {
+import {
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
 import { scheduleOnRN } from "react-native-worklets";
+
+export const HEADER_HIDE_OFFSET = -120;
+export const PLAYER_HIDE_OFFSET = 200;
+const SCROLL_DELTA_THRESHOLD = 6;
+const TOP_SCROLL_THRESHOLD = 300;
+
+/**
+ * Animate a SharedValue to target only when it is not already settled near target.
+ * Prevents re-creating and restarting withTiming loops on every frame while scrolling.
+ */
+const animateTo = (
+  sv: { value: number },
+  target: number,
+  duration: number,
+) => {
+  "worklet";
+  if (Math.abs(sv.value - target) > 0.5) {
+    sv.value = withTiming(target, { duration });
+  }
+};
 
 interface UseQuranDetailScrollParams {
   chapterId: number;
@@ -18,7 +40,7 @@ export function useQuranDetailScroll({
   chapterId,
   isPlayingAudio = false,
 }: UseQuranDetailScrollParams) {
-  const listRef = useRef<any>(null);
+  const listRef = useRef<FlashListRef<SurahVerse> | null>(null);
 
   const lastScrollY = useSharedValue(0);
   const playerScrollTranslateY = useSharedValue(0);
@@ -31,25 +53,67 @@ export function useQuranDetailScroll({
   useEffect(() => {
     isPlayingAudioShared.value = isPlayingAudio;
   }, [isPlayingAudio, isPlayingAudioShared]);
+
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  const { setScrollOffset } = useReadingProgressStore();
+  // Selector prevents re-renders when other reading progress state changes
+  const setScrollOffset = useReadingProgressStore((s) => s.setScrollOffset);
 
   const updateScrollTopVisibility = useCallback((visible: boolean) => {
     setShowScrollTop(visible);
   }, []);
 
-  // Debounce helper — save scroll offset at most once per 500 ms
+  // Debounced scroll offset saving (max once per 500ms)
   const saveOffsetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const saveScrollOffset = useCallback(
     (offsetY: number) => {
-      if (saveOffsetTimer.current) clearTimeout(saveOffsetTimer.current);
+      if (saveOffsetTimer.current) {
+        clearTimeout(saveOffsetTimer.current);
+      }
       saveOffsetTimer.current = setTimeout(() => {
         setScrollOffset(chapterId, offsetY);
+        saveOffsetTimer.current = null;
       }, 500);
     },
     [chapterId, setScrollOffset],
   );
+
+  // Cleanup pending debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (saveOffsetTimer.current) {
+        clearTimeout(saveOffsetTimer.current);
+        saveOffsetTimer.current = null;
+      }
+    };
+  }, []);
+
+  // Flush timer and reset scroll tracking state on chapter change
+  const prevChapterIdRef = useRef(chapterId);
+  useEffect(() => {
+    if (prevChapterIdRef.current !== chapterId) {
+      if (saveOffsetTimer.current) {
+        clearTimeout(saveOffsetTimer.current);
+        saveOffsetTimer.current = null;
+      }
+      prevChapterIdRef.current = chapterId;
+
+      // Clean slate on chapter change
+      lastScrollY.value = 0;
+      isScrollTopVisible.value = false;
+      scrollTopOpacity.value = 0;
+      playerScrollTranslateY.value = 0;
+      headerScrollTranslateY.value = 0;
+      setShowScrollTop(false);
+    }
+  }, [
+    chapterId,
+    headerScrollTranslateY,
+    isScrollTopVisible,
+    lastScrollY,
+    playerScrollTranslateY,
+    scrollTopOpacity,
+  ]);
 
   const scrollToTop = useCallback(() => {
     Haptics.light();
@@ -62,34 +126,37 @@ export function useQuranDetailScroll({
       const delta = currentY - lastScrollY.value;
       lastScrollY.value = currentY;
 
-      if (currentY <= 300) {
+      // Persist scroll offset debounced
+      scheduleOnRN(saveScrollOffset, currentY);
+
+      if (currentY <= TOP_SCROLL_THRESHOLD) {
         if (isScrollTopVisible.value) {
           isScrollTopVisible.value = false;
           scrollTopOpacity.value = withTiming(0, { duration: 200 });
           scheduleOnRN(updateScrollTopVisibility, false);
         }
-        playerScrollTranslateY.value = withTiming(0, { duration: 200 });
-        headerScrollTranslateY.value = withTiming(0, { duration: 200 });
-      } else if (delta > 6) {
+        animateTo(playerScrollTranslateY, 0, 200);
+        animateTo(headerScrollTranslateY, 0, 200);
+      } else if (delta > SCROLL_DELTA_THRESHOLD) {
         if (isScrollTopVisible.value) {
           isScrollTopVisible.value = false;
           scrollTopOpacity.value = withTiming(0, { duration: 200 });
           scheduleOnRN(updateScrollTopVisibility, false);
         }
-        headerScrollTranslateY.value = withTiming(-120, { duration: 250 });
+        animateTo(headerScrollTranslateY, HEADER_HIDE_OFFSET, 250);
         if (!isPlayingAudioShared.value && !isSelectingVerse.value) {
-          playerScrollTranslateY.value = withTiming(200, { duration: 250 });
+          animateTo(playerScrollTranslateY, PLAYER_HIDE_OFFSET, 250);
         } else {
-          playerScrollTranslateY.value = withTiming(0, { duration: 200 });
+          animateTo(playerScrollTranslateY, 0, 200);
         }
-      } else if (delta < -6) {
+      } else if (delta < -SCROLL_DELTA_THRESHOLD) {
         if (!isScrollTopVisible.value) {
           isScrollTopVisible.value = true;
           scrollTopOpacity.value = withTiming(1, { duration: 200 });
           scheduleOnRN(updateScrollTopVisibility, true);
         }
-        playerScrollTranslateY.value = withTiming(0, { duration: 250 });
-        headerScrollTranslateY.value = withTiming(0, { duration: 250 });
+        animateTo(playerScrollTranslateY, 0, 250);
+        animateTo(headerScrollTranslateY, 0, 250);
       }
     },
   });

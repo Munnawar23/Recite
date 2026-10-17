@@ -36,8 +36,8 @@ export function useQuranAudio(
   enabled: boolean = true,
   metadataOptions?: QuranAudioMetadataOptions,
 ) {
-  const { reciterId: globalReciterId, setReciterId: setReciterIdInStore } =
-    useQuranSettingsStore();
+  const globalReciterId = useQuranSettingsStore((s) => s.reciterId);
+  const setReciterIdInStore = useQuranSettingsStore((s) => s.setReciterId);
   const reciterId = globalReciterId || DEFAULT_RECITER_ID;
   const language = useLanguageStore((s) => s.language);
 
@@ -98,30 +98,35 @@ export function useQuranAudio(
   // Use local file when available, otherwise stream remote URL
   const audioUrl = localUri ?? remoteAudioUrl;
 
-  // FIX 3: Correct priority — when downloaded, local timestamps always win.
-  // Remote timestamps (from audioData) are only used when streaming online.
-  // Previously the logic was inverted: remote could override local.
+  // Local timestamps win when available; falls back to remote while local is loading
   const timestamps = useMemo<AudioTimestamp[]>(() => {
-    if (isDownloaded) {
+    if (isDownloaded && localTimestamps.length > 0) {
       return localTimestamps;
     }
     return audioData?.timestamps ?? [];
   }, [isDownloaded, localTimestamps, audioData]);
 
-  // Initialize the expo-audio player
-  const player = useAudioPlayer(
-    enabled && audioUrl ? { uri: audioUrl } : undefined,
+  // Memoize player source to avoid allocating new objects on every render
+  const playerSource = useMemo(
+    () => (enabled && audioUrl ? { uri: audioUrl } : undefined),
+    [enabled, audioUrl],
   );
+  const player = useAudioPlayer(playerSource);
   const status = useAudioPlayerStatus(player);
 
-  // Replace source when audioUrl changes
+  // Skip the first run on mount (useAudioPlayer already loads initial source)
+  const isFirstRun = useRef(true);
   useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
     if (enabled && audioUrl) {
       player.replace({ uri: audioUrl });
     }
   }, [enabled, audioUrl, player]);
 
-  // FIX 4: Keep last known active verse so the highlight doesn't flicker to null
+  // Keep last known active verse so the highlight doesn't flicker to null
   // during the silent gap between timestamp_to of verse N and timestamp_from of N+1.
   const lastActiveVerseKeyRef = useRef<string | null>(null);
 
@@ -130,8 +135,9 @@ export function useQuranAudio(
     lastActiveVerseKeyRef.current = null;
   }, [chapterId]);
 
-  const activeVerseKey = useMemo(() => {
-    if (!status.currentTime || timestamps.length === 0) return null;
+  // Pure computation without mutating refs during render (concurrency-safe)
+  const computedVerseKey = useMemo(() => {
+    if (status.currentTime == null || timestamps.length === 0) return null;
     const currentTimeMs = status.currentTime * 1000;
 
     // Exact match — current playback time falls within a verse window
@@ -140,15 +146,16 @@ export function useQuranAudio(
         currentTimeMs >= ts.timestamp_from && currentTimeMs <= ts.timestamp_to,
     );
 
-    if (active) {
-      lastActiveVerseKeyRef.current = active.verse_key;
-      return active.verse_key;
-    }
-
-    // In a gap between verses — keep the last highlighted verse visible
-    // instead of returning null and causing a flicker
-    return lastActiveVerseKeyRef.current;
+    return active?.verse_key ?? undefined;
   }, [status.currentTime, timestamps]);
+
+  useEffect(() => {
+    if (computedVerseKey) {
+      lastActiveVerseKeyRef.current = computedVerseKey;
+    }
+  }, [computedVerseKey]);
+
+  const activeVerseKey = computedVerseKey ?? lastActiveVerseKeyRef.current;
 
   // Reciter & Surah metadata for lock screen & system notification
   const activeReciter = useMemo(

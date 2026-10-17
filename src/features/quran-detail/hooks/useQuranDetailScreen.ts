@@ -74,7 +74,14 @@ export function useQuranDetailScreen() {
     }
   }, [refetch]);
 
-  // Audio playback
+  const audioMetadataOptions = useMemo(
+    () => ({
+      localizedName: resolvedLocalizedName,
+      arabicName: resolvedArabicName,
+    }),
+    [resolvedLocalizedName, resolvedArabicName],
+  );
+
   const {
     player,
     status,
@@ -85,10 +92,7 @@ export function useQuranDetailScreen() {
     audioUrl,
     audioTotalBytes,
     isPlayingLocally,
-  } = useQuranAudio(chapterId, true, {
-    localizedName: resolvedLocalizedName,
-    arabicName: resolvedArabicName,
-  });
+  } = useQuranAudio(chapterId, true, audioMetadataOptions);
 
   const reciterName = useMemo(() => {
     const activeReciter = RECITER_OPTIONS.find((r) => r.id === reciterId);
@@ -114,7 +118,6 @@ export function useQuranDetailScreen() {
   const setVerseNumber = useReadingProgressStore(
     (state) => state.setVerseNumber,
   );
-  const lastRead = useReadingProgressStore((state) => state.lastRead);
 
   const safeArea = useAppSafeAreaInsets();
 
@@ -235,25 +238,44 @@ export function useQuranDetailScreen() {
     [chapterId, setVerseNumber],
   );
 
-  // Scroll to playing verse (only while actively playing)
+  // Track the last verse we auto-scrolled to, so user can freely scroll while
+  // a verse is playing without being continuously snapped back to it.
+  const lastScrolledVerseKeyRef = useRef<string | null>(null);
+  const hasRestoredScrollRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    lastScrolledVerseKeyRef.current = null;
+    hasRestoredScrollRef.current = false;
+  }, [chapterId]);
+
+  // Scroll to playing verse ONLY when activeVerseKey transitions to a new verse
   useEffect(() => {
     if (status?.playing && activeVerseKey && verses.length > 0) {
-      const index = verses.findIndex((v) => v.verseKey === activeVerseKey);
-      if (index !== -1) {
-        listRef.current?.scrollToIndex({
-          index,
-          animated: true,
-          viewPosition: 0.3,
-        });
+      if (lastScrolledVerseKeyRef.current !== activeVerseKey) {
+        lastScrolledVerseKeyRef.current = activeVerseKey;
+        const index = verses.findIndex((v) => v.verseKey === activeVerseKey);
+        if (index !== -1) {
+          listRef.current?.scrollToIndex({
+            index,
+            animated: true,
+            viewPosition: 0.5,
+          });
+        }
       }
     }
   }, [status?.playing, activeVerseKey, verses.length, listRef]);
 
-  // Restore saved scroll position when re-opening the same surah
+  // Restore saved scroll position ONCE when re-opening the surah (not on every scroll save)
   useEffect(() => {
+    if (hasRestoredScrollRef.current) return;
+    const currentLastRead = useReadingProgressStore.getState().lastRead;
     const savedOffset =
-      lastRead?.surahNumber === chapterId ? lastRead.scrollOffset : 0;
+      currentLastRead?.surahNumber === chapterId
+        ? currentLastRead.scrollOffset
+        : 0;
+
     if (!initialVerse && savedOffset > 0 && verses.length > 0) {
+      hasRestoredScrollRef.current = true;
       const timer = setTimeout(() => {
         listRef.current?.scrollToOffset({
           offset: savedOffset,
@@ -262,7 +284,7 @@ export function useQuranDetailScreen() {
       }, RESTORE_SCROLL_DELAY_MS);
       return () => clearTimeout(timer);
     }
-  }, [chapterId, initialVerse, lastRead, verses.length, listRef]);
+  }, [chapterId, initialVerse, verses.length, listRef]);
 
   return {
     // Route params

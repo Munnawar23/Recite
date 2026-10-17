@@ -121,6 +121,7 @@ export default function QuranDetailScreen() {
           showScrollTop={showScrollTop}
           animatedScrollTopStyle={animatedScrollTopStyle}
           hasAudioPlayer={!!(player && status)}
+          playerScrollTranslateY={playerScrollTranslateY}
           onPress={scrollToTop}
         />
       </View>

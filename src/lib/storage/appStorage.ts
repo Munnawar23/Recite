@@ -15,6 +15,7 @@ export const STORAGE_KEYS = {
   QUERY_CACHE: "RECITE_QUERY_CACHE_V3",
   QURAN_SETTINGS: "quran-settings-storage",
   VERSE_ACTION_HINT: "has-seen-verse-action-hint",
+  AUDIO_PROGRESS: "audio-progress-storage",
 } as const;
 
 export const appStorage = {

@@ -16,7 +16,7 @@ import {
 } from "../hooks/useAudioPlayer";
 
 interface AudioPlayerProps {
-  player: AudioPlayer;
+  player: AudioPlayer | null;
   status: AudioStatus | null;
   isLoadingAudio: boolean;
   scrollTranslateY?: SharedValue<number>;
@@ -37,7 +37,6 @@ export default function AudioPlayerComponent({
 
   const {
     sliderValue,
-    isDragging,
     playbackSpeed,
     isRepeating,
     isPlayerLoading,
@@ -56,22 +55,34 @@ export default function AudioPlayerComponent({
     scrollTranslateY,
   });
 
+  if (!player) return null;
+
+  const isPlaying = status?.playing ?? false;
+  const duration =
+    Number.isFinite(status?.duration) && status!.duration! > 0
+      ? status!.duration!
+      : 1;
+  const safeValue = Number.isFinite(sliderValue)
+    ? Math.min(Math.max(0, sliderValue), duration)
+    : 0;
+  const rawDuration = Number.isFinite(status?.duration)
+    ? status!.duration!
+    : 0;
+
   return (
     <Animated.View style={[S.container, miniPlayerAnimatedStyle]}>
       {/* Progress Bar (Slider) */}
       <View style={S.progressSection}>
         <AppText variant="caption" color="subtext" align="center" style={S.timeText}>
-          {formatTime(sliderValue)}
+          {formatTime(safeValue)}
         </AppText>
 
         <Slider
           style={S.slider}
           minimumValue={0}
-          maximumValue={status?.duration && status.duration > 0 ? status.duration : 1}
-          value={Math.min(
-            Math.max(0, sliderValue),
-            status?.duration && status.duration > 0 ? status.duration : 1,
-          )}
+          maximumValue={duration}
+          value={safeValue}
+          disabled={isPlayerLoading}
           minimumTrackTintColor={colors.primary}
           maximumTrackTintColor={colors.border + "80"}
           thumbTintColor={colors.primary}
@@ -80,7 +91,7 @@ export default function AudioPlayerComponent({
         />
 
         <AppText variant="caption" color="subtext" align="center" style={S.timeText}>
-          {formatTime(status?.duration || 0)}
+          {formatTime(rawDuration)}
         </AppText>
       </View>
 
@@ -105,7 +116,9 @@ export default function AudioPlayerComponent({
         {/* 2. Skip backward 10s */}
         <TouchableOpacity
           onPress={handleSkipBack}
-          style={S.skipButton}
+          disabled={isPlayerLoading}
+          style={[S.skipButton, isPlayerLoading && S.buttonDisabled]}
+          activeOpacity={0.7}
           accessibilityRole="button"
           accessibilityLabel="Skip backward 10 seconds"
         >
@@ -117,11 +130,12 @@ export default function AudioPlayerComponent({
           onPress={handlePlayPause}
           disabled={isPlayerLoading}
           style={S.playPauseButton}
+          activeOpacity={0.85}
           accessibilityRole="button"
           accessibilityLabel={
             isPlayerLoading
               ? "Loading audio"
-              : status?.playing
+              : isPlaying
                 ? "Pause"
                 : "Play"
           }
@@ -130,10 +144,10 @@ export default function AudioPlayerComponent({
             <ActivityIndicator size="small" color="#fff" />
           ) : (
             <Ionicons
-              name={status?.playing ? "pause" : "play"}
+              name={isPlaying ? "pause" : "play"}
               size={rs.icon(26)}
               color="#fff"
-              style={!status?.playing ? { marginLeft: rs.space(2.5) } : undefined}
+              style={!isPlaying ? S.playIconOffset : undefined}
             />
           )}
         </TouchableOpacity>
@@ -141,7 +155,9 @@ export default function AudioPlayerComponent({
         {/* 4. Skip forward 10s */}
         <TouchableOpacity
           onPress={handleSkipForward}
-          style={S.skipButton}
+          disabled={isPlayerLoading}
+          style={[S.skipButton, isPlayerLoading && S.buttonDisabled]}
+          activeOpacity={0.7}
           accessibilityRole="button"
           accessibilityLabel="Skip forward 10 seconds"
         >
@@ -152,6 +168,7 @@ export default function AudioPlayerComponent({
         <TouchableOpacity
           onPress={cycleSpeed}
           style={S.speedButton}
+          activeOpacity={0.7}
           accessibilityRole="button"
           accessibilityLabel={`Playback speed ${playbackSpeed % 1 === 0 ? `${playbackSpeed}.0` : playbackSpeed}x`}
         >
@@ -231,6 +248,9 @@ const createStyles = (colors: ThemeColors, bottomInset: number) =>
       justifyContent: "center",
       backgroundColor: colors.background,
     },
+    buttonDisabled: {
+      opacity: 0.45,
+    },
     speedButton: {
       width: rs.space(38),
       height: rs.space(38),
@@ -256,5 +276,8 @@ const createStyles = (colors: ThemeColors, bottomInset: number) =>
       shadowOpacity: 0.3,
       shadowRadius: 6,
       elevation: 5,
+    },
+    playIconOffset: {
+      marginLeft: rs.space(2.5),
     },
   });

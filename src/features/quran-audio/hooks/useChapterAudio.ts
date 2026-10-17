@@ -17,6 +17,7 @@ import {
 } from "@/constants";
 import { useBackgroundPlay } from "@/hooks/useBackgroundPlay";
 import { Haptics } from "@/lib/haptics";
+import { useAudioProgress } from "./useAudioProgress";
 
 export interface UseChapterAudioOptions {
   chapterId: number;
@@ -39,7 +40,7 @@ export function useChapterAudio({
 }: UseChapterAudioOptions) {
   const isArabicAudio = audioLanguage === "ar";
   const isEnglishAudio = audioLanguage === "en";
-  const { reciterId: globalReciterId } = useQuranSettingsStore();
+  const globalReciterId = useQuranSettingsStore((s) => s.reciterId);
   const reciterId = globalReciterId || DEFAULT_RECITER_ID;
 
   // Always fetch Arabic recitation audio online (same API as Quran Detail AudioPlayer)
@@ -102,9 +103,11 @@ export function useChapterAudio({
   }, [isArabicAudio, isEnglishAudio, reciterId, activeAudioReciter]);
 
   // Initialize expo-audio player
-  const player = useAudioPlayer(
-    enabled && audioUrl ? { uri: audioUrl } : undefined,
+  const playerSource = useMemo(
+    () => (enabled && audioUrl ? { uri: audioUrl } : undefined),
+    [enabled, audioUrl],
   );
+  const player = useAudioPlayer(playerSource);
   const status = useAudioPlayerStatus(player);
 
   // Minimal UI state
@@ -115,32 +118,56 @@ export function useChapterAudio({
 
   // Tracking refs
   const loadedAudioUrlRef = useRef<string | null>(null);
+  const isFirstRun = useRef<boolean>(true);
   const wasEnabledRef = useRef<boolean>(false);
   const seekTargetRef = useRef<number | null>(null);
   const seekTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasHandledCompletionRef = useRef<boolean>(false);
+  const isPlayingRef = useRef<boolean>(false);
+  const currentTimeRef = useRef<number>(0);
+  const durationRef = useRef<number>(0);
 
-  // Clear seek target once player's currentTime catches up near the target
-  if (
-    seekTargetRef.current !== null &&
-    Math.abs((status?.currentTime || 0) - seekTargetRef.current) < 1.0
-  ) {
-    seekTargetRef.current = null;
-    if (seekTimeoutRef.current) clearTimeout(seekTimeoutRef.current);
-  }
+  // Keep live refs fresh without re-running effects
+  currentTimeRef.current = status?.currentTime ?? 0;
+  isPlayingRef.current = Boolean(status?.playing);
 
-  // Pure derived state: No useEffect, zero extra renders during normal playback!
+  useEffect(() => {
+    if (status?.duration != null && status.duration > 0) {
+      durationRef.current = status.duration;
+    }
+  }, [status?.duration]);
+
+  // Concurrency-safe: Clear seek target in effect, not render body
+  useEffect(() => {
+    if (
+      seekTargetRef.current !== null &&
+      Math.abs((status?.currentTime ?? 0) - seekTargetRef.current) < 1.0
+    ) {
+      seekTargetRef.current = null;
+      if (seekTimeoutRef.current) {
+        clearTimeout(seekTimeoutRef.current);
+        seekTimeoutRef.current = null;
+      }
+    }
+  }, [status?.currentTime]);
+
+  // Pure derived state: No useEffect, zero extra renders during normal playback
   const isDragging = dragValue !== null;
-  const sliderValue = dragValue ?? seekTargetRef.current ?? status?.currentTime ?? 0;
+  const sliderValue = isChangingTrack
+    ? (seekTargetRef.current ?? 0)
+    : (dragValue ?? seekTargetRef.current ?? status?.currentTime ?? 0);
 
-  // Cleanup timeout on unmount
+  // Cleanup seek timeout on unmount
   useEffect(() => {
     return () => {
-      if (seekTimeoutRef.current) clearTimeout(seekTimeoutRef.current);
+      if (seekTimeoutRef.current) {
+        clearTimeout(seekTimeoutRef.current);
+        seekTimeoutRef.current = null;
+      }
     };
   }, []);
 
-  // Effect 1: Track switching and auto-play on modal open
+  // Effect 1: Track switching and auto-play on modal open (prevents double-load on mount)
   useEffect(() => {
     if (!enabled || !audioUrl || !player) {
       wasEnabledRef.current = enabled;
@@ -151,7 +178,7 @@ export function useChapterAudio({
     wasEnabledRef.current = enabled;
 
     if (loadedAudioUrlRef.current === audioUrl) {
-      if (justOpened && !status?.playing) {
+      if (justOpened && !player.playing) {
         player.play();
       }
       return;
@@ -163,40 +190,66 @@ export function useChapterAudio({
     seekTargetRef.current = null;
     setDragValue(null);
     setIsChangingTrack(true);
-    player.replace({ uri: audioUrl });
-    player.play();
-  }, [enabled, audioUrl, player, status?.playing]);
 
-  // Effect 2: Clear track loading once duration becomes available
+    try {
+      if (isFirstRun.current) {
+        // useAudioPlayer already loaded playerSource on mount
+        isFirstRun.current = false;
+      } else {
+        player.replace({ uri: audioUrl });
+      }
+      if (playbackSpeed !== 1.0) player.setPlaybackRate(playbackSpeed);
+      if (isRepeating) player.loop = isRepeating;
+      player.play();
+    } catch {
+      // Ignored if player released
+    }
+  }, [enabled, audioUrl, player, playbackSpeed, isRepeating]);
+
+  // Effect 2: Clear isChangingTrack once track's duration is ready, or if error occurs
   useEffect(() => {
     const dur = status?.duration ?? 0;
-    if (dur > 0 && !status?.isBuffering) {
+    if ((dur > 0 && !status?.isBuffering) || status?.error) {
       setIsChangingTrack(false);
     }
-  }, [status?.duration, status?.isBuffering]);
+  }, [status?.duration, status?.isBuffering, status?.error]);
 
-  // Effect 3: Stop when modal closes
+  // Progress tracking, periodic auto-save, and restore logic encapsulated in dedicated hook
+  const { saveCurrentProgress } = useAudioProgress({
+    player,
+    status,
+    chapterId,
+    enabled,
+    audioLanguage,
+    reciterId: isArabicAudio
+      ? reciterId
+      : (editionName ?? DEFAULT_ENGLISH_RECITER_NAME),
+    isChangingTrack,
+    isRepeating,
+  });
+
+  // Effect 3: Stop playback when modal closes (flushes save before pause)
   useEffect(() => {
-    if (!enabled) {
-      if (player && status?.playing) {
+    if (!enabled && player && isPlayingRef.current) {
+      saveCurrentProgress();
+      try {
         player.pause();
-      }
+      } catch {}
     }
-  }, [enabled, player, status?.playing]);
+  }, [enabled, player, saveCurrentProgress]);
 
-  // Effect 4: Play next on track completion (only fires on completion events, not on every tick)
+  // Effect 4: Play next on track completion
   useEffect(() => {
     const isFinished =
       Boolean(status?.didJustFinish) ||
       status?.playbackState === "completed";
 
     if (isFinished) {
-      if (!isRepeating && onPlayNext && !hasHandledCompletionRef.current) {
+      if (!isRepeating && !hasHandledCompletionRef.current) {
         hasHandledCompletionRef.current = true;
-        onPlayNext();
+        if (onPlayNext) onPlayNext();
       }
-    } else {
-      // Reset completion flag if track is playing normally
+    } else if (hasHandledCompletionRef.current) {
       hasHandledCompletionRef.current = false;
     }
   }, [
@@ -206,69 +259,109 @@ export function useChapterAudio({
     onPlayNext,
   ]);
 
-  // Combined loading state
+  // Combined loading state with error protection
   const isFetchingAudio = isArabicAudio && isLoadingArabicAudio && !audioUrl;
+  const isAudioError = Boolean(status?.error);
+  const isDurationReady =
+    (status?.duration ?? 0) > 0 ||
+    (status?.isLoaded ?? false) ||
+    (player?.isLoaded ?? false);
   const isLoading =
     enabled &&
-    (isChangingTrack ||
-      isFetchingAudio ||
-      Boolean(status?.isBuffering) ||
-      status?.playbackState === "loading" ||
-      status?.playbackState === "buffering" ||
-      (status?.duration ?? 0) <= 0);
+    !isAudioError &&
+    (isChangingTrack || isFetchingAudio || (!isDurationReady && !status?.error));
 
   // Control Handlers
   const handlePlayPause = useCallback(() => {
     Haptics.light();
     if (!player) return;
-    if (status?.playing) {
-      player.pause();
-    } else {
-      player.play();
-    }
+    try {
+      if (status?.playing) {
+        player.pause();
+      } else {
+        player.play();
+      }
+    } catch {}
   }, [player, status?.playing]);
 
+  // Common Skip Backward 10s (immediate optimistic slider update + seek)
   const handleSkipBack = useCallback(() => {
     Haptics.light();
     if (!player) return;
-    const current = player.currentTime || status?.currentTime || 0;
+    let current = currentTimeRef.current;
+    try {
+      if (typeof player.currentTime === "number" && !isNaN(player.currentTime)) {
+        current = player.currentTime;
+      }
+    } catch {}
     const target = Math.max(0, current - 10);
-    player.seekTo(target);
-  }, [player, status?.currentTime]);
+    seekTargetRef.current = target;
+    try {
+      player.seekTo(target)?.catch?.(() => {});
+    } catch {}
+    if (seekTimeoutRef.current) {
+      clearTimeout(seekTimeoutRef.current);
+    }
+    seekTimeoutRef.current = setTimeout(() => {
+      seekTargetRef.current = null;
+      seekTimeoutRef.current = null;
+    }, 800);
+  }, [player]);
 
+  // Common Skip Forward 10s (immediate optimistic slider update + seek)
   const handleSkipForward = useCallback(() => {
     Haptics.light();
     if (!player) return;
-    const current = player.currentTime || status?.currentTime || 0;
-    const dur = player.duration || status?.duration || 0;
-    const target = Math.min(dur, current + 10);
-    player.seekTo(target);
-  }, [player, status?.currentTime, status?.duration]);
+    let current = currentTimeRef.current;
+    let dur = durationRef.current;
+    try {
+      if (typeof player.currentTime === "number" && !isNaN(player.currentTime)) {
+        current = player.currentTime;
+      }
+      if (typeof player.duration === "number" && player.duration > 0) {
+        dur = player.duration;
+      }
+    } catch {}
+    const target = dur > 0 ? Math.min(dur, current + 10) : current + 10;
+    seekTargetRef.current = target;
+    try {
+      player.seekTo(target)?.catch?.(() => {});
+    } catch {}
+    if (seekTimeoutRef.current) {
+      clearTimeout(seekTimeoutRef.current);
+    }
+    seekTimeoutRef.current = setTimeout(() => {
+      seekTargetRef.current = null;
+      seekTimeoutRef.current = null;
+    }, 800);
+  }, [player]);
 
   const cycleSpeed = useCallback(() => {
     Haptics.light();
-    const next =
-      playbackSpeed === 1.0
-        ? 1.25
-        : playbackSpeed === 1.25
-          ? 1.5
-          : playbackSpeed === 1.5
-            ? 2.0
-            : 1.0;
-    setPlaybackSpeed(next);
-    if (player) {
-      player.setPlaybackRate(next);
-    }
-  }, [player, playbackSpeed]);
+    setPlaybackSpeed((prev) => {
+      const next =
+        prev === 1.0 ? 1.25 : prev === 1.25 ? 1.5 : prev === 1.5 ? 2.0 : 1.0;
+      if (player) {
+        try {
+          player.setPlaybackRate(next);
+        } catch {}
+      }
+      return next;
+    });
+  }, [player]);
 
   const toggleRepeat = useCallback(() => {
     Haptics.light();
-    const next = !isRepeating;
-    setIsRepeating(next);
-    if (player) {
-      player.loop = next;
-    }
-  }, [player, isRepeating]);
+    setIsRepeating((prev) => {
+      const next = !prev;
+      if (player) {
+        try {
+          player.loop = next;
+        } catch {}
+      }
+      return next;
+    });
+  }, [player]);
 
   const handleSliderValueChange = useCallback((val: number) => {
     setDragValue(val);
@@ -278,10 +371,15 @@ export function useChapterAudio({
     (val: number) => {
       seekTargetRef.current = val;
       setDragValue(null);
-      player?.seekTo(val);
-      if (seekTimeoutRef.current) clearTimeout(seekTimeoutRef.current);
+      try {
+        player?.seekTo(val)?.catch?.(() => {});
+      } catch {}
+      if (seekTimeoutRef.current) {
+        clearTimeout(seekTimeoutRef.current);
+      }
       seekTimeoutRef.current = setTimeout(() => {
         seekTargetRef.current = null;
+        seekTimeoutRef.current = null;
       }, 800);
     },
     [player],
@@ -336,9 +434,13 @@ export function useChapterAudio({
     toggleRepeat,
     handleSliderValueChange,
     handleSlidingComplete,
+    saveProgress: saveCurrentProgress,
   };
 }
 
 // Backward-compatible alias
 export const useSurahCdnAudio = useChapterAudio;
 export type UseSurahCdnAudioOptions = UseChapterAudioOptions;
+
+export { useAudioProgress, useChapterAudioProgress } from "./useAudioProgress";
+export type { UseAudioProgressOptions } from "./useAudioProgress";

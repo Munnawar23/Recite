@@ -142,7 +142,7 @@ export default function CommonModal({
                     <Ionicons name={icon} size={rs.icon(18)} color={iconColor || colors.primary} />
                   </View>
                 )}
-                <AppText variant="cardTitle" family="title" color="text" numberOfLines={1}>
+                <AppText variant="title" family="title" color="text" numberOfLines={1}>
                   {modalTitle}
                 </AppText>
               </View>

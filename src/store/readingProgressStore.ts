@@ -51,13 +51,43 @@ export const useReadingProgressStore = create<ReadingProgressState>()(
         set({ lastRead: { ...data, scrollOffset: data.scrollOffset ?? 0 } }),
       setScrollOffset: (surahNumber, offset) =>
         set((state) => {
-          if (state.lastRead?.surahNumber !== surahNumber) return state;
-          return { lastRead: { ...state.lastRead, scrollOffset: offset } };
+          if (state.lastRead?.surahNumber === surahNumber) {
+            return { lastRead: { ...state.lastRead, scrollOffset: offset } };
+          }
+          // If lastRead is null or for another chapter, preserve surahNumber and scrollOffset
+          // so initial scroll saves are never silently dropped before or during transitions.
+          return {
+            lastRead: {
+              ...(state.lastRead ?? {
+                surahName: "",
+                arabicName: "",
+                versesCount: "",
+                type: "",
+                verseNumber: 1,
+              }),
+              surahNumber,
+              scrollOffset: offset,
+            },
+          };
         }),
       setVerseNumber: (surahNumber, verseNumber) =>
         set((state) => {
-          if (state.lastRead?.surahNumber !== surahNumber) return state;
-          return { lastRead: { ...state.lastRead, verseNumber } };
+          if (state.lastRead?.surahNumber === surahNumber) {
+            return { lastRead: { ...state.lastRead, verseNumber } };
+          }
+          return {
+            lastRead: {
+              ...(state.lastRead ?? {
+                surahName: "",
+                arabicName: "",
+                versesCount: "",
+                type: "",
+                scrollOffset: 0,
+              }),
+              surahNumber,
+              verseNumber,
+            },
+          };
         }),
       clearLastRead: () => set({ lastRead: null }),
     }),
@@ -65,11 +95,13 @@ export const useReadingProgressStore = create<ReadingProgressState>()(
       name: STORAGE_KEYS.READING_PROGRESS,
       storage: createJSONStorage(() => zustandStorage),
       version: 1,
+      // migrate returns Partial<ReadingProgressState>; Zustand's persist middleware
+      // merges it with defaults. The cast is a typing concession.
       migrate: (persistedState, fromVersion) =>
         migrateReadingProgress(
           persistedState,
           fromVersion,
-        ) as ReadingProgressState,
+        ) as unknown as ReadingProgressState,
       partialize: (state) => ({
         lastRead: state.lastRead,
       }),

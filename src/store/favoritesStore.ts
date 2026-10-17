@@ -53,11 +53,12 @@ export const useFavoritesStore = create<FavoritesState>()(
       storage: createJSONStorage(() => zustandStorage),
       version: 2,
       migrate: (persisted: any, fromVersion: number) => {
-        if (fromVersion < 2) {
+        if (!fromVersion || fromVersion < 2) {
           return {
             favoriteVerses: Array.isArray(persisted?.favoriteVerses)
               ? persisted.favoriteVerses
               : [],
+            favoriteIds: [],
           };
         }
         return persisted as FavoritesState;

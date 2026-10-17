@@ -1,47 +1,102 @@
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import type { ThemeColors } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { useMemo } from "react";
-import { StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
-import Animated from "react-native-reanimated";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  type AnimatedStyle,
+  type SharedValue,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { PLAYER_HIDE_OFFSET } from "../hooks/useQuranDetailScroll";
+
+const PLAYER_BUTTON_OFFSET = 100;
 
 interface ScrollTopButtonProps {
   showScrollTop: boolean;
-  animatedScrollTopStyle: any;
+  animatedScrollTopStyle: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>> | any;
   hasAudioPlayer: boolean;
+  playerScrollTranslateY?: SharedValue<number>;
   onPress: () => void;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 }
 
 export default function ScrollTopButton({
   showScrollTop,
   animatedScrollTopStyle,
   hasAudioPlayer,
+  playerScrollTranslateY,
   onPress,
+  style,
 }: ScrollTopButtonProps) {
   const { colors } = useAppTheme();
   const insets = useSafeAreaInsets();
-  const S = useMemo(() => createStyles(colors, insets.bottom), [colors, insets.bottom]);
+  const S = useMemo(
+    () => createStyles(colors, insets.bottom),
+    [colors, insets.bottom],
+  );
+
+  // Smoothly close the dead space when the audio player slides off-screen
+  const playerShift = useMemo(() => {
+    const playerBottomOffset = Math.max(
+      insets.bottom + rs.space(8),
+      rs.space(22),
+    );
+    const withAudioBottom = playerBottomOffset + rs.space(PLAYER_BUTTON_OFFSET);
+    const withoutAudioBottom = Math.max(
+      insets.bottom + rs.space(12),
+      rs.space(20),
+    );
+    return withAudioBottom - withoutAudioBottom;
+  }, [insets.bottom]);
+
+  const animatedPlayerShiftStyle = useAnimatedStyle(() => {
+    if (!hasAudioPlayer || !playerScrollTranslateY) {
+      return { transform: [{ translateY: 0 }] };
+    }
+    const progress = Math.min(
+      1,
+      Math.max(0, playerScrollTranslateY.value / PLAYER_HIDE_OFFSET),
+    );
+    return {
+      transform: [{ translateY: progress * playerShift }],
+    };
+  });
 
   return (
     <Animated.View
       style={[
         S.container,
         hasAudioPlayer ? S.withAudioPlayer : S.withoutAudioPlayer,
-        animatedScrollTopStyle,
+        animatedPlayerShiftStyle,
+        style,
       ]}
       pointerEvents={showScrollTop ? "auto" : "none"}
     >
-      <TouchableOpacity style={S.button} activeOpacity={0.8} onPress={onPress}>
-        <Ionicons name="chevron-up" size={rs.icon(24)} color="#FFFFFF" />
-      </TouchableOpacity>
+      <Animated.View style={animatedScrollTopStyle}>
+        <TouchableOpacity
+          style={S.button}
+          activeOpacity={0.8}
+          onPress={onPress}
+          accessibilityRole="button"
+          accessibilityLabel="Scroll to top"
+        >
+          <Ionicons name="chevron-up" size={rs.icon(24)} color="#FFFFFF" />
+        </TouchableOpacity>
+      </Animated.View>
     </Animated.View>
   );
 }
 
-const createStyles = (colors: any, bottomInset: number) => {
-  const playerBottomOffset = Math.max(bottomInset + rs.space(8), rs.space(22));
+const createStyles = (colors: ThemeColors, bottomInset: number) => {
+  const playerBottomOffset = Math.max(bottomInset + rs.space(8), rs.space(27));
 
   return StyleSheet.create({
     container: {
@@ -50,7 +105,7 @@ const createStyles = (colors: any, bottomInset: number) => {
       zIndex: 25,
     },
     withAudioPlayer: {
-      bottom: playerBottomOffset + rs.space(100),
+      bottom: playerBottomOffset + rs.space(PLAYER_BUTTON_OFFSET),
     },
     withoutAudioPlayer: {
       bottom: Math.max(bottomInset + rs.space(12), rs.space(20)),

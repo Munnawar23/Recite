@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   ActivityIndicator,
-  Dimensions,
   Modal,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  useWindowDimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -21,34 +21,31 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 
 import { AppText, CommonModal } from "@/components";
-import {
-  AR_CHAPTER_NAMES,
-  CHAPTERS_METADATA,
-  DEFAULT_RECITER_ID,
-  RECITER_OPTIONS,
-  AUDIO_RECITERS,
-  DEFAULT_ENGLISH_RECITER_NAME,
-  getChapter,
-  getSurahName,
-} from "@/constants";
 import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
 import { Haptics } from "@/lib/haptics";
 import { useAppTheme } from "@/hooks/useAppTheme";
-import { useLanguageStore } from "@/store/languageStore";
-import { useQuranSettingsStore } from "@/store/quranSettingsStore";
 import { type ThemeColors } from "@/theme";
 import ChapterNumberBadge from "@/components/ui/ChapterNumberBadge";
 import { usePlayerModal } from "../hooks/usePlayerModal";
-import { useChapterAudio } from "../hooks/useChapterAudio";
 import { formatTime } from "@/features/quran-detail/hooks/useAudioPlayer";
 import type { Chapter } from "@/types";
 
-const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
-const ARTWORK_SIZE = Math.min(
-  SCREEN_WIDTH - scale(80),
-  scale(190),
-  SCREEN_HEIGHT * 0.22,
-);
+function withAlpha(color: string, alphaHex: string): string {
+  if (!color) return color;
+  if (color.startsWith("#")) {
+    let hex = color.slice(1);
+    if (hex.length === 3) {
+      hex = hex.split("").map((c) => c + c).join("");
+    } else if (hex.length === 8) {
+      hex = hex.slice(0, 6);
+    }
+    if (hex.length === 6) {
+      return `#${hex}${alphaHex}`;
+    }
+    return color;
+  }
+  return color;
+}
 
 interface AudioPlayerModalProps {
   visible: boolean;
@@ -69,143 +66,104 @@ export default function AudioPlayerModal({
   const { colors, activeScheme } = useAppTheme();
   const isDark = activeScheme === "dark";
   const { t } = useTranslation();
-  const language = useLanguageStore((state) => state.language);
-  const storeAudioLanguage = useQuranSettingsStore((state) => state.audioLanguage);
-  const resolvedAudioLanguage = audioLanguage || storeAudioLanguage || (language === "ar" ? "ar" : "en");
-  const isEnglish = resolvedAudioLanguage === "en";
-
-  const [isReciterModalVisible, setIsReciterModalVisible] = useState(false);
-  const [avatarError, setAvatarError] = useState(false);
-  const [selectedEditionName, setSelectedEditionName] = useState<string>(
-    DEFAULT_ENGLISH_RECITER_NAME,
-  );
-
-  // Reciter settings
-  const reciterId = useQuranSettingsStore((state) => state.reciterId);
-  const setReciterId = useQuranSettingsStore((state) => state.setReciterId);
-  const activeReciterId = isEnglish ? DEFAULT_RECITER_ID : (reciterId || DEFAULT_RECITER_ID);
-
-  useEffect(() => {
-    setAvatarError(false);
-  }, [activeReciterId, selectedEditionName]);
-
-  const currentReciter = useMemo(() => {
-    if (isEnglish) {
-      const audioReciter =
-        AUDIO_RECITERS.find((r) => r.name === selectedEditionName) ||
-        AUDIO_RECITERS[0];
-      return {
-        id: audioReciter.id ?? DEFAULT_RECITER_ID,
-        label: audioReciter.label,
-        avatar: audioReciter.avatar,
-      };
-    }
-    return (
-      RECITER_OPTIONS.find((r) => r.id === activeReciterId) ||
-      RECITER_OPTIONS[0]
-    );
-  }, [isEnglish, selectedEditionName, activeReciterId]);
-
-  const reciterDropdownItems = useMemo(() => {
-    if (isEnglish) {
-      // In English, use AUDIO_RECITERS identified by name
-      return AUDIO_RECITERS.filter((r) => r.language === "en").map((r) => ({
-        label: r.label,
-        value: r.name,
-        avatar: r.avatar,
-      }));
-    }
-    return RECITER_OPTIONS.map((r) => ({
-      label: r.label,
-      value: String(r.id),
-      avatar: r.avatar,
-    }));
-  }, [isEnglish]);
-
-  const currentChapterId = chapter?.id ?? 1;
-
-  const chapterMetadata = useMemo(() => {
-    return (
-      CHAPTERS_METADATA.find((m) => m.id === currentChapterId) ??
-      CHAPTERS_METADATA[0]
-    );
-  }, [currentChapterId]);
-
-  const localizedName = useMemo(() => {
-    return chapter?.localizedName || getSurahName(currentChapterId, language);
-  }, [chapter?.localizedName, currentChapterId, language]);
-
-  const arabicName = useMemo(() => {
-    return (
-      chapter?.name ||
-      AR_CHAPTER_NAMES[currentChapterId]?.name ||
-      "الفاتحة"
-    );
-  }, [chapter?.name, currentChapterId]);
-
-  const versesCount = chapter?.versesCount ?? chapterMetadata.versesCount;
-  const chapterType = chapter?.type ?? chapterMetadata.type;
-  const typeTranslationKey =
-    chapterType.toLowerCase() === "medinan" ? "quran.medinan" : "quran.meccan";
-
-  // Up Next Queue Calculation
-  const nextChapterId = currentChapterId < 114 ? currentChapterId + 1 : 1;
-  const nextSurahName = useMemo(() => {
-    return getSurahName(nextChapterId, language);
-  }, [nextChapterId, language]);
 
   const {
+    // Modal animations & actions
     closePlayer,
     panGesture,
     animatedSheetStyle,
     animatedBackdropStyle,
     headerTitleAnimatedStyle,
     trackContentAnimatedStyle,
-    animateTrackChange,
+
+    // Chapter metadata
+    currentChapterId,
+    localizedName,
+    arabicName,
+    versesCount,
+    typeTranslationKey,
+    nextChapterId,
+    nextSurahName,
+    handlePlayNext,
+
+    // Reciter state & actions
+    isEnglish,
+    selectedEditionName,
+    activeReciterId,
+    currentReciter,
+    reciterDropdownItems,
+    isReciterModalVisible,
+    setIsReciterModalVisible,
+    avatarError,
+    setAvatarError,
+    handleSelectReciter,
+
+    // Audio controls
+    audio: {
+      isLoading,
+      isPlaying,
+      duration,
+      sliderValue,
+      playbackSpeed,
+      isRepeating,
+      reciterName,
+      handlePlayPause,
+      handleSkipBack,
+      handleSkipForward,
+      cycleSpeed,
+      toggleRepeat,
+      handleSliderValueChange,
+      handleSlidingComplete,
+    },
   } = usePlayerModal({
     visible,
     onClose,
+    chapter,
+    onChapterChange,
+    audioLanguage,
   });
 
-  const handlePlayNext = useCallback(() => {
-    if (!onChapterChange) return;
-    animateTrackChange(() => {
-      const nextChapter = getChapter(nextChapterId, language);
-      onChapterChange(nextChapter);
-    });
-  }, [animateTrackChange, nextChapterId, language, onChapterChange]);
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const artworkSize = useMemo(
+    () =>
+      Math.min(
+        windowWidth - scale(80),
+        scale(190),
+        windowHeight * 0.22,
+      ),
+    [windowWidth, windowHeight],
+  );
 
-  // Audio integration (Arabic recitations from Quran.com API or English CDN audio)
-  const {
-    isLoading,
-    isPlaying,
-    currentTime,
-    duration,
-    sliderValue,
-    isDragging,
-    playbackSpeed,
-    isRepeating,
-    reciterName,
-    handlePlayPause,
-    handleSkipBack,
-    handleSkipForward,
-    cycleSpeed,
-    toggleRepeat,
-    handleSliderValueChange,
-    handleSlidingComplete,
-  } = useChapterAudio({
-    chapterId: currentChapterId,
-    enabled: visible,
-    localizedName,
-    arabicName,
-    onPlayNext: handlePlayNext,
-    audioLanguage: resolvedAudioLanguage,
-    editionName: isEnglish ? selectedEditionName : undefined,
-  });
+  const safeDuration =
+    Number.isFinite(duration) && duration > 0 ? duration : 1;
+  const safeValue = Number.isFinite(sliderValue)
+    ? Math.min(Math.max(0, sliderValue), safeDuration)
+    : 0;
+  const rawDuration = Number.isFinite(duration) ? duration : 0;
+
+  const handleClose = useCallback(() => {
+    Haptics.light();
+    closePlayer();
+  }, [closePlayer]);
+
+  const handleRequestClose = useCallback(() => {
+    if (isReciterModalVisible) {
+      setIsReciterModalVisible(false);
+    } else {
+      handleClose();
+    }
+  }, [isReciterModalVisible, handleClose]);
 
   const S = useMemo(
-    () => createStyles(colors, insets.top, insets.bottom, isDark),
-    [colors, insets.top, insets.bottom, isDark],
+    () =>
+      createStyles(
+        colors,
+        insets.top,
+        insets.bottom,
+        isDark,
+        artworkSize,
+      ),
+    [colors, insets.top, insets.bottom, isDark, artworkSize],
   );
 
   const primaryGradientColors = useMemo(
@@ -239,12 +197,13 @@ export default function AudioPlayerModal({
       visible={visible}
       transparent
       animationType="none"
+      presentationStyle="overFullScreen"
       statusBarTranslucent
-      onRequestClose={closePlayer}
+      onRequestClose={handleRequestClose}
     >
       <GestureHandlerRootView style={S.rootContainer}>
         {/* Dimmed Backdrop */}
-        <TouchableWithoutFeedback onPress={closePlayer}>
+        <TouchableWithoutFeedback onPress={handleClose}>
           <Animated.View style={[S.backdrop, animatedBackdropStyle]} />
         </TouchableWithoutFeedback>
 
@@ -273,7 +232,7 @@ export default function AudioPlayerModal({
 
             <View style={S.headerRow}>
               <TouchableOpacity
-                onPress={closePlayer}
+                onPress={handleClose}
                 hitSlop={rs.space(12)}
                 style={S.headerIconButton}
                 activeOpacity={0.7}
@@ -341,7 +300,7 @@ export default function AudioPlayerModal({
                   />
                 ) : (
                   <LinearGradient
-                    colors={[colors.primary + "35", colors.card]}
+                    colors={[withAlpha(colors.primary, "35"), colors.card]}
                     style={S.artworkGradient}
                   >
                     <Ionicons
@@ -370,16 +329,18 @@ export default function AudioPlayerModal({
                   >
                     {localizedName}
                   </AppText>
-                  <View style={S.arabicBadge}>
-                    <AppText
-                      variant="cardTitle"
-                      family="quran"
-                      color="primary"
-                      numberOfLines={1}
-                    >
-                      {arabicName}
-                    </AppText>
-                  </View>
+                  {arabicName ? (
+                    <View style={S.arabicBadge}>
+                      <AppText
+                        variant="cardTitle"
+                        family="quran"
+                        color="primary"
+                        numberOfLines={1}
+                      >
+                        {arabicName}
+                      </AppText>
+                    </View>
+                  ) : null}
                 </View>
 
                 <View style={S.metadataChipsRow}>
@@ -422,7 +383,7 @@ export default function AudioPlayerModal({
                         color={colors.subtext}
                       />
                       <AppText
-                        variant="bodySm"
+                        variant="body"
                         family="title"
                         color="subtext"
                         numberOfLines={1}
@@ -440,11 +401,9 @@ export default function AudioPlayerModal({
               <Slider
                 style={S.slider}
                 minimumValue={0}
-                maximumValue={duration > 0 ? duration : 1}
-                value={Math.min(
-                  Math.max(0, sliderValue),
-                  duration > 0 ? duration : 1,
-                )}
+                maximumValue={safeDuration}
+                value={safeValue}
+                disabled={isLoading}
                 minimumTrackTintColor={colors.primary}
                 maximumTrackTintColor={
                   isDark
@@ -458,10 +417,10 @@ export default function AudioPlayerModal({
 
               <View style={S.timeRow}>
                 <AppText variant="caption" color="subtext" style={S.timeText}>
-                  {formatTime(sliderValue)}
+                  {formatTime(safeValue)}
                 </AppText>
                 <AppText variant="caption" color="subtext" style={S.timeText}>
-                  {formatTime(duration)}
+                  {formatTime(rawDuration)}
                 </AppText>
               </View>
             </View>
@@ -485,7 +444,8 @@ export default function AudioPlayerModal({
               <TouchableOpacity
                 onPress={handleSkipBack}
                 hitSlop={rs.space(10)}
-                style={S.skipButton}
+                style={[S.skipButton, isLoading && S.controlDisabled]}
+                disabled={isLoading}
                 activeOpacity={0.7}
                 accessibilityRole="button"
                 accessibilityLabel="Skip backward 10 seconds"
@@ -517,7 +477,7 @@ export default function AudioPlayerModal({
                         name={isPlaying ? "pause" : "play"}
                         size={scale(30)}
                         color="#FFFFFF"
-                        style={!isPlaying ? { marginLeft: scale(3) } : undefined}
+                        style={!isPlaying ? S.playIconOffset : undefined}
                       />
                     )}
                   </View>
@@ -528,7 +488,8 @@ export default function AudioPlayerModal({
               <TouchableOpacity
                 onPress={handleSkipForward}
                 hitSlop={rs.space(10)}
-                style={S.skipButton}
+                style={[S.skipButton, isLoading && S.controlDisabled]}
+                disabled={isLoading}
                 activeOpacity={0.7}
                 accessibilityRole="button"
                 accessibilityLabel="Skip forward 10 seconds"
@@ -558,56 +519,58 @@ export default function AudioPlayerModal({
             </View>
 
             {/* Up Next Card */}
-            <TouchableOpacity
-              style={S.upNextContainer}
-              activeOpacity={0.8}
-              onPress={handlePlayNext}
-              accessibilityRole="button"
-              accessibilityLabel={`${t("quran.upNextInQueue", "Up Next in Queue")}: ${nextSurahName}`}
-            >
-              <View style={S.upNextLeft}>
-                <View style={S.upNextBadge}>
-                  <Ionicons
-                    name="play-forward"
-                    size={scale(15)}
-                    color={colors.primary}
-                  />
+            {nextSurahName ? (
+              <TouchableOpacity
+                style={S.upNextContainer}
+                activeOpacity={0.8}
+                onPress={handlePlayNext}
+                accessibilityRole="button"
+                accessibilityLabel={`${t("quran.upNextInQueue", "Up Next in Queue")}: ${nextSurahName}`}
+              >
+                <View style={S.upNextLeft}>
+                  <View style={S.upNextBadge}>
+                    <Ionicons
+                      name="play-forward"
+                      size={scale(15)}
+                      color={colors.primary}
+                    />
+                  </View>
+                  <View style={S.upNextTextContainer}>
+                    <AppText
+                      variant="caption"
+                      family="title"
+                      color="subtext"
+                      style={S.upNextLabel}
+                    >
+                      {t("quran.upNextInQueue", "UP NEXT IN QUEUE")}
+                    </AppText>
+                    <AppText
+                      variant="body"
+                      family="title"
+                      color="text"
+                      numberOfLines={1}
+                    >
+                      {`${nextChapterId}. ${nextSurahName}`}
+                    </AppText>
+                  </View>
                 </View>
-                <View style={S.upNextTextContainer}>
+
+                <View style={S.upNextActionBtn}>
                   <AppText
                     variant="caption"
                     family="title"
-                    color="subtext"
-                    style={S.upNextLabel}
+                    style={S.upNextActionText}
                   >
-                    {t("quran.upNextInQueue", "UP NEXT IN QUEUE")}
+                    {t("quran.playNext", "Play Next")}
                   </AppText>
-                  <AppText
-                    variant="body"
-                    family="title"
-                    color="text"
-                    numberOfLines={1}
-                  >
-                    {`${nextChapterId}. ${nextSurahName}`}
-                  </AppText>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={scale(14)}
+                    color="#FFFFFF"
+                  />
                 </View>
-              </View>
-
-              <View style={S.upNextActionBtn}>
-                <AppText
-                  variant="caption"
-                  family="title"
-                  style={S.upNextActionText}
-                >
-                  {t("quran.playNext", "Play Next")}
-                </AppText>
-                <Ionicons
-                  name="chevron-forward"
-                  size={scale(14)}
-                  color="#FFFFFF"
-                />
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            ) : null}
           </View>
         </Animated.View>
 
@@ -618,14 +581,7 @@ export default function AudioPlayerModal({
           icon="mic-outline"
           data={reciterDropdownItems}
           value={isEnglish ? selectedEditionName : String(activeReciterId)}
-          onChange={(item) => {
-            Haptics.light();
-            if (isEnglish) {
-              setSelectedEditionName(item.value);
-            } else {
-              setReciterId(Number(item.value));
-            }
-          }}
+          onChange={(item) => handleSelectReciter(item.value)}
         />
       </GestureHandlerRootView>
     </Modal>
@@ -637,6 +593,7 @@ const createStyles = (
   topInset: number,
   bottomInset: number,
   isDark: boolean,
+  artworkSize: number,
 ) =>
   StyleSheet.create({
     rootContainer: {
@@ -662,7 +619,7 @@ const createStyles = (
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: isDark ? "#070E0F" : "#0d1b1e",
+      backgroundColor: isDark ? "#070E0F" : "#F3F8F5",
       paddingTop: Math.max(topInset, verticalScale(8)),
       paddingBottom: Math.max(
         bottomInset + verticalScale(8),
@@ -714,7 +671,7 @@ const createStyles = (
       borderWidth: 1.5,
       borderColor: colors.primary,
       overflow: "hidden",
-      backgroundColor: colors.primary + "18",
+      backgroundColor: withAlpha(colors.primary, "18"),
       alignItems: "center",
       justifyContent: "center",
     },
@@ -743,16 +700,16 @@ const createStyles = (
       position: "relative",
     },
     artworkShadow: {
-      width: ARTWORK_SIZE,
-      height: ARTWORK_SIZE,
-      borderRadius: ARTWORK_SIZE / 2,
+      width: artworkSize,
+      height: artworkSize,
+      borderRadius: artworkSize / 2,
       backgroundColor: colors.card,
       position: "relative",
       overflow: "hidden",
       borderWidth: scale(3),
       borderColor: isDark
         ? "rgba(255, 255, 255, 0.12)"
-        : colors.primary + "30",
+        : withAlpha(colors.primary, "30"),
       elevation: 10,
       shadowColor: "#000",
       shadowOffset: { width: 0, height: 6 },
@@ -789,12 +746,12 @@ const createStyles = (
       flexShrink: 1,
     },
     arabicBadge: {
-      backgroundColor: `${colors.primary}14`,
+      backgroundColor: withAlpha(colors.primary, "14"),
       paddingHorizontal: scale(8),
       paddingVertical: verticalScale(2),
       borderRadius: scale(8),
       borderWidth: 1,
-      borderColor: `${colors.primary}30`,
+      borderColor: withAlpha(colors.primary, "30"),
     },
     metadataChipsRow: {
       flexDirection: "row",
@@ -874,6 +831,12 @@ const createStyles = (
         ? "rgba(255, 255, 255, 0.08)"
         : "rgba(0, 0, 0, 0.05)",
     },
+    controlDisabled: {
+      opacity: 0.45,
+    },
+    playIconOffset: {
+      marginLeft: scale(3),
+    },
     heroPlayContainer: {
       alignItems: "center",
       justifyContent: "center",
@@ -882,7 +845,7 @@ const createStyles = (
       width: scale(78),
       height: scale(78),
       borderRadius: scale(39),
-      backgroundColor: `${colors.primary}20`,
+      backgroundColor: withAlpha(colors.primary, "20"),
       alignItems: "center",
       justifyContent: "center",
     },
@@ -938,7 +901,7 @@ const createStyles = (
       width: scale(34),
       height: scale(34),
       borderRadius: scale(17),
-      backgroundColor: `${colors.primary}18`,
+      backgroundColor: withAlpha(colors.primary, "18"),
       alignItems: "center",
       justifyContent: "center",
     },

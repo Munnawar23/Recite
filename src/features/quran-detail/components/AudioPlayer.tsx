@@ -3,12 +3,13 @@ import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from "react-nat
 import Animated, { type SharedValue } from "react-native-reanimated";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
-import type { AudioPlayer } from "expo-audio";
+import type { AudioPlayer, AudioStatus } from "expo-audio";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AppText } from "@/components";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { type ThemeColors } from "@/theme";
 import {
   formatTime,
   useAudioPlayer,
@@ -16,7 +17,7 @@ import {
 
 interface AudioPlayerProps {
   player: AudioPlayer;
-  status: any;
+  status: AudioStatus | null;
   isLoadingAudio: boolean;
   scrollTranslateY?: SharedValue<number>;
 }
@@ -60,14 +61,17 @@ export default function AudioPlayerComponent({
       {/* Progress Bar (Slider) */}
       <View style={S.progressSection}>
         <AppText variant="caption" color="subtext" align="center" style={S.timeText}>
-          {formatTime(isDragging ? sliderValue : status?.currentTime || 0)}
+          {formatTime(sliderValue)}
         </AppText>
 
         <Slider
           style={S.slider}
           minimumValue={0}
-          maximumValue={status?.duration || 1}
-          value={sliderValue}
+          maximumValue={status?.duration && status.duration > 0 ? status.duration : 1}
+          value={Math.min(
+            Math.max(0, sliderValue),
+            status?.duration && status.duration > 0 ? status.duration : 1,
+          )}
           minimumTrackTintColor={colors.primary}
           maximumTrackTintColor={colors.border + "80"}
           thumbTintColor={colors.primary}
@@ -88,7 +92,7 @@ export default function AudioPlayerComponent({
           style={[S.sideButton, isRepeating && S.repeatButtonActive]}
           activeOpacity={0.7}
           accessibilityRole="button"
-          accessibilityLabel="Toggle repeat"
+          accessibilityLabel={isRepeating ? "Disable repeat" : "Enable repeat"}
         >
           <Ionicons
             name="repeat"
@@ -114,7 +118,13 @@ export default function AudioPlayerComponent({
           disabled={isPlayerLoading}
           style={S.playPauseButton}
           accessibilityRole="button"
-          accessibilityLabel={status?.playing ? "Pause" : "Play"}
+          accessibilityLabel={
+            isPlayerLoading
+              ? "Loading audio"
+              : status?.playing
+                ? "Pause"
+                : "Play"
+          }
         >
           {isPlayerLoading ? (
             <ActivityIndicator size="small" color="#fff" />
@@ -143,10 +153,10 @@ export default function AudioPlayerComponent({
           onPress={cycleSpeed}
           style={S.speedButton}
           accessibilityRole="button"
-          accessibilityLabel={`Playback speed ${playbackSpeed === 1 ? "1.0" : playbackSpeed}x`}
+          accessibilityLabel={`Playback speed ${playbackSpeed % 1 === 0 ? `${playbackSpeed}.0` : playbackSpeed}x`}
         >
           <AppText variant="caption" family="title" color="#FFFFFF">
-            {playbackSpeed === 1 ? "1.0" : playbackSpeed}x
+            {`${playbackSpeed % 1 === 0 ? `${playbackSpeed}.0` : playbackSpeed}x`}
           </AppText>
         </TouchableOpacity>
       </View>
@@ -154,7 +164,7 @@ export default function AudioPlayerComponent({
   );
 }
 
-const createStyles = (colors: any, bottomInset: number) =>
+const createStyles = (colors: ThemeColors, bottomInset: number) =>
   StyleSheet.create({
     container: {
       backgroundColor: colors.card,

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { SharedValue } from "react-native-reanimated";
 import { useAnimatedStyle } from "react-native-reanimated";
-import type { AudioPlayer } from "expo-audio";
+import type { AudioPlayer, AudioStatus } from "expo-audio";
 
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { Haptics } from "@/lib/haptics";
@@ -19,7 +19,7 @@ export const formatTime = (seconds: number): string => {
 
 export interface UseAudioPlayerParams {
   player: AudioPlayer | null;
-  status: any;
+  status: AudioStatus | null;
   isLoadingAudio: boolean;
   scrollTranslateY?: SharedValue<number>;
 }
@@ -34,14 +34,36 @@ export function useAudioPlayer({
   const isDark = activeScheme === "dark";
 
   // Playback controls state
-  const [sliderValue, setSliderValue] = useState<number>(0);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [dragValue, setDragValue] = useState<number | null>(null);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(
     () => player?.playbackRate ?? 1.0,
   );
   const [isRepeating, setIsRepeating] = useState<boolean>(
     () => player?.loop ?? false,
   );
+
+  const seekTargetRef = useRef<number | null>(null);
+  const seekTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clear seek target once player's currentTime catches up near the target
+  if (
+    seekTargetRef.current !== null &&
+    Math.abs((status?.currentTime || 0) - seekTargetRef.current) < 1.0
+  ) {
+    seekTargetRef.current = null;
+    if (seekTimeoutRef.current) clearTimeout(seekTimeoutRef.current);
+  }
+
+  // Pure derived state: No useEffect, zero extra renders during normal playback!
+  const isDragging = dragValue !== null;
+  const sliderValue = dragValue ?? seekTargetRef.current ?? status?.currentTime ?? 0;
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (seekTimeoutRef.current) clearTimeout(seekTimeoutRef.current);
+    };
+  }, []);
 
   // Keep speed and repeat in sync
   useEffect(() => {
@@ -59,13 +81,6 @@ export function useAudioPlayer({
   // Keep loader active until duration is known
   const isDurationReady = (status?.duration ?? 0) > 0;
   const isPlayerLoading = isLoadingAudio || !isDurationReady;
-
-  // Sync slider with player's currentTime when user is not dragging
-  useEffect(() => {
-    if (!isDragging) {
-      setSliderValue(status?.currentTime || 0);
-    }
-  }, [status?.currentTime, isDragging]);
 
   // Common Play / Pause
   const handlePlayPause = useCallback(() => {
@@ -124,14 +139,18 @@ export function useAudioPlayer({
 
   // Slider change handlers
   const handleSliderValueChange = useCallback((val: number) => {
-    setIsDragging(true);
-    setSliderValue(val);
+    setDragValue(val);
   }, []);
 
   const handleSlidingComplete = useCallback(
     (val: number) => {
+      seekTargetRef.current = val;
+      setDragValue(null);
       player?.seekTo(val);
-      setIsDragging(false);
+      if (seekTimeoutRef.current) clearTimeout(seekTimeoutRef.current);
+      seekTimeoutRef.current = setTimeout(() => {
+        seekTargetRef.current = null;
+      }, 800);
     },
     [player],
   );

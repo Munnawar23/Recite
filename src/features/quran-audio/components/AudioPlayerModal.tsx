@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -8,7 +8,6 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   GestureDetector,
@@ -24,7 +23,6 @@ import { AppText } from "@/components";
 import {
   AR_CHAPTER_NAMES,
   CHAPTERS_METADATA,
-  RECITERS_IMAGES,
   getChapter,
   getSurahName,
 } from "@/constants";
@@ -37,6 +35,7 @@ import ChapterNumberBadge from "@/components/common/ChapterNumberBadge";
 import { usePlayerModal } from "../hooks/usePlayerModal";
 import { useSurahCdnAudio } from "../hooks/useSurahCdnAudio";
 import { formatTime } from "@/features/quran-detail/hooks/useAudioPlayer";
+import type { Chapter } from "@/types";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 const ARTWORK_SIZE = Math.min(
@@ -65,11 +64,6 @@ export default function AudioPlayerModal({
   const language = useLanguageStore((state) => state.language);
 
   const currentChapterId = chapter?.id ?? 1;
-
-  const [imageError, setImageError] = useState(false);
-  useEffect(() => {
-    setImageError(false);
-  }, [currentChapterId]);
 
   const chapterMetadata = useMemo(() => {
     return (
@@ -221,6 +215,8 @@ export default function AudioPlayerModal({
                 hitSlop={rs.space(12)}
                 style={S.headerIconButton}
                 activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel={t("common.close", "Close")}
               >
                 <Ionicons
                   name="chevron-down"
@@ -250,26 +246,16 @@ export default function AudioPlayerModal({
           <GestureDetector gesture={panGesture}>
             <View style={S.middleSection}>
               <Animated.View style={[S.artworkShadow, trackContentAnimatedStyle]}>
-                {!imageError && RECITERS_IMAGES[7] ? (
-                  <Image
-                    source={RECITERS_IMAGES[7]}
-                    style={S.artworkImage}
-                    contentFit="cover"
-                    transition={300}
-                    onError={() => setImageError(true)}
+                <LinearGradient
+                  colors={[colors.primary + "35", colors.card]}
+                  style={S.artworkGradient}
+                >
+                  <Ionicons
+                    name="musical-notes"
+                    size={scale(64)}
+                    color={colors.primary}
                   />
-                ) : (
-                  <LinearGradient
-                    colors={[colors.primary + "35", colors.card]}
-                    style={S.artworkGradient}
-                  >
-                    <Ionicons
-                      name="musical-notes"
-                      size={scale(64)}
-                      color={colors.primary}
-                    />
-                  </LinearGradient>
-                )}
+                </LinearGradient>
               </Animated.View>
             </View>
           </GestureDetector>
@@ -342,7 +328,10 @@ export default function AudioPlayerModal({
                 style={S.slider}
                 minimumValue={0}
                 maximumValue={duration > 0 ? duration : 1}
-                value={isDragging ? sliderValue : currentTime}
+                value={Math.min(
+                  Math.max(0, sliderValue),
+                  duration > 0 ? duration : 1,
+                )}
                 minimumTrackTintColor={colors.primary}
                 maximumTrackTintColor={
                   isDark
@@ -356,7 +345,7 @@ export default function AudioPlayerModal({
 
               <View style={S.timeRow}>
                 <AppText variant="caption" color="subtext" style={S.timeText}>
-                  {formatTime(isDragging ? sliderValue : currentTime)}
+                  {formatTime(sliderValue)}
                 </AppText>
                 <AppText variant="caption" color="subtext" style={S.timeText}>
                   {formatTime(duration)}
@@ -372,10 +361,10 @@ export default function AudioPlayerModal({
                 style={S.speedPill}
                 activeOpacity={0.7}
                 accessibilityRole="button"
-                accessibilityLabel={`Speed ${playbackSpeed}x`}
+                accessibilityLabel={`Speed ${playbackSpeed % 1 === 0 ? `${playbackSpeed}.0` : playbackSpeed}x`}
               >
                 <AppText variant="caption" family="title" style={S.speedText}>
-                  {`${playbackSpeed}x`}
+                  {`${playbackSpeed % 1 === 0 ? `${playbackSpeed}.0` : playbackSpeed}x`}
                 </AppText>
               </TouchableOpacity>
 
@@ -460,6 +449,8 @@ export default function AudioPlayerModal({
               style={S.upNextContainer}
               activeOpacity={0.8}
               onPress={handlePlayNext}
+              accessibilityRole="button"
+              accessibilityLabel={`${t("quran.upNextInQueue", "Up Next in Queue")}: ${nextSurahName}`}
             >
               <View style={S.upNextLeft}>
                 <View style={S.upNextBadge}>
@@ -625,10 +616,6 @@ const createStyles = (
       shadowOffset: { width: 0, height: 6 },
       shadowOpacity: 0.25,
       shadowRadius: 12,
-    },
-    artworkImage: {
-      width: "100%",
-      height: "100%",
     },
     artworkGradient: {
       width: "100%",

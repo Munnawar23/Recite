@@ -37,8 +37,7 @@ export function useSurahCdnAudio({
   const status = useAudioPlayerStatus(player);
 
   // Minimal UI state
-  const [sliderValue, setSliderValue] = useState<number>(0);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [dragValue, setDragValue] = useState<number | null>(null);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
   const [isRepeating, setIsRepeating] = useState<boolean>(false);
   const [isChangingTrack, setIsChangingTrack] = useState<boolean>(true);
@@ -46,6 +45,29 @@ export function useSurahCdnAudio({
   // Tracking refs
   const loadedAudioUrlRef = useRef<string | null>(null);
   const wasEnabledRef = useRef<boolean>(false);
+  const seekTargetRef = useRef<number | null>(null);
+  const seekTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasHandledCompletionRef = useRef<boolean>(false);
+
+  // Clear seek target once player's currentTime catches up near the target
+  if (
+    seekTargetRef.current !== null &&
+    Math.abs((status?.currentTime || 0) - seekTargetRef.current) < 1.0
+  ) {
+    seekTargetRef.current = null;
+    if (seekTimeoutRef.current) clearTimeout(seekTimeoutRef.current);
+  }
+
+  // Pure derived state: No useEffect, zero extra renders during normal playback!
+  const isDragging = dragValue !== null;
+  const sliderValue = dragValue ?? seekTargetRef.current ?? status?.currentTime ?? 0;
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (seekTimeoutRef.current) clearTimeout(seekTimeoutRef.current);
+    };
+  }, []);
 
   // Effect 1: Track switching and auto-play on modal open
   useEffect(() => {
@@ -66,6 +88,9 @@ export function useSurahCdnAudio({
 
     // New track selected
     loadedAudioUrlRef.current = audioUrl;
+    hasHandledCompletionRef.current = false;
+    seekTargetRef.current = null;
+    setDragValue(null);
     setIsChangingTrack(true);
     player.replace({ uri: audioUrl });
     player.play();
@@ -88,22 +113,24 @@ export function useSurahCdnAudio({
     }
   }, [enabled, player, status?.playing]);
 
-  // Effect 4: Play next on track completion
+  // Effect 4: Play next on track completion (only fires on completion events, not on every tick)
   useEffect(() => {
-    if (
-      status?.duration &&
-      status.duration > 0 &&
-      (status.playbackState === "completed" ||
-        (status.currentTime >= status.duration - 0.5 && status.duration > 5))
-    ) {
-      if (!isRepeating && onPlayNext) {
+    const isFinished =
+      Boolean(status?.didJustFinish) ||
+      status?.playbackState === "completed";
+
+    if (isFinished) {
+      if (!isRepeating && onPlayNext && !hasHandledCompletionRef.current) {
+        hasHandledCompletionRef.current = true;
         onPlayNext();
       }
+    } else {
+      // Reset completion flag if track is playing normally
+      hasHandledCompletionRef.current = false;
     }
   }, [
+    status?.didJustFinish,
     status?.playbackState,
-    status?.currentTime,
-    status?.duration,
     isRepeating,
     onPlayNext,
   ]);
@@ -171,14 +198,18 @@ export function useSurahCdnAudio({
   }, [player, isRepeating]);
 
   const handleSliderValueChange = useCallback((val: number) => {
-    setIsDragging(true);
-    setSliderValue(val);
+    setDragValue(val);
   }, []);
 
   const handleSlidingComplete = useCallback(
     (val: number) => {
+      seekTargetRef.current = val;
+      setDragValue(null);
       player?.seekTo(val);
-      setIsDragging(false);
+      if (seekTimeoutRef.current) clearTimeout(seekTimeoutRef.current);
+      seekTimeoutRef.current = setTimeout(() => {
+        seekTargetRef.current = null;
+      }, 800);
     },
     [player],
   );

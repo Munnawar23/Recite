@@ -14,6 +14,10 @@
       }
     },
     "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/icons/adaptive-icon.png",
+        "backgroundColor": "#2A5941"
+      },
       "versionCode": 2,
       "icon": "./assets/images/icons/icon.png",
       "allowBackup": false,

@@ -7,7 +7,7 @@ import { Background, CommonModal, ScreenHeader } from "@/components";
 import { getChapters } from "@/constants";
 import AudioPlayerModal from "@/features/quran-audio/components/AudioPlayerModal";
 import QuranListenCard from "@/features/quran-audio/components/QuranListenCard";
-import { rs } from "@/helpers/responsiveHelper";
+import { rs, verticalScale } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLanguageStore } from "@/store/languageStore";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
@@ -147,6 +147,6 @@ const createStyles = (spacing: ThemeSpacing) =>
     listContent: {
       flexGrow: 1,
       paddingTop: spacing.vXs,
-      paddingBottom: spacing.vLg,
+      paddingBottom: verticalScale(50),
     },
   });

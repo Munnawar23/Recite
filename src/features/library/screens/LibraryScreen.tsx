@@ -10,6 +10,7 @@ import {
 
 import { EmptyState, Header, StorageCard, TabSwitcher } from "@/components";
 import QuranCard from "@/features/quran/components/QuranCard";
+import { verticalScale } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { type ThemeSpacing } from "@/theme";
 import { Chapter, FavoriteVerse } from "@/types";
@@ -19,7 +20,7 @@ import { TabValue, useLibraryData } from "../hooks/useLibraryData";
 export default function LibraryScreen() {
   const { t } = useTranslation();
   const { colors, spacing } = useAppTheme();
-  const [activeTab, setActiveTab] = useState<TabValue>("favorites");
+  const [activeTab, setActiveTab] = useState<TabValue>("downloads");
   const [refreshing, setRefreshing] = useState(false);
   const refreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -57,8 +58,8 @@ export default function LibraryScreen() {
 
   const tabsData = useMemo(
     () => [
-      { label: t("library.tabs.favorites", "Favorites"), value: "favorites" },
       { label: t("library.tabs.downloads", "Downloads"), value: "downloads" },
+      { label: t("library.tabs.favorites", "Favorites"), value: "favorites" },
     ],
     [t],
   );
@@ -176,7 +177,7 @@ const createStyles = (spacing: ThemeSpacing) =>
     },
     listContentContainer: {
       flexGrow: 1,
-      paddingBottom: spacing.vLg,
+      paddingBottom: verticalScale(50),
     },
     emptyStateWrapper: {
       flex: 1,

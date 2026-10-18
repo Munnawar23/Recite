@@ -10,7 +10,7 @@ import ContinueReadingCard from "@/features/quran/components/ContinueReadingCard
 import QuranCard from "@/features/quran/components/QuranCard";
 import SearchBar from "@/features/quran/components/SearchBar";
 import { useChapterSearch } from "@/features/quran/hooks/useChapterSearch";
-import { rs } from "@/helpers/responsiveHelper";
+import { rs, verticalScale } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { useLanguageStore } from "@/store/languageStore";
 import { LastRead, useReadingProgressStore } from "@/store/readingProgressStore";
@@ -180,11 +180,11 @@ const createStyles = (spacing: ThemeSpacing) =>
     },
     searchBarContainer: {
       marginTop: 0,
-      marginBottom: spacing.vMd,
+      marginBottom: spacing.vSm,
     },
     listContent: {
       flexGrow: 1,
       paddingTop: 0,
-      paddingBottom: spacing.vLg,
+      paddingBottom: verticalScale(50),
     },
   });

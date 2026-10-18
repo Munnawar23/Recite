@@ -1,7 +1,7 @@
-import { MessageModal } from "./MessageModal";
 import { RECITER_OPTIONS } from "@/constants";
 import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
+import { useNetwork } from "@/hooks/useNetwork";
 import { getChapterAudio } from "@/lib/api";
 import { Haptics } from "@/lib/haptics";
 import { useQuranSettingsStore } from "@/store/quranSettingsStore";
@@ -18,6 +18,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { AppText } from "./AppText";
+import { MessageModal } from "./MessageModal";
 
 const PLAY_BTN_HIT_SLOP = { top: 8, bottom: 8, left: 8, right: 8 };
 
@@ -35,6 +36,7 @@ export function ReciterList({
   const { reciterId, setReciterId } = useQuranSettingsStore();
   const { colors, spacing } = useAppTheme();
   const { t } = useTranslation();
+  const { isOffline, isKnown } = useNetwork();
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
   const [offlineModalVisible, setOfflineModalVisible] = useState(false);
 
@@ -88,6 +90,11 @@ export function ReciterList({
   const togglePlayAudio = useCallback(async (targetReciterId: number) => {
     Haptics.light();
 
+    if (isKnown && isOffline) {
+      setOfflineModalVisible(true);
+      return;
+    }
+
     if (playingReciterId === targetReciterId) {
       if (status.playing) {
         safePause();
@@ -128,7 +135,7 @@ export function ReciterList({
       setPlayingReciterId(null);
       setOfflineModalVisible(true);
     }
-  }, [playingReciterId, status.playing, safePause, player]);
+  }, [playingReciterId, status.playing, safePause, player, isKnown, isOffline]);
 
   const handleSelectReciter = useCallback((id: number) => {
     Haptics.light();

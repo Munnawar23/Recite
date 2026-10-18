@@ -134,6 +134,7 @@ function VerseListContent({
   const shareCardRef = useRef<View>(null);
   const [verseToShare, setVerseToShare] = useState<SurahVerse | null>(null);
   const [isSharing, setIsSharing] = useState(false);
+  const cardHeightRef = useRef<number>(0);
 
   const [selectedVerseForAction, setSelectedVerseForAction] =
     useState<SurahVerse | null>(null);
@@ -188,14 +189,20 @@ function VerseListContent({
       setIsSharing(true);
       setVerseToShare(verse);
 
-      // Brief delay to allow VerseShareCard to mount and render with the verse content
+      // Delay to ensure VerseShareCard has rendered, loaded layout & fonts
       setTimeout(async () => {
         try {
           if (shareCardRef.current) {
+            const TARGET_WIDTH = 2160; // 3x of 720 DP design for true 2160px Ultra HD output
+            const measuredHeight = cardHeightRef.current;
+            const targetHeight = measuredHeight > 0 ? Math.round(measuredHeight * 3) : undefined;
+
             const uri = await captureRef(shareCardRef, {
               format: "png",
               quality: 1,
               result: "tmpfile",
+              width: TARGET_WIDTH,
+              ...(targetHeight ? { height: targetHeight } : {}),
             });
 
             // Dismiss modal smoothly right before opening native share sheet
@@ -224,7 +231,7 @@ function VerseListContent({
           setIsSharing(false);
           setVerseToShare(null);
         }
-      }, 180);
+      }, 250);
     },
     [getVerseFormattedText, localizedSurahName],
   );
@@ -416,6 +423,12 @@ function VerseListContent({
           verse={verseToShare}
           localizedSurahName={localizedSurahName}
           arabicName={arabicName}
+          onLayout={(e) => {
+            const h = e.nativeEvent.layout.height;
+            if (h > 0) {
+              cardHeightRef.current = h;
+            }
+          }}
         />
       </View>
     </>

@@ -11,7 +11,7 @@ import NotificationSection from "../components/NotificationSection";
 import ShareRateSection from "../components/ShareRateSection";
 import StorageSection from "../components/StorageSection";
 
-import { rs } from "@/helpers/responsiveHelper";
+import { rs, verticalScale } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import { type ThemeColors, type ThemeSpacing } from "@/theme";
 
@@ -75,7 +75,7 @@ const createStyles = (spacing: ThemeSpacing) =>
       flex: 1,
     },
     scrollContent: {
-      paddingBottom: spacing.vXxl,
+      paddingBottom: verticalScale(50),
     },
     footerVersionContainer: {
       alignItems: "center",

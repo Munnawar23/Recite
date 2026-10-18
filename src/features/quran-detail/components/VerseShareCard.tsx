@@ -5,11 +5,14 @@ import { AppText } from "@/components";
 import { lightColors } from "@/theme";
 import type { SurahVerse } from "@/types";
 
+import type { LayoutChangeEvent } from "react-native";
+
 interface VerseShareCardProps {
   verse: SurahVerse | null;
   englishName?: string;
   localizedSurahName?: string;
   arabicName?: string;
+  onLayout?: (event: LayoutChangeEvent) => void;
 }
 
 /**
@@ -25,7 +28,7 @@ interface VerseShareCardProps {
  */
 export const VerseShareCard = forwardRef<View, VerseShareCardProps>(
   function VerseShareCard(
-    { verse, englishName, localizedSurahName, arabicName },
+    { verse, englishName, localizedSurahName, arabicName, onLayout },
     ref,
   ) {
     if (!verse) return null;
@@ -35,7 +38,12 @@ export const VerseShareCard = forwardRef<View, VerseShareCardProps>(
     const surahCitation = localizedSurahName || "Surah";
 
     return (
-      <View ref={ref} collapsable={false} style={styles.outerPoster}>
+      <View
+        ref={ref}
+        collapsable={false}
+        style={styles.outerPoster}
+        onLayout={onLayout}
+      >
         {/* 1. Top Sage Gradient Header Banner */}
         <LinearGradient
           colors={lightColors.gradient}

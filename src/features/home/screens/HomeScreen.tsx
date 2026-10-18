@@ -4,6 +4,7 @@ import { useMemo, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { verticalScale } from "@/helpers/responsiveHelper";
 
 import { EmptyState, Header, SectionTitle } from "@/components";
 import { getSurahName } from "@/constants";
@@ -218,7 +219,7 @@ const createStyles = (spacing: ThemeSpacing) =>
       flex: 1,
     },
     scrollContent: {
-      paddingBottom: spacing.vLg,
+      paddingBottom: verticalScale(50),
     },
     exploreScrollContent: {
       paddingHorizontal: spacing.screenPadding,

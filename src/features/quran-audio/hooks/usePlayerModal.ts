@@ -182,14 +182,8 @@ export function usePlayerModal({
     }
   }, [visible, trackTranslateX, trackOpacity]);
 
-  const saveProgressRef = useRef<(() => void) | null>(null);
-
   // Smooth slide-down exit animation
   const closePlayer = useCallback(() => {
-    // Flush-save audio progress immediately when user initiates close
-    if (saveProgressRef.current) {
-      saveProgressRef.current();
-    }
     translateY.value = withTiming(screenHeight, { duration: 240 }, () => {
       if (onClose) {
         scheduleOnRN(onClose);
@@ -300,18 +294,19 @@ export function usePlayerModal({
     editionName: isEnglish ? selectedEditionName : undefined,
   });
 
-  saveProgressRef.current = audio.saveProgress;
-
   const handleSelectReciter = useCallback(
     (value: string) => {
       Haptics.light();
+      try {
+        audio.player?.seekTo(0);
+      } catch {}
       if (isEnglish) {
         setSelectedEditionName(value);
       } else {
         setReciterId(Number(value));
       }
     },
-    [isEnglish, setReciterId],
+    [isEnglish, setReciterId, audio.player],
   );
 
   return {

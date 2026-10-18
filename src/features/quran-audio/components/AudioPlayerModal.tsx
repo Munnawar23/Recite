@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import {
   ActivityIndicator,
   Modal,
@@ -19,8 +19,9 @@ import { Image } from "expo-image";
 import Slider from "@react-native-community/slider";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
+import Toast from "react-native-toast-message";
 
-import { AppText, CommonModal } from "@/components";
+import { AppText, AppToast, CommonModal } from "@/components";
 import { rs, scale, verticalScale } from "@/helpers/responsiveHelper";
 import { Haptics } from "@/lib/haptics";
 import { useAppTheme } from "@/hooks/useAppTheme";
@@ -101,6 +102,8 @@ export default function AudioPlayerModal({
     // Audio controls
     audio: {
       isLoading,
+      isAudioError,
+      retryAudioLoad,
       isPlaying,
       duration,
       sliderValue,
@@ -127,12 +130,23 @@ export default function AudioPlayerModal({
   const artworkSize = useMemo(
     () =>
       Math.min(
-        windowWidth - scale(80),
-        scale(190),
-        windowHeight * 0.22,
+        windowWidth - scale(50),
+        scale(250),
+        windowHeight * 0.29,
       ),
     [windowWidth, windowHeight],
   );
+
+  useEffect(() => {
+    if (visible && isAudioError) {
+      Toast.show({
+        type: "error",
+        text1: t("common.noConnectionTitle", "Connection Error"),
+        text2: t("common.noConnectionSubtitle", "Could not load data. Check your internet connection."),
+        onPress: retryAudioLoad,
+      });
+    }
+  }, [visible, isAudioError, retryAudioLoad, t]);
 
   const safeDuration =
     Number.isFinite(duration) && duration > 0 ? duration : 1;
@@ -170,7 +184,7 @@ export default function AudioPlayerModal({
     () =>
       isDark
         ? (["#0B1B15", "#06120E", "#030806"] as const)
-        : (["#E8F5ED", "#F3F8F5", "#FFFFFF"] as const),
+        : (["#DCEAE1", "#E6EFEB", "#DDE8E2"] as const),
     [isDark],
   );
 
@@ -183,9 +197,9 @@ export default function AudioPlayerModal({
             "rgba(3, 8, 6, 0.95)",
           ] as const)
         : ([
-            "rgba(232, 245, 237, 0.5)",
-            "rgba(243, 248, 245, 0.8)",
-            "rgba(255, 255, 255, 0.96)",
+            "rgba(205, 224, 213, 0.45)",
+            "rgba(224, 235, 229, 0.7)",
+            "rgba(235, 242, 238, 0.95)",
           ] as const),
     [isDark],
   );
@@ -291,25 +305,28 @@ export default function AudioPlayerModal({
           <GestureDetector gesture={panGesture}>
             <View style={S.middleSection}>
               <Animated.View style={[S.artworkShadow, trackContentAnimatedStyle]}>
-                {currentReciter?.avatar && !avatarError ? (
-                  <Image
-                    source={currentReciter.avatar}
-                    style={S.artworkImage}
-                    contentFit="cover"
-                    onError={() => setAvatarError(true)}
-                  />
-                ) : (
-                  <LinearGradient
-                    colors={[withAlpha(colors.primary, "35"), colors.card]}
-                    style={S.artworkGradient}
-                  >
-                    <Ionicons
-                      name="musical-notes"
-                      size={scale(64)}
-                      color={colors.primary}
+                <View style={S.artworkHalo} />
+                <View style={S.artworkInner}>
+                  {currentReciter?.avatar && !avatarError ? (
+                    <Image
+                      source={currentReciter.avatar}
+                      style={S.artworkImage}
+                      contentFit="cover"
+                      onError={() => setAvatarError(true)}
                     />
-                  </LinearGradient>
-                )}
+                  ) : (
+                    <LinearGradient
+                      colors={[withAlpha(colors.primary, "35"), colors.card]}
+                      style={S.artworkGradient}
+                    >
+                      <Ionicons
+                        name="musical-notes"
+                        size={scale(64)}
+                        color={colors.primary}
+                      />
+                    </LinearGradient>
+                  )}
+                </View>
               </Animated.View>
             </View>
           </GestureDetector>
@@ -457,21 +474,27 @@ export default function AudioPlayerModal({
                 />
               </TouchableOpacity>
 
-              {/* Play / Pause Button */}
+              {/* Play / Pause / Retry Button */}
               <TouchableOpacity
-                onPress={handlePlayPause}
+                onPress={isAudioError ? retryAudioLoad : handlePlayPause}
                 style={S.heroPlayContainer}
                 activeOpacity={0.88}
                 disabled={isLoading}
                 accessibilityRole="button"
                 accessibilityLabel={
-                  isLoading ? "Loading" : isPlaying ? "Pause" : "Play"
+                  isAudioError ? "Retry" : isLoading ? "Loading" : isPlaying ? "Pause" : "Play"
                 }
               >
                 <View style={S.heroPlayHalo}>
                   <View style={S.heroPlayButton}>
                     {isLoading ? (
                       <ActivityIndicator size="small" color="#FFFFFF" />
+                    ) : isAudioError ? (
+                      <Ionicons
+                        name="reload"
+                        size={scale(28)}
+                        color="#FFFFFF"
+                      />
                     ) : (
                       <Ionicons
                         name={isPlaying ? "pause" : "play"}
@@ -583,6 +606,8 @@ export default function AudioPlayerModal({
           value={isEnglish ? selectedEditionName : String(activeReciterId)}
           onChange={(item) => handleSelectReciter(item.value)}
         />
+
+        <AppToast />
       </GestureHandlerRootView>
     </Modal>
   );
@@ -619,7 +644,7 @@ const createStyles = (
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: isDark ? "#070E0F" : "#F3F8F5",
+      backgroundColor: isDark ? "#070E0F" : "#E2ECE6",
       paddingTop: Math.max(topInset, verticalScale(8)),
       paddingBottom: Math.max(
         bottomInset + verticalScale(8),
@@ -703,18 +728,33 @@ const createStyles = (
       width: artworkSize,
       height: artworkSize,
       borderRadius: artworkSize / 2,
-      backgroundColor: colors.card,
+      alignItems: "center",
+      justifyContent: "center",
       position: "relative",
+      shadowColor: colors.primary,
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: isDark ? 0.75 : 0.5,
+      shadowRadius: scale(18),
+      elevation: 14,
+    },
+    artworkHalo: {
+      position: "absolute",
+      width: artworkSize + scale(14),
+      height: artworkSize + scale(14),
+      borderRadius: (artworkSize + scale(14)) / 2,
+      backgroundColor: withAlpha(colors.primary, isDark ? "25" : "18"),
+      borderWidth: 1,
+      borderColor: withAlpha(colors.primary, isDark ? "40" : "30"),
+    },
+    artworkInner: {
+      width: artworkSize,
+      height: artworkSize,
+      borderRadius: artworkSize / 2,
+      backgroundColor: colors.card,
+      borderWidth: scale(3.5),
+      borderColor: colors.primary,
       overflow: "hidden",
-      borderWidth: scale(3),
-      borderColor: isDark
-        ? "rgba(255, 255, 255, 0.12)"
-        : withAlpha(colors.primary, "30"),
-      elevation: 10,
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: 6 },
-      shadowOpacity: 0.25,
-      shadowRadius: 12,
+      position: "relative",
     },
     artworkImage: {
       width: "100%",

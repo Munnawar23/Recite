@@ -17,7 +17,6 @@ import {
 } from "@/constants";
 import { useBackgroundPlay } from "@/hooks/useBackgroundPlay";
 import { Haptics } from "@/lib/haptics";
-import { useAudioProgress } from "./useAudioProgress";
 
 export interface UseChapterAudioOptions {
   chapterId: number;
@@ -44,12 +43,18 @@ export function useChapterAudio({
   const reciterId = globalReciterId || DEFAULT_RECITER_ID;
 
   // Always fetch Arabic recitation audio online (same API as Quran Detail AudioPlayer)
-  const { data: arabicAudioData, isLoading: isLoadingArabicAudio } = useQuery({
+  const {
+    data: arabicAudioData,
+    isLoading: isLoadingArabicAudio,
+    isError: isErrorArabicAudio,
+    refetch: refetchArabicAudio,
+  } = useQuery({
     queryKey: ["chapter-audio", chapterId, reciterId],
     queryFn: () => getChapterAudio(chapterId, reciterId),
     enabled: enabled && isArabicAudio && !!chapterId && chapterId > 0,
     staleTime: 1000 * 60 * 60 * 24, // 24 hours fresh
     gcTime: Infinity,
+    retry: 1,
   });
 
   const remoteArabicUrl = useMemo(() => {
@@ -115,6 +120,7 @@ export function useChapterAudio({
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
   const [isRepeating, setIsRepeating] = useState<boolean>(false);
   const [isChangingTrack, setIsChangingTrack] = useState<boolean>(true);
+  const [hasTimedOut, setHasTimedOut] = useState<boolean>(false);
 
   // Tracking refs
   const loadedAudioUrlRef = useRef<string | null>(null);
@@ -122,10 +128,12 @@ export function useChapterAudio({
   const wasEnabledRef = useRef<boolean>(false);
   const seekTargetRef = useRef<number | null>(null);
   const seekTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasHandledCompletionRef = useRef<boolean>(false);
   const isPlayingRef = useRef<boolean>(false);
   const currentTimeRef = useRef<number>(0);
   const durationRef = useRef<number>(0);
+  const shouldResetToZeroRef = useRef<boolean>(false);
 
   // Keep live refs fresh without re-running effects
   currentTimeRef.current = status?.currentTime ?? 0;
@@ -187,9 +195,12 @@ export function useChapterAudio({
     // New track selected
     loadedAudioUrlRef.current = audioUrl;
     hasHandledCompletionRef.current = false;
-    seekTargetRef.current = null;
+    seekTargetRef.current = 0;
+    currentTimeRef.current = 0;
     setDragValue(null);
     setIsChangingTrack(true);
+    setHasTimedOut(false);
+    shouldResetToZeroRef.current = true;
 
     try {
       if (isFirstRun.current) {
@@ -197,6 +208,7 @@ export function useChapterAudio({
         isFirstRun.current = false;
       } else {
         player.replace({ uri: audioUrl });
+        player.seekTo(0);
       }
       if (playbackSpeed !== 1.0) player.setPlaybackRate(playbackSpeed);
       if (isRepeating) player.loop = isRepeating;
@@ -206,37 +218,69 @@ export function useChapterAudio({
     }
   }, [enabled, audioUrl, player, playbackSpeed, isRepeating]);
 
-  // Effect 2: Clear isChangingTrack once track's duration is ready, or if error occurs
+  // Effect 2: Clear isChangingTrack once track's duration is ready, and ensure seek to 0 lands
   useEffect(() => {
     const dur = status?.duration ?? 0;
     if ((dur > 0 && !status?.isBuffering) || status?.error) {
+      if (shouldResetToZeroRef.current && player) {
+        shouldResetToZeroRef.current = false;
+        try {
+          player.seekTo(0);
+        } catch {}
+      }
       setIsChangingTrack(false);
+      setHasTimedOut(false);
+      if (loadTimeoutRef.current) {
+        clearTimeout(loadTimeoutRef.current);
+        loadTimeoutRef.current = null;
+      }
     }
-  }, [status?.duration, status?.isBuffering, status?.error]);
+  }, [status?.duration, status?.isBuffering, status?.error, player]);
 
-  // Progress tracking, periodic auto-save, and restore logic encapsulated in dedicated hook
-  const { saveCurrentProgress } = useAudioProgress({
-    player,
-    status,
-    chapterId,
-    enabled,
-    audioLanguage,
-    reciterId: isArabicAudio
-      ? reciterId
-      : (editionName ?? DEFAULT_ENGLISH_RECITER_NAME),
-    isChangingTrack,
-    isRepeating,
-  });
+  // Effect 2b: Safety timeout (stops infinite spinner if user goes offline)
+  useEffect(() => {
+    if (!enabled) {
+      if (loadTimeoutRef.current) {
+        clearTimeout(loadTimeoutRef.current);
+        loadTimeoutRef.current = null;
+      }
+      return;
+    }
 
-  // Effect 3: Stop playback when modal closes (flushes save before pause)
+    const isReady = (status?.duration ?? 0) > 0 || status?.isLoaded || player?.isLoaded;
+    if (isReady || status?.error || isErrorArabicAudio) {
+      if (loadTimeoutRef.current) {
+        clearTimeout(loadTimeoutRef.current);
+        loadTimeoutRef.current = null;
+      }
+      return;
+    }
+
+    // Start 8-second timer when waiting to load
+    if (!loadTimeoutRef.current) {
+      loadTimeoutRef.current = setTimeout(() => {
+        setHasTimedOut(true);
+        setIsChangingTrack(false);
+        loadTimeoutRef.current = null;
+      }, 8000);
+    }
+
+    return () => {
+      if (loadTimeoutRef.current) {
+        clearTimeout(loadTimeoutRef.current);
+        loadTimeoutRef.current = null;
+      }
+    };
+  }, [enabled, status?.duration, status?.isLoaded, player?.isLoaded, status?.error, isErrorArabicAudio]);
+
+  // Effect 3: Stop playback when modal closes
   useEffect(() => {
     if (!enabled && player && isPlayingRef.current) {
-      saveCurrentProgress();
       try {
         player.pause();
       } catch {}
     }
-  }, [enabled, player, saveCurrentProgress]);
+  }, [enabled, player]);
 
   // Effect 4: Play next on track completion
   useEffect(() => {
@@ -259,9 +303,9 @@ export function useChapterAudio({
     onPlayNext,
   ]);
 
-  // Combined loading state with error protection
+  // Combined error and loading state with network protection
   const isFetchingAudio = isArabicAudio && isLoadingArabicAudio && !audioUrl;
-  const isAudioError = Boolean(status?.error);
+  const isAudioError = Boolean(status?.error) || isErrorArabicAudio || hasTimedOut;
   const isDurationReady =
     (status?.duration ?? 0) > 0 ||
     (status?.isLoaded ?? false) ||
@@ -411,6 +455,22 @@ export function useChapterAudio({
     enabled,
   });
 
+  const retryAudioLoad = useCallback(() => {
+    Haptics.light();
+    setHasTimedOut(false);
+    setIsChangingTrack(true);
+    if (isArabicAudio) {
+      refetchArabicAudio();
+    }
+    if (player && audioUrl) {
+      try {
+        player.replace({ uri: audioUrl });
+        player.seekTo(0);
+        player.play();
+      } catch {}
+    }
+  }, [isArabicAudio, refetchArabicAudio, player, audioUrl]);
+
   return {
     player,
     status,
@@ -420,6 +480,8 @@ export function useChapterAudio({
     isArabicAudio,
     isEnglishAudio,
     isLoading,
+    isAudioError,
+    retryAudioLoad,
     isPlaying: !!status?.playing,
     currentTime: status?.currentTime || 0,
     duration: status?.duration || 0,
@@ -434,13 +496,9 @@ export function useChapterAudio({
     toggleRepeat,
     handleSliderValueChange,
     handleSlidingComplete,
-    saveProgress: saveCurrentProgress,
   };
 }
 
 // Backward-compatible alias
 export const useSurahCdnAudio = useChapterAudio;
 export type UseSurahCdnAudioOptions = UseChapterAudioOptions;
-
-export { useAudioProgress, useChapterAudioProgress } from "./useAudioProgress";
-export type { UseAudioProgressOptions } from "./useAudioProgress";

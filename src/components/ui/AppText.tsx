@@ -2,8 +2,6 @@ import { rs } from "@/helpers/responsiveHelper";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import {
   fontSize,
-  letterSpacing,
-  lineHeight,
   type ThemeColors,
   type ThemeFontFamily,
   type ThemeFontSize,
@@ -32,7 +30,7 @@ export type TextColor = keyof ThemeColors | (string & {});
 
 export interface AppTextProps extends Omit<TextProps, "style"> {
   /**
-   * Predefined typography preset combining font size, line height, letter spacing, and font family.
+   * Predefined typography preset combining font size and font family.
    * Options: 'caption' | 'bodySm' | 'body' | 'bodyLg' | 'title' | 'cardTitle' | 'heading' | 'largeTitle' | 'splashTitle' | 'arabic'
    * @default 'body'
    */
@@ -46,12 +44,6 @@ export interface AppTextProps extends Omit<TextProps, "style"> {
 
   /** Optional font size override (ThemeFontSize key or custom number) */
   size?: TextVariant | number;
-
-  /** Optional line height override */
-  lineHeight?: number;
-
-  /** Optional letter spacing override */
-  letterSpacing?: number;
 
   /** Optional font family / weight override */
   weight?: TextWeight | TextStyle["fontWeight"];
@@ -67,6 +59,15 @@ export interface AppTextProps extends Omit<TextProps, "style"> {
   /** Text alignment shorthand */
   align?: TextStyle["textAlign"];
 
+  /** Limits the number of lines when wrapping */
+  numberOfLines?: number;
+
+  /** Optional manual line height override */
+  lineHeight?: number;
+
+  /** Optional manual letter spacing override */
+  letterSpacing?: number;
+
   /** Additional custom text styles (overrides defaults) */
   style?: StyleProp<TextStyle>;
 
@@ -80,8 +81,6 @@ export const AppText = forwardRef<RNText, AppTextProps>(function AppText(
     variant = "body",
     color = "text",
     size,
-    lineHeight: customLineHeight,
-    letterSpacing: customLetterSpacing,
     weight,
     fontWeight: fontWeightProp,
     family,
@@ -90,6 +89,9 @@ export const AppText = forwardRef<RNText, AppTextProps>(function AppText(
     semiBold,
     medium,
     align,
+    numberOfLines,
+    lineHeight,
+    letterSpacing,
     style,
     children,
     maxFontSizeMultiplier = 1.2, // Limits system accessibility zoom to 1.2x to prevent UI overflow
@@ -97,12 +99,11 @@ export const AppText = forwardRef<RNText, AppTextProps>(function AppText(
   },
   ref,
 ) {
-  // Get active theme colors, font families, font sizes, line heights, and theme mode
+  // Get active theme colors, font families, font sizes, and theme mode
   const {
     colors,
     fontFamily,
     fontSize: themeFontSize,
-    lineHeight: themeLineHeight,
   } = useAppTheme();
 
   // ── Step 1: Calculate Responsive Font Size ──
@@ -114,27 +115,7 @@ export const AppText = forwardRef<RNText, AppTextProps>(function AppText(
         ? themeFontSize[size as keyof ThemeFontSize]
         : (themeFontSize[variant] ?? themeFontSize.body);
 
-  // ── Step 2: Calculate Line Height ──
-  // Pairs line height with font size to prevent text from clipping at the top/bottom
-  const resolvedLineHeight =
-    typeof customLineHeight === "number"
-      ? customLineHeight
-      : typeof size === "number"
-        ? Math.round(resolvedSize * 1.45)
-        : size && size in themeLineHeight
-          ? themeLineHeight[size as keyof ThemeFontSize]
-          : (themeLineHeight[variant] ?? themeLineHeight.body);
-
-  // ── Step 3: Calculate Letter Spacing ──
-  // Spacing between characters for crisp readability
-  const resolvedLetterSpacing =
-    typeof customLetterSpacing === "number"
-      ? customLetterSpacing
-      : size && size in letterSpacing
-        ? letterSpacing[size as keyof ThemeFontSize]
-        : (letterSpacing[variant] ?? 0);
-
-  // ── Step 4: Resolve Font Family & Weight ──
+  // ── Step 2: Resolve Font Family & Weight ──
   const isNumericWeight =
     typeof weight === "string" &&
     (/^[1-9]00$/.test(weight) || weight === "normal" || weight === "bold");
@@ -164,30 +145,29 @@ export const AppText = forwardRef<RNText, AppTextProps>(function AppText(
 
   const resolvedFontFamily = fontFamily[selectedWeight] ?? fontFamily.regular;
 
-  // ── Step 5: Resolve Text Color ──
+  // ── Step 3: Resolve Text Color ──
   // Look up color from theme palette, or allow direct color string (e.g. '#FF0000')
   const resolvedColor =
     color && color in colors
       ? (colors as any)[color]
       : color || colors.text;
 
-  // ── Step 6: Assemble Styles ──
+  // ── Step 4: Assemble Styles ──
   const baseStyle: TextStyle = {
     color: resolvedColor,
     fontSize: resolvedSize,
-    ...(resolvedLineHeight ? { lineHeight: resolvedLineHeight } : {}),
-    letterSpacing: resolvedLetterSpacing,
     fontFamily: resolvedFontFamily,
-    includeFontPadding: false,
-    textAlignVertical: "center",
+    ...(typeof lineHeight === "number" ? { lineHeight } : {}),
+    ...(typeof letterSpacing === "number" ? { letterSpacing } : {}),
     ...(fontStyleWeight ? { fontWeight: fontStyleWeight } : {}),
     ...(align ? { textAlign: align } : {}),
   };
 
-  // ── Step 7: Render Text ──
+  // ── Step 5: Render Text ──
   return (
     <RNText
       ref={ref}
+      numberOfLines={numberOfLines}
       maxFontSizeMultiplier={maxFontSizeMultiplier}
       style={[baseStyle, style]}
       {...rest}

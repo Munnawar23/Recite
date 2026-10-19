@@ -79,6 +79,7 @@ function QuranListenCard({ item, onPress }: QuranListenCardProps) {
             family="quran"
             color="primary"
             numberOfLines={1}
+            style={S.arabicText}
           >
             {item.name}
           </AppText>
@@ -111,8 +112,8 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      minHeight: scale(58),
-      paddingVertical: verticalScale(10),
+      minHeight: scale(74),
+      paddingVertical: verticalScale(20),
       paddingHorizontal: scale(16),
       borderRadius: scale(16),
       backgroundColor: colors.card,
@@ -143,6 +144,9 @@ const createStyles = (
       justifyContent: "flex-end",
       gap: scale(10),
       zIndex: 1,
+    },
+    arabicText: {
+      lineHeight: scale(32),
     },
     musicIconContainer: {
       width: scale(32),

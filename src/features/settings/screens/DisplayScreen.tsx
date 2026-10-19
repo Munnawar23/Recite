@@ -99,8 +99,8 @@ export default function DisplayScreen() {
           </AppText>
           <AppText
             size={fontSize.body * textMultiplier}
-            lineHeight={Math.round(fontSize.body * textMultiplier * 1.5)}
             color="text"
+            style={{ lineHeight: Math.round(fontSize.body * textMultiplier * 1.5) }}
           >
             {t(
               "settings.display.sampleTranslation",
@@ -109,11 +109,13 @@ export default function DisplayScreen() {
           </AppText>
           <AppText
             size={fontSize.arabic * quranMultiplier}
-            lineHeight={Math.round(fontSize.arabic * quranMultiplier * 1.8)}
             family="quran"
             color="primary"
             align="right"
-            style={S.previewArabic}
+            style={[
+              S.previewArabic,
+              { lineHeight: Math.round(fontSize.arabic * quranMultiplier * 1.8) },
+            ]}
           >
             {t(
               "settings.display.sampleArabic",

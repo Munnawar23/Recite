@@ -91,12 +91,16 @@ function VerseRow({
       >
         <AppText
           size={fontSize.arabic * quranMultiplier}
-          lineHeight={Math.round(fontSize.arabic * quranMultiplier * 2.2)}
           family="quran"
-          letterSpacing={2.5}
           align="center"
           color={isActive || isHintActive ? "primary" : colors.quranVerse}
-          style={S.arabicText}
+          style={[
+            S.arabicText,
+            {
+              lineHeight: Math.round(fontSize.arabic * quranMultiplier * 2.2),
+              letterSpacing: 2.5,
+            },
+          ]}
         >
           {item.arabic}
         </AppText>
@@ -106,11 +110,15 @@ function VerseRow({
       {selectedTransId !== "0" && item.translation ? (
         <AppText
           size={fontSize.title * textMultiplier}
-          lineHeight={Math.round(fontSize.title * textMultiplier * 1.7)}
           family="text"
           color="text"
           align="center"
-          style={S.translationText}
+          style={[
+            S.translationText,
+            {
+              lineHeight: Math.round(fontSize.title * textMultiplier * 1.7),
+            },
+          ]}
         >
           {item.translation}
         </AppText>

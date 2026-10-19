@@ -170,9 +170,9 @@
         "system": "System"
       },
       "fontSize": {
+        "small": "Small",
         "default": "Default",
-        "large": "Large",
-        "extraLarge": "Max"
+        "large": "Large"
       }
     },
     "languages": {

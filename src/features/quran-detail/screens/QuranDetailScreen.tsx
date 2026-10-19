@@ -45,6 +45,7 @@ export default function QuranDetailScreen() {
     animatedScrollTopStyle,
     showScrollTop,
     scrollToTop,
+    onHeaderLayout,
     handleVersePress,
     onViewableItemsChanged,
     viewabilityConfig,
@@ -71,7 +72,10 @@ export default function QuranDetailScreen() {
       />
 
       <View style={S.mainContainer}>
-        <Animated.View style={[S.animatedHeaderContainer, animatedHeaderStyle]}>
+        <Animated.View
+          onLayout={onHeaderLayout}
+          style={[S.animatedHeaderContainer, animatedHeaderStyle]}
+        >
           <Header
             chapterId={chapterId}
             arabicName={arabicName}

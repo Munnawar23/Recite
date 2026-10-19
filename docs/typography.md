@@ -8,22 +8,22 @@ A complete reference guide for typography variants, font scaling, color tokens, 
 
 All sizes are dynamically scaled for mobile screens using `rs.font(...)`.
 
-| # | Variant (`variant`) | Font Size (`fontSize`) | Line Height (`lineHeight`) | Letter Spacing | Primary Use Case |
-|---|---------------------|------------------------|----------------------------|----------------|------------------|
-| 1 | `caption`           | **12px**               | 16px                       | 0.2            | Timestamps, badges, secondary notes |
-| 2 | `bodySm`            | **13px**               | 18px                       | 0.1            | Helper descriptions, minor labels |
-| 3 | `body` *(default)*  | **14px**               | 19px                       | 0              | Standard body text, card subtitles |
-| 4 | `bodyLg`            | **15px**               | 23px                       | 0              | Prominent body text, Surah names |
-| 5 | `title`             | **17px**               | 23px                       | 0.15           | Settings cards, subheaders |
-| 6 | `heading`           | **18px**               | 24px                       | 0.2            | Section headers, modal titles |
-| 7 | `cardTitle`         | **19px**               | 26px                       | 0.15           | Major card headers |
-| 8 | `arabic`            | **27px**               | 55px                       | 0              | Quranic Arabic verse text |
-| 9 | `largeTitle`        | **28px**               | 38px                       | 0.25           | Main screen titles |
-| 10| `splashTitle`       | **29px**               | 39px                       | 0.2            | Splash screen & branding |
+| # | Variant (`variant`) | Font Size (`fontSize`) | Default Font Family | Primary Use Case |
+|---|---------------------|------------------------|---------------------|------------------|
+| 1 | `caption`           | **12px**               | `Nunito-Medium`     | Timestamps, badges, secondary notes |
+| 2 | `bodySm`            | **13px**               | `Nunito-Medium`     | Helper descriptions, minor labels |
+| 3 | `body` *(default)*  | **14px**               | `Nunito-Medium`     | Standard body text, card subtitles |
+| 4 | `bodyLg`            | **15px**               | `Nunito-Medium`     | Prominent body text, Surah names |
+| 5 | `title`             | **17px**               | `Nunito-SemiBold`   | Settings cards, subheaders |
+| 6 | `heading`           | **18px**               | `PlusJakartaSans-Bold` | Section headers, modal titles |
+| 7 | `cardTitle`         | **19px**               | `Nunito-SemiBold`   | Major card headers |
+| 8 | `arabic`            | **27px**               | `Amiri-Bold`        | Quranic Arabic verse text |
+| 9 | `largeTitle`        | **28px**               | `PlusJakartaSans-Bold` | Main screen titles |
+| 10| `splashTitle`       | **29px**               | `PlusJakartaSans-Bold` | Splash screen & branding |
 
-> **⚠️ What `variant` sets:**  
-> Passing `variant` sets `fontSize`, `lineHeight`, `letterSpacing`, and a default `fontFamily`.  
-> **It never sets color.** Colors are managed separately via the `color` prop.
+> **💡 Natural Line Spacing & Kerning:**  
+> `AppText` uses natural OS font metrics for all variants by default. Rigid default `lineHeight` and `letterSpacing` are intentionally excluded to prevent text clipping, line truncations, and broken ligatures across different languages (Hindi, Arabic, English) and accessibility font sizes.  
+> Special components requiring custom spacing (e.g. Quran recitation lines) can supply `lineHeight` directly via `style={{ lineHeight: ... }}`.
 
 ---
 
@@ -67,19 +67,17 @@ You can pass weights directly through props without using inline styles:
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `TextVariant` | `'body'` | Typography preset (size, line height, letter spacing) |
+| `variant` | `TextVariant` | `'body'` | Typography preset (size and default font family) |
 | `color` | `TextColor` | `'text'` | Theme color token or `#hex` / `rgba(...)` string |
 | `weight` / `fontWeight` | `string` | *preset default* | Numeric weight (`"400"`, `"500"`, `"600"`, `"700"`) |
 | `family` / `fontFamily` | `TextWeight` | *preset default* | `'heading'`, `'title'`, `'regular'`, `'quran'` |
 | `bold` / `semiBold` / `medium` | `boolean` | `false` | Shorthand weight flags |
 | `size` | `number \| TextVariant` | *preset size* | Override font size (automatically scaled if number) |
-| `lineHeight` | `number` | *preset height*| Custom line height in pixels |
-| `letterSpacing` | `number` | *preset spacing*| Character spacing |
 | `align` | `TextStyle['textAlign']` | `'left'` | `'left'`, `'center'`, `'right'`, `'justify'` |
-| `maxFontSizeMultiplier` | `number` | `1.2` | Caps OS accessibility zoom to prevent layout breakage |
 | `numberOfLines` | `number` | `undefined` | Truncate text after specified line count |
+| `maxFontSizeMultiplier` | `number` | `1.2` | Caps OS accessibility zoom to prevent layout breakage |
 | `ellipsizeMode` | `string` | `'tail'` | Ellipsis truncation position (`'tail'`, `'middle'`, etc.) |
-| `style` | `StyleProp<TextStyle>` | `undefined` | Custom React Native text styles |
+| `style` | `StyleProp<TextStyle>` | `undefined` | Custom React Native text styles (e.g. custom `lineHeight`, `letterSpacing`) |
 
 ---
 
@@ -96,8 +94,8 @@ import { AppText } from "@/components";
   Display Options
 </AppText>
 
-// 3. Subtitle with subtext color and alignment
-<AppText variant="body" color="subtext" align="left" numberOfLines={1}>
+// 3. Subtitle with subtext color, center alignment, and single line limit
+<AppText variant="body" color="subtext" align="center" numberOfLines={1}>
   Theme & font sizes
 </AppText>
 
@@ -106,8 +104,14 @@ import { AppText } from "@/components";
   Al-Baqarah
 </AppText>
 
-// 5. Quran Arabic verse text
-<AppText variant="arabic" family="quran" color="quranVerse" align="right">
+// 5. Quran Arabic verse text with custom lineHeight via style
+<AppText
+  variant="arabic"
+  family="quran"
+  color="quranVerse"
+  align="center"
+  style={{ lineHeight: 54, letterSpacing: 2.5 }}
+>
   الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ
 </AppText>
 

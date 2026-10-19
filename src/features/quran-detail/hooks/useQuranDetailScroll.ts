@@ -11,7 +11,9 @@ import {
 } from "react-native-reanimated";
 import { scheduleOnRN } from "react-native-worklets";
 
-export const HEADER_HIDE_OFFSET = -120;
+import type { LayoutChangeEvent } from "react-native";
+
+export const DEFAULT_HEADER_HIDE_OFFSET = -220;
 export const PLAYER_HIDE_OFFSET = 200;
 const SCROLL_DELTA_THRESHOLD = 6;
 const TOP_SCROLL_THRESHOLD = 300;
@@ -45,10 +47,21 @@ export function useQuranDetailScroll({
   const lastScrollY = useSharedValue(0);
   const playerScrollTranslateY = useSharedValue(0);
   const headerScrollTranslateY = useSharedValue(0);
+  const headerHeight = useSharedValue(220);
   const isSelectingVerse = useSharedValue(false);
   const isScrollTopVisible = useSharedValue(false);
   const scrollTopOpacity = useSharedValue(0);
   const isPlayingAudioShared = useSharedValue(isPlayingAudio);
+
+  const onHeaderLayout = useCallback(
+    (e: LayoutChangeEvent) => {
+      const h = e.nativeEvent.layout.height;
+      if (h > 0) {
+        headerHeight.value = Math.max(h + 15, 200);
+      }
+    },
+    [headerHeight],
+  );
 
   useEffect(() => {
     isPlayingAudioShared.value = isPlayingAudio;
@@ -143,7 +156,7 @@ export function useQuranDetailScroll({
           scrollTopOpacity.value = withTiming(0, { duration: 200 });
           scheduleOnRN(updateScrollTopVisibility, false);
         }
-        animateTo(headerScrollTranslateY, HEADER_HIDE_OFFSET, 250);
+        animateTo(headerScrollTranslateY, -headerHeight.value, 250);
         if (!isPlayingAudioShared.value && !isSelectingVerse.value) {
           animateTo(playerScrollTranslateY, PLAYER_HIDE_OFFSET, 250);
         } else {
@@ -179,5 +192,6 @@ export function useQuranDetailScroll({
     animatedScrollTopStyle,
     showScrollTop,
     scrollToTop,
+    onHeaderLayout,
   };
 }

@@ -366,7 +366,7 @@ function VerseListContent({
           size={rs.icon(52)}
           color={colors.subtext}
         />
-        <AppText variant="title" family="title" color="text">
+        <AppText variant="title" family="title" color="text" align="center">
           {t("quran.versesError.title", "Failed to Load")}
         </AppText>
         <AppText variant="body" color="subtext" align="center">

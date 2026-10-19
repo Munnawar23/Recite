@@ -98,7 +98,7 @@ const createStyles = (
   StyleSheet.create({
     cardWrapper: {
       paddingHorizontal: spacing.screenPadding,
-      marginBottom: spacing.vMd,
+      marginBottom: spacing.vSm,
     },
     card: {
       borderRadius: rs.space(20),
@@ -117,7 +117,7 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      paddingVertical: verticalScale(18),
+      paddingVertical: verticalScale(17),
       paddingHorizontal: scale(18),
     },
     leftSection: {

@@ -125,6 +125,8 @@ function DetailHeader({
             family="quran"
             color="primary"
             align="center"
+            numberOfLines={1}
+            style={S.arabicTitle}
           >
             {arabicName || "—"}
           </AppText>
@@ -133,6 +135,8 @@ function DetailHeader({
             family="title"
             color="text"
             align="center"
+            numberOfLines={1}
+            style={S.surahName}
           >
             {localizedSurahName || "—"}
           </AppText>
@@ -141,6 +145,8 @@ function DetailHeader({
             family="text"
             color="subtext"
             align="center"
+            numberOfLines={1}
+            style={S.surahMeta}
           >
             {type || "—"} • {versesCount || "—"} Verses
           </AppText>
@@ -212,7 +218,7 @@ const createStyles = (
       alignItems: "center",
       paddingHorizontal: rs.space(12),
       paddingTop: rs.space(4),
-      paddingBottom: rs.space(2),
+      paddingBottom: rs.space(4),
     },
     leftActions: {
       width: rs.space(60),
@@ -255,6 +261,16 @@ const createStyles = (
     headerCenter: {
       flex: 1,
       alignItems: "center",
-      gap: 0,
+      justifyContent: "center",
+      gap: rs.space(5),
+    },
+    arabicTitle: {
+      lineHeight: rs.space(25),
+    },
+    surahName: {
+      lineHeight: rs.space(20),
+    },
+    surahMeta: {
+      lineHeight: rs.space(16),
     },
   });

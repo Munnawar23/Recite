@@ -132,7 +132,7 @@
     }
   },
   "verse": {
-    "holdForActions": "दबाकर रखें",
+    "holdForActions": "होल्ड करें",
     "favoritedTitle": "पसंदीदा में जोड़ा गया",
     "unfavoritedTitle": "पसंदीदा से हटाया गया",
     "favoritedMsg": "आयत पसंदीदा में सेव हो गई",
@@ -170,9 +170,9 @@
         "system": "सिस्टम"
       },
       "fontSize": {
+        "small": "छोटा",
         "default": "सामान्य",
-        "large": "बड़ा",
-        "extraLarge": "सबसे बड़ा"
+        "large": "बड़ा"
       }
     },
     "languages": {

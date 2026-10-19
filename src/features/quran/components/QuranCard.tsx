@@ -110,11 +110,12 @@ function QuranCard({ item, onPress }: QuranCardProps) {
             family="quran"
             color="primary"
             numberOfLines={1}
+            style={S.arabicText}
           >
             {item.name}
           </AppText>
           <AppText
-            variant="caption"
+            variant="bodySm"
             family="text"
             color="subtext"
             align="right"
@@ -147,7 +148,7 @@ const createStyles = (
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      paddingVertical: verticalScale(10),
+      paddingVertical: verticalScale(15),
       paddingHorizontal: scale(16),
       borderRadius: scale(16),
       backgroundColor: colors.card,
@@ -190,10 +191,13 @@ const createStyles = (
       flex: 0.8,
       alignItems: "flex-end",
       justifyContent: "center",
-      gap: verticalScale(2),
+      gap: verticalScale(5),
       zIndex: 1,
     },
+    arabicText: {
+      lineHeight: scale(32),
+    },
     translationText: {
-      opacity: 0.8,
+      opacity: 0.9,
     },
   });

@@ -17,22 +17,9 @@ export function useAppFonts() {
     return Object.fromEntries(scaledEntries) as typeof fonts.size;
   }, [fontSizeScale]);
 
-  const lineHeight = useMemo(() => {
-    const multiplier = FONT_SCALE_MULTIPLIER[fontSizeScale] ?? 1;
-    if (multiplier === 1) return fonts.lineHeight;
-
-    const scaledEntries = Object.entries(fonts.lineHeight).map(([key, val]) => [
-      key,
-      Math.round(val * multiplier),
-    ]);
-    return Object.fromEntries(scaledEntries) as typeof fonts.lineHeight;
-  }, [fontSizeScale]);
-
   return {
     fontFamily: fonts.family,
     fontSize,
-    lineHeight,
-    letterSpacing: fonts.letterSpacing,
     fontSizeScale,
     setFontSizeScale,
   };

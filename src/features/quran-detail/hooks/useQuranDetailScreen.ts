@@ -109,6 +109,7 @@ export function useQuranDetailScreen() {
     animatedScrollTopStyle,
     showScrollTop,
     scrollToTop,
+    onHeaderLayout,
   } = useQuranDetailScroll({
     chapterId,
     isPlayingAudio: status?.playing,
@@ -341,6 +342,7 @@ export function useQuranDetailScreen() {
     animatedScrollTopStyle,
     showScrollTop,
     scrollToTop,
+    onHeaderLayout,
     // Verse interaction
     handleVersePress,
     onViewableItemsChanged,

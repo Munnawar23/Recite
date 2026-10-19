@@ -2,7 +2,7 @@
   "expo": {
     "name": "Recite",
     "slug": "Recite",
-    "version": "1.0.1",
+    "version": "1.1",
     "orientation": "portrait",
     "icon": "./assets/images/icons/icon.png",
     "scheme": "recite",
@@ -18,7 +18,7 @@
         "foregroundImage": "./assets/images/icons/adaptive-icon.png",
         "backgroundColor": "#2A5941"
       },
-      "versionCode": 2,
+      "versionCode": 1002,
       "icon": "./assets/images/icons/icon.png",
       "allowBackup": false,
       "predictiveBackGestureEnabled": false,
